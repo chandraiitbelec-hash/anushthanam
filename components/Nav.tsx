@@ -65,6 +65,22 @@ export default function Nav() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginLeft: 'auto' }}>
 
+            {/* Search */}
+            <Link href="/search" aria-label="Search" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '32px', height: '32px',
+              color: 'var(--color-text-secondary)',
+              textDecoration: 'none',
+              fontSize: '18px',
+              borderRadius: '6px',
+              flexShrink: 0,
+            }}
+              onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+              onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
+            >
+              🔍
+            </Link>
+
             {/* Language switcher */}
             <div style={{ position: 'relative' }}>
               <button
@@ -161,6 +177,10 @@ export default function Nav() {
                 {linkLabel(link)}
               </Link>
             ))}
+            <Link href="/search" onClick={() => setMobileOpen(false)}
+              style={{ fontSize: '16px', color: 'var(--color-text-primary)', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid var(--color-border)' }}>
+              {lang === 'te' ? 'వెతకండి' : lang === 'ta' ? 'தேடு' : lang === 'hi' ? 'खोजें' : 'Search'}
+            </Link>
             <Link href="/upcoming" onClick={() => setMobileOpen(false)}
               style={{ fontSize: '16px', color: 'var(--color-text-secondary)', textDecoration: 'none', padding: '12px 0' }}>
               {lang === 'te' ? 'రాబోయేవి' : lang === 'ta' ? 'வரவிருப்பவை' : lang === 'hi' ? 'आगामी' : 'Upcoming'}

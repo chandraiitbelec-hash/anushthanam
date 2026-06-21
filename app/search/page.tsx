@@ -1,7 +1,9 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import SearchBar from '@/components/SearchBar';
+import SearchPage from './SearchPage';
 
-export default function SearchPage() {
+export const metadata = { title: 'Search | Anushthanam' };
+
+export default function Page() {
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Search' }]} />
@@ -14,14 +16,7 @@ export default function SearchPage() {
       }}>
         Search
       </h1>
-      <SearchBar />
-      <p style={{
-        marginTop: '24px',
-        fontSize: '14px',
-        color: 'var(--color-text-secondary)',
-      }}>
-        Search across gods, shlokas, festivals, and vrathams in all four languages.
-      </p>
+      <SearchPage />
     </div>
   );
 }
