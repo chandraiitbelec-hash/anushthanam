@@ -5,6 +5,8 @@ import { useLang } from '@/context/LanguageContext';
 import type { Festival, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
+import DeityChips from './DeityChips';
+import type { DeityRef } from './DeityChips';
 
 const SECTION_LABELS: Record<string, Record<string, string>> = {
   significance: { en: 'Significance',       te: 'ప్రాముఖ్యత',              ta: 'முக்கியத்துவம்',    hi: 'महत्व' },
@@ -42,9 +44,10 @@ type Props = {
   steps: ProcedureStep[];
   materials: MaterialItem[];
   story: Story | null;
+  deities: DeityRef[];
 };
 
-export default function FestivalProfile({ festival, steps, materials, story }: Props) {
+export default function FestivalProfile({ festival, steps, materials, story, deities }: Props) {
   const { lang } = useLang();
 
   const r = festival as unknown as Record<string, string>;
@@ -87,6 +90,8 @@ export default function FestivalProfile({ festival, steps, materials, story }: P
           </p>
         )}
       </div>
+
+      <DeityChips deities={deities} />
 
       {/* Significance */}
       {significance && (

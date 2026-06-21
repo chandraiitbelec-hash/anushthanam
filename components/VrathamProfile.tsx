@@ -4,6 +4,8 @@ import { useLang } from '@/context/LanguageContext';
 import type { Vratham, ProcedureStep, MaterialItem } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
+import DeityChips from './DeityChips';
+import type { DeityRef } from './DeityChips';
 
 const SECTION_LABELS: Record<string, Record<string, string>> = {
   fasting:    { en: 'Fasting Rules', te: 'ఉపవాస నిబంధనలు', ta: 'உபவாச விதிகள்', hi: 'उपवास नियम' },
@@ -32,9 +34,10 @@ type Props = {
   vratham: Vratham;
   steps: ProcedureStep[];
   materials: MaterialItem[];
+  deities: DeityRef[];
 };
 
-export default function VrathamProfile({ vratham, steps, materials }: Props) {
+export default function VrathamProfile({ vratham, steps, materials, deities }: Props) {
   const { lang } = useLang();
 
   const title = (vratham as unknown as Record<string, string>)[`title_${lang}`] || vratham.title_en;
@@ -90,6 +93,8 @@ export default function VrathamProfile({ vratham, steps, materials }: Props) {
           </p>
         )}
       </div>
+
+      <DeityChips deities={deities} />
 
       {fasting && (
         <section style={{ marginBottom: '32px' }}>
