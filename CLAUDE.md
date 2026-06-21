@@ -14,6 +14,7 @@ GitHub: https://github.com/chandraiitbelec-hash/anushthanam
 - **CMS:** Google Sheets (structured data) + Google Docs (long prose/kathas)
 - **Search:** Client-side Fuse.js over `public/search-index.json` (built at build time)
 - **Deployment:** Vercel with ISR (`revalidate = 3600`) + manual deploy hook triggered from Sheets Apps Script
+  - **NEVER run `vercel` or deploy to Vercel directly.** Always push to GitHub; the user manages Vercel from there.
 
 ## Commands
 
