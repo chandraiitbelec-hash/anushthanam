@@ -102,8 +102,8 @@ body {
 }
 
 /* ─── Mobile ────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  /* Tighten page gutters to match hamburger breakpoint */
+@media (max-width: 640px) {
+  /* Tighten page gutters */
   .content-width,
   .wide-width {
     padding-left: 16px;

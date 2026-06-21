@@ -6,12 +6,12 @@ import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/Langu
 import type { Language } from '@/lib/types';
 
 const NAV_LINKS = [
-  { href: '/gods', label_en: 'Gods', label_te: 'దేవతలు', label_ta: 'தேவர்கள்', label_hi: 'देवता' },
-  { href: '/festivals', label_en: 'Festivals', label_te: 'పండుగలు', label_ta: 'திருவிழாக்கள்', label_hi: 'त्योहार' },
-  { href: '/vrathams', label_en: 'Vrathams', label_te: 'వ్రతాలు', label_ta: 'விரதங்கள்', label_hi: 'व्रत' },
-  { href: '/pujas', label_en: 'Pujas', label_te: 'పూజలు', label_ta: 'பூஜைகள்', label_hi: 'पूजा' },
-  { href: '/shlokas', label_en: 'Shlokas', label_te: 'శ్లోకాలు', label_ta: 'ஸ்லோகங்கள்', label_hi: 'श्लोक' },
-  { href: '/panchangam', label_en: 'Panchangam', label_te: 'పంచాంగం', label_ta: 'பஞ்சாங்கம்', label_hi: 'पंचांग' },
+  { href: '/gods',       label_en: 'Gods',       label_te: 'దేవతలు',    label_ta: 'தேவர்கள்',      label_hi: 'देवता' },
+  { href: '/festivals',  label_en: 'Festivals',  label_te: 'పండుగలు',   label_ta: 'திருவிழாக்கள்', label_hi: 'त्योहार' },
+  { href: '/vrathams',   label_en: 'Vrathams',   label_te: 'వ్రతాలు',   label_ta: 'விரதங்கள்',     label_hi: 'व्रत' },
+  { href: '/pujas',      label_en: 'Pujas',      label_te: 'పూజలు',     label_ta: 'பூஜைகள்',       label_hi: 'पूजा' },
+  { href: '/shlokas',    label_en: 'Shlokas',    label_te: 'శ్లోకాలు',  label_ta: 'ஸ்லோகங்கள்',    label_hi: 'श्लोक' },
+  { href: '/panchangam', label_en: 'Panchangam', label_te: 'పంచాంగం',   label_ta: 'பஞ்சாங்கம்',    label_hi: 'पंचांग' },
 ];
 
 export default function Nav() {
@@ -46,8 +46,8 @@ export default function Nav() {
             {SITE_NAMES[lang]}
           </Link>
 
-          {/* Desktop nav */}
-          <nav style={{ display: 'flex', gap: '24px', flex: 1 }} className="desktop-nav">
+          {/* Desktop nav — hidden on mobile */}
+          <nav className="desktop-nav" style={{ display: 'flex', gap: '24px', flex: 1 }}>
             {NAV_LINKS.map(link => (
               <Link key={link.href} href={link.href} style={{
                 fontSize: '14px',
@@ -63,12 +63,13 @@ export default function Nav() {
             ))}
           </nav>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginLeft: 'auto' }}>
+          {/* Right controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
 
-            {/* Search */}
+            {/* Search — always visible */}
             <Link href="/search" aria-label="Search" style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: '32px', height: '32px',
+              width: '36px', height: '36px',
               color: 'var(--color-text-secondary)',
               textDecoration: 'none',
               fontSize: '18px',
@@ -81,8 +82,8 @@ export default function Nav() {
               🔍
             </Link>
 
-            {/* Language switcher */}
-            <div style={{ position: 'relative' }}>
+            {/* Language switcher — desktop only; on mobile it moves into the drawer */}
+            <div className="desktop-lang" style={{ position: 'relative' }}>
               <button
                 onClick={() => setLangOpen(o => !o)}
                 aria-label="Switch language"
@@ -97,10 +98,7 @@ export default function Nav() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                <span className="lang-label-full">{LANGUAGE_LABELS[lang]}</span>
-                <span className="lang-label-short" style={{ display: 'none' }}>
-                  {lang === 'te' ? 'తె' : lang === 'ta' ? 'த' : lang === 'hi' ? 'हि' : 'En'}
-                </span>
+                {LANGUAGE_LABELS[lang]}
               </button>
 
               {langOpen && (
@@ -135,14 +133,17 @@ export default function Nav() {
               )}
             </div>
 
-            {/* Mobile hamburger */}
+            {/* Hamburger — mobile only */}
             <button
               onClick={() => setMobileOpen(o => !o)}
               className="mobile-menu-btn"
               aria-label="Open menu"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--color-text-primary)', fontSize: '22px', padding: '4px',
+                color: 'var(--color-text-primary)', fontSize: '22px',
+                padding: '4px', lineHeight: 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '36px', height: '36px',
               }}
             >
               {mobileOpen ? '✕' : '☰'}
@@ -151,20 +152,20 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — full-width sheet below nav */}
       {mobileOpen && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 40,
-          background: 'rgba(0,0,0,0.3)',
-        }} onClick={() => setMobileOpen(false)}>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(0,0,0,0.3)' }}
+          onClick={() => setMobileOpen(false)}
+        >
           <nav
             onClick={e => e.stopPropagation()}
             style={{
               position: 'absolute', top: '64px', left: 0, right: 0,
               background: 'var(--color-bg)',
               borderBottom: '1px solid var(--color-border)',
-              padding: '16px 24px 24px',
-              display: 'flex', flexDirection: 'column', gap: '4px',
+              padding: '8px 24px 16px',
+              display: 'flex', flexDirection: 'column',
             }}
           >
             {NAV_LINKS.map(link => (
@@ -174,42 +175,53 @@ export default function Nav() {
                   fontSize: '16px',
                   color: 'var(--color-text-primary)',
                   textDecoration: 'none',
-                  padding: '12px 0',
+                  padding: '13px 0',
                   borderBottom: '1px solid var(--color-border)',
                 }}
               >
                 {linkLabel(link)}
               </Link>
             ))}
-            <Link href="/search" onClick={() => setMobileOpen(false)}
-              style={{ fontSize: '16px', color: 'var(--color-text-primary)', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid var(--color-border)' }}>
-              {lang === 'te' ? 'వెతకండి' : lang === 'ta' ? 'தேடு' : lang === 'hi' ? 'खोजें' : 'Search'}
-            </Link>
-            <Link href="/upcoming" onClick={() => setMobileOpen(false)}
-              style={{ fontSize: '16px', color: 'var(--color-text-secondary)', textDecoration: 'none', padding: '12px 0' }}>
-              {lang === 'te' ? 'రాబోయేవి' : lang === 'ta' ? 'வரவிருப்பவை' : lang === 'hi' ? 'आगामी' : 'Upcoming'}
-            </Link>
-            <Link href="/index" onClick={() => setMobileOpen(false)}
-              style={{ fontSize: '16px', color: 'var(--color-text-secondary)', textDecoration: 'none', padding: '12px 0' }}>
-              {lang === 'te' ? 'సూచిక' : lang === 'ta' ? 'அட்டவணை' : lang === 'hi' ? 'अनुक्रमणिका' : 'Site Index'}
-            </Link>
+
+            {/* Language section in drawer */}
+            <div style={{ paddingTop: '16px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 8px' }}>
+                Language
+              </p>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {LANGUAGES.map(l => (
+                  <button
+                    key={l}
+                    onClick={() => { setLang(l as Language); setMobileOpen(false); }}
+                    style={{
+                      padding: '7px 16px',
+                      fontSize: '13px',
+                      fontWeight: l === lang ? 600 : 400,
+                      color: l === lang ? '#fff' : 'var(--color-text-secondary)',
+                      background: l === lang ? 'var(--color-gold)' : 'none',
+                      border: `1px solid ${l === lang ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {LANGUAGE_LABELS[l]}
+                  </button>
+                ))}
+              </div>
+            </div>
           </nav>
         </div>
       )}
 
       <style>{`
-        .desktop-nav { display: flex; }
+        .desktop-nav  { display: flex; }
+        .desktop-lang { display: block; }
         .mobile-menu-btn { display: none; }
-        .lang-label-full { display: inline; }
-        .lang-label-short { display: none; }
-        /* 900px: catches phones in landscape + tablets in portrait */
-        @media (max-width: 900px) {
-          .desktop-nav { display: none; }
-          .mobile-menu-btn { display: block; }
-        }
-        @media (max-width: 600px) {
-          .lang-label-full { display: none; }
-          .lang-label-short { display: inline !important; }
+
+        @media (max-width: 768px) {
+          .desktop-nav  { display: none; }
+          .desktop-lang { display: none; }
+          .mobile-menu-btn { display: flex; }
         }
       `}</style>
     </>
