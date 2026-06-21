@@ -34,7 +34,7 @@ export default function Nav() {
       }}>
         <div className="wide-width" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '32px' }}>
 
-          {/* Site name */}
+          {/* Site name — always visible */}
           <Link href="/" style={{
             fontFamily: 'var(--font-display)',
             fontSize: '22px',
@@ -46,8 +46,8 @@ export default function Nav() {
             {SITE_NAMES[lang]}
           </Link>
 
-          {/* Desktop nav — hidden on mobile */}
-          <nav className="desktop-nav" style={{ display: 'flex', gap: '24px', flex: 1 }}>
+          {/* Desktop nav links — CSS hides this on mobile */}
+          <nav className="nav-desktop" style={{ gap: '24px', flex: 1 }}>
             {NAV_LINKS.map(link => (
               <Link key={link.href} href={link.href} style={{
                 fontSize: '14px',
@@ -63,7 +63,7 @@ export default function Nav() {
             ))}
           </nav>
 
-          {/* Right controls */}
+          {/* Right side */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
 
             {/* Search — always visible */}
@@ -73,7 +73,6 @@ export default function Nav() {
               color: 'var(--color-text-secondary)',
               textDecoration: 'none',
               fontSize: '18px',
-              borderRadius: '6px',
               flexShrink: 0,
             }}
               onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
@@ -82,8 +81,8 @@ export default function Nav() {
               🔍
             </Link>
 
-            {/* Language switcher — desktop only; on mobile it moves into the drawer */}
-            <div className="desktop-lang" style={{ position: 'relative' }}>
+            {/* Language switcher — CSS hides this on mobile */}
+            <div className="nav-desktop" style={{ position: 'relative' }}>
               <button
                 onClick={() => setLangOpen(o => !o)}
                 aria-label="Switch language"
@@ -133,17 +132,18 @@ export default function Nav() {
               )}
             </div>
 
-            {/* Hamburger — mobile only */}
+            {/* Hamburger — CSS hides this on desktop */}
             <button
               onClick={() => setMobileOpen(o => !o)}
-              className="mobile-menu-btn"
+              className="nav-hamburger"
               aria-label="Open menu"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--color-text-primary)', fontSize: '22px',
                 padding: '4px', lineHeight: 1,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: '36px', height: '36px',
+                alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
               }}
             >
               {mobileOpen ? '✕' : '☰'}
@@ -152,7 +152,7 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* Mobile drawer — full-width sheet below nav */}
+      {/* Mobile drawer */}
       {mobileOpen && (
         <div
           style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(0,0,0,0.3)' }}
@@ -164,7 +164,7 @@ export default function Nav() {
               position: 'absolute', top: '64px', left: 0, right: 0,
               background: 'var(--color-bg)',
               borderBottom: '1px solid var(--color-border)',
-              padding: '8px 24px 16px',
+              padding: '8px 24px 24px',
               display: 'flex', flexDirection: 'column',
             }}
           >
@@ -183,9 +183,13 @@ export default function Nav() {
               </Link>
             ))}
 
-            {/* Language section in drawer */}
-            <div style={{ paddingTop: '16px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 8px' }}>
+            {/* Language picker in drawer */}
+            <div style={{ paddingTop: '20px' }}>
+              <p style={{
+                fontSize: '11px', fontWeight: 600, textTransform: 'uppercase',
+                letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
+                margin: '0 0 10px',
+              }}>
                 Language
               </p>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -194,11 +198,11 @@ export default function Nav() {
                     key={l}
                     onClick={() => { setLang(l as Language); setMobileOpen(false); }}
                     style={{
-                      padding: '7px 16px',
-                      fontSize: '13px',
+                      padding: '7px 18px',
+                      fontSize: '14px',
                       fontWeight: l === lang ? 600 : 400,
                       color: l === lang ? '#fff' : 'var(--color-text-secondary)',
-                      background: l === lang ? 'var(--color-gold)' : 'none',
+                      background: l === lang ? 'var(--color-gold)' : 'transparent',
                       border: `1px solid ${l === lang ? 'var(--color-gold)' : 'var(--color-border)'}`,
                       borderRadius: '20px',
                       cursor: 'pointer',
@@ -212,7 +216,6 @@ export default function Nav() {
           </nav>
         </div>
       )}
-
     </>
   );
 }
