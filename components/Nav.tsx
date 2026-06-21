@@ -213,17 +213,6 @@ export default function Nav() {
         </div>
       )}
 
-      <style>{`
-        .desktop-nav  { display: flex; }
-        .desktop-lang { display: block; }
-        .mobile-menu-btn { display: none; }
-
-        @media (max-width: 768px) {
-          .desktop-nav  { display: none; }
-          .desktop-lang { display: none; }
-          .mobile-menu-btn { display: flex; }
-        }
-      `}</style>
     </>
   );
 }

@@ -101,6 +101,17 @@ body {
   padding-right: 24px;
 }
 
+/* ─── Navigation ────────────────────────────────────────────── */
+.desktop-nav   { display: flex; }
+.desktop-lang  { display: block; }
+.mobile-menu-btn { display: none; }
+
+@media (max-width: 768px) {
+  .desktop-nav   { display: none !important; }
+  .desktop-lang  { display: none !important; }
+  .mobile-menu-btn { display: flex !important; }
+}
+
 /* ─── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   /* Tighten page gutters */
