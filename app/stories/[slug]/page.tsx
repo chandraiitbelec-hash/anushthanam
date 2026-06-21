@@ -6,6 +6,7 @@ import { getStoriesForParent } from '@/lib/relations';
 import type { Story, Festival, Vratham } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import StoryReader from '@/components/StoryReader';
+import StoryPartPicker from '@/components/StoryPartPicker';
 
 export const revalidate = 3600;
 
@@ -27,7 +28,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   const story = (rows as unknown as Story[]).find(s => s.slug === slug);
   if (!story) notFound();
 
-  // Fetch paragraphs + parent info + siblings in parallel
   const [paragraphs, siblings, festivalRows, vrathamRows] = await Promise.all([
     story.gdoc_id_en ? getStoryBody(story.gdoc_id_en) : getStoryBodyFromSheet(slug, 'en'),
     story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([]),
@@ -35,7 +35,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     getPublished('vrathams'),
   ]);
 
-  // Resolve parent title + href
   type ParentInfo = { title_en: string; href: string };
   let parent: ParentInfo | null = null;
   if (story.parent_slug) {
@@ -48,8 +47,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     }
   }
 
-  const siblingList = (siblings as unknown as Story[]).filter(s => s.slug !== slug);
-  const currentIndex = (siblings as unknown as Story[]).findIndex(s => s.slug === slug);
+  const parts = (siblings as unknown as Story[]).map(s => ({ slug: s.slug, title_en: s.title_en }));
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
@@ -60,7 +58,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       ]} />
 
       <div style={{ marginBottom: '24px' }}>
-        {/* Parent back-link */}
         {parent && (
           <Link href={parent.href} style={{
             display: 'inline-flex', alignItems: 'center', gap: '4px',
@@ -76,12 +73,12 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           fontSize: 'clamp(28px, 4vw, 44px)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
-          margin: '0 0 8px',
+          margin: '0 0 12px',
         }}>
           {story.title_en}
         </h1>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
           {story.story_type && (
             <span style={{
               padding: '3px 10px',
@@ -94,11 +91,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
               {story.story_type.replace(/-/g, ' ')}
             </span>
           )}
-          {currentIndex >= 0 && siblings.length > 1 && (
-            <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-              Part {currentIndex + 1} of {siblings.length}
-            </span>
-          )}
+          <StoryPartPicker parts={parts} currentSlug={slug} />
         </div>
       </div>
 
@@ -114,49 +107,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       )}
 
       <StoryReader summary={story.brief_summary_en || ''} paragraphs={paragraphs} />
-
-      {/* Sibling stories (other parts of the same festival/vratham) */}
-      {siblingList.length > 0 && (
-        <section style={{ marginTop: '48px', borderTop: '1px solid var(--color-border)', paddingTop: '32px' }}>
-          <h2 style={{
-            fontSize: '13px', fontWeight: 600, textTransform: 'uppercase',
-            letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 16px',
-          }}>
-            More from {parent?.title_en ?? 'this collection'}
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {(siblings as unknown as Story[]).map((s, idx) => (
-              <Link key={s.slug} href={`/stories/${s.slug}`} style={{
-                display: 'flex', alignItems: 'center', gap: '12px',
-                padding: '12px 16px',
-                background: s.slug === slug ? 'rgba(184,134,11,0.06)' : 'var(--color-surface)',
-                border: `1px solid ${s.slug === slug ? 'var(--color-gold)' : 'var(--color-border)'}`,
-                borderRadius: '8px',
-                textDecoration: 'none',
-                opacity: s.slug === slug ? 1 : 0.85,
-              }}>
-                <span style={{
-                  width: '24px', height: '24px', flexShrink: 0,
-                  background: s.slug === slug ? 'var(--color-gold)' : 'rgba(184,134,11,0.1)',
-                  borderRadius: '50%',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '11px', fontWeight: 700,
-                  color: s.slug === slug ? '#fff' : 'var(--color-gold)',
-                }}>
-                  {idx + 1}
-                </span>
-                <span style={{
-                  fontSize: '14px', fontWeight: s.slug === slug ? 600 : 400,
-                  color: 'var(--color-text-primary)',
-                }}>
-                  {s.title_en}
-                  {s.slug === slug && <span style={{ color: 'var(--color-text-secondary)', fontWeight: 400 }}> — reading now</span>}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
