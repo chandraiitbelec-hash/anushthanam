@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
 import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
-import type { Vratham, God } from '@/lib/types';
+import type { Vratham, God, Story } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
@@ -26,10 +26,11 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
   const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
   if (!vratham) notFound();
 
-  const [steps, materials, godRows] = await Promise.all([
+  const [steps, materials, godRows, storyRows] = await Promise.all([
     getProcedureSteps(slug),
     getMaterialItems(slug),
     getPublished('gods'),
+    getPublished('stories_index'),
   ]);
 
   const deities: DeityRef[] = vratham.deity_slug
@@ -38,10 +39,14 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
         .map(g => ({ slug: g.slug, name_en: g.name_en, name_te: g.name_te, name_ta: g.name_ta, name_hi: g.name_hi }))
     : [];
 
+  const story = vratham.linked_story_slug
+    ? ((storyRows as unknown as Story[]).find(s => s.slug === vratham.linked_story_slug) ?? null)
+    : null;
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Vrathams', href: '/vrathams' }, { label: vratham.title_en }]} />
-      <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} />
+      <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} story={story} />
     </div>
   );
 }
