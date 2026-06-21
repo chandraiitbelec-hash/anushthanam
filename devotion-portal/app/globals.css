@@ -62,8 +62,9 @@ body {
 
 .script-telugu {
   font-family: var(--font-telugu);
-  line-height: 1.8;
+  line-height: 2.15;
   font-size: 18px;
+  letter-spacing: 0.03em;
 }
 
 .script-tamil {
