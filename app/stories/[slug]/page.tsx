@@ -1,14 +1,14 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
 import { getStoryBody, getStoryBodyFromSheet } from '@/lib/docs';
 import { getStoriesForParent } from '@/lib/relations';
 import type { Story, Festival, Vratham } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
-import StoryReader from '@/components/StoryReader';
-import StoryPartPicker from '@/components/StoryPartPicker';
+import StoryContent from '@/components/StoryContent';
 
 export const revalidate = 3600;
+
+const LANGS = ['en', 'te', 'ta', 'hi'] as const;
 
 export async function generateStaticParams() {
   const rows = await getPublished('stories_index');
@@ -28,13 +28,31 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   const story = (rows as unknown as Story[]).find(s => s.slug === slug);
   if (!story) notFound();
 
-  const [paragraphs, siblings, festivalRows, vrathamRows] = await Promise.all([
-    story.gdoc_id_en ? getStoryBody(story.gdoc_id_en) : getStoryBodyFromSheet(slug, 'en'),
+  const r = story as unknown as Record<string, string>;
+
+  // Fetch all available language bodies in parallel.
+  // Each lang only makes a Docs API call if a gdoc_id is populated.
+  // 'en' falls back to sheet storage if no gdoc_id.
+  const [langBodies, siblings, festivalRows, vrathamRows] = await Promise.all([
+    Promise.all(
+      LANGS.map(async l => {
+        const gdocId = r[`gdoc_id_${l}`];
+        if (gdocId) return [l, await getStoryBody(gdocId)] as const;
+        if (l === 'en') return [l, await getStoryBodyFromSheet(slug, 'en')] as const;
+        return [l, [] as string[]] as const;
+      })
+    ).then(entries => Object.fromEntries(entries) as Record<string, string[]>),
     story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([]),
     getPublished('festivals'),
     getPublished('vrathams'),
   ]);
 
+  // Summaries per language (fall back gracefully to empty)
+  const summaries: Record<string, string> = Object.fromEntries(
+    LANGS.map(l => [l, r[`brief_summary_${l}`] || ''])
+  );
+
+  // Resolve parent
   type ParentInfo = { title_en: string; href: string };
   let parent: ParentInfo | null = null;
   if (story.parent_slug) {
@@ -57,56 +75,13 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
         { label: story.title_en },
       ]} />
 
-      <div style={{ marginBottom: '24px' }}>
-        {parent && (
-          <Link href={parent.href} style={{
-            display: 'inline-flex', alignItems: 'center', gap: '4px',
-            fontSize: '13px', color: 'var(--color-gold)', fontWeight: 500,
-            textDecoration: 'none', marginBottom: '12px',
-          }}>
-            ← {parent.title_en}
-          </Link>
-        )}
-
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(28px, 4vw, 44px)',
-          fontWeight: 600,
-          color: 'var(--color-text-primary)',
-          margin: '0 0 12px',
-        }}>
-          {story.title_en}
-        </h1>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          {story.story_type && (
-            <span style={{
-              padding: '3px 10px',
-              background: 'rgba(212,98,42,0.1)',
-              border: '1px solid var(--color-saffron)',
-              borderRadius: '20px',
-              fontSize: '12px', color: 'var(--color-saffron)', fontWeight: 600,
-              textTransform: 'capitalize',
-            }}>
-              {story.story_type.replace(/-/g, ' ')}
-            </span>
-          )}
-          <StoryPartPicker parts={parts} currentSlug={slug} />
-        </div>
-      </div>
-
-      {story.reading_instruction_en && (
-        <p style={{
-          fontSize: '13px', color: 'var(--color-text-secondary)', fontStyle: 'italic',
-          margin: '0 0 24px', padding: '12px 16px',
-          background: 'var(--color-surface)', borderRadius: '8px',
-          border: '1px solid var(--color-border)',
-        }}>
-          {story.reading_instruction_en}
-        </p>
-      )}
-
-      <StoryReader summary={story.brief_summary_en || ''} paragraphs={paragraphs} />
+      <StoryContent
+        story={story}
+        bodies={langBodies}
+        summaries={summaries}
+        parent={parent}
+        parts={parts}
+      />
     </div>
   );
 }
