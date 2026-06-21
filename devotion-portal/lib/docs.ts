@@ -1,6 +1,15 @@
 import { google } from 'googleapis';
+import { getSheetRows } from './sheets';
+import { unstable_cache } from 'next/cache';
 
-function getAuth() {
+// Cache the entire stories_content tab for the build; revalidate every hour
+const getStoriesContent = unstable_cache(
+  () => getSheetRows('stories_content'),
+  ['stories_content'],
+  { revalidate: 3600 }
+);
+
+function getDocsAuth() {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
   if (!raw) throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY is not set');
   const credentials = JSON.parse(raw);
@@ -12,7 +21,7 @@ function getAuth() {
 
 export async function getStoryBody(docId: string): Promise<string[]> {
   if (!docId) return [];
-  const auth = await getAuth().getClient();
+  const auth = await getDocsAuth().getClient();
   const docs = google.docs({ version: 'v1', auth: auth as never });
   const res = await docs.documents.get({ documentId: docId });
   return (res.data.body?.content ?? [])
@@ -34,4 +43,18 @@ export async function getStoryBodiesBatched(
     await new Promise(resolve => setTimeout(resolve, 200));
   }
   return results;
+}
+
+// Read story paragraphs from the stories_content Sheets tab.
+// Used when gdoc_id is empty (content stored in Sheet instead of a Doc).
+export async function getStoryBodyFromSheet(
+  storySlug: string,
+  lang: string
+): Promise<string[]> {
+  const rows = await getStoriesContent();
+  return rows
+    .filter(r => r.story_slug === storySlug && r.lang === lang)
+    .sort((a, b) => parseInt(a.paragraph_num) - parseInt(b.paragraph_num))
+    .map(r => r.text)
+    .filter(Boolean);
 }

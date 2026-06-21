@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { unstable_cache } from 'next/cache';
 
 function getAuth() {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
@@ -14,7 +15,7 @@ function getAuth() {
   });
 }
 
-export async function getSheetRows(tabName: string): Promise<Record<string, string>[]> {
+async function fetchSheetRows(tabName: string): Promise<Record<string, string>[]> {
   const auth = await getAuth().getClient();
   const sheets = google.sheets({ version: 'v4', auth: auth as never });
   const res = await sheets.spreadsheets.values.get({
@@ -28,6 +29,13 @@ export async function getSheetRows(tabName: string): Promise<Record<string, stri
     Object.fromEntries((headers as string[]).map((h: string, i: number) => [h, (row[i] ?? '') as string]))
   );
 }
+
+// Cache each tab separately for 1 hour — shared across all pages in the same build
+export const getSheetRows = unstable_cache(
+  fetchSheetRows,
+  ['sheet-rows'],
+  { revalidate: 3600 }
+);
 
 export async function getPublished(tabName: string): Promise<Record<string, string>[]> {
   const rows = await getSheetRows(tabName);

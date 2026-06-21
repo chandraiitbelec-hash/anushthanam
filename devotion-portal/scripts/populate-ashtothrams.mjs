@@ -170,6 +170,30 @@ async function main() {
     }
   }
 
+  // Expand shloka_stanzas sheet to fit all rows
+  const spreadsheetMeta = await sheets.spreadsheets.get({ spreadsheetId });
+  const stanzasSheet = spreadsheetMeta.data.sheets.find(s => s.properties.title === 'shloka_stanzas');
+  if (stanzasSheet) {
+    const needed = stanzaRows.length + 10;
+    if ((stanzasSheet.properties.gridProperties.rowCount || 0) < needed) {
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          requests: [{
+            updateSheetProperties: {
+              properties: {
+                sheetId: stanzasSheet.properties.sheetId,
+                gridProperties: { rowCount: needed },
+              },
+              fields: 'gridProperties.rowCount',
+            },
+          }],
+        },
+      });
+      console.log(`Expanded shloka_stanzas to ${needed} rows`);
+    }
+  }
+
   // Write shlokas
   await sheets.spreadsheets.values.update({
     spreadsheetId,
