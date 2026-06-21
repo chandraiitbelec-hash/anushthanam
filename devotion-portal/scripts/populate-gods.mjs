@@ -199,7 +199,7 @@ async function main() {
     g[8], g[9], g[10], g[11], // descriptions
     g[12], // iconography_en
     '', '', '', // illustration_filename, illustration_credit, image_drive_id
-    'draft', 'en-only', // status, translation_status
+    'published', 'en-only', // status, translation_status
   ]);
 
   await sheets.spreadsheets.values.update({
