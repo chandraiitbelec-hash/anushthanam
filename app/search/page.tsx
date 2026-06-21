@@ -1,7 +1,7 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import SearchPage from './SearchPage';
 
-export const metadata = { title: 'Search | Anushthanam' };
+export const metadata = { title: 'Search | Anuṣṭhāna' };
 
 export default function Page() {
   return (

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('shlokas');
   const shloka = (rows as unknown as Shloka[]).find(s => s.slug === slug);
-  return { title: shloka ? `${shloka.title_en} | Anushthanam` : 'Anushthanam' };
+  return { title: shloka ? `${shloka.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
 }
 
 export default async function ShlokaPage({ params }: { params: Promise<{ slug: string }> }) {

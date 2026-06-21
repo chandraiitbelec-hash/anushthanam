@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('pujas');
   const puja = (rows as unknown as Puja[]).find(p => p.slug === slug);
-  return { title: puja ? `${puja.title_en} | Anushthanam` : 'Anushthanam' };
+  return { title: puja ? `${puja.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
 }
 
 export default async function PujaPage({ params }: { params: Promise<{ slug: string }> }) {

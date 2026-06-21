@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('vrathams');
   const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
-  return { title: vratham ? `${vratham.title_en} | Anushthanam` : 'Anushthanam' };
+  return { title: vratham ? `${vratham.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
 }
 
 export default async function VrathamPage({ params }: { params: Promise<{ slug: string }> }) {

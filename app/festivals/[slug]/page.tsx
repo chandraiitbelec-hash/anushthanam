@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('festivals');
   const festival = (rows as unknown as Festival[]).find(f => f.slug === slug);
-  return { title: festival ? `${festival.title_en} | Anushthanam` : 'Anushthanam' };
+  return { title: festival ? `${festival.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
 }
 
 export default async function FestivalPage({ params }: { params: Promise<{ slug: string }> }) {

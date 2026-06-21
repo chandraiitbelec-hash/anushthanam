@@ -40,14 +40,14 @@ export function useLang() {
 }
 
 export const SITE_NAMES: Record<Language, string> = {
-  en: 'Anushthanam',
+  en: 'Anuṣṭhāna',
   te: 'అనుష్ఠానం',
   ta: 'அனுஷ்டானம்',
   hi: 'अनुष्ठान',
 };
 
 export const LANGUAGE_LABELS: Record<Language, string> = {
-  en: 'Anushthanam - EN',
+  en: 'Anuṣṭhāna - EN',
   te: 'అనుష్ఠానం - TE',
   ta: 'அனுஷ்டானம் - TA',
   hi: 'अनुष्ठान - HI',

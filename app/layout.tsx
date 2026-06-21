@@ -40,7 +40,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: 'Anushthanam',
+  title: 'Anuṣṭhāna',
   description: 'A reference for Hindu devotional practice — gods, shlokas, pujas, festivals, vrathams, and panchangam.',
 };
 
@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main>{children}</main>
           <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '96px', padding: '40px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
             <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-              <span>Anushthanam</span>
+              <span>Anuṣṭhāna</span>
               <nav style={{ display: 'flex', gap: '24px' }}>
                 <a href="/upcoming" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Upcoming</a>
                 <a href="/panchangam" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Panchangam</a>

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('stories_index');
   const story = (rows as unknown as Story[]).find(s => s.slug === slug);
-  return { title: story ? `${story.title_en} | Anushthanam` : 'Anushthanam' };
+  return { title: story ? `${story.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
 }
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
