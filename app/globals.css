@@ -47,7 +47,7 @@
 
 body {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
@@ -58,20 +58,20 @@ body {
 .script-devanagari {
   font-family: var(--font-devanagari);
   line-height: 1.8;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .script-telugu {
   font-family: var(--font-telugu);
   line-height: 2.15;
-  font-size: 18px;
+  font-size: 20px;
   letter-spacing: 0.03em;
 }
 
 .script-tamil {
   font-family: var(--font-tamil);
   line-height: 1.9;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .script-iast {
@@ -137,7 +137,7 @@ body {
   }
 
   /* Script sizes: Telugu/Tamil line-height is very tall — tighten on mobile */
-  .script-telugu { font-size: 16px; }
-  .script-tamil  { font-size: 16px; }
-  .script-devanagari { font-size: 16px; }
+  .script-telugu { font-size: 17px; }
+  .script-tamil  { font-size: 17px; }
+  .script-devanagari { font-size: 17px; }
 }
