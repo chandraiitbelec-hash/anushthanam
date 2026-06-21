@@ -45,8 +45,8 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
       ignoreObserver.current = false;
     }, 900);
 
-    // 110px offset: 64px header + ~46px this chip bar
-    const top = el.getBoundingClientRect().top + window.scrollY - 110;
+    // 64px nav + 57px chip bar + 16px breathing room = 137px
+    const top = el.getBoundingClientRect().top + window.scrollY - 137;
     window.scrollTo({ top, behavior: 'smooth' });
   }
 
