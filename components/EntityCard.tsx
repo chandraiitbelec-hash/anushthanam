@@ -3,20 +3,32 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 
+type Names = { en: string; te?: string; ta?: string; hi?: string; sa?: string };
+
 type EntityCardProps = {
   href: string;
-  title: string;
-  subtitle?: string;
+  names: Names;
   badge?: string;
   badgeColor?: 'gold' | 'saffron' | 'green';
   meta?: string;
 };
 
-export default function EntityCard({ href, title, subtitle, badge, badgeColor = 'gold', meta }: EntityCardProps) {
+export default function EntityCard({ href, names, badge, badgeColor = 'gold', meta }: EntityCardProps) {
+  const { lang } = useLang();
+
+  const title = (names as Record<string, string>)[lang] || names.en;
+  // show English as muted subtitle when viewing another language
+  const subtitle = lang !== 'en' && names.en !== title ? names.en : undefined;
+
+  const titleClass =
+    lang === 'te' ? 'script-telugu' :
+    lang === 'ta' ? 'script-tamil' :
+    lang === 'hi' ? 'script-devanagari' : '';
+
   const badgeColors = {
-    gold: { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold)' },
+    gold:    { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold)' },
     saffron: { bg: 'rgba(212,98,42,0.1)', color: 'var(--color-saffron)' },
-    green: { bg: 'rgba(61,107,79,0.1)', color: 'var(--color-green)' },
+    green:   { bg: 'rgba(61,107,79,0.1)', color: 'var(--color-green)' },
   };
   const bc = badgeColors[badgeColor];
 
@@ -48,9 +60,9 @@ export default function EntityCard({ href, title, subtitle, badge, badgeColor = 
           {badge}
         </span>
       )}
-      <p style={{
-        fontFamily: 'var(--font-cormorant)',
-        fontSize: '20px',
+      <p className={titleClass} style={{
+        fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
+        fontSize: lang === 'en' ? '20px' : '18px',
         fontWeight: 600,
         margin: '0 0 4px',
         color: 'var(--color-text-primary)',

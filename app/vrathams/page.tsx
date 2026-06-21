@@ -2,6 +2,7 @@ import { getPublished } from '@/lib/sheets';
 import type { Vratham } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
+import ListPageHeader from '@/components/ListPageHeader';
 
 export const revalidate = 3600;
 
@@ -12,19 +13,11 @@ export default async function VrathamsPage() {
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Vrathams' }]} />
-      <h1 style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(28px, 4vw, 40px)',
-        fontWeight: 600,
-        color: 'var(--color-text-primary)',
-        margin: '0 0 8px',
-      }}>
-        Vrathams &amp; Vows
-      </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 32px', fontSize: '15px' }}>
-        {vrathams.length} vrathams
-      </p>
-
+      <ListPageHeader
+        titles={{ en: 'Vrathams & Vows', te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }}
+        count={vrathams.length}
+        countLabels={{ en: 'vrathams', te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }}
+      />
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
@@ -34,8 +27,7 @@ export default async function VrathamsPage() {
           <EntityCard
             key={v.slug}
             href={`/vrathams/${v.slug}`}
-            title={v.title_en}
-            subtitle={v.title_te || v.title_ta}
+            names={{ en: v.title_en, te: v.title_te, ta: v.title_ta, hi: v.title_hi }}
             badge={v.duration || v.observance_day || undefined}
             badgeColor="green"
           />

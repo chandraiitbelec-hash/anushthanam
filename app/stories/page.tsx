@@ -2,6 +2,7 @@ import { getPublished } from '@/lib/sheets';
 import type { Story } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
+import ListPageHeader from '@/components/ListPageHeader';
 
 export const revalidate = 3600;
 
@@ -17,18 +18,11 @@ export default async function StoriesPage() {
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Stories' }]} />
-      <h1 style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(28px, 4vw, 40px)',
-        fontWeight: 600,
-        color: 'var(--color-text-primary)',
-        margin: '0 0 8px',
-      }}>
-        Stories &amp; Kathas
-      </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 32px', fontSize: '15px' }}>
-        {stories.length} stories
-      </p>
+      <ListPageHeader
+        titles={{ en: 'Stories & Kathas', te: 'కథలు & కథానాయకులు', ta: 'கதைகள் & கதாநாயகர்கள்', hi: 'कथाएं & कहानियां' }}
+        count={stories.length}
+        countLabels={{ en: 'stories', te: 'కథలు', ta: 'கதைகள்', hi: 'कहानियां' }}
+      />
 
       {Object.entries(byType).map(([type, list]) => (
         <section key={type} style={{ marginBottom: '40px' }}>
@@ -51,8 +45,7 @@ export default async function StoriesPage() {
               <EntityCard
                 key={s.slug}
                 href={`/stories/${s.slug}`}
-                title={s.title_en}
-                subtitle={s.brief_summary_en?.slice(0, 80) || undefined}
+                names={{ en: s.title_en, te: s.title_te, ta: s.title_ta, hi: s.title_hi }}
                 badgeColor="saffron"
               />
             ))}

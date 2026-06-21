@@ -2,6 +2,7 @@ import { getPublished } from '@/lib/sheets';
 import type { Shloka } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
+import ListPageHeader from '@/components/ListPageHeader';
 
 export const revalidate = 3600;
 
@@ -18,18 +19,11 @@ export default async function ShlokasPage() {
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Shlokas' }]} />
-      <h1 style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(28px, 4vw, 40px)',
-        fontWeight: 600,
-        color: 'var(--color-text-primary)',
-        margin: '0 0 8px',
-      }}>
-        Shlokas &amp; Stotras
-      </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 32px', fontSize: '15px' }}>
-        {shlokas.length} texts
-      </p>
+      <ListPageHeader
+        titles={{ en: 'Shlokas & Stotras', te: 'శ్లోకాలు & స్తోత్రాలు', ta: 'ஸ்லோகங்கள் & ஸ்தோத்திரங்கள்', hi: 'श्लोक & स्तोत्र' }}
+        count={shlokas.length}
+        countLabels={{ en: 'texts', te: 'రచనలు', ta: 'நூல்கள்', hi: 'ग्रंथ' }}
+      />
 
       {Object.entries(byType).map(([type, list]) => (
         <section key={type} style={{ marginBottom: '40px' }}>
@@ -52,8 +46,7 @@ export default async function ShlokasPage() {
               <EntityCard
                 key={s.slug}
                 href={`/shlokas/${s.slug}`}
-                title={s.title_en}
-                subtitle={s.brief_intro_en?.slice(0, 60) || undefined}
+                names={{ en: s.title_en, te: s.title_te, ta: s.title_ta, hi: s.title_hi }}
                 badge={s.type || undefined}
                 badgeColor="gold"
               />
