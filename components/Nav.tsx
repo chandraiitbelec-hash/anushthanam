@@ -202,11 +202,12 @@ export default function Nav() {
         .mobile-menu-btn { display: none; }
         .lang-label-full { display: inline; }
         .lang-label-short { display: none; }
-        @media (max-width: 768px) {
+        /* 900px: catches phones in landscape + tablets in portrait */
+        @media (max-width: 900px) {
           .desktop-nav { display: none; }
           .mobile-menu-btn { display: block; }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
           .lang-label-full { display: none; }
           .lang-label-short { display: inline !important; }
         }

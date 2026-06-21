@@ -51,6 +51,7 @@ body {
   line-height: 1.6;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
+  overflow-x: hidden; /* prevent horizontal scroll from negative-margin bleeds */
 }
 
 /* Script-specific classes */
@@ -101,14 +102,16 @@ body {
 }
 
 /* ─── Mobile ────────────────────────────────────────────────── */
-@media (max-width: 640px) {
-  /* Tighten page gutters */
+@media (max-width: 900px) {
+  /* Tighten page gutters to match hamburger breakpoint */
   .content-width,
   .wide-width {
     padding-left: 16px;
     padding-right: 16px;
   }
+}
 
+@media (max-width: 640px) {
   /* SectionNav bleeds edge-to-edge with matching reduced gutter */
   .section-nav-bar {
     margin-left: -16px !important;
