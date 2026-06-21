@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import StoryPartPicker from './StoryPartPicker';
 import type { Story } from '@/lib/types';
@@ -16,16 +15,8 @@ type Props = {
   parts: Part[];
 };
 
-const READ_LABEL: Record<string, string> = {
-  en: 'Read full story', te: 'పూర్తి కథ చదవండి', ta: 'முழு கதை படிக்க', hi: 'पूरी कथा पढ़ें',
-};
-const CLOSE_LABEL: Record<string, string> = {
-  en: 'Close', te: 'మూయండి', ta: 'மூடு', hi: 'बंद करें',
-};
-
 export default function StoryContent({ story, bodies, summaries, parent, parts }: Props) {
   const { lang } = useLang();
-  const [expanded, setExpanded] = useState(false);
 
   const r = story as unknown as Record<string, string>;
 
@@ -130,49 +121,32 @@ export default function StoryContent({ story, bodies, summaries, parent, parts }
         )}
 
         {paras.length > 0 && (
-          <>
-            <div style={{ padding: summary ? '0 24px 20px' : '20px 24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {isFallback && (
-                <p style={{
-                  fontSize: '12px',
-                  color: 'var(--color-text-secondary)',
-                  fontStyle: 'italic',
-                  margin: 0,
-                  padding: '6px 10px',
-                  background: 'rgba(184,134,11,0.06)',
-                  border: '1px solid rgba(184,134,11,0.2)',
-                  borderRadius: '6px',
-                }}>
-                  {FALLBACK_NOTE[lang]}
-                </p>
-              )}
-              <button onClick={() => setExpanded(e => !e)} style={{
-                fontSize: '13px', fontWeight: 500,
-                color: 'var(--color-gold)',
-                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+          <div style={{ padding: summary ? '0 24px 24px' : '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {isFallback && (
+              <p style={{
+                fontSize: '12px',
+                color: 'var(--color-text-secondary)',
+                fontStyle: 'italic',
+                margin: 0,
+                padding: '6px 10px',
+                background: 'rgba(184,134,11,0.06)',
+                border: '1px solid rgba(184,134,11,0.2)',
+                borderRadius: '6px',
               }}>
-                {expanded ? CLOSE_LABEL[lang] : READ_LABEL[lang]} {expanded ? '▲' : '▼'}
-              </button>
-            </div>
-
-            {expanded && (
-              <div style={{
-                padding: '20px 24px 24px',
-                borderTop: '1px solid var(--color-border)',
-              }}>
-                {paras.map((para, i) => (
-                  <p key={i} className={isFallback ? '' : nameClass} style={{
-                    fontSize: '15px',
-                    lineHeight: isFallback ? 1.9 : lang === 'te' ? 2.1 : lang === 'ta' ? 1.9 : lang === 'hi' ? 1.8 : 1.9,
-                    color: 'var(--color-text-primary)',
-                    margin: '0 0 16px',
-                  }}>
-                    {para}
-                  </p>
-                ))}
-              </div>
+                {FALLBACK_NOTE[lang]}
+              </p>
             )}
-          </>
+            {paras.map((para, i) => (
+              <p key={i} className={isFallback ? '' : nameClass} style={{
+                fontSize: '15px',
+                lineHeight: isFallback ? 1.9 : lang === 'te' ? 2.1 : lang === 'ta' ? 1.9 : lang === 'hi' ? 1.8 : 1.9,
+                color: 'var(--color-text-primary)',
+                margin: 0,
+              }}>
+                {para}
+              </p>
+            ))}
+          </div>
         )}
       </div>
     </>
