@@ -38,8 +38,8 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       LANGS.map(async l => {
         const gdocId = r[`gdoc_id_${l}`];
         if (gdocId) return [l, await getStoryBody(gdocId)] as const;
-        if (l === 'en') return [l, await getStoryBodyFromSheet(slug, 'en')] as const;
-        return [l, [] as string[]] as const;
+        // Fall back to stories_content Sheet for every language, not just English
+        return [l, await getStoryBodyFromSheet(slug, l)] as const;
       })
     ).then(entries => Object.fromEntries(entries) as Record<string, string[]>),
     story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([]),
