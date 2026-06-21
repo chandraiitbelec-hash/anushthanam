@@ -21,12 +21,12 @@
   --color-gold-dark: #D4A017;
   --color-saffron-dark: #E07040;
 
-  /* Fonts */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Noto Sans', sans-serif;
-  --font-telugu: 'Noto Sans Telugu', serif;
-  --font-tamil: 'Noto Sans Tamil', serif;
-  --font-devanagari: 'Noto Sans Devanagari', serif;
+  /* Fonts — variables set by next/font in layout.tsx */
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-noto-sans), sans-serif;
+  --font-telugu: var(--font-noto-telugu), serif;
+  --font-tamil: var(--font-noto-tamil), serif;
+  --font-devanagari: var(--font-noto-devanagari), serif;
 
   /* Spacing base: 4px */
   --spacing-1: 4px;
