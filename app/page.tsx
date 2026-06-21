@@ -34,14 +34,13 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section style={{
-        padding: '96px 24px 80px',
+      <section className="hero-section" style={{
         textAlign: 'center',
         borderBottom: '1px solid var(--color-border)',
       }}>
         <h1 style={{
           fontFamily: 'var(--font-cormorant)',
-          fontSize: 'clamp(40px, 6vw, 72px)',
+          fontSize: 'clamp(36px, 7vw, 72px)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 16px',
@@ -50,10 +49,13 @@ export default function HomePage() {
           {SITE_NAMES[lang]}
         </h1>
         <p style={{
-          fontSize: '18px',
+          fontSize: 'clamp(15px, 2.5vw, 18px)',
           color: 'var(--color-text-secondary)',
-          margin: '0 0 40px',
+          margin: '0 0 36px',
           lineHeight: 1.6,
+          maxWidth: '480px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}>
           {TAGLINES[lang]}
         </p>
@@ -72,32 +74,26 @@ export default function HomePage() {
       </section>
 
       {/* Explore */}
-      <section className="wide-width" style={{ padding: '64px 24px' }}>
+      <section className="wide-width explore-section">
         <h2 style={{
           fontFamily: 'var(--font-cormorant)',
-          fontSize: '28px',
+          fontSize: 'clamp(22px, 3vw, 28px)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
-          margin: '0 0 32px',
+          margin: '0 0 24px',
         }}>
           {LABELS.explore[lang]}
         </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="explore-grid">
           {EXPLORE.map(item => (
-            <Link key={item.href} href={item.href} style={{
+            <Link key={item.href} href={item.href} className="explore-card" style={{
               display: 'block',
-              padding: '24px',
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderRadius: '12px',
               textDecoration: 'none',
               color: 'var(--color-text-primary)',
               fontFamily: 'var(--font-cormorant)',
-              fontSize: '22px',
               fontWeight: 600,
             }}
               onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
@@ -108,6 +104,26 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <style>{`
+        .hero-section { padding: 80px 24px 64px; }
+        .explore-section { padding: 56px 24px; }
+        .explore-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 16px;
+        }
+        .explore-card { padding: 24px; font-size: 22px; }
+        @media (max-width: 640px) {
+          .hero-section { padding: 52px 16px 44px; }
+          .explore-section { padding: 36px 16px; }
+          .explore-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+          .explore-card { padding: 18px 16px; font-size: 18px; }
+        }
+      `}</style>
     </div>
   );
 }

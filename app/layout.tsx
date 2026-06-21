@@ -54,10 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <Nav />
           <main>{children}</main>
-          <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '96px', padding: '40px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
-            <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-              <span>Anuṣṭhāna</span>
-              <nav style={{ display: 'flex', gap: '24px' }}>
+          <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+            <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '16px', color: 'var(--color-text-primary)' }}>Anuṣṭhāna</span>
+              <nav style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                 <a href="/upcoming" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Upcoming</a>
                 <a href="/panchangam" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Panchangam</a>
                 <a href="/index" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Site Index</a>

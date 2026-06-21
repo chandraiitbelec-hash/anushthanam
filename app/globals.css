@@ -99,3 +99,32 @@ body {
   padding-left: 24px;
   padding-right: 24px;
 }
+
+/* ─── Mobile ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Tighten page gutters */
+  .content-width,
+  .wide-width {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* SectionNav bleeds edge-to-edge with matching reduced gutter */
+  .section-nav-bar {
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Chip font a touch smaller */
+  .section-nav-bar button {
+    font-size: 12px !important;
+    padding: 4px 12px !important;
+  }
+
+  /* Script sizes: Telugu/Tamil line-height is very tall — tighten on mobile */
+  .script-telugu { font-size: 16px; }
+  .script-tamil  { font-size: 16px; }
+  .script-devanagari { font-size: 16px; }
+}

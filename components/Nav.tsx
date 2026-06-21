@@ -85,6 +85,7 @@ export default function Nav() {
             <div style={{ position: 'relative' }}>
               <button
                 onClick={() => setLangOpen(o => !o)}
+                aria-label="Switch language"
                 style={{
                   fontSize: '13px',
                   color: 'var(--color-text-secondary)',
@@ -96,7 +97,10 @@ export default function Nav() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                {LANGUAGE_LABELS[lang]}
+                <span className="lang-label-full">{LANGUAGE_LABELS[lang]}</span>
+                <span className="lang-label-short" style={{ display: 'none' }}>
+                  {lang === 'te' ? 'తె' : lang === 'ta' ? 'த' : lang === 'hi' ? 'हि' : 'En'}
+                </span>
               </button>
 
               {langOpen && (
@@ -196,9 +200,15 @@ export default function Nav() {
       <style>{`
         .desktop-nav { display: flex; }
         .mobile-menu-btn { display: none; }
+        .lang-label-full { display: inline; }
+        .lang-label-short { display: none; }
         @media (max-width: 768px) {
           .desktop-nav { display: none; }
           .mobile-menu-btn { display: block; }
+        }
+        @media (max-width: 480px) {
+          .lang-label-full { display: none; }
+          .lang-label-short { display: inline !important; }
         }
       `}</style>
     </>
