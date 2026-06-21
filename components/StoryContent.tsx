@@ -31,7 +31,17 @@ export default function StoryContent({ story, bodies, summaries, parent, parts }
 
   const title   = r[`title_${lang}`]         || story.title_en;
   const summary = summaries[lang]             || summaries.en || '';
-  const paras   = (bodies[lang]?.length ? bodies[lang] : bodies.en) ?? [];
+
+  // Pick body in selected language; track if we fell back to English
+  const bodyLang  = bodies[lang]?.length ? lang : 'en';
+  const paras     = bodies[bodyLang] ?? [];
+  const isFallback = lang !== 'en' && bodyLang === 'en' && paras.length > 0;
+
+  const FALLBACK_NOTE: Record<string, string> = {
+    te: 'పూర్తి కథ ఇంకా తెలుగులో అందుబాటులో లేదు — ఇంగ్లీష్‌లో చదువుతున్నారు',
+    ta: 'முழு கதை இன்னும் தமிழில் கிடைக்கவில்லை — ஆங்கிலத்தில் படிக்கிறீர்கள்',
+    hi: 'पूरी कथा अभी हिंदी में उपलब्ध नहीं है — अंग्रेज़ी में पढ़ रहे हैं',
+  };
 
   const nameClass =
     lang === 'te' ? 'script-telugu' :
@@ -121,7 +131,21 @@ export default function StoryContent({ story, bodies, summaries, parent, parts }
 
         {paras.length > 0 && (
           <>
-            <div style={{ padding: summary ? '0 24px 20px' : '20px 24px' }}>
+            <div style={{ padding: summary ? '0 24px 20px' : '20px 24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {isFallback && (
+                <p style={{
+                  fontSize: '12px',
+                  color: 'var(--color-text-secondary)',
+                  fontStyle: 'italic',
+                  margin: 0,
+                  padding: '6px 10px',
+                  background: 'rgba(184,134,11,0.06)',
+                  border: '1px solid rgba(184,134,11,0.2)',
+                  borderRadius: '6px',
+                }}>
+                  {FALLBACK_NOTE[lang]}
+                </p>
+              )}
               <button onClick={() => setExpanded(e => !e)} style={{
                 fontSize: '13px', fontWeight: 500,
                 color: 'var(--color-gold)',
@@ -137,9 +161,9 @@ export default function StoryContent({ story, bodies, summaries, parent, parts }
                 borderTop: '1px solid var(--color-border)',
               }}>
                 {paras.map((para, i) => (
-                  <p key={i} className={nameClass} style={{
+                  <p key={i} className={isFallback ? '' : nameClass} style={{
                     fontSize: '15px',
-                    lineHeight: lang === 'te' ? 2.1 : lang === 'ta' ? 1.9 : lang === 'hi' ? 1.8 : 1.9,
+                    lineHeight: isFallback ? 1.9 : lang === 'te' ? 2.1 : lang === 'ta' ? 1.9 : lang === 'hi' ? 1.8 : 1.9,
                     color: 'var(--color-text-primary)',
                     margin: '0 0 16px',
                   }}>
