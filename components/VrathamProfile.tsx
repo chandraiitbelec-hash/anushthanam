@@ -43,10 +43,10 @@ type Props = {
   steps: ProcedureStep[];
   materials: MaterialItem[];
   deities: DeityRef[];
-  story: Story | null;
+  stories: Story[];
 };
 
-export default function VrathamProfile({ vratham, steps, materials, deities, story }: Props) {
+export default function VrathamProfile({ vratham, steps, materials, deities, stories }: Props) {
   const { lang } = useLang();
 
   const r = vratham as unknown as Record<string, string>;
@@ -59,9 +59,6 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
 
-  const sr = story ? story as unknown as Record<string, string> : null;
-  const storyTitle   = sr ? (sr[`title_${lang}`]         || story!.title_en)         : '';
-  const storySummary = sr ? (sr[`brief_summary_${lang}`] || story!.brief_summary_en) : '';
 
   return (
     <>
@@ -143,53 +140,42 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         </section>
       )}
 
-      {story && (
+      {stories.length > 0 && (
         <section style={{ marginBottom: '32px' }}>
           <SectionHeading>{label('story', lang)}</SectionHeading>
-          <div style={{
-            padding: '20px 24px',
-            background: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-            borderLeft: '4px solid var(--color-gold)',
-            borderRadius: '8px',
-          }}>
-            {story.story_type && (
-              <span style={{
-                display: 'inline-block',
-                padding: '2px 10px',
-                background: 'rgba(184,134,11,0.12)',
-                border: '1px solid var(--color-gold)',
-                borderRadius: '12px',
-                fontSize: '11px', fontWeight: 600,
-                color: 'var(--color-gold)',
-                textTransform: 'uppercase', letterSpacing: '0.06em',
-                marginBottom: '10px',
-              }}>
-                {STORY_TYPE_LABELS[story.story_type] ?? story.story_type}
-              </span>
-            )}
-            <h3 className={nameClass} style={{
-              fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-              fontSize: '20px', fontWeight: 600,
-              color: 'var(--color-text-primary)',
-              margin: '0 0 8px',
-            }}>
-              {storyTitle}
-            </h3>
-            {storySummary && (
-              <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: '0 0 16px' }}>
-                {storySummary}
-              </p>
-            )}
-            <Link href={`/stories/${story.slug}`} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
-              padding: '8px 18px',
-              background: 'var(--color-gold)', color: '#fff',
-              borderRadius: '6px', fontSize: '14px', fontWeight: 600,
-              textDecoration: 'none',
-            }}>
-              {label('readStory', lang)} →
-            </Link>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {stories.map((s, idx) => {
+              const sr = s as unknown as Record<string, string>;
+              const t = sr[`title_${lang}`] || s.title_en;
+              return (
+                <Link key={s.slug} href={`/stories/${s.slug}`} style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '14px 18px',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  borderLeft: '3px solid var(--color-gold)',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                }}>
+                  {stories.length > 1 && (
+                    <span style={{
+                      width: '24px', height: '24px', flexShrink: 0,
+                      background: 'rgba(184,134,11,0.1)', border: '1px solid var(--color-gold)',
+                      borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '11px', fontWeight: 700, color: 'var(--color-gold)',
+                    }}>{idx + 1}</span>
+                  )}
+                  <span className={nameClass} style={{
+                    flex: 1, fontSize: '15px', fontWeight: 500,
+                    fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
+                    color: 'var(--color-text-primary)',
+                  }}>{t}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--color-gold)', fontWeight: 600, flexShrink: 0 }}>
+                    {label('readStory', lang)} →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}

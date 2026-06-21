@@ -184,6 +184,8 @@ export type Story = {
   gdoc_id_te: string;
   gdoc_id_ta: string;
   gdoc_id_hi: string;
+  parent_slug: string;
+  parent_type: 'festival' | 'vratham' | '';
   status: Status;
   translation_status: TranslationStatus;
 };

@@ -9,19 +9,12 @@ import DeityChips from './DeityChips';
 import type { DeityRef } from './DeityChips';
 
 const SECTION_LABELS: Record<string, Record<string, string>> = {
-  significance: { en: 'Significance',       te: 'ప్రాముఖ్యత',              ta: 'முக்கியத்துவம்',    hi: 'महत्व' },
-  materials:    { en: 'Materials Required',  te: 'అవసరమైన సామగ్రి',          ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' },
-  procedure:    { en: 'Celebration Procedure', te: 'పూజా విధానం',            ta: 'கொண்டாட்ட நடைமுறை', hi: 'पूजा विधि' },
-  story:        { en: 'Related Story',       te: 'సంబంధిత కథ',              ta: 'தொடர்புடைய கதை',    hi: 'संबंधित कथा' },
-  readStory:    { en: 'Read Story',          te: 'కథ చదవండి',               ta: 'கதை படிக்க',        hi: 'कथा पढ़ें' },
-  next:         { en: 'Next',                te: 'తదుపరి',                   ta: 'அடுத்தது',          hi: 'अगला' },
-};
-
-const STORY_TYPE_LABELS: Record<string, string> = {
-  'vrata-katha':    'Vrata Katha',
-  'mahatmya':       'Mahatmya',
-  'purana-story':   'Purana Story',
-  'sthala-purana':  'Sthala Purana',
+  significance: { en: 'Significance',            te: 'ప్రాముఖ్యత',    ta: 'முக்கியத்துவம்',    hi: 'महत्व' },
+  materials:    { en: 'Materials Required',       te: 'అవసరమైన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' },
+  procedure:    { en: 'Celebration Procedure',    te: 'పూజా విధానం',    ta: 'கொண்டாட்ட நடைமுறை', hi: 'पूजा विधि' },
+  story:        { en: 'Stories & Kathas',         te: 'కథలు',           ta: 'கதைகள்',             hi: 'कथाएं' },
+  readStory:    { en: 'Read',                     te: 'చదవండి',         ta: 'படிக்க',              hi: 'पढ़ें' },
+  next:         { en: 'Next',                     te: 'తదుపరి',         ta: 'அடுத்தது',           hi: 'अगला' },
 };
 
 function label(key: string, lang: string) {
@@ -43,11 +36,11 @@ type Props = {
   festival: Festival;
   steps: ProcedureStep[];
   materials: MaterialItem[];
-  story: Story | null;
+  stories: Story[];
   deities: DeityRef[];
 };
 
-export default function FestivalProfile({ festival, steps, materials, story, deities }: Props) {
+export default function FestivalProfile({ festival, steps, materials, stories, deities }: Props) {
   const { lang } = useLang();
 
   const r = festival as unknown as Record<string, string>;
@@ -58,9 +51,6 @@ export default function FestivalProfile({ festival, steps, materials, story, dei
     lang === 'te' ? 'script-telugu' :
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
-
-  const storyTitle   = story ? ((story as unknown as Record<string, string>)[`title_${lang}`]         || story.title_en)         : '';
-  const storySummary = story ? ((story as unknown as Record<string, string>)[`brief_summary_${lang}`] || story.brief_summary_en) : '';
 
   return (
     <>
@@ -119,61 +109,46 @@ export default function FestivalProfile({ festival, steps, materials, story, dei
         </section>
       )}
 
-      {/* Linked Story */}
-      {story && (
+      {/* Stories */}
+      {stories.length > 0 && (
         <section style={{ marginBottom: '32px' }}>
           <SectionHeading>{label('story', lang)}</SectionHeading>
-          <div style={{
-            padding: '20px 24px',
-            background: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-            borderLeft: '4px solid var(--color-gold)',
-            borderRadius: '8px',
-          }}>
-            {story.story_type && (
-              <span style={{
-                display: 'inline-block',
-                padding: '2px 10px',
-                background: 'rgba(184,134,11,0.12)',
-                border: '1px solid var(--color-gold)',
-                borderRadius: '12px',
-                fontSize: '11px',
-                fontWeight: 600,
-                color: 'var(--color-gold)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                marginBottom: '10px',
-              }}>
-                {STORY_TYPE_LABELS[story.story_type] ?? story.story_type}
-              </span>
-            )}
-            <h3 className={nameClass} style={{
-              fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-              fontSize: '20px', fontWeight: 600,
-              color: 'var(--color-text-primary)',
-              margin: '0 0 8px',
-            }}>
-              {storyTitle}
-            </h3>
-            {storySummary && (
-              <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: '0 0 16px' }}>
-                {storySummary}
-              </p>
-            )}
-            <Link href={`/stories/${story.slug}`} style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 18px',
-              background: 'var(--color-gold)',
-              color: '#fff',
-              borderRadius: '6px',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}>
-              {label('readStory', lang)} →
-            </Link>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {stories.map((s, idx) => {
+              const sr = s as unknown as Record<string, string>;
+              const t = sr[`title_${lang}`] || s.title_en;
+              return (
+                <Link key={s.slug} href={`/stories/${s.slug}`} style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '14px 18px',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  borderLeft: '3px solid var(--color-gold)',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                }}
+                  onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
+                  onMouseOut={e => (e.currentTarget.style.borderLeftColor = 'var(--color-gold)', e.currentTarget.style.borderColor = 'var(--color-border)')}
+                >
+                  {stories.length > 1 && (
+                    <span style={{
+                      width: '24px', height: '24px', flexShrink: 0,
+                      background: 'rgba(184,134,11,0.1)', border: '1px solid var(--color-gold)',
+                      borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '11px', fontWeight: 700, color: 'var(--color-gold)',
+                    }}>{idx + 1}</span>
+                  )}
+                  <span className={nameClass} style={{
+                    flex: 1, fontSize: '15px', fontWeight: 500,
+                    fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
+                    color: 'var(--color-text-primary)',
+                  }}>{t}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--color-gold)', fontWeight: 600, flexShrink: 0 }}>
+                    {label('readStory', lang)} →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}

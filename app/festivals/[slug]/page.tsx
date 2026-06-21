@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
+import { getProcedureSteps, getMaterialItems, getStoriesForParent } from '@/lib/relations';
 import type { Festival, Story, God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -31,13 +31,11 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
   const [steps, materials, storyRows, godRows] = await Promise.all([
     getProcedureSteps(festival.slug),
     getMaterialItems(materialsSlug),
-    getPublished('stories_index'),
+    getStoriesForParent(festival.slug),
     getPublished('gods'),
   ]);
 
-  const story = festival.linked_story_slug
-    ? ((storyRows as unknown as Story[]).find(s => s.slug === festival.linked_story_slug) ?? null)
-    : null;
+  const stories = storyRows as unknown as Story[];
 
   const deitySlugList = festival.deity_slugs
     ? festival.deity_slugs.split(',').map((s: string) => s.trim()).filter(Boolean)
@@ -50,7 +48,7 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Festivals', href: '/festivals' }, { label: festival.title_en }]} />
-      <FestivalProfile festival={festival} steps={steps} materials={materials} story={story} deities={deities} />
+      <FestivalProfile festival={festival} steps={steps} materials={materials} stories={stories} deities={deities} />
     </div>
   );
 }

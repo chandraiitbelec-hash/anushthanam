@@ -80,6 +80,11 @@ export async function getShlokaStanzas(shlokaSlug: string) {
     .sort((a, b) => a.stanza_number - b.stanza_number);
 }
 
+export async function getStoriesForParent(parentSlug: string) {
+  const rows = await getPublished('stories_index');
+  return rows.filter(r => r.parent_slug === parentSlug);
+}
+
 export async function getUpcoming(limit?: number) {
   const [festivals, vrathams] = await Promise.all([
     getPublished('festivals'),
