@@ -68,7 +68,6 @@ export default async function StoriesPage() {
                 color: 'var(--color-text-primary)',
                 textDecoration: 'none',
               }}
-                onMouseOver={undefined}
               >
                 {parent.title_en}
               </Link>
@@ -88,10 +87,7 @@ export default async function StoriesPage() {
                   border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   textDecoration: 'none',
-                  transition: 'border-color 0.15s',
                 }}
-                  onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
-                  onMouseOut={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
                 >
                   <span style={{
                     width: '28px', height: '28px', flexShrink: 0,

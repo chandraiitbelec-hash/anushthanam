@@ -6,26 +6,30 @@ import type { Festival, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
 import DeityChips from './DeityChips';
+import SectionNav from './SectionNav';
 import type { DeityRef } from './DeityChips';
+import type { NavSection } from './SectionNav';
 
 const SECTION_LABELS: Record<string, Record<string, string>> = {
-  significance: { en: 'Significance',            te: 'ప్రాముఖ్యత',    ta: 'முக்கியத்துவம்',    hi: 'महत्व' },
-  materials:    { en: 'Materials Required',       te: 'అవసరమైన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' },
-  procedure:    { en: 'Celebration Procedure',    te: 'పూజా విధానం',    ta: 'கொண்டாட்ட நடைமுறை', hi: 'पूजा विधि' },
-  story:        { en: 'Stories & Kathas',         te: 'కథలు',           ta: 'கதைகள்',             hi: 'कथाएं' },
-  readStory:    { en: 'Read',                     te: 'చదవండి',         ta: 'படிக்க',              hi: 'पढ़ें' },
-  next:         { en: 'Next',                     te: 'తదుపరి',         ta: 'அடுத்தது',           hi: 'अगला' },
+  significance: { en: 'Significance',         te: 'ప్రాముఖ్యత',     ta: 'முக்கியத்துவம்',    hi: 'महत्व' },
+  materials:    { en: 'Materials',             te: 'సామగ్రి',         ta: 'பொருட்கள்',          hi: 'सामग्री' },
+  procedure:    { en: 'Procedure',             te: 'విధానం',          ta: 'நடைமுறை',            hi: 'विधि' },
+  story:        { en: 'Stories',               te: 'కథలు',            ta: 'கதைகள்',             hi: 'कथाएं' },
+  readStory:    { en: 'Read',                  te: 'చదవండి',          ta: 'படிக்க',              hi: 'पढ़ें' },
+  next:         { en: 'Next',                  te: 'తదుపరి',          ta: 'அடுத்தது',           hi: 'अगला' },
 };
 
 function label(key: string, lang: string) {
   return SECTION_LABELS[key]?.[lang] ?? SECTION_LABELS[key]?.en ?? key;
 }
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
+function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 style={{
+    <h2 id={id} style={{
       fontSize: '13px', fontWeight: 600, textTransform: 'uppercase',
-      letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 12px',
+      letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
+      margin: '0 0 12px',
+      scrollMarginTop: '120px', // offset for sticky nav + chip bar
     }}>
       {children}
     </h2>
@@ -52,10 +56,18 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
 
+  // Build section nav dynamically — only include sections that have content
+  const navSections: NavSection[] = [
+    significance                  && { id: 'significance', label: label('significance', lang) },
+    materials.length > 0          && { id: 'materials',    label: label('materials', lang) },
+    steps.length > 0              && { id: 'procedure',    label: label('procedure', lang) },
+    stories.length > 0            && { id: 'stories',      label: label('story', lang) },
+  ].filter(Boolean) as NavSection[];
+
   return (
     <>
       {/* Header */}
-      <div style={{ marginBottom: '32px' }}>
+      <div style={{ marginBottom: '24px' }}>
         <h1 className={nameClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
           fontSize: 'clamp(32px, 5vw, 52px)',
@@ -67,26 +79,29 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
         </h1>
 
         {lang !== 'en' && festival.title_en && (
-          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 12px' }}>
+          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 10px' }}>
             {festival.title_en}
           </p>
         )}
 
         {festival.next_occurrence && (
-          <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: 0 }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
             {label('next', lang)}: {new Date(festival.next_occurrence).toLocaleDateString('en-IN', {
               year: 'numeric', month: 'long', day: 'numeric',
             })}
           </p>
         )}
+
+        <DeityChips deities={deities} />
       </div>
 
-      <DeityChips deities={deities} />
+      {/* Sticky section nav */}
+      <SectionNav sections={navSections} />
 
       {/* Significance */}
       {significance && (
-        <section style={{ marginBottom: '32px' }}>
-          <SectionHeading>{label('significance', lang)}</SectionHeading>
+        <section style={{ marginBottom: '40px' }}>
+          <SectionHeading id="significance">{label('significance', lang)}</SectionHeading>
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
             {significance}
           </p>
@@ -95,24 +110,24 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
 
       {/* Materials */}
       {materials.length > 0 && (
-        <section style={{ marginBottom: '32px' }}>
-          <SectionHeading>{label('materials', lang)}</SectionHeading>
+        <section style={{ marginBottom: '40px' }}>
+          <SectionHeading id="materials">{label('materials', lang)}</SectionHeading>
           <MaterialsList items={materials} />
         </section>
       )}
 
       {/* Procedure */}
       {steps.length > 0 && (
-        <section style={{ marginBottom: '32px' }}>
-          <SectionHeading>{label('procedure', lang)}</SectionHeading>
+        <section style={{ marginBottom: '40px' }}>
+          <SectionHeading id="procedure">{label('procedure', lang)}</SectionHeading>
           <ProcedureSteps steps={steps} />
         </section>
       )}
 
       {/* Stories */}
       {stories.length > 0 && (
-        <section style={{ marginBottom: '32px' }}>
-          <SectionHeading>{label('story', lang)}</SectionHeading>
+        <section style={{ marginBottom: '40px' }}>
+          <SectionHeading id="stories">{label('story', lang)}</SectionHeading>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {stories.map((s, idx) => {
               const sr = s as unknown as Record<string, string>;
@@ -127,8 +142,8 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
                   borderRadius: '8px',
                   textDecoration: 'none',
                 }}
-                  onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
-                  onMouseOut={e => (e.currentTarget.style.borderLeftColor = 'var(--color-gold)', e.currentTarget.style.borderColor = 'var(--color-border)')}
+                  onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.04)')}
+                  onMouseOut={e => (e.currentTarget.style.background = 'var(--color-surface)')}
                 >
                   {stories.length > 1 && (
                     <span style={{
