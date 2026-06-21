@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colours */
+  --color-bg: #FAF7F2;
+  --color-surface: #F2EDE5;
+  --color-border: #DDD5C8;
+  --color-text-primary: #2D2520;
+  --color-text-secondary: #7A6E64;
+  --color-gold: #B8860B;
+  --color-saffron: #D4622A;
+  --color-green: #3D6B4F;
+  --color-red-muted: #8B3A3A;
+
+  /* Dark mode */
+  --color-bg-dark: #1C1611;
+  --color-surface-dark: #26201A;
+  --color-border-dark: #3A3028;
+  --color-text-primary-dark: #F0EAE0;
+  --color-text-secondary-dark: #9A8E84;
+  --color-gold-dark: #D4A017;
+  --color-saffron-dark: #E07040;
+
+  /* Fonts */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Noto Sans', sans-serif;
+  --font-telugu: 'Noto Sans Telugu', serif;
+  --font-tamil: 'Noto Sans Tamil', serif;
+  --font-devanagari: 'Noto Sans Devanagari', serif;
+
+  /* Spacing base: 4px */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+}
+
+:root {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+/* Script-specific classes */
+.script-devanagari {
+  font-family: var(--font-devanagari);
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+.script-telugu {
+  font-family: var(--font-telugu);
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+.script-tamil {
+  font-family: var(--font-tamil);
+  line-height: 1.9;
+  font-size: 18px;
+}
+
+.script-iast {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Max width containers */
+.content-width {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.wide-width {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
