@@ -15,19 +15,46 @@ function getAuth() {
   });
 }
 
-async function fetchSheetRows(tabName: string): Promise<Record<string, string>[]> {
-  const auth = await getAuth().getClient();
-  const sheets = google.sheets({ version: 'v4', auth: auth as never });
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
-    range: `${tabName}!A:ZZ`,
-  });
-  const values = res.data.values ?? [];
-  if (values.length < 1) return [];
-  const [headers, ...rows] = values;
-  return rows.map(row =>
-    Object.fromEntries((headers as string[]).map((h: string, i: number) => [h, (row[i] ?? '') as string]))
-  );
+// Coalesce concurrent calls for the same tab into one in-flight request.
+// unstable_cache deduplicates after the first resolve; this deduplicates before.
+const inflight = new Map<string, Promise<Record<string, string>[]>>();
+
+async function fetchWithRetry(tabName: string): Promise<Record<string, string>[]> {
+  const MAX_RETRIES = 5;
+  let delay = 2000;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const auth = await getAuth().getClient();
+      const sheets = google.sheets({ version: 'v4', auth: auth as never });
+      const res = await sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
+        range: `${tabName}!A:ZZ`,
+      });
+      const values = res.data.values ?? [];
+      if (values.length < 1) return [];
+      const [headers, ...rows] = values;
+      return rows.map(row =>
+        Object.fromEntries((headers as string[]).map((h: string, i: number) => [h, (row[i] ?? '') as string]))
+      );
+    } catch (err: unknown) {
+      const status = (err as { status?: number; code?: number }).status ?? (err as { code?: number }).code;
+      if (status === 429 && attempt < MAX_RETRIES) {
+        await new Promise(res => setTimeout(res, delay));
+        delay = Math.min(delay * 2, 30000);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error(`Failed to fetch sheet tab "${tabName}" after ${MAX_RETRIES} retries`);
+}
+
+function fetchSheetRows(tabName: string): Promise<Record<string, string>[]> {
+  const existing = inflight.get(tabName);
+  if (existing) return existing;
+  const promise = fetchWithRetry(tabName).finally(() => inflight.delete(tabName));
+  inflight.set(tabName, promise);
+  return promise;
 }
 
 // Cache each tab separately for 1 hour — shared across all pages in the same build
