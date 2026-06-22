@@ -4,6 +4,7 @@ import { getLinksForGod } from '@/lib/relations';
 import type { God, GodLink, Shloka, Festival } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import GodProfile from '@/components/GodProfile';
+import { pageMeta, SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -16,7 +17,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('gods');
   const god = (rows as unknown as God[]).find(g => g.slug === slug);
-  return { title: god ? `${god.name_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  if (!god) return { title: 'Anuṣṭhāna' };
+  const altNames = god.alternate_names_en ? ` Also known as ${god.alternate_names_en}.` : '';
+  return pageMeta(god.name_en, (god.description_en || '') + altNames, `/gods/${slug}`);
 }
 
 export default async function GodPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -60,8 +63,18 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
   const pujas    = rawLinks.filter((l: GodLink) => l.entity_type === 'puja').map(l => resolveLink(l, 'puja'));
   const festivals = rawLinks.filter((l: GodLink) => l.entity_type === 'festival').map(l => resolveLink(l, 'festival'));
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Thing',
+    name: god.name_en,
+    alternateName: [god.name_sa, god.alternate_names_en].filter(Boolean),
+    description: god.description_en,
+    url: `${SITE_URL}/gods/${slug}`,
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumb crumbs={[{ label: 'Gods', href: '/gods' }, { label: god.name_en }]} />
       <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} />
     </div>

@@ -5,6 +5,7 @@ import type { Festival, Story, God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import FestivalProfile from '@/components/FestivalProfile';
+import { pageMeta, SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -17,7 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('festivals');
   const festival = (rows as unknown as Festival[]).find(f => f.slug === slug);
-  return { title: festival ? `${festival.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  if (!festival) return { title: 'Anuṣṭhāna' };
+  return pageMeta(festival.title_en, festival.significance_en || '', `/festivals/${slug}`);
 }
 
 export default async function FestivalPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -45,8 +47,20 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
     .filter((g): g is God => Boolean(g))
     .map(g => ({ slug: g.slug, name_en: g.name_en, name_te: g.name_te, name_ta: g.name_ta, name_hi: g.name_hi }));
 
+  const altNames = festival.alternate_names_en ? festival.alternate_names_en.split(',').map(s => s.trim()) : [];
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Festival',
+    name: festival.title_en,
+    alternateName: altNames,
+    description: festival.significance_en,
+    url: `${SITE_URL}/festivals/${slug}`,
+    ...(festival.next_occurrence ? { startDate: festival.next_occurrence } : {}),
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumb crumbs={[{ label: 'Festivals', href: '/festivals' }, { label: festival.title_en }]} />
       <FestivalProfile festival={festival} steps={steps} materials={materials} stories={stories} deities={deities} />
     </div>

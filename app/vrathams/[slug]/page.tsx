@@ -5,6 +5,7 @@ import type { Vratham, God, Story } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
+import { pageMeta, SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -17,7 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('vrathams');
   const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
-  return { title: vratham ? `${vratham.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  if (!vratham) return { title: 'Anuṣṭhāna' };
+  const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
+  return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
 }
 
 export default async function VrathamPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -41,8 +44,21 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
 
   const stories = storyRows as unknown as Story[];
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: vratham.title_en,
+    description: vratham.benefits_en,
+    url: `${SITE_URL}/vrathams/${slug}`,
+    about: {
+      '@type': 'Thing',
+      name: vratham.title_en,
+    },
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumb crumbs={[{ label: 'Vrathams', href: '/vrathams' }, { label: vratham.title_en }]} />
       <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} stories={stories} />
     </div>

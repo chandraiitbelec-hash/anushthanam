@@ -5,6 +5,7 @@ import type { Shloka } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
+import { pageMeta, SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -17,7 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('shlokas');
   const shloka = (rows as unknown as Shloka[]).find(s => s.slug === slug);
-  return { title: shloka ? `${shloka.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  if (!shloka) return { title: 'Anuṣṭhāna' };
+  const typeLabel = shloka.type ? `${shloka.type.charAt(0).toUpperCase()}${shloka.type.slice(1)}. ` : '';
+  return pageMeta(shloka.title_en, typeLabel + (shloka.brief_intro_en || ''), `/shlokas/${slug}`);
 }
 
 export default async function ShlokaPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -28,8 +31,20 @@ export default async function ShlokaPage({ params }: { params: Promise<{ slug: s
 
   const stanzas = await getShlokaStanzas(slug);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: shloka.title_en,
+    description: shloka.brief_intro_en,
+    url: `${SITE_URL}/shlokas/${slug}`,
+    inLanguage: shloka.language_of_composition || 'Sanskrit',
+    genre: shloka.type,
+    isPartOf: { '@type': 'WebSite', name: 'Anuṣṭhāna', url: SITE_URL },
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumb crumbs={[{ label: 'Shlokas', href: '/shlokas' }, { label: shloka.title_en }]} />
       <ShlokaHeader shloka={shloka} />
       {stanzas.length > 0 && <ShlokaViewer stanzas={stanzas} />}

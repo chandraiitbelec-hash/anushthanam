@@ -39,9 +39,39 @@ const notoDevanagari = Noto_Sans_Devanagari({
   display: 'optional',
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://anushthanam.vercel.app';
+
 export const metadata: Metadata = {
-  title: 'Anuṣṭhāna',
-  description: 'A reference for Hindu devotional practice — gods, shlokas, pujas, festivals, vrathams, and panchangam.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Anuṣṭhāna — Hindu Devotional Reference',
+    template: '%s | Anuṣṭhāna',
+  },
+  description:
+    'A reference for Hindu devotional practice — gods, shlokas, pujas, festivals, vrathams, and panchangam. Available in Telugu, Tamil, Hindi and English.',
+  keywords: [
+    'Hindu devotion', 'puja', 'vratham', 'vrat', 'shloka', 'stotra',
+    'festival', 'panchangam', 'telugu devotion', 'tamil devotion',
+    'hindi bhakti', 'gods', 'devata', 'katha',
+  ],
+  authors: [{ name: 'Anuṣṭhāna' }],
+  creator: 'Anuṣṭhāna',
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: 'website',
+    siteName: 'Anuṣṭhāna',
+    title: 'Anuṣṭhāna — Hindu Devotional Reference',
+    description:
+      'Gods, shlokas, festivals, vrathams, pujas and panchangam — in Telugu, Tamil, Hindi and English.',
+    url: SITE_URL,
+    locale: 'en_IN',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Anuṣṭhāna — Hindu Devotional Reference',
+    description:
+      'Gods, shlokas, festivals, vrathams, pujas and panchangam — in Telugu, Tamil, Hindi and English.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

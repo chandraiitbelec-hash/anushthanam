@@ -5,6 +5,7 @@ import { getStoriesForParent } from '@/lib/relations';
 import type { Story, Festival, Vratham } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import StoryContent from '@/components/StoryContent';
+import { pageMeta, SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('stories_index');
   const story = (rows as unknown as Story[]).find(s => s.slug === slug);
-  return { title: story ? `${story.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  if (!story) return { title: 'Anuṣṭhāna' };
+  return pageMeta(story.title_en, story.brief_summary_en || '', `/stories/${slug}`, 'article');
 }
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -67,8 +69,20 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
 
   const parts = (siblings as unknown as Story[]).map(s => ({ slug: s.slug, title_en: s.title_en }));
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: story.title_en,
+    description: story.brief_summary_en,
+    url: `${SITE_URL}/stories/${slug}`,
+    inLanguage: 'en',
+    genre: story.story_type,
+    isPartOf: { '@type': 'WebSite', name: 'Anuṣṭhāna', url: SITE_URL },
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Stories', href: '/stories' },
         ...(parent ? [{ label: parent.title_en, href: parent.href }] : []),
