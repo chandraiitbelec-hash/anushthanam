@@ -9,19 +9,17 @@ type Part = { slug: string; title_en: string };
 
 type Props = {
   story: Story;
-  bodies: Record<string, string[]>;   // keyed by lang code, value = paragraphs
-  summaries: Record<string, string>;  // keyed by lang code
+  bodies: Record<string, string[]>;
   parent: { title_en: string; href: string } | null;
   parts: Part[];
 };
 
-export default function StoryContent({ story, bodies, summaries, parent, parts }: Props) {
+export default function StoryContent({ story, bodies, parent, parts }: Props) {
   const { lang } = useLang();
 
   const r = story as unknown as Record<string, string>;
 
-  const title   = r[`title_${lang}`]         || story.title_en;
-  const summary = summaries[lang]             || summaries.en || '';
+  const title = r[`title_${lang}`] || story.title_en;
 
   // Pick body in selected language; track if we fell back to English
   const bodyLang  = bodies[lang]?.length ? lang : 'en';
@@ -107,21 +105,8 @@ export default function StoryContent({ story, bodies, summaries, parent, parts }
         borderRadius: '12px',
         overflow: 'hidden',
       }}>
-        {summary && (
-          <div style={{ padding: '20px 24px' }}>
-            <p className={nameClass} style={{
-              fontSize: '15px',
-              color: 'var(--color-text-secondary)',
-              margin: 0,
-              lineHeight: 1.8,
-            }}>
-              {summary}
-            </p>
-          </div>
-        )}
-
         {paras.length > 0 && (
-          <div style={{ padding: summary ? '0 24px 24px' : '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {isFallback && (
               <p style={{
                 fontSize: '12px',

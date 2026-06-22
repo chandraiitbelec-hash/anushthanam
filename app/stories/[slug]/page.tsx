@@ -49,11 +49,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     getPublished('vrathams'),
   ]);
 
-  // Summaries per language (fall back gracefully to empty)
-  const summaries: Record<string, string> = Object.fromEntries(
-    LANGS.map(l => [l, r[`brief_summary_${l}`] || ''])
-  );
-
   // Resolve parent
   type ParentInfo = { title_en: string; href: string };
   let parent: ParentInfo | null = null;
@@ -92,7 +87,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       <StoryContent
         story={story}
         bodies={langBodies}
-        summaries={summaries}
         parent={parent}
         parts={parts}
       />
