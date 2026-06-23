@@ -3,8 +3,20 @@ import type { Shloka } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
+import ShlokaTypeNav from '@/components/ShlokaTypeNav';
 
 export const revalidate = 3600;
+
+const TYPE_ORDER = ['ashtothram', 'sahasranamam', 'chalisa', 'stotra', 'kavacham', 'suprabhatam', 'namavali'];
+const TYPE_LABELS: Record<string, string> = {
+  ashtothram: 'Ashtothram',
+  sahasranamam: 'Sahasranamam',
+  chalisa: 'Chalisa',
+  stotra: 'Stotra',
+  kavacham: 'Kavacham',
+  suprabhatam: 'Suprabhatam',
+  namavali: 'Namavali',
+};
 
 export default async function ShlokasPage() {
   const rows = await getPublished('shlokas');
@@ -16,17 +28,25 @@ export default async function ShlokasPage() {
     return acc;
   }, {});
 
+  // Stable order: known types first, then any extras
+  const orderedTypes = [
+    ...TYPE_ORDER.filter(t => byType[t]),
+    ...Object.keys(byType).filter(t => !TYPE_ORDER.includes(t)),
+  ];
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Shlokas' }]} />
       <ListPageHeader
         titles={{ en: 'Shlokas & Stotras', te: 'శ్లోకాలు & స్తోత్రాలు', ta: 'ஸ்லோகங்கள் & ஸ்தோத்திரங்கள்', hi: 'श्लोक & स्तोत्र' }}
         count={shlokas.length}
-        countLabels={{ en: 'texts', te: 'రచనలు', ta: 'நூல்கள்', hi: 'ग्रंथ' }}
+        countLabels={{ en: 'texts', te: 'రచనలు', ta: 'நூல்కள்', hi: 'ग्रंथ' }}
       />
 
-      {Object.entries(byType).map(([type, list]) => (
-        <section key={type} style={{ marginBottom: '40px' }}>
+      <ShlokaTypeNav types={orderedTypes} />
+
+      {orderedTypes.map(type => (
+        <section key={type} id={`section-${type}`} style={{ marginBottom: '48px', scrollMarginTop: '80px' }}>
           <h2 style={{
             fontSize: '13px',
             fontWeight: 600,
@@ -35,14 +55,14 @@ export default async function ShlokasPage() {
             color: 'var(--color-text-secondary)',
             margin: '0 0 16px',
           }}>
-            {type}
+            {TYPE_LABELS[type] ?? type}
           </h2>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
             gap: '16px',
           }}>
-            {list.map(s => (
+            {byType[type].map(s => (
               <EntityCard
                 key={s.slug}
                 href={`/shlokas/${s.slug}`}
