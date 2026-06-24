@@ -6,12 +6,13 @@ import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/Langu
 import type { Language } from '@/lib/types';
 
 const NAV_LINKS = [
-  { href: '/gods',       label_en: 'Gods',       label_te: 'దేవతలు',    label_ta: 'தேவர்கள்',      label_hi: 'देवता' },
-  { href: '/festivals',  label_en: 'Festivals',  label_te: 'పండుగలు',   label_ta: 'திருவிழாக்கள்', label_hi: 'त्योहार' },
-  { href: '/vrathams',   label_en: 'Vrathams',   label_te: 'వ్రతాలు',   label_ta: 'விரதங்கள்',     label_hi: 'व्रत' },
-  { href: '/pujas',      label_en: 'Pujas',      label_te: 'పూజలు',     label_ta: 'பூஜைகள்',       label_hi: 'पूजा' },
-  { href: '/shlokas',    label_en: 'Shlokas',    label_te: 'శ్లోకాలు',  label_ta: 'ஸ்லோகங்கள்',    label_hi: 'श्लोक' },
-  { href: '/panchangam', label_en: 'Panchangam', label_te: 'పంచాంగం',   label_ta: 'பஞ்சாங்கம்',    label_hi: 'पंचांग' },
+  { href: '/gods',           label_en: 'Gods',          label_te: 'దేవతలు',       label_ta: 'தேவர்கள்',      label_hi: 'देवता' },
+  { href: '/festivals',      label_en: 'Festivals',     label_te: 'పండుగలు',      label_ta: 'திருவிழாக்கள்', label_hi: 'त्योहार' },
+  { href: '/vrathams',       label_en: 'Vrathams',      label_te: 'వ్రతాలు',      label_ta: 'விரதங்கள்',     label_hi: 'व्रत' },
+  { href: '/pujas',          label_en: 'Pujas',         label_te: 'పూజలు',        label_ta: 'பூஜைகள்',       label_hi: 'पूजा' },
+  { href: '/shlokas',        label_en: 'Shlokas',       label_te: 'శ్లోకాలు',     label_ta: 'ஸ்லோகங்கள்',    label_hi: 'श्लोक' },
+  { href: '/bhagavad-gita',  label_en: 'Bhagavad Gita', label_te: 'భగవద్గీత',     label_ta: 'பகவத் கீதை',    label_hi: 'भगवद्गीता' },
+  { href: '/panchangam',     label_en: 'Panchangam',    label_te: 'పంచాంగం',      label_ta: 'பஞ்சாங்கம்',    label_hi: 'पंचांग' },
 ];
 
 export default function Nav() {
