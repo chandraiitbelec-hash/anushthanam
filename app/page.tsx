@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang, SITE_NAMES } from '@/context/LanguageContext';
+import DailyDevotional from '@/components/DailyDevotional';
 
 const TAGLINES = {
   en: 'Your guide to Hindu devotional practice',
@@ -72,6 +73,8 @@ export default function HomePage() {
           {LABELS.viewUpcoming[lang]}
         </Link>
       </section>
+
+      <DailyDevotional />
 
       {/* Explore */}
       <section className="wide-width explore-section">
