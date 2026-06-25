@@ -12,8 +12,7 @@ const TAGLINES = {
 };
 
 const LABELS = {
-  viewUpcoming: { en: 'View upcoming festivals', te: 'రాబోయే పండుగలు చూడండి', ta: 'வரவிருக்கும் திருவிழாக்களைப் பாருங்கள்', hi: 'आगामी त्योहार देखें' },
-  explore:      { en: 'Explore',                 te: 'అన్వేషించండి',            ta: 'ஆராயுங்கள்',                              hi: 'खोजें' },
+  explore: { en: 'Explore', te: 'అన్వేషించండి', ta: 'ஆராயுங்கள்', hi: 'खोजें' },
 };
 
 const EXPLORE = [
@@ -60,18 +59,6 @@ export default function HomePage() {
         }}>
           {TAGLINES[lang]}
         </p>
-        <Link href="/upcoming" style={{
-          display: 'inline-block',
-          padding: '12px 28px',
-          background: 'var(--color-gold)',
-          color: '#fff',
-          textDecoration: 'none',
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontWeight: 500,
-        }}>
-          {LABELS.viewUpcoming[lang]}
-        </Link>
       </section>
 
       <DailyDevotional />
@@ -109,7 +96,7 @@ export default function HomePage() {
       </section>
 
       <style>{`
-        .hero-section { padding: 80px 24px 64px; }
+        .hero-section { padding: 72px 24px 56px; }
         .explore-section { padding: 56px 24px; }
         .explore-grid {
           display: grid;

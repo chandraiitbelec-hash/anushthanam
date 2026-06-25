@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { href: '/shlokas',        label_en: 'Shlokas',       label_te: 'శ్లోకాలు',     label_ta: 'ஸ்லோகங்கள்',    label_hi: 'श्लोक' },
   { href: '/bhagavad-gita',  label_en: 'Bhagavad Gita', label_te: 'భగవద్గీత',     label_ta: 'பகவத் கீதை',    label_hi: 'भगवद्गीता' },
   { href: '/panchangam',     label_en: 'Panchangam',    label_te: 'పంచాంగం',      label_ta: 'பஞ்சாங்கம்',    label_hi: 'पंचांग' },
+  { href: '/upcoming',       label_en: 'Upcoming',      label_te: 'రాబోయేవి',     label_ta: 'வரவிருக்கும்',  label_hi: 'आगामी' },
 ];
 
 export default function Nav() {
