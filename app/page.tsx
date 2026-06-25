@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLang, SITE_NAMES } from '@/context/LanguageContext';
+import { useLang } from '@/context/LanguageContext';
 import DailyDevotional from '@/components/DailyDevotional';
 
 const TAGLINES = {
@@ -38,24 +38,11 @@ export default function HomePage() {
         textAlign: 'center',
         borderBottom: '1px solid var(--color-border)',
       }}>
-        <h1 style={{
-          fontFamily: 'var(--font-cormorant)',
-          fontSize: 'clamp(36px, 7vw, 72px)',
-          fontWeight: 600,
-          color: 'var(--color-text-primary)',
-          margin: '0 0 16px',
-          lineHeight: 1.15,
-        }}>
-          {SITE_NAMES[lang]}
-        </h1>
         <p style={{
-          fontSize: 'clamp(15px, 2.5vw, 18px)',
+          fontSize: 'clamp(15px, 2vw, 17px)',
           color: 'var(--color-text-secondary)',
-          margin: '0 0 36px',
+          margin: 0,
           lineHeight: 1.6,
-          maxWidth: '480px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
         }}>
           {TAGLINES[lang]}
         </p>
@@ -96,7 +83,7 @@ export default function HomePage() {
       </section>
 
       <style>{`
-        .hero-section { padding: 72px 24px 56px; }
+        .hero-section { padding: 40px 24px; }
         .explore-section { padding: 56px 24px; }
         .explore-grid {
           display: grid;
@@ -105,7 +92,7 @@ export default function HomePage() {
         }
         .explore-card { padding: 24px; font-size: 22px; }
         @media (max-width: 640px) {
-          .hero-section { padding: 52px 16px 44px; }
+          .hero-section { padding: 28px 16px; }
           .explore-section { padding: 36px 16px; }
           .explore-grid {
             grid-template-columns: repeat(2, 1fr);
