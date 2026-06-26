@@ -4,13 +4,6 @@ import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import DailyDevotional from '@/components/DailyDevotional';
 
-const TAGLINES = {
-  en: 'Your guide to Hindu devotional practice',
-  te: 'హిందూ భక్తి ఆచారానికి మీ మార్గదర్శి',
-  ta: 'இந்து பக்தி வழிபாட்டிற்கான உங்கள் வழிகாட்டி',
-  hi: 'हिंदू भक्ति आचरण के लिए आपका मार्गदर्शक',
-};
-
 const LABELS = {
   explore: { en: 'Explore', te: 'అన్వేషించండి', ta: 'ஆராயுங்கள்', hi: 'खोजें' },
 };
@@ -33,21 +26,6 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="hero-section" style={{
-        textAlign: 'center',
-        borderBottom: '1px solid var(--color-border)',
-      }}>
-        <p style={{
-          fontSize: 'clamp(15px, 2vw, 17px)',
-          color: 'var(--color-text-secondary)',
-          margin: 0,
-          lineHeight: 1.6,
-        }}>
-          {TAGLINES[lang]}
-        </p>
-      </section>
-
       <DailyDevotional />
 
       {/* Explore */}
@@ -83,8 +61,7 @@ export default function HomePage() {
       </section>
 
       <style>{`
-        .hero-section { padding: 40px 24px; }
-        .explore-section { padding: 56px 24px; }
+        .explore-section { padding: 48px 24px; }
         .explore-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -92,12 +69,8 @@ export default function HomePage() {
         }
         .explore-card { padding: 24px; font-size: 22px; }
         @media (max-width: 640px) {
-          .hero-section { padding: 28px 16px; }
-          .explore-section { padding: 36px 16px; }
-          .explore-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-          }
+          .explore-section { padding: 32px 16px; }
+          .explore-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
           .explore-card { padding: 18px 16px; font-size: 18px; }
         }
       `}</style>

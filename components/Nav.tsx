@@ -3,6 +3,13 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
+
+const TAGLINES: Record<string, string> = {
+  en: 'Your guide to Hindu devotional practice',
+  te: 'హిందూ భక్తి ఆచారానికి మీ మార్గదర్శి',
+  ta: 'இந்து பக்தி வழிபாட்டிற்கான உங்கள் வழிகாட்டி',
+  hi: 'हिंदू भक्ति आचरण के लिए आपका मार्गदर्शक',
+};
 import type { Language } from '@/lib/types';
 
 const NAV_LINKS = [
@@ -36,16 +43,32 @@ export default function Nav() {
       }}>
         <div className="wide-width" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '32px' }}>
 
-          {/* Site name — always visible */}
+          {/* Site name + tagline — always visible */}
           <Link href="/" style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '22px',
-            fontWeight: 600,
-            color: 'var(--color-text-primary)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1px',
             textDecoration: 'none',
             flexShrink: 0,
           }}>
-            {SITE_NAMES[lang]}
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '22px',
+              fontWeight: 600,
+              color: 'var(--color-text-primary)',
+              lineHeight: 1.1,
+            }}>
+              {SITE_NAMES[lang]}
+            </span>
+            <span style={{
+              fontSize: '10px',
+              color: 'var(--color-text-secondary)',
+              letterSpacing: '0.01em',
+              lineHeight: 1,
+              opacity: 0.7,
+            }}>
+              {TAGLINES[lang]}
+            </span>
           </Link>
 
           {/* Desktop nav links — CSS hides this on mobile */}
