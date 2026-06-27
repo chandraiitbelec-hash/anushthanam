@@ -103,12 +103,33 @@ export default function DailyDevotional() {
         {open === 'shloka' && (
           <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ borderLeft: '3px solid var(--color-gold)', paddingLeft: '16px' }}>
-              <p className="script-devanagari" style={{ fontSize: '18px', lineHeight: 1.9, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
-                {entry.shloka.sanskrit}
-              </p>
-              <p className="script-iast" style={{ fontSize: '13px', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.8 }}>
-                {entry.shloka.iast}
-              </p>
+              {/* Show shloka in user's script; Sanskrit (Devanagari) shown below as reference for non-Hindi */}
+              {lang === 'te' && (
+                <p className="script-telugu" style={{ fontSize: '18px', lineHeight: 2.0, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                  {(entry.shloka as unknown as Record<string, string>).script_te}
+                </p>
+              )}
+              {lang === 'ta' && (
+                <p className="script-tamil" style={{ fontSize: '18px', lineHeight: 2.1, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                  {(entry.shloka as unknown as Record<string, string>).script_ta}
+                </p>
+              )}
+              {(lang === 'en' || lang === 'hi') && (
+                <p className="script-devanagari" style={{ fontSize: '18px', lineHeight: 1.9, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                  {entry.shloka.sanskrit}
+                </p>
+              )}
+              {/* Sanskrit reference for Telugu/Tamil; IAST for English */}
+              {(lang === 'te' || lang === 'ta') && (
+                <p className="script-devanagari" style={{ fontSize: '13px', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.7 }}>
+                  {entry.shloka.sanskrit}
+                </p>
+              )}
+              {lang === 'en' && (
+                <p className="script-iast" style={{ fontSize: '13px', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.8 }}>
+                  {entry.shloka.iast}
+                </p>
+              )}
             </div>
 
             <div>
