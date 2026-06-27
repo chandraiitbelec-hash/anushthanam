@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+
+const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
 
 export type UpcomingItem = {
   type: 'festival' | 'vratham';
@@ -39,12 +42,12 @@ function getDaysUntil(dateStr: string): number {
   return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-function groupByMonth(items: UpcomingItem[]) {
+function groupByMonth(items: UpcomingItem[], locale: string) {
   const groups: { monthKey: string; label: string; items: UpcomingItem[] }[] = [];
   for (const item of items) {
     const d = new Date(item.next_occurrence + 'T00:00:00');
     const monthKey = item.next_occurrence.slice(0, 7);
-    const label = d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+    const label = d.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
     let g = groups.find(g => g.monthKey === monthKey);
     if (!g) { g = { monthKey, label, items: [] }; groups.push(g); }
     g.items.push(item);
@@ -84,7 +87,8 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
     );
   }
 
-  const groups = groupByMonth(items);
+  const locale = LOCALE_MAP[lang] ?? 'en-IN';
+  const groups = groupByMonth(items, locale);
   const typeLabels = TYPE_LABELS[lang as keyof typeof TYPE_LABELS] ?? TYPE_LABELS.en;
 
   return (
@@ -147,7 +151,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       color: 'var(--color-text-secondary)',
                       margin: '0 0 1px',
                     }}>
-                      {d.toLocaleDateString('en-IN', { weekday: 'short' })}
+                      {d.toLocaleDateString(LOCALE_MAP[lang] ?? 'en-IN', { weekday: 'short' })}
                     </p>
                     <p style={{
                       fontFamily: 'var(--font-cormorant)',
@@ -167,7 +171,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       color: 'var(--color-text-secondary)',
                       margin: '1px 0 0',
                     }}>
-                      {d.toLocaleDateString('en-IN', { month: 'short' })}
+                      {d.toLocaleDateString(LOCALE_MAP[lang] ?? 'en-IN', { month: 'short' })}
                     </p>
                   </div>
 
@@ -217,7 +221,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       )}
                       {isSoon && (
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
-                          in {days} day{days > 1 ? 's' : ''}
+                          {UI[lang as keyof typeof UI]?.daysAway(days)}
                         </span>
                       )}
                     </div>

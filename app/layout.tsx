@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import Nav from '@/components/Nav';
+import FooterLinks from '@/components/FooterLinks';
 
 const cormorant = Cormorant_Garamond({
   weight: ['400', '600'],
@@ -87,11 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
             <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '16px', color: 'var(--color-text-primary)' }}>Anuṣṭhāna</span>
-              <nav style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                <a href="/upcoming" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Upcoming</a>
-                <a href="/panchangam" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Panchangam</a>
-                <a href="/index" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Site Index</a>
-              </nav>
+              <FooterLinks />
             </div>
           </footer>
         </LanguageProvider>

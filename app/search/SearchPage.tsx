@@ -3,7 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 import type { SearchRecord } from '@/lib/types';
+
+const LOADING_LABEL: Record<string, string> = {
+  en: 'Loading search…',
+  te: 'సెర్చ్ లోడవుతోంది…',
+  ta: 'தேடல் ஏற்றப்படுகிறது…',
+  hi: 'खोज लोड हो रहा है…',
+};
 
 const PLACEHOLDER: Record<string, string> = {
   en: 'Search gods, shlokas, festivals, vrathams…',
@@ -72,6 +80,7 @@ export default function SearchPage() {
     inputRef.current?.focus();
   }, [ready]);
 
+  const ui = UI[lang];
   const nameForLang = (r: SearchRecord) =>
     (r[`name_${lang}` as keyof SearchRecord] as string) || r.name_en;
 
@@ -97,21 +106,32 @@ export default function SearchPage() {
             boxSizing: 'border-box',
           }}
         />
+        {!ready && (
+          <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '8px' }}>
+            {LOADING_LABEL[lang] ?? LOADING_LABEL.en}
+          </p>
+        )}
         <span style={{
           position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)',
-          fontSize: '18px', pointerEvents: 'none',
-        }}>🔍</span>
+          pointerEvents: 'none', color: 'var(--color-text-secondary)',
+          display: 'flex', alignItems: 'center',
+        }}>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="7.5" cy="7.5" r="5" />
+            <line x1="11.5" y1="11.5" x2="16" y2="16" />
+          </svg>
+        </span>
       </div>
 
       {empty && (
         <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
-          Search index is being built — it will be available after the next site deploy.
+          {ui.searchBuilding}
         </p>
       )}
 
       {!empty && ready && query && results.length === 0 && (
         <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
-          No results for &ldquo;{query}&rdquo;
+          {ui.searchNoResults(query)}
         </p>
       )}
 
@@ -129,7 +149,7 @@ export default function SearchPage() {
             }}>
               <span style={{ fontSize: '20px', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '15px', fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '15px', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {nameForLang(r)}
                 </div>
                 {nameForLang(r) !== r.name_en && (
@@ -155,12 +175,26 @@ export default function SearchPage() {
       )}
 
       {!query && ready && !empty && (
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
-          {lang === 'te' ? 'పైన వెతకండి — దేవతలు, శ్లోకాలు, పండుగలు, వ్రతాలు అన్నీ వస్తాయి.' :
-           lang === 'ta' ? 'மேலே தேடுங்கள் — தெய்வங்கள், ஸ்லோகங்கள், திருவிழாக்கள், விரதங்கள் கிடைக்கும்.' :
-           lang === 'hi' ? 'ऊपर खोजें — देवता, श्लोक, त्योहार, व्रत सभी मिलेंगे।' :
-           'Search across gods, shlokas, festivals, and vrathams in all four languages.'}
-        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {([
+            { href: '/gods',     label: ui.gods },
+            { href: '/festivals',label: ui.festivals },
+            { href: '/shlokas',  label: ui.shlokas },
+            { href: '/vrathams', label: ui.vrathams },
+          ] as { href: string; label: string }[]).map(item => (
+            <Link key={item.href} href={item.href} style={{
+              padding: '8px 16px',
+              border: '1px solid var(--color-border)',
+              borderRadius: '20px',
+              fontSize: '13px',
+              color: 'var(--color-text-secondary)',
+              textDecoration: 'none',
+              background: 'var(--color-surface)',
+            }}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
       )}
     </div>
   );

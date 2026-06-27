@@ -31,7 +31,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '5px',
-            padding: '5px 14px',
+            padding: '10px 16px',
             background: 'rgba(184,134,11,0.08)',
             border: '1px solid var(--color-gold)',
             borderRadius: '20px',
@@ -44,7 +44,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
             onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.18)')}
             onMouseOut={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.08)')}
           >
-            ✦ {name}
+            <span aria-hidden="true">✦</span> {name}
           </Link>
         );
       })}

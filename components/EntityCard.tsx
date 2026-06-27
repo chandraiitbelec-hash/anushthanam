@@ -33,7 +33,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
   const bc = badgeColors[badgeColor];
 
   return (
-    <Link href={href} style={{
+    <Link href={href} className="entity-card-link" style={{
       display: 'block',
       padding: '20px 24px',
       background: 'var(--color-surface)',

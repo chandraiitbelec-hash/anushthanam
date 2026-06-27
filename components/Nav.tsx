@@ -4,12 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
 
-const TAGLINES: Record<string, string> = {
-  en: 'Your guide to Hindu devotional practice',
-  te: 'హిందూ భక్తి ఆచారానికి మీ మార్గదర్శి',
-  ta: 'இந்து பக்தி வழிபாட்டிற்கான உங்கள் வழிகாட்டி',
-  hi: 'हिंदू भक्ति आचरण के लिए आपका मार्गदर्शक',
-};
 import type { Language } from '@/lib/types';
 
 const NAV_LINKS = [
@@ -44,13 +38,7 @@ export default function Nav() {
         <div className="wide-width" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '32px' }}>
 
           {/* Site name + tagline — always visible */}
-          <Link href="/" style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1px',
-            textDecoration: 'none',
-            flexShrink: 0,
-          }}>
+          <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
             <span style={{
               fontFamily: 'var(--font-display)',
               fontSize: '22px',
@@ -59,15 +47,6 @@ export default function Nav() {
               lineHeight: 1.1,
             }}>
               {SITE_NAMES[lang]}
-            </span>
-            <span style={{
-              fontSize: '10px',
-              color: 'var(--color-text-secondary)',
-              letterSpacing: '0.01em',
-              lineHeight: 1,
-              opacity: 0.7,
-            }}>
-              {TAGLINES[lang]}
             </span>
           </Link>
 
@@ -103,7 +82,10 @@ export default function Nav() {
               onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
               onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
             >
-              🔍
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="7.5" cy="7.5" r="5" />
+                <line x1="11.5" y1="11.5" x2="16" y2="16" />
+              </svg>
             </Link>
 
             {/* Language switcher — CSS hides this on mobile */}
@@ -200,7 +182,7 @@ export default function Nav() {
                   fontSize: '16px',
                   color: 'var(--color-text-primary)',
                   textDecoration: 'none',
-                  padding: '13px 0',
+                  padding: '14px 0',
                   borderBottom: '1px solid var(--color-border)',
                 }}
               >
@@ -215,7 +197,7 @@ export default function Nav() {
                 letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
                 margin: '0 0 10px',
               }}>
-                Language
+                {lang === 'te' ? 'భాష' : lang === 'ta' ? 'மொழி' : lang === 'hi' ? 'भाषा' : 'Language'}
               </p>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {LANGUAGES.map(l => (

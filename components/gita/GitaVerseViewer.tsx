@@ -62,21 +62,21 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
       {/* Controls */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
         {!isEnglish && (
-          <button onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
+          <button aria-pressed={showSanskrit} onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
             {labels.devanagari}
           </button>
         )}
         {!isEnglish && (
-          <button onClick={() => setShowIast(v => !v)} style={pill(showIast)}>
+          <button aria-pressed={showIast} onClick={() => setShowIast(v => !v)} style={pill(showIast)}>
             {labels.iast}
           </button>
         )}
         {isEnglish && (
-          <button onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
+          <button aria-pressed={showSanskrit} onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
             {labels.devanagari}
           </button>
         )}
-        <button onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning)}>
+        <button aria-pressed={showMeaning} onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning)}>
           {labels.meaning}
         </button>
       </div>

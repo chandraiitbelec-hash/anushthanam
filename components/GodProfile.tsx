@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import SectionNav, { type NavSection } from '@/components/SectionNav';
 import type { God } from '@/lib/types';
 
 type LinkedEntity = {
@@ -39,7 +40,7 @@ function nameInLang(e: LinkedEntity, lang: string) {
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 style={{
-      fontSize: '13px',
+      fontSize: '14px',
       fontWeight: 600,
       textTransform: 'uppercase',
       letterSpacing: '0.08em',
@@ -58,7 +59,7 @@ function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: string }) {
       {items.map(item => (
         <Link key={item.href} href={item.href} style={{
           display: 'inline-block',
-          padding: '6px 14px',
+          padding: '11px 16px',
           border: '1px solid var(--color-border)',
           borderRadius: '20px',
           fontSize: '13px',
@@ -85,6 +86,13 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
 
+  const navSections: NavSection[] = [
+    ...(iconography ? [{ id: 'section-iconography', label: label('iconography', lang) }] : []),
+    ...(shlokas.length > 0 ? [{ id: 'section-shlokas', label: label('shlokas', lang) }] : []),
+    ...(pujas.length > 0 ? [{ id: 'section-pujas', label: label('pujas', lang) }] : []),
+    ...(festivals.length > 0 ? [{ id: 'section-festivals', label: label('festivals', lang) }] : []),
+  ];
+
   return (
     <>
       {/* Header */}
@@ -95,6 +103,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 4px',
+          lineHeight: lang === 'te' ? 1.5 : lang === 'ta' ? 1.45 : lang === 'hi' ? 1.3 : 1.15,
         }}>
           {name}
         </h1>
@@ -104,7 +113,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
           <p className="script-devanagari" style={{
             fontSize: '20px',
             color: 'var(--color-text-secondary)',
-            margin: '0 0 4px',
+            margin: '0 0 8px',
           }}>
             {god.name_sa}
           </p>
@@ -153,9 +162,11 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
         </section>
       )}
 
+      <SectionNav sections={navSections} />
+
       {/* Iconography */}
       {iconography && (
-        <section style={{ marginBottom: '32px' }}>
+        <section id="section-iconography" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
           <SectionHeading>{label('iconography', lang)}</SectionHeading>
           <p style={{
             fontSize: '15px',
@@ -170,7 +181,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related shlokas */}
       {shlokas.length > 0 && (
-        <section style={{ marginTop: '32px' }}>
+        <section id="section-shlokas" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
           <SectionHeading>{label('shlokas', lang)}</SectionHeading>
           <LinkedChips items={shlokas} lang={lang} />
         </section>
@@ -178,7 +189,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related pujas */}
       {pujas.length > 0 && (
-        <section style={{ marginTop: '32px' }}>
+        <section id="section-pujas" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
           <SectionHeading>{label('pujas', lang)}</SectionHeading>
           <LinkedChips items={pujas} lang={lang} />
         </section>
@@ -186,7 +197,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related festivals */}
       {festivals.length > 0 && (
-        <section style={{ marginTop: '32px' }}>
+        <section id="section-festivals" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
           <SectionHeading>{label('festivals', lang)}</SectionHeading>
           <LinkedChips items={festivals} lang={lang} />
         </section>

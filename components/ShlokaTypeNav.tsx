@@ -1,19 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useLang } from '@/context/LanguageContext';
+import type { Language } from '@/lib/types';
 
-const TYPE_LABELS: Record<string, string> = {
-  ashtothram: 'Ashtothram',
-  sahasranamam: 'Sahasranamam',
-  chalisa: 'Chalisa',
-  stotra: 'Stotra',
-  kavacham: 'Kavacham',
-  suprabhatam: 'Suprabhatam',
-  namavali: 'Namavali',
-  other: 'Other',
+const TYPE_LABELS: Record<string, Record<Language, string>> = {
+  ashtothram:  { en: 'Ashtothram',  te: 'అష్టోత్తరం',    ta: 'அஷ்டோத்திரம்',  hi: 'अष्टोत्तरम्' },
+  sahasranamam:{ en: 'Sahasranamam',te: 'సహస్రనామం',     ta: 'சஹஸ்ரநாமம்',    hi: 'सहस्रनामम्' },
+  chalisa:     { en: 'Chalisa',     te: 'చాలీసా',         ta: 'சாலீசா',         hi: 'चालीसा' },
+  stotra:      { en: 'Stotra',      te: 'స్తోత్రం',       ta: 'ஸ்தோத்திரம்',   hi: 'स्तोत्र' },
+  kavacham:    { en: 'Kavacham',    te: 'కవచం',           ta: 'கவசம்',          hi: 'कवचम्' },
+  suprabhatam: { en: 'Suprabhatam', te: 'సుప్రభాతం',     ta: 'சுப்ரபாதம்',    hi: 'सुप्रभातम्' },
+  namavali:    { en: 'Namavali',    te: 'నామావళి',        ta: 'நாமாவளி',       hi: 'नामावली' },
+  other:       { en: 'Other',       te: 'ఇతరాలు',         ta: 'மற்றவை',         hi: 'अन्य' },
 };
 
 export default function ShlokaTypeNav({ types }: { types: string[] }) {
+  const { lang } = useLang();
   const [active, setActive] = useState<string>(types[0] ?? '');
   const scrolling = useRef(false);
 
@@ -49,7 +52,13 @@ export default function ShlokaTypeNav({ types }: { types: string[] }) {
       display: 'flex',
       gap: '8px',
       flexWrap: 'wrap',
-      margin: '0 0 32px',
+      position: 'sticky',
+      top: 'var(--nav-height)',
+      zIndex: 10,
+      background: 'var(--color-bg)',
+      borderBottom: '1px solid var(--color-border)',
+      padding: '10px 0',
+      margin: '0 0 24px',
     }}>
       {types.map(t => {
         const isActive = active === t;
@@ -75,7 +84,7 @@ export default function ShlokaTypeNav({ types }: { types: string[] }) {
               transition: 'all 0.15s ease',
             }}
           >
-            {TYPE_LABELS[t] ?? t.charAt(0).toUpperCase() + t.slice(1)}
+            {TYPE_LABELS[t]?.[lang] ?? TYPE_LABELS[t]?.en ?? t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         );
       })}

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getGitaChapter, getGitaChapters, getGitaVersesByChapter } from '@/lib/gita';
 import Breadcrumb from '@/components/Breadcrumb';
+import ClientLabel from '@/components/ClientLabel';
 import GitaVerseViewer from '@/components/gita/GitaVerseViewer';
 import ChapterNav from '@/components/gita/ChapterNav';
 
@@ -31,8 +32,8 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[
-        { label: 'Bhagavad Gita', href: '/bhagavad-gita' },
-        { label: `Chapter ${ch.number}` },
+        { label: 'Bhagavad Gita', labels: { te: 'భగవద్గీత', ta: 'பகவத் கீதை', hi: 'भगवद्गीता' }, href: '/bhagavad-gita' },
+        { label: `Chapter ${ch.number}`, labels: { te: `అధ్యాయం ${ch.number}`, ta: `அத்தியாயம் ${ch.number}`, hi: `अध्याय ${ch.number}` } },
       ]} />
 
       {/* Chapter header */}
@@ -45,7 +46,12 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
           color: 'var(--color-gold)',
           margin: '0 0 6px',
         }}>
-          Chapter {ch.number} of 18
+          <ClientLabel labels={{
+            en: `Chapter ${ch.number} of 18`,
+            te: `18లో ${ch.number}వ అధ్యాయం`,
+            ta: `18இல் ${ch.number}வது அத்தியாயம்`,
+            hi: `18 में से अध्याय ${ch.number}`,
+          }} />
         </p>
         <h1 style={{
           fontFamily: 'var(--font-cormorant)',
@@ -69,7 +75,12 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
           </span>
         </div>
         <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: '10px 0 0' }}>
-          {ch.verse_count} verses
+          <ClientLabel labels={{
+            en: `${ch.verse_count} verses`,
+            te: `${ch.verse_count} శ్లోకాలు`,
+            ta: `${ch.verse_count} ஸ்லோகங்கள்`,
+            hi: `${ch.verse_count} श्लोक`,
+          }} />
         </p>
       </div>
 

@@ -59,7 +59,10 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Breadcrumb crumbs={[{ label: 'Vrathams', href: '/vrathams' }, { label: vratham.title_en }]} />
+      <Breadcrumb crumbs={[
+        { label: 'Vrathams', labels: { te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }, href: '/vrathams' },
+        { label: vratham.title_en, labels: { te: vratham.title_te, ta: vratham.title_ta, hi: vratham.title_hi } },
+      ]} />
       <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} stories={stories} />
     </div>
   );

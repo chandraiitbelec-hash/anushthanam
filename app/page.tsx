@@ -48,13 +48,19 @@ export default function HomePage() {
               borderRadius: '12px',
               textDecoration: 'none',
               color: 'var(--color-text-primary)',
-              fontFamily: 'var(--font-cormorant)',
+              fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
               fontWeight: 600,
             }}
               onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
               onMouseOut={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
             >
-              {label(item)}
+              <span className={
+                lang === 'te' ? 'script-telugu' :
+                lang === 'ta' ? 'script-tamil' :
+                lang === 'hi' ? 'script-devanagari' : ''
+              }>
+                {label(item)}
+              </span>
             </Link>
           ))}
         </div>

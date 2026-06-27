@@ -3,8 +3,11 @@ import { getPublished } from '@/lib/sheets';
 import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
 import type { Puja } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
+import ClientLabel from '@/components/ClientLabel';
+import ScriptH1 from '@/components/ScriptH1';
 import ProcedureSteps from '@/components/ProcedureSteps';
 import MaterialsList from '@/components/MaterialsList';
+import SectionNav from '@/components/SectionNav';
 
 export const revalidate = 3600;
 
@@ -33,18 +36,16 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Pujas', href: '/pujas' }, { label: puja.title_en }]} />
+      <Breadcrumb crumbs={[
+        { label: 'Pujas', labels: { te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजाएं' }, href: '/pujas' },
+        { label: puja.title_en, labels: { te: puja.title_te, ta: puja.title_ta, hi: puja.title_hi } },
+      ]} />
 
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(32px, 5vw, 52px)',
-          fontWeight: 600,
-          color: 'var(--color-text-primary)',
-          margin: '0 0 8px',
-        }}>
-          {puja.title_en}
-        </h1>
+        <ScriptH1
+          labels={{ en: puja.title_en, te: puja.title_te || puja.title_en, ta: puja.title_ta || puja.title_en, hi: puja.title_hi || puja.title_en }}
+          style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}
+        />
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
           {puja.title_te && (
@@ -88,6 +89,11 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
+      <SectionNav sections={[
+        ...(materials.length > 0 ? [{ id: 'section-materials', label: 'Materials' }] : []),
+        ...(steps.length > 0 ? [{ id: 'section-procedure', label: 'Procedure' }] : []),
+      ]} />
+
       {puja.brief_description_en && (
         <section style={{ marginBottom: '32px' }}>
           <p style={{
@@ -102,7 +108,7 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
       )}
 
       {materials.length > 0 && (
-        <section style={{ marginBottom: '32px' }}>
+        <section id="section-materials" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
           <h2 style={{
             fontSize: '13px',
             fontWeight: 600,
@@ -111,14 +117,14 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
             color: 'var(--color-text-secondary)',
             margin: '0 0 16px',
           }}>
-            Materials Required
+            <ClientLabel labels={{ en: 'Materials Required', te: 'కావలసిన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' }} />
           </h2>
           <MaterialsList items={materials} />
         </section>
       )}
 
       {steps.length > 0 && (
-        <section style={{ marginBottom: '32px' }}>
+        <section id="section-procedure" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
           <h2 style={{
             fontSize: '13px',
             fontWeight: 600,
@@ -127,7 +133,7 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
             color: 'var(--color-text-secondary)',
             margin: '0 0 16px',
           }}>
-            Procedure
+            <ClientLabel labels={{ en: 'Procedure', te: 'విధానం', ta: 'முறை', hi: 'विधि' }} />
           </h2>
           <ProcedureSteps steps={steps} />
         </section>

@@ -1,8 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 
-type Part = { slug: string; title_en: string };
+type Part = { slug: string; title_en: string; title_te?: string; title_ta?: string; title_hi?: string };
 
 export default function StoryPartPicker({
   parts,
@@ -12,14 +14,21 @@ export default function StoryPartPicker({
   currentSlug: string;
 }) {
   const router = useRouter();
+  const { lang } = useLang();
+  const ui = UI[lang];
   if (parts.length < 2) return null;
 
   const currentIndex = parts.findIndex(p => p.slug === currentSlug);
 
+  function partTitle(p: Part) {
+    const r = p as unknown as Record<string, string>;
+    return r[`title_${lang}`] || p.title_en;
+  }
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
       <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
-        Part {currentIndex + 1} of {parts.length}
+        {ui.partOf(currentIndex + 1, parts.length)}
       </span>
       <select
         value={currentSlug}
@@ -41,7 +50,7 @@ export default function StoryPartPicker({
       >
         {parts.map((p, idx) => (
           <option key={p.slug} value={p.slug}>
-            {idx + 1}. {p.title_en}
+            {idx + 1}. {partTitle(p)}
           </option>
         ))}
       </select>

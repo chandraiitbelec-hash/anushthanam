@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
 import type { Shloka } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
@@ -6,6 +7,11 @@ import ListPageHeader from '@/components/ListPageHeader';
 import ShlokaTypeNav from '@/components/ShlokaTypeNav';
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Shlokas & Stotras | Anushthanam',
+  description: 'Hindu shlokas, stotras, and prayers — Ashtothram, Sahasranamam, Chalisa, Kavacham with meanings in Telugu, Tamil, Hindi, and English.',
+};
 
 const TYPE_ORDER = ['ashtothram', 'sahasranamam', 'chalisa', 'stotra', 'kavacham', 'suprabhatam', 'namavali'];
 const TYPE_LABELS: Record<string, string> = {
@@ -42,6 +48,14 @@ export default async function ShlokasPage() {
         count={shlokas.length}
         countLabels={{ en: 'texts', te: 'రచనలు', ta: 'நூல்కள்', hi: 'ग्रंथ' }}
       />
+
+      {shlokas.length === 0 && (
+        <div style={{ padding: '64px 32px', textAlign: 'center', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
+          <p style={{ fontSize: '36px', margin: '0 0 16px' }}>📖</p>
+          <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>No shlokas published yet</p>
+          <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Shlokas and stotras will appear here once published from the content management system.</p>
+        </div>
+      )}
 
       <ShlokaTypeNav types={orderedTypes} />
 

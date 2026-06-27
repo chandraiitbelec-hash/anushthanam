@@ -4,6 +4,7 @@ import PanchangamWidget from '@/components/PanchangamWidget';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
 import UpcomingList from '@/components/UpcomingList';
+import ClientLabel from '@/components/ClientLabel';
 
 export const revalidate = 3600;
 
@@ -33,7 +34,7 @@ export default async function UpcomingPage() {
             color: 'var(--color-text-secondary)',
             margin: '0 0 12px',
           }}>
-            Today's Panchangam
+            <ClientLabel labels={{ en: "Today's Panchangam", te: 'ఈరోజు పంచాంగం', ta: 'இன்றைய பஞ்சாங்கம்', hi: 'आज का पंचांग' }} />
           </h2>
           <PanchangamWidget day={today} compact />
         </section>

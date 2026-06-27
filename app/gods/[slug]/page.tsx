@@ -75,7 +75,10 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Breadcrumb crumbs={[{ label: 'Gods', href: '/gods' }, { label: god.name_en }]} />
+      <Breadcrumb crumbs={[
+        { label: 'Gods', labels: { te: 'దేవతలు', ta: 'தெய்வங்கள்', hi: 'देवता' }, href: '/gods' },
+        { label: god.name_en, labels: { te: god.name_te, ta: god.name_ta, hi: god.name_hi } },
+      ]} />
       <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} />
     </div>
   );

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import type { God, Festival, Vratham, Shloka } from '@/lib/types';
+import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 
 type Item = { slug: string; name: string; href: string; type: string };
 
@@ -10,8 +11,11 @@ type Props = {
   items: Item[];
 };
 
-export default function RelatedContent({ heading = 'Related', items }: Props) {
+export default function RelatedContent({ heading, items }: Props) {
+  const { lang } = useLang();
   if (!items.length) return null;
+
+  const displayHeading = heading ?? UI[lang].related;
 
   return (
     <section style={{ marginTop: '32px' }}>
@@ -23,7 +27,7 @@ export default function RelatedContent({ heading = 'Related', items }: Props) {
         color: 'var(--color-text-secondary)',
         margin: '0 0 12px',
       }}>
-        {heading}
+        {displayHeading}
       </h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
         {items.map(item => (

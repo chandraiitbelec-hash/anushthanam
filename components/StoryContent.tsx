@@ -2,15 +2,16 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 import StoryPartPicker from './StoryPartPicker';
 import type { Story } from '@/lib/types';
 
-type Part = { slug: string; title_en: string };
+type Part = { slug: string; title_en: string; title_te?: string; title_ta?: string; title_hi?: string };
 
 type Props = {
   story: Story;
   bodies: Record<string, string[]>;
-  parent: { title_en: string; href: string } | null;
+  parent: { title_en: string; title_te?: string; title_ta?: string; title_hi?: string; href: string } | null;
   parts: Part[];
 };
 
@@ -39,14 +40,14 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
 
   return (
     <>
-      {/* Back link */}
-      {parent && (
-        <Link href={parent.href} style={{
+      {/* Back link — only for orphaned stories; stories with a parent use the breadcrumb */}
+      {!parent && (
+        <Link href="/stories" style={{
           display: 'inline-flex', alignItems: 'center', gap: '4px',
           fontSize: '13px', color: 'var(--color-gold)', fontWeight: 500,
           textDecoration: 'none', marginBottom: '12px',
         }}>
-          ← {parent.title_en}
+          ← {UI[lang].storiesLabel}
         </Link>
       )}
 

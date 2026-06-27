@@ -2,11 +2,18 @@
 
 import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 import type { ProcedureStep } from '@/lib/types';
 
 export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
   const { lang } = useLang();
+  const ui = UI[lang];
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
+  const scriptClass =
+    lang === 'te' ? 'script-telugu' :
+    lang === 'ta' ? 'script-tamil' :
+    lang === 'hi' ? 'script-devanagari' : '';
 
   function toggle(n: number) {
     setExpanded(prev => {
@@ -53,7 +60,7 @@ export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{
+            <p className={scriptClass} style={{
               fontWeight: 500,
               fontSize: '15px',
               margin: '0 0 6px',
@@ -63,7 +70,7 @@ export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
             </p>
 
             {instruction(step) && (
-              <p style={{
+              <p className={scriptClass} style={{
                 fontSize: '14px',
                 color: 'var(--color-text-secondary)',
                 margin: '0',
@@ -81,10 +88,11 @@ export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: 0,
+                padding: '8px 0',
+                display: 'inline-block',
                 fontWeight: 500,
               }}>
-                {expanded.has(step.step_number) ? '▲ Hide shloka' : '▼ Show shloka'}
+                {expanded.has(step.step_number) ? ui.hideShloka : ui.showShloka}
               </button>
             )}
 
@@ -98,7 +106,7 @@ export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
                 fontSize: '13px',
                 color: 'var(--color-text-secondary)',
               }}>
-                Shloka: {step.recite_shloka_slug}
+                {ui.shlokaLabel}: {step.recite_shloka_slug}
                 {step.recite_stanza_range && ` (${step.recite_stanza_range})`}
               </div>
             )}

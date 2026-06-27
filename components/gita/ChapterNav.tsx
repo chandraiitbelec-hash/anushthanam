@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { GitaChapter } from '@/lib/gita';
 
 export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; next: GitaChapter | null }) {
@@ -13,7 +14,7 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
       borderTop: '1px solid var(--color-border)',
     }}>
       {prev ? (
-        <a href={`/bhagavad-gita/${prev.number}`} style={{
+        <Link href={`/bhagavad-gita/${prev.number}`} style={{
           fontSize: '14px',
           color: 'var(--color-text-secondary)',
           textDecoration: 'none',
@@ -26,11 +27,11 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
         >
           <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← Chapter {prev.number}</span>
           <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600 }}>{prev.name_en}</span>
-        </a>
+        </Link>
       ) : <div />}
 
       {next ? (
-        <a href={`/bhagavad-gita/${next.number}`} style={{
+        <Link href={`/bhagavad-gita/${next.number}`} style={{
           fontSize: '14px',
           color: 'var(--color-text-secondary)',
           textDecoration: 'none',
@@ -44,7 +45,7 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
         >
           <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Chapter {next.number} →</span>
           <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600 }}>{next.name_en}</span>
-        </a>
+        </Link>
       ) : <div />}
     </div>
   );

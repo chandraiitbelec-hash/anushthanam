@@ -69,7 +69,13 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
         {required.map(({ item, i }) => {
           const done = checked.has(i);
           return (
-            <li key={i} onClick={() => toggle(i)} style={{
+            <li key={i}
+              role="checkbox"
+              aria-checked={done}
+              tabIndex={0}
+              onClick={() => toggle(i)}
+              onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
+              style={{
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
@@ -94,7 +100,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               }}>
                 {done ? '✓' : ''}
               </span>
-              <span style={{
+              <span className={lang !== 'en' ? (lang === 'te' ? 'script-telugu' : lang === 'ta' ? 'script-tamil' : 'script-devanagari') : ''} style={{
                 color: 'var(--color-text-primary)', flex: 1,
                 textDecoration: done ? 'line-through' : 'none',
               }}>
@@ -112,7 +118,13 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
         {optional.map(({ item, i }) => {
           const done = checked.has(i);
           return (
-            <li key={`opt-${i}`} onClick={() => toggle(i)} style={{
+            <li key={`opt-${i}`}
+              role="checkbox"
+              aria-checked={done}
+              tabIndex={0}
+              onClick={() => toggle(i)}
+              onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
+              style={{
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
@@ -136,7 +148,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               }}>
                 {done ? '✓' : ''}
               </span>
-              <span style={{
+              <span className={lang !== 'en' ? (lang === 'te' ? 'script-telugu' : lang === 'ta' ? 'script-tamil' : 'script-devanagari') : ''} style={{
                 color: 'var(--color-text-secondary)', flex: 1,
                 textDecoration: done ? 'line-through' : 'none',
               }}>

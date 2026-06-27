@@ -61,7 +61,10 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Breadcrumb crumbs={[{ label: 'Festivals', href: '/festivals' }, { label: festival.title_en }]} />
+      <Breadcrumb crumbs={[
+        { label: 'Festivals', labels: { te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' }, href: '/festivals' },
+        { label: festival.title_en, labels: { te: festival.title_te, ta: festival.title_ta, hi: festival.title_hi } },
+      ]} />
       <FestivalProfile festival={festival} steps={steps} materials={materials} stories={stories} deities={deities} />
     </div>
   );

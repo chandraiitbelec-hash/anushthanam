@@ -58,7 +58,7 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
         className="section-nav-bar"
         style={{
           position: 'sticky',
-          top: '64px', // matches header height exactly
+          top: 'var(--nav-height)',
           zIndex: 10,
           background: 'var(--color-bg)',
           borderBottom: '1px solid var(--color-border)',

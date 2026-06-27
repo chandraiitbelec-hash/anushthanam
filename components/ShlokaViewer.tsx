@@ -57,13 +57,20 @@ export default function ShlokaViewer({ stanzas }: { stanzas: ShlokaStanza[] }) {
 
   return (
     <div>
-      {/* Controls */}
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '24px' }}>
-        <button onClick={() => setShowExtra(v => !v)} style={pill(showExtra, 'gold')}>
+      {/* Controls — sticky so they remain visible while scrolling through long shlokas */}
+      <div className="shloka-controls-bar" style={{
+        display: 'flex', gap: '8px', flexWrap: 'wrap',
+        position: 'sticky', top: 'var(--nav-height)', zIndex: 10,
+        background: 'var(--color-bg)',
+        padding: '10px 0',
+        marginBottom: '16px',
+        borderBottom: '1px solid var(--color-border)',
+      }}>
+        <button aria-pressed={showExtra} onClick={() => setShowExtra(v => !v)} style={pill(showExtra, 'gold')}>
           {IAST_LABEL[lang] ?? 'IAST'}
         </button>
         {hasMeaning && (
-          <button onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning, 'saffron')}>
+          <button aria-pressed={showMeaning} onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning, 'saffron')}>
             {MEANING_LABEL[lang] ?? 'Meaning'}
           </button>
         )}

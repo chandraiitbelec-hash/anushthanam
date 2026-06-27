@@ -45,7 +45,10 @@ export default async function ShlokaPage({ params }: { params: Promise<{ slug: s
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Breadcrumb crumbs={[{ label: 'Shlokas', href: '/shlokas' }, { label: shloka.title_en }]} />
+      <Breadcrumb crumbs={[
+        { label: 'Shlokas', labels: { te: 'శ్లోకాలు', ta: 'ஸ்லோகங்கள்', hi: 'श्लोक' }, href: '/shlokas' },
+        { label: shloka.title_en, labels: { te: shloka.title_te, ta: shloka.title_ta, hi: shloka.title_hi } },
+      ]} />
       <ShlokaHeader shloka={shloka} />
       {stanzas.length > 0 && <ShlokaViewer stanzas={stanzas} />}
     </div>
