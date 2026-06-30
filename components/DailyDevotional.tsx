@@ -156,7 +156,7 @@ export default function DailyDevotional() {
         {open === 'story' && (
           <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <h3 className={lang !== 'en' ? scriptClass : ''} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 700, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
+              <h3 className={lang !== 'en' ? scriptClass : ''} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: lang === 'en' ? 700 : 500, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
                 {langField(entry.story as unknown as Record<string, string>, 'title', lang)}
               </h3>
               {entry.story.source && (
