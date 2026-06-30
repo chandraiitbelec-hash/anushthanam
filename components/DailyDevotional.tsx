@@ -166,7 +166,7 @@ export default function DailyDevotional() {
               )}
             </div>
 
-            <div className={scriptClass} style={{ fontSize: '14px', lineHeight: lang === 'ta' ? 1.95 : lang === 'te' ? 1.85 : 1.8, color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div className={scriptClass} style={{ fontSize: '16px', lineHeight: lang === 'ta' ? 1.95 : lang === 'te' ? 1.85 : 1.8, color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {langField(entry.story as unknown as Record<string, string>, 'body', lang)
                 .split('\n\n')
                 .map((para, i) => <p key={i} style={{ margin: 0 }}>{para}</p>)}

@@ -20,21 +20,21 @@ const notoSans = Noto_Sans({
 });
 
 const notoTelugu = Noto_Sans_Telugu({
-  weight: ['400', '500'],
+  weight: ['400', '500', '700'],
   subsets: ['telugu'],
   variable: '--font-noto-telugu',
   display: 'optional',
 });
 
 const notoTamil = Noto_Sans_Tamil({
-  weight: ['400', '500'],
+  weight: ['400', '500', '700'],
   subsets: ['tamil'],
   variable: '--font-noto-tamil',
   display: 'optional',
 });
 
 const notoDevanagari = Noto_Sans_Devanagari({
-  weight: ['400', '500'],
+  weight: ['400', '500', '700'],
   subsets: ['devanagari'],
   variable: '--font-noto-devanagari',
   display: 'optional',
