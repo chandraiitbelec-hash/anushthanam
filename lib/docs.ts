@@ -21,15 +21,24 @@ function getDocsAuth() {
 
 export async function getStoryBody(docId: string): Promise<string[]> {
   if (!docId) return [];
-  const auth = await getDocsAuth().getClient();
-  const docs = google.docs({ version: 'v1', auth: auth as never });
-  const res = await docs.documents.get({ documentId: docId });
-  return (res.data.body?.content ?? [])
-    .filter(el => el.paragraph)
-    .map(el =>
-      el.paragraph!.elements?.map(e => e.textRun?.content ?? '').join('') ?? ''
-    )
-    .filter(text => text.trim().length > 0);
+  try {
+    const auth = await getDocsAuth().getClient();
+    const docs = google.docs({ version: 'v1', auth: auth as never });
+    const res = await docs.documents.get({ documentId: docId });
+    return (res.data.body?.content ?? [])
+      .filter(el => el.paragraph)
+      .map(el =>
+        el.paragraph!.elements?.map(e => e.textRun?.content ?? '').join('') ?? ''
+      )
+      .filter(text => text.trim().length > 0);
+  } catch (err: unknown) {
+    const status = (err as { status?: number; code?: number }).status ?? (err as { status?: number; code?: number }).code;
+    if (status === 403 || status === 404) {
+      console.warn(`[docs] Cannot read doc ${docId} (${status}) — story body will be empty`);
+      return [];
+    }
+    throw err;
+  }
 }
 
 // Throttled batch fetcher — spaces requests 200ms apart to avoid Docs API HTTP 429
