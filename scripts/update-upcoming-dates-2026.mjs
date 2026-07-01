@@ -57,6 +57,7 @@ const VRATHAM_UPDATES = {
   'mangala-gauri-vratham':       { date: '2026-08-04', note: 'First Shravana Mangalavar (Tuesday)' },
   'vaibhav-lakshmi-vrat':        { date: '2026-07-31', note: 'First Shravana Shukravar (Friday)' },
   'sankashti-chaturthi-vratham': { date: '2026-08-02', note: 'Shravana Krishna Chaturthi' },
+  'dhanurmasa-vratam':           { date: '2026-12-16', note: 'Sun enters Sagittarius (Dhanu Rashi); 30-day Margazhi vow; ends ~Jan 14 2027' },
 };
 
 function colToLetter(index) {
