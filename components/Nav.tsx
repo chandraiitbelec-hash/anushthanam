@@ -108,7 +108,7 @@ export default function Nav() {
               fontFamily: 'var(--font-display)',
               fontSize: '22px',
               fontWeight: 600,
-              color: 'var(--color-text-primary)',
+              color: 'var(--color-gold)',
               lineHeight: 1.1,
             }}>
               {SITE_NAMES[lang]}
