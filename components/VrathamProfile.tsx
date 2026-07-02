@@ -1,44 +1,32 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import type { Vratham, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
 import DeityChips from './DeityChips';
-import SectionNav from './SectionNav';
 import PasuramViewer from './PasuramViewer';
 import type { DeityRef } from './DeityChips';
-import type { NavSection } from './SectionNav';
 import type { ShlokaStanza } from '@/lib/types';
 
-const SECTION_LABELS: Record<string, Record<string, string>> = {
-  fasting:   { en: 'Fasting Rules', te: 'ఉపవాసం',    ta: 'உபவாசம்',         hi: 'उपवास' },
-  benefits:  { en: 'Benefits',      te: 'ఫలితాలు',    ta: 'பலன்கள்',          hi: 'लाभ' },
-  materials: { en: 'Materials',     te: 'సామగ్రి',     ta: 'பொருட்கள்',        hi: 'सामग्री' },
-  procedure: { en: 'Procedure',     te: 'విధానం',      ta: 'நடைமுறை',          hi: 'विधि' },
-  pasurams:  { en: 'Pasurams',      te: 'పాశురాలు',   ta: 'பாசுரங்கள்',        hi: 'पासुर' },
-  story:     { en: 'Vrata Katha',   te: 'వ్రత కథ',    ta: 'விரத கதை',         hi: 'व्रत कथा' },
-  readStory: { en: 'Read',          te: 'చదవండి',      ta: 'படிக்க',            hi: 'पढ़ें' },
-  next:      { en: 'Next',          te: 'తదుపరి',      ta: 'அடுத்தது',         hi: 'अगला' },
+const LABELS: Record<string, Record<string, string>> = {
+  fasting:   { en: 'Fasting',      te: 'ఉపవాసం',    ta: 'உபவாசம்',    hi: 'उपवास' },
+  benefits:  { en: 'Benefits',     te: 'ఫలితాలు',    ta: 'பலன்கள்',     hi: 'लाभ' },
+  materials: { en: 'Materials',    te: 'సామగ్రి',     ta: 'பொருட்கள்',   hi: 'सामग्री' },
+  procedure: { en: 'Procedure',    te: 'విధానం',      ta: 'நடைமுறை',     hi: 'विधि' },
+  pasurams:  { en: 'Pasurams',     te: 'పాశురాలు',   ta: 'பாசுரங்கள்',   hi: 'पासुर' },
+  story:     { en: 'Vrata Katha',  te: 'వ్రత కథ',    ta: 'விரத கதை',    hi: 'व्रत कथा' },
+  readStory: { en: 'Read',         te: 'చదవండి',      ta: 'படிக்க',       hi: 'पढ़ें' },
+  next:      { en: 'Next',         te: 'తదుపరి',      ta: 'அடுத்தது',    hi: 'अगला' },
 };
 
-function label(key: string, lang: string) {
-  return SECTION_LABELS[key]?.[lang] ?? SECTION_LABELS[key]?.en ?? key;
+function lbl(key: string, lang: string) {
+  return LABELS[key]?.[lang] ?? LABELS[key]?.en ?? key;
 }
 
-function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
-  return (
-    <h2 id={id} style={{
-      fontSize: '13px', fontWeight: 600, textTransform: 'uppercase',
-      letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
-      margin: '0 0 12px',
-      scrollMarginTop: '137px',
-    }}>
-      {children}
-    </h2>
-  );
-}
+type Tab = { id: string; label: string };
 
 type Props = {
   vratham: Vratham;
@@ -62,14 +50,16 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
 
-  const navSections: NavSection[] = [
-    fasting                  && { id: 'fasting',   label: label('fasting', lang) },
-    benefits                 && { id: 'benefits',  label: label('benefits', lang) },
-    materials.length > 0     && { id: 'materials', label: label('materials', lang) },
-    steps.length > 0         && { id: 'procedure', label: label('procedure', lang) },
-    stanzas.length > 0       && { id: 'pasurams',  label: label('pasurams', lang) },
-    stories.length > 0       && { id: 'stories',   label: label('story', lang) },
-  ].filter(Boolean) as NavSection[];
+  const tabs: Tab[] = [
+    fasting              && { id: 'fasting',   label: lbl('fasting', lang) },
+    benefits             && { id: 'benefits',  label: lbl('benefits', lang) },
+    materials.length > 0 && { id: 'materials', label: lbl('materials', lang) },
+    steps.length > 0     && { id: 'procedure', label: lbl('procedure', lang) },
+    stanzas.length > 0   && { id: 'pasurams',  label: lbl('pasurams', lang) },
+    stories.length > 0   && { id: 'stories',   label: lbl('story', lang) },
+  ].filter(Boolean) as Tab[];
+
+  const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? '');
 
   return (
     <>
@@ -108,7 +98,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
         {vratham.next_occurrence && (
           <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
-            {label('next', lang)}: {new Date(vratham.next_occurrence).toLocaleDateString('en-IN', {
+            {lbl('next', lang)}: {new Date(vratham.next_occurrence).toLocaleDateString('en-IN', {
               year: 'numeric', month: 'long', day: 'numeric',
             })}
           </p>
@@ -117,89 +107,120 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         <DeityChips deities={deities} />
       </div>
 
-      {/* Sticky section nav */}
-      <SectionNav sections={navSections} />
-
-      {fasting && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="fasting">{label('fasting', lang)}</SectionHeading>
-          <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
-            {fasting}
-          </p>
-        </section>
-      )}
-
-      {benefits && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="benefits">{label('benefits', lang)}</SectionHeading>
-          <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
-            {benefits}
-          </p>
-        </section>
-      )}
-
-      {materials.length > 0 && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="materials">{label('materials', lang)}</SectionHeading>
-          <MaterialsList items={materials} />
-        </section>
-      )}
-
-      {steps.length > 0 && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="procedure">{label('procedure', lang)}</SectionHeading>
-          <ProcedureSteps steps={steps} hasPasurams={stanzas.length > 0} />
-        </section>
-      )}
-
-      {stanzas.length > 0 && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="pasurams">{label('pasurams', lang)}</SectionHeading>
-          <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
-        </section>
-      )}
-
-      {stories.length > 0 && (
-        <section style={{ marginBottom: '40px' }}>
-          <SectionHeading id="stories">{label('story', lang)}</SectionHeading>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {stories.map((s, idx) => {
-              const sr = s as unknown as Record<string, string>;
-              const t = sr[`title_${lang}`] || s.title_en;
+      {/* Tab bar */}
+      {tabs.length > 1 && (
+        <div style={{
+          position: 'sticky',
+          top: 'var(--nav-height)',
+          zIndex: 10,
+          background: 'var(--color-bg)',
+          borderBottom: '1px solid var(--color-border)',
+          margin: '0 -24px 32px',
+          padding: '0 24px',
+        }}>
+          <div style={{
+            display: 'flex',
+            gap: '0',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
+          }}>
+            {tabs.map(tab => {
+              const isActive = tab.id === activeTab;
               return (
-                <Link key={s.slug} href={`/stories/${s.slug}`} style={{
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                  padding: '14px 18px',
-                  background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
-                  borderLeft: '3px solid var(--color-gold)',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                }}
-                  onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.04)')}
-                  onMouseOut={e => (e.currentTarget.style.background = 'var(--color-surface)')}
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    flexShrink: 0,
+                    padding: '12px 18px',
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: `2px solid ${isActive ? 'var(--color-gold)' : 'transparent'}`,
+                    fontSize: '13px',
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.15s, border-color 0.15s',
+                    minHeight: '44px',
+                  }}
                 >
-                  {stories.length > 1 && (
-                    <span style={{
-                      width: '24px', height: '24px', flexShrink: 0,
-                      background: 'rgba(184,134,11,0.1)', border: '1px solid var(--color-gold)',
-                      borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '11px', fontWeight: 700, color: 'var(--color-gold)',
-                    }}>{idx + 1}</span>
-                  )}
-                  <span className={nameClass} style={{
-                    flex: 1, fontSize: '15px', fontWeight: 500,
-                    fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-                    color: 'var(--color-text-primary)',
-                  }}>{t}</span>
-                  <span style={{ fontSize: '12px', color: 'var(--color-gold)', fontWeight: 600, flexShrink: 0 }}>
-                    {label('readStory', lang)} →
-                  </span>
-                </Link>
+                  {tab.label}
+                </button>
               );
             })}
           </div>
-        </section>
+        </div>
+      )}
+
+      {/* Tab content */}
+      {activeTab === 'fasting' && fasting && (
+        <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
+          {fasting}
+        </p>
+      )}
+
+      {activeTab === 'benefits' && benefits && (
+        <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
+          {benefits}
+        </p>
+      )}
+
+      {activeTab === 'materials' && materials.length > 0 && (
+        <MaterialsList items={materials} />
+      )}
+
+      {activeTab === 'procedure' && steps.length > 0 && (
+        <ProcedureSteps
+          steps={steps}
+          hasPasurams={stanzas.length > 0}
+          onViewPasurams={stanzas.length > 0 ? () => setActiveTab('pasurams') : undefined}
+        />
+      )}
+
+      {activeTab === 'pasurams' && stanzas.length > 0 && (
+        <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
+      )}
+
+      {activeTab === 'stories' && stories.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {stories.map((s, idx) => {
+            const sr = s as unknown as Record<string, string>;
+            const t = sr[`title_${lang}`] || s.title_en;
+            return (
+              <Link key={s.slug} href={`/stories/${s.slug}`} style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '14px 18px',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderLeft: '3px solid var(--color-gold)',
+                borderRadius: '8px',
+                textDecoration: 'none',
+              }}
+                onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.04)')}
+                onMouseOut={e => (e.currentTarget.style.background = 'var(--color-surface)')}
+              >
+                {stories.length > 1 && (
+                  <span style={{
+                    width: '24px', height: '24px', flexShrink: 0,
+                    background: 'rgba(184,134,11,0.1)', border: '1px solid var(--color-gold)',
+                    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '11px', fontWeight: 700, color: 'var(--color-gold)',
+                  }}>{idx + 1}</span>
+                )}
+                <span className={nameClass} style={{
+                  flex: 1, fontSize: '15px', fontWeight: 500,
+                  fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
+                  color: 'var(--color-text-primary)',
+                }}>{t}</span>
+                <span style={{ fontSize: '12px', color: 'var(--color-gold)', fontWeight: 600, flexShrink: 0 }}>
+                  {lbl('readStory', lang)} →
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       )}
     </>
   );

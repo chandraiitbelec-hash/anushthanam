@@ -20,41 +20,24 @@ function shortName(label: string): string {
   return colon >= 0 ? label.slice(colon + 2) : label;
 }
 
-const TRANSLIT_LABEL: Record<string, string> = {
-  en: 'Transliteration', te: 'లిప్యంతరీకరణ', ta: 'எழுத்தாக்கம்', hi: 'लिप्यंतरण',
+const TRANSLIT_FIELD: Record<string, keyof ShlokaStanza | null> = {
+  en: 'roman_iast',
+  te: 'script_telugu',
+  hi: 'script_devanagari',
+  ta: null, // primary is already Tamil
 };
 
-const MEANING_LABEL: Record<string, string> = {
-  en: 'Meaning', te: 'అర్థం', ta: 'பொருள்', hi: 'अर्थ',
+const TRANSLIT_CLASS: Record<string, string> = {
+  en: 'script-iast',
+  te: 'script-telugu',
+  hi: 'script-devanagari',
 };
 
-function pill(active: boolean, accent: 'gold' | 'saffron'): React.CSSProperties {
-  const color = accent === 'gold' ? 'var(--color-gold)' : 'var(--color-saffron)';
-  const bg = accent === 'gold' ? 'rgba(184,134,11,0.1)' : 'rgba(212,98,42,0.1)';
-  return {
-    padding: '6px 14px',
-    borderRadius: '20px',
-    border: `1px solid ${active ? color : 'var(--color-border)'}`,
-    background: active ? bg : 'transparent',
-    color: active ? color : 'var(--color-text-secondary)',
-    fontSize: '13px',
-    fontWeight: 500,
-    cursor: 'pointer',
-  };
-}
-
-function StanzaCard({
-  stanza,
-  showTranslit,
-  showMeaning,
-  lang,
-}: {
-  stanza: ShlokaStanza;
-  showTranslit: boolean;
-  showMeaning: boolean;
-  lang: string;
-}) {
+function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
   const meaningText = stanza[`meaning_${lang}` as keyof ShlokaStanza] as string;
+  const translitField = TRANSLIT_FIELD[lang];
+  const translitText = translitField ? stanza[translitField] as string : null;
+  const translitClass = TRANSLIT_CLASS[lang] ?? 'script-iast';
 
   return (
     <div style={{
@@ -65,38 +48,35 @@ function StanzaCard({
     }}>
       {stanza.stanza_label && (
         <p style={{
-          fontSize: '12px', fontWeight: 500, color: 'var(--color-gold)',
-          margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em',
+          fontSize: '11px', fontWeight: 500, color: 'var(--color-gold)',
+          margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.05em',
         }}>
           {stanza.stanza_label}
         </p>
       )}
 
-      {/* Original Tamil — always shown */}
       {stanza.script_tamil && (
-        <div className="script-tamil" style={{ marginBottom: '8px' }}>
+        <div className="script-tamil" style={{ fontSize: '15px', marginBottom: '8px' }}>
           {splitStanzaLines(stanza.script_tamil).map((line, i) => (
             <div key={i}>{line}</div>
           ))}
         </div>
       )}
 
-      {/* IAST transliteration — toggle */}
-      {showTranslit && stanza.roman_iast && (
-        <div className="script-iast" style={{ opacity: 0.75, marginBottom: '8px' }}>
-          {splitStanzaLines(stanza.roman_iast).map((line, i) => (
+      {translitText && (
+        <div className={translitClass} style={{ fontSize: '13px', opacity: 0.75, marginBottom: '8px' }}>
+          {splitStanzaLines(translitText).map((line, i) => (
             <div key={i}>{line}</div>
           ))}
         </div>
       )}
 
-      {/* Meaning in chosen language */}
-      {showMeaning && meaningText && (
+      {meaningText && (
         <div style={{
           marginTop: '8px',
           paddingTop: '8px',
           borderTop: '1px solid var(--color-border)',
-          fontSize: '14px',
+          fontSize: '13px',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.7,
         }}>
@@ -106,7 +86,7 @@ function StanzaCard({
 
       {stanza.notes_en && (
         <p style={{
-          fontSize: '12px', color: 'var(--color-text-secondary)',
+          fontSize: '11px', color: 'var(--color-text-secondary)',
           margin: '8px 0 0', fontStyle: 'italic',
         }}>
           {stanza.notes_en}
@@ -127,8 +107,6 @@ export default function PasuramViewer({
   const ui = UI[lang];
   const todayDay = startDate ? getTodayDayNumber(startDate) : null;
   const [selected, setSelected] = useState<number>(todayDay ?? 1);
-  const [showTranslit, setShowTranslit] = useState(false);
-  const [showMeaning, setShowMeaning] = useState(true);
 
   const selectedStanza = stanzas.find(s => s.stanza_number === selected);
 
@@ -207,36 +185,8 @@ export default function PasuramViewer({
         })}
       </div>
 
-      {/* Controls */}
       {selectedStanza && (
-        <>
-          <div style={{
-            display: 'flex', gap: '8px', flexWrap: 'wrap',
-            marginBottom: '16px',
-          }}>
-            <button
-              aria-pressed={showTranslit}
-              onClick={() => setShowTranslit(v => !v)}
-              style={pill(showTranslit, 'gold')}
-            >
-              {TRANSLIT_LABEL[lang]}
-            </button>
-            <button
-              aria-pressed={showMeaning}
-              onClick={() => setShowMeaning(v => !v)}
-              style={pill(showMeaning, 'saffron')}
-            >
-              {MEANING_LABEL[lang]}
-            </button>
-          </div>
-
-          <StanzaCard
-            stanza={selectedStanza}
-            showTranslit={showTranslit}
-            showMeaning={showMeaning}
-            lang={lang}
-          />
-        </>
+        <StanzaCard stanza={selectedStanza} lang={lang} />
       )}
     </div>
   );

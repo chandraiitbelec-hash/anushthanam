@@ -4,7 +4,7 @@ import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import type { ProcedureStep } from '@/lib/types';
 
-export default function ProcedureSteps({ steps, hasPasurams }: { steps: ProcedureStep[]; hasPasurams?: boolean }) {
+export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: { steps: ProcedureStep[]; hasPasurams?: boolean; onViewPasurams?: () => void }) {
   const { lang } = useLang();
   const ui = UI[lang];
 
@@ -71,20 +71,39 @@ export default function ProcedureSteps({ steps, hasPasurams }: { steps: Procedur
             )}
 
             {step.recite_shloka_slug && (
-              <a
-                href={hasPasurams ? '#pasurams' : `/shlokas/${step.recite_shloka_slug}`}
-                style={{
-                  marginTop: '8px',
-                  fontSize: '12px',
-                  color: 'var(--color-gold)',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  display: 'inline-block',
-                  padding: '4px 0',
-                }}
-              >
-                {ui.viewPasurams}
-              </a>
+              hasPasurams && onViewPasurams ? (
+                <button
+                  onClick={onViewPasurams}
+                  style={{
+                    marginTop: '8px',
+                    fontSize: '12px',
+                    color: 'var(--color-gold)',
+                    background: 'none',
+                    border: 'none',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    padding: '4px 0',
+                    display: 'inline-block',
+                  }}
+                >
+                  {ui.viewPasurams}
+                </button>
+              ) : (
+                <a
+                  href={`/shlokas/${step.recite_shloka_slug}`}
+                  style={{
+                    marginTop: '8px',
+                    fontSize: '12px',
+                    color: 'var(--color-gold)',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    display: 'inline-block',
+                    padding: '4px 0',
+                  }}
+                >
+                  {ui.viewPasurams}
+                </a>
+              )
             )}
 
             {step.notes_en && (
