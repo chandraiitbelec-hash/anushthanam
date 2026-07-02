@@ -7,7 +7,7 @@ import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
 import DeityChips from './DeityChips';
 import SectionNav from './SectionNav';
-import ShlokaViewer from './ShlokaViewer';
+import PasuramViewer from './PasuramViewer';
 import type { DeityRef } from './DeityChips';
 import type { NavSection } from './SectionNav';
 import type { ShlokaStanza } from '@/lib/types';
@@ -148,14 +148,14 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
       {steps.length > 0 && (
         <section style={{ marginBottom: '40px' }}>
           <SectionHeading id="procedure">{label('procedure', lang)}</SectionHeading>
-          <ProcedureSteps steps={steps} />
+          <ProcedureSteps steps={steps} hasPasurams={stanzas.length > 0} />
         </section>
       )}
 
       {stanzas.length > 0 && (
         <section style={{ marginBottom: '40px' }}>
           <SectionHeading id="pasurams">{label('pasurams', lang)}</SectionHeading>
-          <ShlokaViewer stanzas={stanzas} />
+          <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
         </section>
       )}
 

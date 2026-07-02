@@ -19,6 +19,8 @@ type UiStrings = {
   showShloka: string;
   hideShloka: string;
   shlokaLabel: string;
+  viewPasurams: string;
+  todaysPasuram: string;
   // Stories
   otherStories: string;
   story: string;
@@ -66,6 +68,8 @@ export const UI: Record<Language, UiStrings> = {
     showShloka: '▼ Show shloka',
     hideShloka: '▲ Hide shloka',
     shlokaLabel: 'Shloka',
+    viewPasurams: '↓ View Pasurams',
+    todaysPasuram: "Today's Pasuram",
     otherStories: 'Other Stories',
     story: 'story',
     stories: 'stories',
@@ -105,6 +109,8 @@ export const UI: Record<Language, UiStrings> = {
     showShloka: '▼ శ్లోకం చూపించు',
     hideShloka: '▲ శ్లోకం దాచు',
     shlokaLabel: 'శ్లోకం',
+    viewPasurams: '↓ పాశురాలు చూడండి',
+    todaysPasuram: 'నేటి పాశురం',
     otherStories: 'ఇతర కథలు',
     story: 'కథ',
     stories: 'కథలు',
@@ -144,6 +150,8 @@ export const UI: Record<Language, UiStrings> = {
     showShloka: '▼ ஸ்லோகம் காட்டு',
     hideShloka: '▲ ஸ்லோகம் மறை',
     shlokaLabel: 'ஸ்லோகம்',
+    viewPasurams: '↓ பாசுரங்கள் காண்க',
+    todaysPasuram: 'இன்றைய பாசுரம்',
     otherStories: 'பிற கதைகள்',
     story: 'கதை',
     stories: 'கதைகள்',
@@ -183,6 +191,8 @@ export const UI: Record<Language, UiStrings> = {
     showShloka: '▼ श्लोक दिखाएं',
     hideShloka: '▲ श्लोक छुपाएं',
     shlokaLabel: 'श्लोक',
+    viewPasurams: '↓ पासुर देखें',
+    todaysPasuram: 'आज का पासुर',
     otherStories: 'अन्य कथाएं',
     story: 'कथा',
     stories: 'कथाएं',

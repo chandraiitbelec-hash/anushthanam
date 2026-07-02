@@ -161,6 +161,7 @@ export type Vratham = {
   linked_puja_slug: string;
   linked_story_slug: string;
   shloka_slug: string;
+  shloka_start_date: string;
   status: Status;
   translation_status: TranslationStatus;
 };

@@ -1,27 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import type { ProcedureStep } from '@/lib/types';
 
-export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
+export default function ProcedureSteps({ steps, hasPasurams }: { steps: ProcedureStep[]; hasPasurams?: boolean }) {
   const { lang } = useLang();
   const ui = UI[lang];
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   const scriptClass =
     lang === 'te' ? 'script-telugu' :
     lang === 'ta' ? 'script-tamil' :
     lang === 'hi' ? 'script-devanagari' : '';
-
-  function toggle(n: number) {
-    setExpanded(prev => {
-      const next = new Set(prev);
-      next.has(n) ? next.delete(n) : next.add(n);
-      return next;
-    });
-  }
 
   function title(step: ProcedureStep) {
     return step[`step_title_${lang}` as keyof ProcedureStep] as string || step.step_title_en;
@@ -81,34 +71,20 @@ export default function ProcedureSteps({ steps }: { steps: ProcedureStep[] }) {
             )}
 
             {step.recite_shloka_slug && (
-              <button onClick={() => toggle(step.step_number)} style={{
-                marginTop: '8px',
-                fontSize: '12px',
-                color: 'var(--color-gold)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px 0',
-                display: 'inline-block',
-                fontWeight: 500,
-              }}>
-                {expanded.has(step.step_number) ? ui.hideShloka : ui.showShloka}
-              </button>
-            )}
-
-            {expanded.has(step.step_number) && step.recite_shloka_slug && (
-              <div style={{
-                marginTop: '8px',
-                padding: '12px',
-                background: 'var(--color-bg)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '6px',
-                fontSize: '13px',
-                color: 'var(--color-text-secondary)',
-              }}>
-                {ui.shlokaLabel}: {step.recite_shloka_slug}
-                {step.recite_stanza_range && ` (${step.recite_stanza_range})`}
-              </div>
+              <a
+                href={hasPasurams ? '#pasurams' : `/shlokas/${step.recite_shloka_slug}`}
+                style={{
+                  marginTop: '8px',
+                  fontSize: '12px',
+                  color: 'var(--color-gold)',
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                  display: 'inline-block',
+                  padding: '4px 0',
+                }}
+              >
+                {ui.viewPasurams}
+              </a>
             )}
 
             {step.notes_en && (
