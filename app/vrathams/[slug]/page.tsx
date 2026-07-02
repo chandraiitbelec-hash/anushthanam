@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getProcedureSteps, getMaterialItems, getStoriesForParent } from '@/lib/relations';
-import type { Vratham, God, Story } from '@/lib/types';
+import { getProcedureSteps, getMaterialItems, getStoriesForParent, getShlokaStanzas } from '@/lib/relations';
+import type { Vratham, God, Story, ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
@@ -29,11 +29,12 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
   const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
   if (!vratham) notFound();
 
-  const [steps, materials, godRows, storyRows] = await Promise.all([
+  const [steps, materials, godRows, storyRows, stanzas] = await Promise.all([
     getProcedureSteps(slug),
     getMaterialItems(slug),
     getPublished('gods'),
     getStoriesForParent(slug),
+    vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([]),
   ]);
 
   const deities: DeityRef[] = vratham.deity_slug
@@ -63,7 +64,7 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
         { label: 'Vrathams', labels: { te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }, href: '/vrathams' },
         { label: vratham.title_en, labels: { te: vratham.title_te, ta: vratham.title_ta, hi: vratham.title_hi } },
       ]} />
-      <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} stories={stories} />
+      <VrathamProfile vratham={vratham} steps={steps} materials={materials} deities={deities} stories={stories} stanzas={stanzas as ShlokaStanza[]} />
     </div>
   );
 }

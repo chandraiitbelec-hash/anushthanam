@@ -7,14 +7,17 @@ import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
 import DeityChips from './DeityChips';
 import SectionNav from './SectionNav';
+import ShlokaViewer from './ShlokaViewer';
 import type { DeityRef } from './DeityChips';
 import type { NavSection } from './SectionNav';
+import type { ShlokaStanza } from '@/lib/types';
 
 const SECTION_LABELS: Record<string, Record<string, string>> = {
   fasting:   { en: 'Fasting Rules', te: 'ఉపవాసం',    ta: 'உபவாசம்',         hi: 'उपवास' },
   benefits:  { en: 'Benefits',      te: 'ఫలితాలు',    ta: 'பலன்கள்',          hi: 'लाभ' },
   materials: { en: 'Materials',     te: 'సామగ్రి',     ta: 'பொருட்கள்',        hi: 'सामग्री' },
   procedure: { en: 'Procedure',     te: 'విధానం',      ta: 'நடைமுறை',          hi: 'विधि' },
+  pasurams:  { en: 'Pasurams',      te: 'పాశురాలు',   ta: 'பாசுரங்கள்',        hi: 'पासुर' },
   story:     { en: 'Vrata Katha',   te: 'వ్రత కథ',    ta: 'விரத கதை',         hi: 'व्रत कथा' },
   readStory: { en: 'Read',          te: 'చదవండి',      ta: 'படிக்க',            hi: 'पढ़ें' },
   next:      { en: 'Next',          te: 'తదుపరి',      ta: 'அடுத்தது',         hi: 'अगला' },
@@ -43,9 +46,10 @@ type Props = {
   materials: MaterialItem[];
   deities: DeityRef[];
   stories: Story[];
+  stanzas: ShlokaStanza[];
 };
 
-export default function VrathamProfile({ vratham, steps, materials, deities, stories }: Props) {
+export default function VrathamProfile({ vratham, steps, materials, deities, stories, stanzas }: Props) {
   const { lang } = useLang();
 
   const r = vratham as unknown as Record<string, string>;
@@ -63,6 +67,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
     benefits                 && { id: 'benefits',  label: label('benefits', lang) },
     materials.length > 0     && { id: 'materials', label: label('materials', lang) },
     steps.length > 0         && { id: 'procedure', label: label('procedure', lang) },
+    stanzas.length > 0       && { id: 'pasurams',  label: label('pasurams', lang) },
     stories.length > 0       && { id: 'stories',   label: label('story', lang) },
   ].filter(Boolean) as NavSection[];
 
@@ -144,6 +149,13 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         <section style={{ marginBottom: '40px' }}>
           <SectionHeading id="procedure">{label('procedure', lang)}</SectionHeading>
           <ProcedureSteps steps={steps} />
+        </section>
+      )}
+
+      {stanzas.length > 0 && (
+        <section style={{ marginBottom: '40px' }}>
+          <SectionHeading id="pasurams">{label('pasurams', lang)}</SectionHeading>
+          <ShlokaViewer stanzas={stanzas} />
         </section>
       )}
 

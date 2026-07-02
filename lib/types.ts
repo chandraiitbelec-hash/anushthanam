@@ -160,6 +160,7 @@ export type Vratham = {
   benefits_hi: string;
   linked_puja_slug: string;
   linked_story_slug: string;
+  shloka_slug: string;
   status: Status;
   translation_status: TranslationStatus;
 };
