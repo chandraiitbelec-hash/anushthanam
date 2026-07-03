@@ -40,54 +40,66 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
   const translitClass = TRANSLIT_CLASS[lang] ?? 'script-iast';
 
   return (
-    <div style={{
-      background: 'var(--color-surface)',
-      borderLeft: '4px solid var(--color-gold)',
-      borderRadius: '0 8px 8px 0',
-      padding: '16px 20px',
-    }}>
+    <div>
+      {/* Eyebrow label */}
       {stanza.stanza_label && (
         <p style={{
-          fontSize: '11px', fontWeight: 500, color: 'var(--color-gold)',
-          margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.05em',
+          fontSize: '10px', fontWeight: 600, color: 'var(--color-gold)',
+          margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.07em',
         }}>
           {stanza.stanza_label}
         </p>
       )}
 
-      {stanza.script_tamil && (
-        <div className="script-tamil" style={{ fontSize: '15px', marginBottom: '8px' }}>
-          {splitStanzaLines(stanza.script_tamil).map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
-        </div>
-      )}
+      {/* Verse block — Tamil primary + transliteration as subordinate pair */}
+      <div style={{
+        borderLeft: '3px solid var(--color-gold)',
+        paddingLeft: '14px',
+        marginBottom: meaningText ? '14px' : 0,
+      }}>
+        {stanza.script_tamil && (
+          <div className="script-tamil" style={{
+            fontSize: '14px',
+            lineHeight: 1.75,
+            marginBottom: translitText ? '10px' : 0,
+          }}>
+            {splitStanzaLines(stanza.script_tamil).map((line, i) => (
+              <span key={i} style={{ display: 'block' }}>{line}</span>
+            ))}
+          </div>
+        )}
 
-      {translitText && (
-        <div className={translitClass} style={{ fontSize: '13px', opacity: 0.75, marginBottom: '8px' }}>
-          {splitStanzaLines(translitText).map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
-        </div>
-      )}
+        {translitText && (
+          <div className={translitClass} style={{
+            fontSize: '12px',
+            lineHeight: 1.65,
+            color: 'var(--color-text-secondary)',
+          }}>
+            {splitStanzaLines(translitText).map((line, i) => (
+              <span key={i} style={{ display: 'block' }}>{line}</span>
+            ))}
+          </div>
+        )}
+      </div>
 
+      {/* Meaning — visually separate, prose-style */}
       {meaningText && (
-        <div style={{
-          marginTop: '8px',
-          paddingTop: '8px',
-          borderTop: '1px solid var(--color-border)',
+        <p style={{
           fontSize: '13px',
           color: 'var(--color-text-secondary)',
-          lineHeight: 1.7,
+          lineHeight: 1.75,
+          margin: 0,
+          paddingLeft: '17px',
+          borderLeft: '3px solid var(--color-border)',
         }}>
           {meaningText}
-        </div>
+        </p>
       )}
 
       {stanza.notes_en && (
         <p style={{
           fontSize: '11px', color: 'var(--color-text-secondary)',
-          margin: '8px 0 0', fontStyle: 'italic',
+          margin: '10px 0 0', fontStyle: 'italic', paddingLeft: '17px',
         }}>
           {stanza.notes_en}
         </p>
