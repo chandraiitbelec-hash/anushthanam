@@ -71,6 +71,10 @@ export function devanagariToTamilSuperscript(dev) {
       out += INDEP_VOWEL[ch]; i += 1;
     } else if (ch === ' ') {
       out += ' '; i += 1;
+    } else if (ch === 'ऽ') {
+      i += 1; // avagraha (sandhi elision marker) has no Tamil-script equivalent; drop it
+    } else if (ch === 'ॐ') {
+      out += 'ஓம்'; i += 1; // matches the OM.tamil literal used across the site's ashtottaram data
     } else {
       out += ch; i += 1; // pass through anything unexpected (danda, digits, etc.)
     }
