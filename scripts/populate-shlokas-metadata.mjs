@@ -31,10 +31,22 @@ async function getExistingSlugs() {
   return new Set(rows.flat());
 }
 
-// Columns order (must match sheet header exactly):
+// Sheet header order (from lib/types.ts Shloka):
 // slug | title_en | title_te | title_ta | title_hi | type | deity_slug |
+// source_scripture_en | language_of_composition |
 // brief_intro_en | brief_intro_te | brief_intro_ta | brief_intro_hi |
-// language_of_composition | stanza_count | source_text | status
+// audio_drive_id | status | translation_status
+//
+// NOTE: the object literals below use brief_intro_en/te/ta/hi, language_of_composition,
+// stanza_count, source_text, status — a DIFFERENT order than the sheet header above.
+// The `rows` builder in run() must map each named field to its correct column
+// (see the fixed version below) rather than relying on object property order —
+// a previous version of this script wrote values in object-literal order instead
+// of sheet-column order, which silently shifted brief_intro_en/te/ta/hi,
+// language_of_composition, source_text and audio_drive_id into the wrong columns
+// for every row this script appended (kavachams, sahasranamams, chalisas, most
+// stotras, govinda-namalu, suprabhatams). Those already-written rows need a
+// data repair pass — this fix only prevents new appends from repeating it.
 
 const shlokas = [
   // ── ASHTOTHRAMS (new gods) ────────────────────────────────────────────────
@@ -936,14 +948,15 @@ async function run() {
     s.title_hi,
     s.type,
     s.deity_slug,
+    s.source_text ?? '',          // source_scripture_en
+    s.language_of_composition,
     s.brief_intro_en,
     s.brief_intro_te,
     s.brief_intro_ta,
     s.brief_intro_hi,
-    s.language_of_composition,
-    s.stanza_count,
-    s.source_text,
+    '',                            // audio_drive_id — not tracked in this script's data
     s.status,
+    '',                            // translation_status
   ]);
 
   await sheets.spreadsheets.values.append({
