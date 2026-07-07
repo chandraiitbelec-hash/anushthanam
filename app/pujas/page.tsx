@@ -31,11 +31,7 @@ export default async function PujasPage() {
           <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Puja guides will appear here once published from the content management system.</p>
         </div>
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="entity-grid">
           {pujas.map(p => (
             <EntityCard
               key={p.slug}

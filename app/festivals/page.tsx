@@ -31,11 +31,7 @@ export default async function FestivalsPage() {
           <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Festival listings will appear here once published from the content management system.</p>
         </div>
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="entity-grid">
           {festivals.map(f => (
             <EntityCard
               key={f.slug}

@@ -31,11 +31,7 @@ export default async function VrathamsPage() {
           <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Vow and fasting guides will appear here once published from the content management system.</p>
         </div>
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="entity-grid entity-grid--3col">
           {vrathams.map(v => (
             <EntityCard
               key={v.slug}

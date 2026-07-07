@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
+import SearchBar from '@/components/SearchBar';
 
 import type { Language } from '@/lib/types';
 
@@ -21,10 +22,30 @@ export default function Nav() {
   const { lang, setLang } = useLang();
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   function linkLabel(link: typeof NAV_LINKS[0]) {
     return link[`label_${lang}` as keyof typeof link] || link.label_en;
   }
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setSearchOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [searchOpen]);
 
   return (
     <>
@@ -136,22 +157,42 @@ export default function Nav() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
 
             {/* Search — always visible */}
-            <Link href="/search" aria-label="Search" style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: '36px', height: '36px',
-              color: 'var(--color-text-secondary)',
-              textDecoration: 'none',
-              fontSize: '18px',
-              flexShrink: 0,
-            }}
-              onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
-              onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
-            >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="7.5" cy="7.5" r="5" />
-                <line x1="11.5" y1="11.5" x2="16" y2="16" />
-              </svg>
-            </Link>
+            <div ref={searchRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setSearchOpen(o => !o)}
+                aria-label="Search"
+                aria-expanded={searchOpen}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '36px', height: '36px',
+                  color: searchOpen ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  flexShrink: 0,
+                }}
+                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+                onMouseOut={e => (e.currentTarget.style.color = searchOpen ? 'var(--color-gold)' : 'var(--color-text-secondary)')}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="7.5" cy="7.5" r="5" />
+                  <line x1="11.5" y1="11.5" x2="16" y2="16" />
+                </svg>
+              </button>
+
+              {searchOpen && (
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  right: 0,
+                  width: 'min(420px, calc(100vw - 32px))',
+                  zIndex: 100,
+                }}>
+                  <SearchBar autoFocus onSelect={() => setSearchOpen(false)} />
+                </div>
+              )}
+            </div>
 
             {/* Language switcher — CSS hides this on mobile */}
             <div className="nav-desktop" style={{ position: 'relative' }}>

@@ -35,12 +35,13 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
   return (
     <Link href={href} className="entity-card-link" style={{
       display: 'block',
-      padding: '20px 24px',
+      padding: '14px 16px',
       background: 'var(--color-surface)',
       border: '1px solid var(--color-border)',
-      borderRadius: '12px',
+      borderRadius: '10px',
       textDecoration: 'none',
       color: 'var(--color-text-primary)',
+      minWidth: 0,
     }}
       onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
       onMouseOut={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
@@ -48,13 +49,13 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       {badge && (
         <span style={{
           display: 'inline-block',
-          fontSize: '11px',
+          fontSize: '10px',
           fontWeight: 500,
-          padding: '3px 8px',
+          padding: '2px 7px',
           borderRadius: '20px',
           background: bc.bg,
           color: bc.color,
-          marginBottom: '8px',
+          marginBottom: '6px',
           textTransform: 'capitalize',
         }}>
           {badge}
@@ -62,26 +63,27 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       )}
       <p className={titleClass} style={{
         fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-        fontSize: lang === 'en' ? '20px' : '18px',
+        fontSize: lang === 'en' ? '17px' : '16px',
         fontWeight: 600,
-        margin: '0 0 4px',
+        margin: '0 0 2px',
         color: 'var(--color-text-primary)',
+        overflowWrap: 'break-word',
       }}>
         {title}
       </p>
       {subtitle && (
         <p style={{
-          fontSize: '13px',
+          fontSize: '12px',
           color: 'var(--color-text-secondary)',
-          margin: '0 0 4px',
-          lineHeight: 1.5,
+          margin: '0 0 2px',
+          lineHeight: 1.4,
         }}>
           {subtitle}
         </p>
       )}
       {meta && (
         <p style={{
-          fontSize: '12px',
+          fontSize: '11px',
           color: 'var(--color-gold)',
           margin: 0,
           fontWeight: 500,

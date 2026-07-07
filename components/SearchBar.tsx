@@ -12,7 +12,7 @@ const PLACEHOLDER: Record<string, string> = {
   hi: 'खोजें…',
 };
 
-export default function SearchBar() {
+export default function SearchBar({ autoFocus = false, onSelect }: { autoFocus?: boolean; onSelect?: () => void } = {}) {
   const { lang } = useLang();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchRecord[]>([]);
@@ -21,6 +21,11 @@ export default function SearchBar() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fuseRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus) inputRef.current?.focus();
+  }, [autoFocus]);
 
   useEffect(() => {
     let cancelled = false;
@@ -76,6 +81,7 @@ export default function SearchBar() {
   return (
     <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '480px' }}>
       <input
+        ref={inputRef}
         type="search"
         value={query}
         onChange={e => setQuery(e.target.value)}
@@ -110,7 +116,7 @@ export default function SearchBar() {
             <Link
               key={r.url}
               href={r.url}
-              onClick={() => { setOpen(false); setQuery(''); }}
+              onClick={() => { setOpen(false); setQuery(''); onSelect?.(); }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
