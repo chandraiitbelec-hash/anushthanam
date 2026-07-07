@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { FontScaleProvider } from '@/context/FontScaleContext';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
 
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <LanguageProvider>
+        <FontScaleProvider>
           <Nav />
           <main>{children}</main>
           <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
@@ -91,6 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <FooterLinks />
             </div>
           </footer>
+        </FontScaleProvider>
         </LanguageProvider>
       </body>
     </html>

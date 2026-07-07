@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
+import { useFontScale } from '@/context/FontScaleContext';
+import FontSizeToggle from '@/components/FontSizeToggle';
 import type { GitaVerse } from '@/lib/gita';
 
 // Primary recitation script per UI language
@@ -46,6 +48,7 @@ function splitLines(text: string) {
 
 export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
   const { lang } = useLang();
+  const { scale } = useFontScale();
   const [showSanskrit, setShowSanskrit] = useState(false);
   const [showIast, setShowIast] = useState(false);
   const [showMeaning, setShowMeaning] = useState(true);
@@ -58,7 +61,7 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
   const isEnglish = lang === 'en';
 
   return (
-    <div>
+    <div style={{ '--content-font-scale': scale } as React.CSSProperties}>
       {/* Controls */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
         {!isEnglish && (
@@ -79,6 +82,7 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
         <button aria-pressed={showMeaning} onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning)}>
           {labels.meaning}
         </button>
+        <FontSizeToggle />
       </div>
 
       {/* Verses */}
@@ -144,7 +148,7 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
                     marginTop: '4px',
                     paddingTop: '10px',
                     borderTop: '1px solid var(--color-border)',
-                    fontSize: '14px',
+                    fontSize: 'calc(14px * var(--content-font-scale, 1))',
                     color: 'var(--color-text-secondary)',
                     lineHeight: 1.75,
                   }} className={

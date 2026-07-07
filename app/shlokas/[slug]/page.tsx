@@ -50,7 +50,7 @@ export default async function ShlokaPage({ params }: { params: Promise<{ slug: s
         { label: shloka.title_en, labels: { te: shloka.title_te, ta: shloka.title_ta, hi: shloka.title_hi } },
       ]} />
       <ShlokaHeader shloka={shloka} />
-      {stanzas.length > 0 && <ShlokaViewer stanzas={stanzas} />}
+      {stanzas.length > 0 && <ShlokaViewer stanzas={stanzas} type={shloka.type} />}
     </div>
   );
 }

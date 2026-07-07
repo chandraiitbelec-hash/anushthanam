@@ -63,29 +63,31 @@ body {
 }
 
 /* Script-specific classes */
+/* --content-font-scale is set by FontSizeToggle on content-heavy pages (Shlokas, Gita) — defaults to 1 elsewhere */
 .script-devanagari {
   font-family: var(--font-devanagari);
   line-height: 1.8;
-  font-size: 20px;
+  font-size: calc(20px * var(--content-font-scale, 1));
 }
 
 .script-telugu {
   font-family: var(--font-telugu);
   line-height: 2.15;
-  font-size: 20px;
+  font-size: calc(20px * var(--content-font-scale, 1));
   letter-spacing: 0.03em;
 }
 
 .script-tamil {
   font-family: var(--font-tamil);
   line-height: 1.9;
-  font-size: 20px;
+  font-size: calc(20px * var(--content-font-scale, 1));
 }
 
 .script-iast {
   font-family: var(--font-body);
   line-height: 1.6;
   font-style: italic;
+  font-size: calc(19px * var(--content-font-scale, 1));
 }
 
 .font-display {
@@ -114,7 +116,9 @@ body {
 .nav-desktop   { display: flex; }
 .nav-hamburger { display: none; }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  /* 8 nav links + logo + search + language switcher don't fit below this —
+     collapsing earlier (e.g. at 768px) left a cramped/overflowing tablet zone */
   .nav-desktop   { display: none; }
   .nav-hamburger { display: flex; }
 }
@@ -145,9 +149,41 @@ body {
   }
 
   /* Script sizes: Telugu/Tamil line-height is very tall — tighten on mobile */
-  .script-telugu { font-size: 17px; }
-  .script-tamil  { font-size: 17px; }
-  .script-devanagari { font-size: 17px; }
+  .script-telugu { font-size: calc(17px * var(--content-font-scale, 1)); }
+  .script-tamil  { font-size: calc(17px * var(--content-font-scale, 1)); }
+  .script-devanagari { font-size: calc(17px * var(--content-font-scale, 1)); }
+}
+
+/* ─── Entity grid (list pages: gods, festivals, pujas, shlokas, vrathams) ── */
+.entity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .entity-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .entity-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Longer titles (e.g. vratham names) — cap at 3 columns so text has room */
+.entity-grid--3col {
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 640px) {
+  .entity-grid--3col { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1024px) {
+  .entity-grid--3col { grid-template-columns: repeat(3, 1fr); }
 }
 
 .story-row {
