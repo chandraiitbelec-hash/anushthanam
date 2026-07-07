@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
 import FontSizeToggle from '@/components/FontSizeToggle';
-import type { GitaVerse } from '@/lib/gita';
+import type { GitaVerse, GitaChapter } from '@/lib/gita';
 
 // Primary recitation script per UI language
 const PRIMARY_SCRIPT: Record<string, keyof GitaVerse> = {
@@ -18,8 +19,8 @@ const SCRIPT_CLASS: Record<string, string> = {
   iast: 'script-iast',
   script_te: 'script-telugu',
   script_ta: 'script-tamil',
-  script_hi: 'script-devanagari',
-  sanskrit: 'script-devanagari',
+  script_hi: 'script-devanagari-serif',
+  sanskrit: 'script-devanagari-serif',
 };
 
 const TOGGLE_LABELS: Record<string, { devanagari: string; iast: string; meaning: string }> = {
@@ -42,13 +43,32 @@ function pill(active: boolean): React.CSSProperties {
   };
 }
 
+const selectStyle: React.CSSProperties = {
+  padding: '6px 10px',
+  borderRadius: '8px',
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-surface)',
+  color: 'var(--color-text-primary)',
+  fontSize: '13px',
+  fontWeight: 500,
+  cursor: 'pointer',
+  flexShrink: 0,
+};
+
 function splitLines(text: string) {
   return text.split(/\s*\|\s*/).filter(l => l.trim().length > 0);
 }
 
-export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
+type Props = {
+  verses: GitaVerse[];
+  chapters?: GitaChapter[];
+  currentChapter?: number;
+};
+
+export default function GitaVerseViewer({ verses, chapters, currentChapter }: Props) {
   const { lang } = useLang();
   const { scale } = useFontScale();
+  const router = useRouter();
   const [showSanskrit, setShowSanskrit] = useState(false);
   const [showIast, setShowIast] = useState(false);
   const [showMeaning, setShowMeaning] = useState(true);
@@ -60,10 +80,47 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
   // For other langs, primary is native script so extras are Sanskrit + IAST
   const isEnglish = lang === 'en';
 
+  function jumpToVerse(verseNumber: string) {
+    if (!verseNumber) return;
+    document.getElementById(`verse-${verseNumber}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   return (
     <div style={{ '--content-font-scale': scale } as React.CSSProperties}>
-      {/* Controls */}
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
+      {/* Controls — sticky so chapter/verse jump and display toggles stay reachable while scrolling */}
+      <div className="shloka-controls-bar" style={{
+        display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center',
+        position: 'sticky', top: 'var(--nav-height)', zIndex: 10,
+        background: 'var(--color-bg)',
+        padding: '10px 0',
+        marginBottom: '24px',
+        borderBottom: '1px solid var(--color-border)',
+      }}>
+        {chapters && currentChapter && (
+          <select
+            aria-label="Jump to chapter"
+            value={currentChapter}
+            onChange={e => router.push(`/bhagavad-gita/${e.target.value}`)}
+            style={selectStyle}
+          >
+            {chapters.map(ch => (
+              <option key={ch.number} value={ch.number}>Ch {ch.number}: {ch.name_en}</option>
+            ))}
+          </select>
+        )}
+        {verses.length > 0 && (
+          <select
+            aria-label="Jump to verse"
+            defaultValue=""
+            onChange={e => jumpToVerse(e.target.value)}
+            style={selectStyle}
+          >
+            <option value="" disabled>Verse…</option>
+            {verses.map(v => (
+              <option key={v.verse} value={v.verse}>Verse {v.verse}</option>
+            ))}
+          </select>
+        )}
         {!isEnglish && (
           <button aria-pressed={showSanskrit} onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
             {labels.devanagari}
@@ -100,6 +157,7 @@ export default function GitaVerseViewer({ verses }: { verses: GitaVerse[] }) {
                 borderLeft: '4px solid var(--color-gold)',
                 borderRadius: '0 8px 8px 0',
                 padding: '16px 20px',
+                scrollMarginTop: 'calc(var(--nav-height) + 70px)',
               }}
             >
               {/* Verse number */}

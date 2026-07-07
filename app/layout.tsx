@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_Sans_Devanagari } from 'next/font/google';
+import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { FontScaleProvider } from '@/context/FontScaleContext';
@@ -38,6 +38,15 @@ const notoDevanagari = Noto_Sans_Devanagari({
   weight: ['400', '500', '700'],
   subsets: ['devanagari'],
   variable: '--font-noto-devanagari',
+  display: 'optional',
+});
+
+// Traditional serif Devanagari for recited Sanskrit verse text (Bhagavad Gita) —
+// distinct from the sans-serif used for Hindi UI text elsewhere on the site
+const notoSerifDevanagari = Noto_Serif_Devanagari({
+  weight: ['400', '500'],
+  subsets: ['devanagari'],
+  variable: '--font-noto-serif-devanagari',
   display: 'optional',
 });
 
@@ -80,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable}`}
+      className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
       <body>
         <LanguageProvider>

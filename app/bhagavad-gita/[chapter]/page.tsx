@@ -26,6 +26,7 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
   if (!ch) notFound();
 
   const verses = getGitaVersesByChapter(num);
+  const chapters = getGitaChapters();
   const prev = num > 1 ? getGitaChapter(num - 1) : null;
   const next = num < 18 ? getGitaChapter(num + 1) : null;
 
@@ -84,7 +85,7 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
         </p>
       </div>
 
-      <GitaVerseViewer verses={verses} />
+      <GitaVerseViewer verses={verses} chapters={chapters} currentChapter={num} />
 
       <ChapterNav prev={prev ?? null} next={next ?? null} />
     </div>

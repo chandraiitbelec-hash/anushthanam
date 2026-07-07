@@ -27,6 +27,7 @@
   --font-telugu: var(--font-noto-telugu), serif;
   --font-tamil: var(--font-noto-tamil), serif;
   --font-devanagari: var(--font-noto-devanagari), serif;
+  --font-devanagari-serif: var(--font-noto-serif-devanagari), serif;
 
   /* Spacing base: 4px */
   --spacing-1: 4px;
@@ -88,6 +89,14 @@ body {
   line-height: 1.6;
   font-style: italic;
   font-size: calc(19px * var(--content-font-scale, 1));
+}
+
+/* Traditional serif Devanagari for recited Sanskrit verse text (Bhagavad Gita) only —
+   general Hindi UI text elsewhere keeps .script-devanagari's sans-serif */
+.script-devanagari-serif {
+  font-family: var(--font-devanagari-serif);
+  line-height: 1.8;
+  font-size: calc(20px * var(--content-font-scale, 1));
 }
 
 .font-display {
@@ -152,6 +161,7 @@ body {
   .script-telugu { font-size: calc(17px * var(--content-font-scale, 1)); }
   .script-tamil  { font-size: calc(17px * var(--content-font-scale, 1)); }
   .script-devanagari { font-size: calc(17px * var(--content-font-scale, 1)); }
+  .script-devanagari-serif { font-size: calc(17px * var(--content-font-scale, 1)); }
 }
 
 /* ─── Entity grid (list pages: gods, festivals, pujas, shlokas, vrathams) ── */
