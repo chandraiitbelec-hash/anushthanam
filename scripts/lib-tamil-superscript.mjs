@@ -67,6 +67,8 @@ export function devanagariToTamilSuperscript(dev) {
       out += ':'; i += 1;
     } else if (ch === 'ृ') {
       out += 'ரு'; i += 1; // standalone vocalic r (rare, word-initial)
+    } else if (ch === 'ऌ') {
+      out += 'ரு'; i += 1; // standalone vocalic l (extremely rare, e.g. क्ऌप्त) -- Tamil has no dedicated glyph for either vocalic liquid, so approximate the same way as vocalic r above
     } else if (INDEP_VOWEL[ch]) {
       out += INDEP_VOWEL[ch]; i += 1;
     } else if (ch === ' ') {
