@@ -5,7 +5,16 @@ import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
 import FontSizeToggle from '@/components/FontSizeToggle';
 import { splitStanzaLines } from '@/lib/utils';
-import type { ShlokaStanza, ScriptLayer, ShlokaType } from '@/lib/types';
+import type { ShlokaStanza, ScriptLayer, ShlokaType, Language } from '@/lib/types';
+
+// Meanings are only ever authored in meaning_en for most content so far — fall
+// back to it the same way the rest of the site falls back to _en (see
+// lib/utils.ts's t()/tVal()), instead of silently hiding the meaning when the
+// active UI language has no translated meaning of its own.
+function getMeaning(stanza: ShlokaStanza, lang: Language): string {
+  const direct = stanza[`meaning_${lang}` as keyof ShlokaStanza] as string;
+  return direct || stanza.meaning_en;
+}
 
 // Types recited as a long list of short names/lines rather than full verses —
 // rendered as one compact list instead of one card per entry
@@ -45,8 +54,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
   // For English the primary is already IAST, so the extra is Devanagari; for others it's IAST
   const extraScript: ScriptLayer = lang === 'en' ? 'script_devanagari' : 'roman_iast';
 
-  const meaningField = `meaning_${lang}` as keyof ShlokaStanza;
-  const hasMeaning = stanzas.some(s => Boolean(s[meaningField]));
+  const hasMeaning = stanzas.some(s => Boolean(getMeaning(s, lang)));
 
   function pill(active: boolean, accent: 'gold' | 'saffron') {
     const color = accent === 'gold' ? 'var(--color-gold)' : 'var(--color-saffron)';
@@ -96,7 +104,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
           {stanzas.map((stanza, i) => {
             const primaryText = stanza[primaryScript as keyof ShlokaStanza] as string;
             const extraText = stanza[extraScript as keyof ShlokaStanza] as string;
-            const meaningText = stanza[meaningField] as string;
+            const meaningText = getMeaning(stanza, lang);
             const isMilestone = stanza.stanza_number % 10 === 0;
 
             return (
@@ -141,7 +149,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
           {stanzas.map((stanza) => {
             const primaryText = stanza[primaryScript as keyof ShlokaStanza] as string;
             const extraText = stanza[extraScript as keyof ShlokaStanza] as string;
-            const meaningText = stanza[meaningField] as string;
+            const meaningText = getMeaning(stanza, lang);
 
             return (
               <div key={stanza.stanza_number} style={{
