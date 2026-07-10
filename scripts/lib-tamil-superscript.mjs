@@ -47,19 +47,24 @@ export function devanagariToTamilSuperscript(dev) {
     const ch = chars[i];
     if (CONS[ch] || ch === 'न') {
       const [base, sup] = ch === 'न' ? [naBase(chars, i), ''] : CONS[ch];
-      const next = chars[i + 1];
+      // Nukta (़, e.g. ड़/ढ़ in Hindi/Awadhi) has no distinct Tamil-script
+      // letter -- same precedent as avagraha below -- so look past it for
+      // whatever virama/matra actually follows the consonant.
+      const hasNukta = chars[i + 1] === '़';
+      const next = hasNukta ? chars[i + 2] : chars[i + 1];
+      const skip = hasNukta ? 2 : 1;
       if (next === '्') {
         out += base + '்' + sup;
-        i += 2;
+        i += skip + 1;
       } else if (next === 'ृ') {
         out += base + '்' + sup + 'ரு';
-        i += 2;
+        i += skip + 1;
       } else if (next && MATRA[next]) {
         out += base + MATRA[next] + sup;
-        i += 2;
+        i += skip + 1;
       } else {
         out += base + sup;
-        i += 1;
+        i += skip;
       }
     } else if (ch === 'ं') {
       out += 'ம்'; i += 1;
