@@ -28,6 +28,10 @@ const MATRA = {
 const INDEP_VOWEL = {
   'अ':'அ','आ':'ஆ','इ':'இ','ई':'ஈ','उ':'உ','ऊ':'ஊ',
   'ऎ':'எ','ए':'ஏ','ऐ':'ஐ','ऒ':'ஒ','ओ':'ஓ','औ':'ஔ',
+  // ऋ (U+090B, independent vocalic r, e.g. ऋतु/ऋषि) is distinct from the
+  // dependent matra ृ (U+0943) handled below -- Tamil has no dedicated
+  // vocalic-r vowel letter, so approximate the same way as the matra form.
+  'ऋ':'ரு',
 };
 
 // न (na): word-initial, or bare/clustering forward into a stop consonant -> dental ந;
