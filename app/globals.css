@@ -57,10 +57,13 @@
 }
 
 /* Dark mode — the whole UI styles from these CSS variables (inline styles reference
-   var(--color-*)), so remapping them here flips the entire site. Follows the OS
-   preference; no JS, no flash. */
+   var(--color-*)), so remapping them here flips the entire site.
+
+   :root:not([data-theme]) means "only apply when no explicit theme is set" — i.e.
+   System mode. An explicit data-theme="dark" or data-theme="light" wins without
+   !important because the attribute selector below has higher specificity. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --color-bg: var(--color-bg-dark);
     --color-surface: var(--color-surface-dark);
     --color-border: var(--color-border-dark);
@@ -73,6 +76,34 @@
     /* Deeper shadow so popovers keep their elevation against the dark background */
     --shadow-popover: 0 10px 30px rgba(0, 0, 0, 0.6);
   }
+}
+
+/* Explicit dark theme override — beats the OS media query without !important */
+:root[data-theme="dark"] {
+  --color-bg: var(--color-bg-dark);
+  --color-surface: var(--color-surface-dark);
+  --color-border: var(--color-border-dark);
+  --color-text-primary: var(--color-text-primary-dark);
+  --color-text-secondary: var(--color-text-secondary-dark);
+  --color-gold: var(--color-gold-dark);
+  --color-saffron: var(--color-saffron-dark);
+  --color-green: var(--color-green-dark);
+  --color-red-muted: var(--color-red-muted-dark);
+  --shadow-popover: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Explicit light theme override — ensures light even when OS is dark */
+:root[data-theme="light"] {
+  --color-bg: #FAF7F2;
+  --color-surface: #F2EDE5;
+  --color-border: #DDD5C8;
+  --color-text-primary: #3D2C22;
+  --color-text-secondary: #7A6E64;
+  --color-gold: #B8860B;
+  --color-saffron: #D4622A;
+  --color-green: #3D6B4F;
+  --color-red-muted: #8B3A3A;
+  --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 /* Global keyboard focus ring for all interactive elements. Mouse clicks don't

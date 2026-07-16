@@ -3,6 +3,8 @@ import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { FontScaleProvider } from '@/context/FontScaleContext';
+import { ThemeProvider } from '@/context/ThemeContext';
+import type { Theme } from '@/context/ThemeContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
@@ -10,6 +12,7 @@ import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
 
 const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
+const VALID_THEMES: Theme[] = ['light', 'dark', 'system'];
 
 const cormorant = Cormorant_Garamond({
   weight: ['400', '600'],
@@ -101,9 +104,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const cookieLang = cookieStore.get('anushthanam-lang')?.value as Language | undefined;
   const initialLang: Language = cookieLang && VALID_LANGS.includes(cookieLang) ? cookieLang : 'en';
 
+  const cookieTheme = cookieStore.get('anushthanam-theme')?.value as Theme | undefined;
+  const initialTheme: Theme = cookieTheme && VALID_THEMES.includes(cookieTheme) ? cookieTheme : 'system';
+  // Only set data-theme for explicit overrides; system = no attribute (OS media query governs)
+  const dataTheme = initialTheme === 'system' ? undefined : initialTheme;
+
   return (
     <html
       lang={initialLang}
+      {...(dataTheme ? { 'data-theme': dataTheme } : {})}
       suppressHydrationWarning
       className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
@@ -115,7 +124,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Script id="lang-init" strategy="beforeInteractive">
           {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
         </Script>
+        {/* theme-init: apply the stored theme preference before paint to avoid flash.
+            Runs before hydration — mirrors the lang-init approach above. */}
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`try{var t=localStorage.getItem('anushthanam-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(t==='system')document.documentElement.removeAttribute('data-theme');}catch(e){}`}
+        </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
+        <ThemeProvider initialTheme={initialTheme}>
         <LanguageProvider initialLang={initialLang}>
         <FontScaleProvider>
           <Nav />
@@ -128,6 +143,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </footer>
         </FontScaleProvider>
         </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

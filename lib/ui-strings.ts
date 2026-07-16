@@ -78,6 +78,11 @@ type UiStrings = {
   errorTitle: string;
   errorBody: string;
   tryAgain: string;
+  // Theme toggle
+  themeLabel: string;
+  themeLight: string;
+  themeDark: string;
+  themeSystem: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -143,6 +148,10 @@ export const UI: Record<Language, UiStrings> = {
     errorTitle: 'Something went wrong',
     errorBody: 'An error occurred while loading this page. This may be a temporary issue — please try again.',
     tryAgain: 'Try again',
+    themeLabel: 'Theme',
+    themeLight: '☀ Light',
+    themeDark: '☾ Dark',
+    themeSystem: '⊙ System',
   },
   te: {
     tithi: 'తిథి',
@@ -206,6 +215,10 @@ export const UI: Record<Language, UiStrings> = {
     errorTitle: 'ఏదో తప్పు జరిగింది',
     errorBody: 'ఈ పేజీని లోడ్ చేయడంలో లోపం వచ్చింది. ఇది తాత్కాలిక సమస్య కావచ్చు — దయచేసి మళ్ళీ ప్రయత్నించండి.',
     tryAgain: 'మళ్ళీ ప్రయత్నించండి',
+    themeLabel: 'థీమ్',
+    themeLight: '☀ వెలుతురు',
+    themeDark: '☾ చీకటి',
+    themeSystem: '⊙ సిస్టమ్',
   },
   ta: {
     tithi: 'திதி',
@@ -269,6 +282,10 @@ export const UI: Record<Language, UiStrings> = {
     errorTitle: 'ஏதோ தவறு நடந்தது',
     errorBody: 'இந்தப் பக்கத்தை ஏற்றுவதில் பிழை ஏற்பட்டது. இது தற்காலிக பிரச்சினையாக இருக்கலாம் — மீண்டும் முயற்சிக்கவும்.',
     tryAgain: 'மீண்டும் முயற்சி',
+    themeLabel: 'தீம்',
+    themeLight: '☀ வெளிச்சம்',
+    themeDark: '☾ இருட்டு',
+    themeSystem: '⊙ கணினி',
   },
   hi: {
     tithi: 'तिथि',
@@ -332,5 +349,9 @@ export const UI: Record<Language, UiStrings> = {
     errorTitle: 'कुछ गलत हो गया',
     errorBody: 'इस पृष्ठ को लोड करने में त्रुटि हुई। यह एक अस्थायी समस्या हो सकती है — कृपया फिर से प्रयास करें।',
     tryAgain: 'फिर से प्रयास करें',
+    themeLabel: 'थीम',
+    themeLight: '☀ उजाला',
+    themeDark: '☾ अंधेरा',
+    themeSystem: '⊙ सिस्टम',
   },
 };

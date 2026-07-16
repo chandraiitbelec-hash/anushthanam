@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
+import { useTheme } from '@/context/ThemeContext';
+import type { Theme } from '@/context/ThemeContext';
 import SearchBar from '@/components/SearchBar';
+import { UI } from '@/lib/ui-strings';
 
 import type { Language } from '@/lib/types';
 
@@ -20,6 +23,7 @@ const NAV_LINKS = [
 
 export default function Nav() {
   const { lang, setLang } = useLang();
+  const { theme, setTheme } = useTheme();
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -245,6 +249,31 @@ export default function Nav() {
               )}
             </div>
 
+            {/* Theme toggle — CSS hides this on mobile */}
+            <div className="nav-desktop" role="group" aria-label={UI[lang].themeLabel} style={{ gap: '2px', display: 'flex' }}>
+              {(['light', 'dark', 'system'] as Theme[]).map(t => (
+                <button
+                  key={t}
+                  onClick={() => setTheme(t)}
+                  aria-pressed={theme === t}
+                  aria-label={t === 'light' ? UI[lang].themeLight : t === 'dark' ? UI[lang].themeDark : UI[lang].themeSystem}
+                  title={t === 'light' ? UI[lang].themeLight : t === 'dark' ? UI[lang].themeDark : UI[lang].themeSystem}
+                  style={{
+                    fontSize: '14px',
+                    padding: '5px 8px',
+                    background: theme === t ? 'var(--color-gold)' : 'none',
+                    color: theme === t ? '#fff' : 'var(--color-text-secondary)',
+                    border: `1px solid ${theme === t ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                    borderRadius: t === 'light' ? '6px 0 0 6px' : t === 'system' ? '0 6px 6px 0' : '0',
+                    cursor: 'pointer',
+                    lineHeight: 1,
+                  }}
+                >
+                  {t === 'light' ? '☀' : t === 'dark' ? '☾' : '⊙'}
+                </button>
+              ))}
+            </div>
+
             {/* Hamburger — CSS hides this on desktop */}
             <button
               onClick={() => setMobileOpen(o => !o)}
@@ -324,6 +353,41 @@ export default function Nav() {
                     {LANGUAGE_LABELS[l]}
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Theme picker in drawer */}
+            <div style={{ paddingTop: '20px' }}>
+              <p style={{
+                fontSize: '11px', fontWeight: 600, textTransform: 'uppercase',
+                letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
+                margin: '0 0 10px',
+              }}>
+                {UI[lang].themeLabel}
+              </p>
+              <div role="group" aria-label={UI[lang].themeLabel} style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {(['light', 'dark', 'system'] as Theme[]).map(t => {
+                  const label = t === 'light' ? UI[lang].themeLight : t === 'dark' ? UI[lang].themeDark : UI[lang].themeSystem;
+                  return (
+                    <button
+                      key={t}
+                      onClick={() => { setTheme(t); setMobileOpen(false); }}
+                      aria-pressed={theme === t}
+                      style={{
+                        padding: '7px 18px',
+                        fontSize: '14px',
+                        fontWeight: theme === t ? 600 : 400,
+                        color: theme === t ? '#fff' : 'var(--color-text-secondary)',
+                        background: theme === t ? 'var(--color-gold)' : 'transparent',
+                        border: `1px solid ${theme === t ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                        borderRadius: '20px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </nav>
