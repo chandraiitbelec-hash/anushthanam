@@ -3,6 +3,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { Language } from '@/lib/types';
 
+const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
+
 type LanguageContextType = {
   lang: Language;
   setLang: (lang: Language) => void;
@@ -13,20 +15,30 @@ const LanguageContext = createContext<LanguageContextType>({
   setLang: () => {},
 });
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Language>('en');
+export function LanguageProvider({
+  children,
+  initialLang = 'en',
+}: {
+  children: React.ReactNode;
+  initialLang?: Language;
+}) {
+  const [lang, setLangState] = useState<Language>(initialLang);
 
   useEffect(() => {
+    // Sync localStorage → state only when it disagrees with the server-seeded value.
+    // This handles the one-time migration for users who had localStorage but no cookie.
     const saved = localStorage.getItem('anushthanam-lang') as Language | null;
-    if (saved && ['en', 'te', 'ta', 'hi'].includes(saved)) {
+    if (saved && VALID_LANGS.includes(saved) && saved !== lang) {
       setLangState(saved);
       document.documentElement.lang = saved;
+      document.cookie = `anushthanam-lang=${saved}; path=/; max-age=31536000; SameSite=Lax`;
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function setLang(l: Language) {
     setLangState(l);
     localStorage.setItem('anushthanam-lang', l);
+    document.cookie = `anushthanam-lang=${l}; path=/; max-age=31536000; SameSite=Lax`;
     document.documentElement.lang = l;
   }
 

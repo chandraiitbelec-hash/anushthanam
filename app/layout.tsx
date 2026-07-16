@@ -6,6 +6,10 @@ import { FontScaleProvider } from '@/context/FontScaleContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
+import { cookies } from 'next/headers';
+import type { Language } from '@/lib/types';
+
+const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
 
 const cormorant = Cormorant_Garamond({
   weight: ['400', '600'],
@@ -86,21 +90,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// Reading `cookies()` opts this layout into dynamic rendering (per-request).
+// Trade-off accepted: the HTML shell is rendered at the edge per request so the
+// correct language is painted on first load with no client-side flash. The heavy
+// data fetches (Sheets, Docs) still happen at build time / ISR in each page
+// segment, so content is not re-fetched per user. Vercel edge rendering is fast
+// enough that this is imperceptible.
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get('anushthanam-lang')?.value as Language | undefined;
+  const initialLang: Language = cookieLang && VALID_LANGS.includes(cookieLang) ? cookieLang : 'en';
+
   return (
     <html
-      lang="en"
+      lang={initialLang}
       suppressHydrationWarning
       className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
       {/* Set <html lang> from the stored preference before paint so assistive tech
           announces content in the right language and there's no lang-attribute flash. */}
+      {/* lang-init script kept only as a fast-path for the lang attribute on the
+          rare case where the cookie is absent (e.g. first visit after clearing
+          cookies but localStorage still set). Has no effect when cookie is present. */}
       <Script id="lang-init" strategy="beforeInteractive">
         {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
       </Script>
       <body>
         <a href="#main-content" className="skip-link">Skip to content</a>
-        <LanguageProvider>
+        <LanguageProvider initialLang={initialLang}>
         <FontScaleProvider>
           <Nav />
           <main id="main-content">{children}</main>
