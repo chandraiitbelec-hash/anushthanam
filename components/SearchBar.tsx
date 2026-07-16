@@ -108,7 +108,7 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: '8px',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+          boxShadow: 'var(--shadow-popover)',
           zIndex: 100,
           overflow: 'hidden',
         }}>

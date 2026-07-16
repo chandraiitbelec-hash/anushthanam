@@ -51,6 +51,9 @@
   /* Scroll offset for in-page section anchors: 64px nav + 57px sticky chip bar + 16px breathing room.
      Single source of truth for SectionNav's scrollTo() and each section's scrollMarginTop. */
   --section-anchor-offset: 137px;
+  /* Elevation for popovers/dropdowns — remapped stronger in dark mode below, where
+     a faint black shadow would be invisible against the near-black background. */
+  --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 /* Dark mode — the whole UI styles from these CSS variables (inline styles reference
@@ -67,6 +70,8 @@
     --color-saffron: var(--color-saffron-dark);
     --color-green: var(--color-green-dark);
     --color-red-muted: var(--color-red-muted-dark);
+    /* Deeper shadow so popovers keep their elevation against the dark background */
+    --shadow-popover: 0 10px 30px rgba(0, 0, 0, 0.6);
   }
 }
 

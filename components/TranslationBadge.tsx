@@ -6,8 +6,8 @@ export function TranslationBadge({ result, fieldName }: { result: TranslationRes
   return (
     <span style={{
       fontSize: '11px',
-      background: 'rgba(234,179,8,0.15)',
-      color: '#92400e',
+      background: 'rgba(184,134,11,0.15)',
+      color: 'var(--color-gold)',
       padding: '2px 6px',
       borderRadius: '4px',
       marginLeft: '6px',

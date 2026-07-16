@@ -80,6 +80,8 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               alignItems: 'center',
               gap: '12px',
               padding: '10px 14px',
+              minHeight: '44px',
+              boxSizing: 'border-box',
               background: done ? 'var(--color-bg)' : 'var(--color-surface)',
               border: `1px solid ${done ? 'var(--color-border)' : 'transparent'}`,
               borderRadius: '8px',

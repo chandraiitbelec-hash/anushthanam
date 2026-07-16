@@ -29,11 +29,12 @@ function langField(obj: Record<string, string>, field: string, lang: string): st
   return obj[`${field}_${lang}`] || obj[`${field}_en`] || '';
 }
 
-function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function Pill({ label, active, onClick, controls }: { label: string; active: boolean; onClick: () => void; controls: string }) {
   return (
     <button
       onClick={onClick}
-      aria-pressed={active}
+      aria-expanded={active}
+      aria-controls={controls}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -94,14 +95,14 @@ export default function DailyDevotional() {
           </div>
 
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Pill label={t(LABELS.shloka, lang)} active={open === 'shloka'} onClick={() => toggle('shloka')} />
-            <Pill label={t(LABELS.story, lang)}  active={open === 'story'}  onClick={() => toggle('story')}  />
+            <Pill label={t(LABELS.shloka, lang)} active={open === 'shloka'} onClick={() => toggle('shloka')} controls="daily-shloka-panel" />
+            <Pill label={t(LABELS.story, lang)}  active={open === 'story'}  onClick={() => toggle('story')}  controls="daily-story-panel" />
           </div>
         </div>
 
         {/* Expandable: Shloka */}
         {open === 'shloka' && (
-          <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div id="daily-shloka-panel" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ borderLeft: '3px solid var(--color-gold)', paddingLeft: '16px' }}>
               {/* Show shloka in user's script; Sanskrit (Devanagari) shown below as reference for non-Hindi */}
               {lang === 'te' && (
@@ -154,7 +155,7 @@ export default function DailyDevotional() {
 
         {/* Expandable: Story */}
         {open === 'story' && (
-          <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div id="daily-story-panel" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <h3 className={lang !== 'en' ? scriptClass : ''} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: lang === 'en' ? 700 : 500, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
                 {langField(entry.story as unknown as Record<string, string>, 'title', lang)}

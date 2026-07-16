@@ -153,6 +153,7 @@ export default function PasuramViewer({
               style={{
                 position: 'relative',
                 padding: '8px 6px',
+                minHeight: '44px',
                 borderRadius: '8px',
                 border: `1.5px solid ${
                   isSelected ? 'var(--color-gold)'
