@@ -158,28 +158,28 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
       )}
 
       {/* Tab panels */}
-      {activeTab === 'significance' && significance && (
-        <div role="tabpanel" id="festival-panel-significance" aria-labelledby="festival-tab-significance">
+      {significance && (
+        <div role="tabpanel" id="festival-panel-significance" aria-labelledby="festival-tab-significance" hidden={activeTab !== 'significance'}>
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
             {significance}
           </p>
         </div>
       )}
 
-      {activeTab === 'materials' && materials.length > 0 && (
-        <div role="tabpanel" id="festival-panel-materials" aria-labelledby="festival-tab-materials">
+      {materials.length > 0 && (
+        <div role="tabpanel" id="festival-panel-materials" aria-labelledby="festival-tab-materials" hidden={activeTab !== 'materials'}>
           <MaterialsList items={materials} />
         </div>
       )}
 
-      {activeTab === 'procedure' && steps.length > 0 && (
-        <div role="tabpanel" id="festival-panel-procedure" aria-labelledby="festival-tab-procedure">
+      {steps.length > 0 && (
+        <div role="tabpanel" id="festival-panel-procedure" aria-labelledby="festival-tab-procedure" hidden={activeTab !== 'procedure'}>
           <ProcedureSteps steps={steps} />
         </div>
       )}
 
-      {activeTab === 'stories' && stories.length > 0 && (
-        <div role="tabpanel" id="festival-panel-stories" aria-labelledby="festival-tab-stories">
+      {stories.length > 0 && (
+        <div role="tabpanel" id="festival-panel-stories" aria-labelledby="festival-tab-stories" hidden={activeTab !== 'stories'}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {stories.map((s, idx) => {
               const sr = s as unknown as Record<string, string>;

@@ -181,30 +181,30 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
       )}
 
       {/* Tab content */}
-      {activeTab === 'fasting' && fasting && (
-        <div role="tabpanel" id="vratham-panel-fasting" aria-labelledby="vratham-tab-fasting">
+      {fasting && (
+        <div role="tabpanel" id="vratham-panel-fasting" aria-labelledby="vratham-tab-fasting" hidden={activeTab !== 'fasting'}>
           <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
             {fasting}
           </p>
         </div>
       )}
 
-      {activeTab === 'benefits' && benefits && (
-        <div role="tabpanel" id="vratham-panel-benefits" aria-labelledby="vratham-tab-benefits">
+      {benefits && (
+        <div role="tabpanel" id="vratham-panel-benefits" aria-labelledby="vratham-tab-benefits" hidden={activeTab !== 'benefits'}>
           <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
             {benefits}
           </p>
         </div>
       )}
 
-      {activeTab === 'materials' && materials.length > 0 && (
-        <div role="tabpanel" id="vratham-panel-materials" aria-labelledby="vratham-tab-materials">
+      {materials.length > 0 && (
+        <div role="tabpanel" id="vratham-panel-materials" aria-labelledby="vratham-tab-materials" hidden={activeTab !== 'materials'}>
           <MaterialsList items={materials} />
         </div>
       )}
 
-      {activeTab === 'procedure' && steps.length > 0 && (
-        <div role="tabpanel" id="vratham-panel-procedure" aria-labelledby="vratham-tab-procedure">
+      {steps.length > 0 && (
+        <div role="tabpanel" id="vratham-panel-procedure" aria-labelledby="vratham-tab-procedure" hidden={activeTab !== 'procedure'}>
           <ProcedureSteps
             steps={steps}
             hasPasurams={stanzas.length > 0}
@@ -213,14 +213,14 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         </div>
       )}
 
-      {activeTab === 'pasurams' && stanzas.length > 0 && (
-        <div role="tabpanel" id="vratham-panel-pasurams" aria-labelledby="vratham-tab-pasurams">
+      {stanzas.length > 0 && (
+        <div role="tabpanel" id="vratham-panel-pasurams" aria-labelledby="vratham-tab-pasurams" hidden={activeTab !== 'pasurams'}>
           <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
         </div>
       )}
 
-      {activeTab === 'stories' && stories.length > 0 && (
-        <div role="tabpanel" id="vratham-panel-stories" aria-labelledby="vratham-tab-stories">
+      {stories.length > 0 && (
+        <div role="tabpanel" id="vratham-panel-stories" aria-labelledby="vratham-tab-stories" hidden={activeTab !== 'stories'}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {stories.map((s, idx) => {
             const sr = s as unknown as Record<string, string>;
