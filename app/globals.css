@@ -20,6 +20,9 @@
   --color-text-secondary-dark: #9A8E84;
   --color-gold-dark: #D4A017;
   --color-saffron-dark: #E07040;
+  /* Lightened for dark bg (#1C1611) to reach ≥4.5:1 WCAG AA contrast */
+  --color-green-dark: #7EC896;
+  --color-red-muted-dark: #D98A8A;
 
   /* Fonts — variables set by next/font in layout.tsx */
   --font-display: var(--font-cormorant), Georgia, serif;
@@ -62,6 +65,8 @@
     --color-text-secondary: var(--color-text-secondary-dark);
     --color-gold: var(--color-gold-dark);
     --color-saffron: var(--color-saffron-dark);
+    --color-green: var(--color-green-dark);
+    --color-red-muted: var(--color-red-muted-dark);
   }
 }
 

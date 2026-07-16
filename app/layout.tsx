@@ -107,15 +107,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
       className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
-      {/* Set <html lang> from the stored preference before paint so assistive tech
-          announces content in the right language and there's no lang-attribute flash. */}
-      {/* lang-init script kept only as a fast-path for the lang attribute on the
-          rare case where the cookie is absent (e.g. first visit after clearing
-          cookies but localStorage still set). Has no effect when cookie is present. */}
-      <Script id="lang-init" strategy="beforeInteractive">
-        {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
-      </Script>
       <body>
+        {/* lang-init script: fast-path for setting <html lang> when the cookie is absent
+            but localStorage still has a preference (e.g. first visit after clearing cookies).
+            Placed as first child of <body> — beforeInteractive still executes before hydration,
+            and this avoids the React 19 "<html> cannot contain a nested <script>" warning. */}
+        <Script id="lang-init" strategy="beforeInteractive">
+          {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
+        </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
         <LanguageProvider initialLang={initialLang}>
         <FontScaleProvider>

@@ -65,6 +65,10 @@ type UiStrings = {
   panchangamNoDataBody: string;
   panchangamNextAvailable: (date: string) => string;
   viewUpcoming: string;
+  // Error boundary
+  errorTitle: string;
+  errorBody: string;
+  tryAgain: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -121,6 +125,9 @@ export const UI: Record<Language, UiStrings> = {
     panchangamNoDataBody: 'The daily almanac entry for today has not been added yet. Check back soon, or browse upcoming festivals and vrathams below.',
     panchangamNextAvailable: (date) => `Next entry: ${new Date(date).toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
     viewUpcoming: 'View upcoming festivals & vrathams',
+    errorTitle: 'Something went wrong',
+    errorBody: 'An error occurred while loading this page. This may be a temporary issue — please try again.',
+    tryAgain: 'Try again',
   },
   te: {
     tithi: 'తిథి',
@@ -175,6 +182,9 @@ export const UI: Record<Language, UiStrings> = {
     panchangamNoDataBody: 'ఈ రోజు పంచాంగం ఇంకా జోడించబడలేదు. త్వరలో తిరిగి చూడండి, లేదా క్రింద రాబోయే పండుగలు మరియు వ్రతాలు చూడండి.',
     panchangamNextAvailable: (date) => `తదుపరి నమోదు: ${new Date(date).toLocaleDateString('te-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
     viewUpcoming: 'రాబోయే పండుగలు & వ్రతాలు చూడండి',
+    errorTitle: 'ఏదో తప్పు జరిగింది',
+    errorBody: 'ఈ పేజీని లోడ్ చేయడంలో లోపం వచ్చింది. ఇది తాత్కాలిక సమస్య కావచ్చు — దయచేసి మళ్ళీ ప్రయత్నించండి.',
+    tryAgain: 'మళ్ళీ ప్రయత్నించండి',
   },
   ta: {
     tithi: 'திதி',
@@ -229,6 +239,9 @@ export const UI: Record<Language, UiStrings> = {
     panchangamNoDataBody: 'இன்றைய பஞ்சாங்கம் இன்னும் சேர்க்கப்படவில்லை. சீக்கிரம் திரும்பி வாருங்கள், அல்லது கீழே வரவிருக்கும் திருவிழாக்கள் மற்றும் விரதங்களைப் பாருங்கள்.',
     panchangamNextAvailable: (date) => `அடுத்த பதிவு: ${new Date(date).toLocaleDateString('ta-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
     viewUpcoming: 'வரவிருக்கும் திருவிழாக்கள் & விரதங்களைக் காண்க',
+    errorTitle: 'ஏதோ தவறு நடந்தது',
+    errorBody: 'இந்தப் பக்கத்தை ஏற்றுவதில் பிழை ஏற்பட்டது. இது தற்காலிக பிரச்சினையாக இருக்கலாம் — மீண்டும் முயற்சிக்கவும்.',
+    tryAgain: 'மீண்டும் முயற்சி',
   },
   hi: {
     tithi: 'तिथि',
@@ -283,5 +296,8 @@ export const UI: Record<Language, UiStrings> = {
     panchangamNoDataBody: 'आज का पंचांग अभी तक नहीं जोड़ा गया है। जल्द ही वापस आएं, या नीचे आगामी त्योहार और व्रत देखें।',
     panchangamNextAvailable: (date) => `अगली प्रविष्टि: ${new Date(date).toLocaleDateString('hi-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
     viewUpcoming: 'आगामी त्योहार और व्रत देखें',
+    errorTitle: 'कुछ गलत हो गया',
+    errorBody: 'इस पृष्ठ को लोड करने में त्रुटि हुई। यह एक अस्थायी समस्या हो सकती है — कृपया फिर से प्रयास करें।',
+    tryAgain: 'फिर से प्रयास करें',
   },
 };

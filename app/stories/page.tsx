@@ -23,18 +23,20 @@ export default async function StoriesPage() {
   const festivals = festivalRows as unknown as Festival[];
   const vrathams = vrathamRows as unknown as Vratham[];
 
-  // Build parent title lookup — all language variants for client-side rendering
+  // Build parent title lookup — keyed by `${parent_type}-${parent_slug}` to avoid
+  // collisions when a festival and a vratham share the same slug (e.g. "maha-shivaratri").
   type ParentInfo = { title_en: string; title_te: string; title_ta: string; title_hi: string; href: string };
   const parentMap: Record<string, ParentInfo> = {};
-  festivals.forEach(f => { parentMap[f.slug] = { title_en: f.title_en, title_te: f.title_te, title_ta: f.title_ta, title_hi: f.title_hi, href: `/festivals/${f.slug}` }; });
-  vrathams.forEach(v => { parentMap[v.slug] = { title_en: v.title_en, title_te: v.title_te, title_ta: v.title_ta, title_hi: v.title_hi, href: `/vrathams/${v.slug}` }; });
+  festivals.forEach(f => { parentMap[`festival-${f.slug}`] = { title_en: f.title_en, title_te: f.title_te, title_ta: f.title_ta, title_hi: f.title_hi, href: `/festivals/${f.slug}` }; });
+  vrathams.forEach(v => { parentMap[`vratham-${v.slug}`] = { title_en: v.title_en, title_te: v.title_te, title_ta: v.title_ta, title_hi: v.title_hi, href: `/vrathams/${v.slug}` }; });
 
-  // Group by parent
+  // Group by composite key so same-slug festival+vratham pairs stay separate
   const grouped: Record<string, Story[]> = {};
   const ungrouped: Story[] = [];
   stories.forEach(s => {
-    if (s.parent_slug && parentMap[s.parent_slug]) {
-      (grouped[s.parent_slug] ??= []).push(s);
+    const key = s.parent_type && s.parent_slug ? `${s.parent_type}-${s.parent_slug}` : null;
+    if (key && parentMap[key]) {
+      (grouped[key] ??= []).push(s);
     } else {
       ungrouped.push(s);
     }
@@ -42,9 +44,9 @@ export default async function StoriesPage() {
 
   // Order parents: festivals first, then vrathams
   const parentOrder = [
-    ...festivals.map(f => f.slug),
-    ...vrathams.map(v => v.slug),
-  ].filter(slug => grouped[slug]);
+    ...festivals.map(f => `festival-${f.slug}`),
+    ...vrathams.map(v => `vratham-${v.slug}`),
+  ].filter(key => grouped[key]);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
@@ -55,11 +57,11 @@ export default async function StoriesPage() {
         countLabels={{ en: 'stories', te: 'కథలు', ta: 'கதைகள்', hi: 'कहानियां' }}
       />
 
-      {parentOrder.map(parentSlug => {
-        const list = grouped[parentSlug];
-        const parent = parentMap[parentSlug];
+      {parentOrder.map(parentKey => {
+        const list = grouped[parentKey];
+        const parent = parentMap[parentKey];
         return (
-          <section key={parentSlug} style={{ marginBottom: '48px' }}>
+          <section key={parentKey} style={{ marginBottom: '48px' }}>
             {/* Parent heading links back to festival/vratham */}
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '16px' }}>
               <Link href={parent.href} style={{
