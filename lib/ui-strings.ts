@@ -56,6 +56,15 @@ type UiStrings = {
   // Site index
   siteIndexIntro: string;
   browseSection: string;
+  // Duration
+  minutesShort: string;
+  // PasuramViewer
+  day: string;
+  // GitaVerseViewer
+  jumpToChapter: string;
+  jumpToVerse: string;
+  verseEllipsis: string;
+  chapterShort: (n: number) => string;
   // ShlokaViewer share / deep-link
   share: string;
   linkCopied: string;
@@ -118,6 +127,12 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'Back to home',
     siteIndexIntro: 'Browse everything on Anuṣṭhāna.',
     browseSection: 'Browse',
+    minutesShort: 'min',
+    day: 'Day',
+    jumpToChapter: 'Jump to chapter',
+    jumpToVerse: 'Jump to verse',
+    verseEllipsis: 'Verse…',
+    chapterShort: (n) => `Ch ${n}:`,
     share: 'Share',
     linkCopied: 'Link copied',
     copyStanzaLink: 'Copy link to this stanza',
@@ -175,6 +190,12 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
     siteIndexIntro: 'అనుష్ఠానంలోని అన్నింటినీ విహరించండి.',
     browseSection: 'విహరించండి',
+    minutesShort: 'నిమి',
+    day: 'రోజు',
+    jumpToChapter: 'అధ్యాయానికి వెళ్ళు',
+    jumpToVerse: 'శ్లోకానికి వెళ్ళు',
+    verseEllipsis: 'శ్లోకం…',
+    chapterShort: (n) => `అ ${n}:`,
     share: 'షేర్',
     linkCopied: 'లింక్ కాపీ అయింది',
     copyStanzaLink: 'ఈ స్తబకానికి లింక్ కాపీ చేయండి',
@@ -232,6 +253,12 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'முகப்புக்குத் திரும்பு',
     siteIndexIntro: 'அனுஷ்டானத்தில் உள்ள அனைத்தையும் உலாவுங்கள்.',
     browseSection: 'உலாவு',
+    minutesShort: 'நிமி',
+    day: 'நாள்',
+    jumpToChapter: 'அத்தியாயத்திற்குச் செல்',
+    jumpToVerse: 'ஸ்லோகத்திற்குச் செல்',
+    verseEllipsis: 'ஸ்லோகம்…',
+    chapterShort: (n) => `அ ${n}:`,
     share: 'பகிர்',
     linkCopied: 'இணைப்பு நகலெடுக்கப்பட்டது',
     copyStanzaLink: 'இந்த தாவலுக்கான இணைப்பை நகலெடுக்கவும்',
@@ -289,6 +316,12 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'होम पर वापस जाएं',
     siteIndexIntro: 'अनुष्ठान की सारी सामग्री देखें।',
     browseSection: 'देखें',
+    minutesShort: 'मिनट',
+    day: 'दिन',
+    jumpToChapter: 'अध्याय पर जाएं',
+    jumpToVerse: 'श्लोक पर जाएं',
+    verseEllipsis: 'श्लोक…',
+    chapterShort: (n) => `अ ${n}:`,
     share: 'साझा करें',
     linkCopied: 'लिंक कॉपी हो गया',
     copyStanzaLink: 'इस श्लोक का लिंक कॉपी करें',

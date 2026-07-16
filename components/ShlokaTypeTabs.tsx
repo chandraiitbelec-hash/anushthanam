@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, KeyboardEvent } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import EntityCard from '@/components/EntityCard';
 import type { Shloka, Language } from '@/lib/types';
@@ -25,8 +25,23 @@ type Group = { type: string; shlokas: Shloka[] };
 export default function ShlokaTypeTabs({ groups }: { groups: Group[] }) {
   const { lang } = useLang();
   const [active, setActive] = useState(groups[0]?.type ?? '');
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const activeGroup = groups.find(g => g.type === active) ?? groups[0];
+
+  function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>, idx: number) {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const next = (idx + 1) % groups.length;
+      tabRefs.current[next]?.focus();
+      setActive(groups[next].type);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prev = (idx - 1 + groups.length) % groups.length;
+      tabRefs.current[prev]?.focus();
+      setActive(groups[prev].type);
+    }
+  }
 
   return (
     <div>
@@ -40,17 +55,29 @@ export default function ShlokaTypeTabs({ groups }: { groups: Group[] }) {
         margin: '0 -24px 24px',
         padding: '0 24px',
       }}>
-        <div style={{
-          display: 'flex',
-          gap: 0,
-          flexWrap: 'wrap',
-        }}>
-          {groups.map(g => {
+        <div
+          role="tablist"
+          style={{
+            display: 'flex',
+            gap: 0,
+            flexWrap: 'wrap',
+          }}
+        >
+          {groups.map((g, idx) => {
             const isActive = g.type === active;
+            const panelId = `shloka-panel-${g.type}`;
+            const tabId = `shloka-tab-${g.type}`;
             return (
               <button
                 key={g.type}
+                id={tabId}
+                ref={el => { tabRefs.current[idx] = el; }}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={panelId}
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => setActive(g.type)}
+                onKeyDown={e => handleKeyDown(e, idx)}
                 style={{
                   flexShrink: 0,
                   padding: '12px 18px',
@@ -76,13 +103,18 @@ export default function ShlokaTypeTabs({ groups }: { groups: Group[] }) {
 
       {/* Active panel */}
       {activeGroup && (
-        <div className="entity-grid">
+        <div
+          id={`shloka-panel-${activeGroup.type}`}
+          role="tabpanel"
+          aria-labelledby={`shloka-tab-${activeGroup.type}`}
+          className="entity-grid"
+        >
           {activeGroup.shlokas.map(s => (
             <EntityCard
               key={s.slug}
               href={`/shlokas/${s.slug}`}
               names={{ en: s.title_en, te: s.title_te, ta: s.title_ta, hi: s.title_hi }}
-              badge={s.type || undefined}
+              badge={s.type ? typeLabel(s.type, lang) : undefined}
               badgeColor="gold"
             />
           ))}

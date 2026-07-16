@@ -131,7 +131,7 @@ export default function PasuramViewer({
           fontWeight: 500,
           margin: '0 0 16px',
         }}>
-          {ui.todaysPasuram} — Day {todayDay}
+          {ui.todaysPasuram} — {ui.day} {todayDay}
         </p>
       )}
 
