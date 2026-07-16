@@ -18,7 +18,7 @@ export default function FooterLinks() {
       <a href="/stories" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
         {ui.footerStories}
       </a>
-      <a href="/index" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
+      <a href="/site-index" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
         {ui.footerSiteIndex}
       </a>
     </nav>
