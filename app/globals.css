@@ -265,6 +265,12 @@ body {
   border-color: var(--color-gold) !important;
 }
 
+/* Show the per-stanza deep-link button on card hover or focus-within */
+.stanza-card:hover .stanza-link-btn,
+.stanza-card:focus-within .stanza-link-btn {
+  opacity: 1 !important;
+}
+
 @media (max-width: 640px) {
   .shloka-controls-bar {
     margin-left: -16px !important;

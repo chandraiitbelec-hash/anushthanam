@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
 import FontSizeToggle from '@/components/FontSizeToggle';
 import { splitStanzaLines } from '@/lib/utils';
+import { UI } from '@/lib/ui-strings';
 import type { ShlokaStanza, ScriptLayer, ShlokaType, Language } from '@/lib/types';
 
 // Meanings are only ever authored in meaning_en for most content so far — fall
@@ -94,7 +95,17 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
   const [showExtra, setShowExtra] = useState(false);
   const [showMeaning, setShowMeaning] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [stanzaCopied, setStanzaCopied] = useState<number | null>(null);
   const isNamavali = type ? NAMAVALI_TYPES.includes(type) : false;
+
+  // On mount, scroll to the #stanza-N hash if present
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.startsWith('#stanza-')) return;
+    const el = document.getElementById(hash.slice(1));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
 
   const primaryScript = LANG_TO_SCRIPT[lang] ?? 'roman_iast';
   // For English the primary is already IAST, so the extra is Devanagari; for others it's IAST
@@ -111,6 +122,32 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
     if (await copyText(text)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
+  async function shareOrCopyUrl() {
+    const url = window.location.href.split('#')[0];
+    const title = document.title;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch {
+        /* user cancelled or API unavailable — fall through */
+      }
+    }
+    if (await copyText(url)) {
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }
+  }
+
+  async function copyStanzaLink(stanzaNumber: number) {
+    const base = window.location.href.split('#')[0];
+    const url = `${base}#stanza-${stanzaNumber}`;
+    if (await copyText(url)) {
+      setStanzaCopied(stanzaNumber);
+      setTimeout(() => setStanzaCopied(null), 2000);
     }
   }
 
@@ -156,6 +193,13 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
         >
           {copied ? `✓ ${COPIED_LABEL[lang] ?? 'Copied'}` : `⧉ ${COPY_LABEL[lang] ?? 'Copy'}`}
         </button>
+        <button
+          onClick={shareOrCopyUrl}
+          aria-label={UI[lang].share}
+          style={pill(false, 'gold')}
+        >
+          {shared ? `✓ ${UI[lang].linkCopied}` : `↗ ${UI[lang].share}`}
+        </button>
       </div>
 
       {/* Stanzas */}
@@ -173,13 +217,18 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
             const isMilestone = stanza.stanza_number % 10 === 0;
 
             return (
-              <div key={stanza.stanza_number} style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '10px',
-                padding: '8px 14px',
-                borderBottom: i < stanzas.length - 1 ? '1px solid var(--color-border)' : 'none',
-              }}>
+              <div
+                key={stanza.stanza_number}
+                id={`stanza-${stanza.stanza_number}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: '10px',
+                  padding: '8px 14px',
+                  borderBottom: i < stanzas.length - 1 ? '1px solid var(--color-border)' : 'none',
+                  scrollMarginTop: 'var(--section-anchor-offset)',
+                }}
+              >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
                   {primaryText && (
                     <div className={SCRIPT_CLASS[primaryScript]} lang={SCRIPT_LANG[primaryScript]}>
@@ -215,14 +264,46 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
             const primaryText = stanza[primaryScript as keyof ShlokaStanza] as string;
             const extraText = stanza[extraScript as keyof ShlokaStanza] as string;
             const meaningText = getMeaning(stanza, lang);
+            const stanzaId = `stanza-${stanza.stanza_number}`;
 
             return (
-              <div key={stanza.stanza_number} style={{
-                background: 'var(--color-surface)',
-                borderLeft: '4px solid var(--color-gold)',
-                borderRadius: '0 8px 8px 0',
-                padding: '16px 20px',
-              }}>
+              <div
+                key={stanza.stanza_number}
+                id={stanzaId}
+                className="stanza-card"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderLeft: '4px solid var(--color-gold)',
+                  borderRadius: '0 8px 8px 0',
+                  padding: '16px 20px',
+                  scrollMarginTop: 'var(--section-anchor-offset)',
+                  position: 'relative',
+                }}
+              >
+                {/* Per-stanza deep-link anchor */}
+                <button
+                  className="stanza-link-btn"
+                  onClick={() => copyStanzaLink(stanza.stanza_number)}
+                  aria-label={UI[lang].copyStanzaLink}
+                  title={UI[lang].copyStanzaLink}
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: stanzaCopied === stanza.stanza_number ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+                    fontSize: '14px',
+                    padding: '4px 6px',
+                    borderRadius: '4px',
+                    opacity: stanzaCopied === stanza.stanza_number ? 1 : 0,
+                    transition: 'opacity 0.15s, color 0.15s',
+                  }}
+                >
+                  {stanzaCopied === stanza.stanza_number ? '✓' : '¶'}
+                </button>
+
                 {stanza.stanza_label && (
                   <p style={{
                     fontSize: '12px', fontWeight: 500, color: 'var(--color-gold)',
