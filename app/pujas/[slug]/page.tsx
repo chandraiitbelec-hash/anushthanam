@@ -3,11 +3,7 @@ import { getPublished } from '@/lib/sheets';
 import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
 import type { Puja } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
-import ClientLabel from '@/components/ClientLabel';
-import ScriptH1 from '@/components/ScriptH1';
-import ProcedureSteps from '@/components/ProcedureSteps';
-import MaterialsList from '@/components/MaterialsList';
-import SectionNav from '@/components/SectionNav';
+import PujaProfile from '@/components/PujaProfile';
 
 export const revalidate = 3600;
 
@@ -20,7 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('pujas');
   const puja = (rows as unknown as Puja[]).find(p => p.slug === slug);
-  return { title: puja ? `${puja.title_en} | Anuṣṭhāna` : 'Anuṣṭhāna' };
+  // Bare title — the root layout's title template appends "| Anuṣṭhāna" (avoids a double suffix)
+  return { title: puja ? puja.title_en : 'Puja' };
 }
 
 export default async function PujaPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -40,111 +37,7 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
         { label: 'Pujas', labels: { te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजाएं' }, href: '/pujas' },
         { label: puja.title_en, labels: { te: puja.title_te, ta: puja.title_ta, hi: puja.title_hi } },
       ]} />
-
-      <div style={{ marginBottom: '32px' }}>
-        <ScriptH1
-          labels={{ en: puja.title_en, te: puja.title_te || puja.title_en, ta: puja.title_ta || puja.title_en, hi: puja.title_hi || puja.title_en }}
-          style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}
-        />
-
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
-          {puja.title_te && (
-            <span className="script-telugu" style={{
-              padding: '4px 12px',
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: '20px',
-              fontSize: '14px',
-            }}>{puja.title_te}</span>
-          )}
-          {puja.title_ta && (
-            <span className="script-tamil" style={{
-              padding: '4px 12px',
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: '20px',
-              fontSize: '14px',
-            }}>{puja.title_ta}</span>
-          )}
-          {puja.title_hi && (
-            <span className="script-devanagari" style={{
-              padding: '4px 12px',
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: '20px',
-              fontSize: '14px',
-            }}>{puja.title_hi}</span>
-          )}
-          {puja.duration_minutes && (
-            <span style={{
-              padding: '4px 12px',
-              background: 'rgba(184,134,11,0.1)',
-              border: '1px solid var(--color-gold)',
-              borderRadius: '20px',
-              fontSize: '12px',
-              color: 'var(--color-gold)',
-              fontWeight: 600,
-            }}>
-              {puja.duration_minutes} <ClientLabel labels={{ en: 'min', te: 'నిమి', ta: 'நிமி', hi: 'मिनट' }} />
-            </span>
-          )}
-        </div>
-      </div>
-
-      <SectionNav sections={[
-        ...(materials.length > 0 ? [{ id: 'section-materials', label: 'Materials Required', labels: { te: 'కావలసిన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' } }] : []),
-        ...(steps.length > 0 ? [{ id: 'section-procedure', label: 'Procedure', labels: { te: 'విధానం', ta: 'முறை', hi: 'विधि' } }] : []),
-      ]} />
-
-      {puja.brief_description_en && (
-        <section style={{ marginBottom: '32px' }}>
-          <p style={{
-            fontSize: '16px',
-            lineHeight: 1.8,
-            color: 'var(--color-text-primary)',
-            margin: 0,
-          }}>
-            <ClientLabel labels={{
-              en: puja.brief_description_en,
-              te: puja.brief_description_te || puja.brief_description_en,
-              ta: puja.brief_description_ta || puja.brief_description_en,
-              hi: puja.brief_description_hi || puja.brief_description_en,
-            }} />
-          </p>
-        </section>
-      )}
-
-      {materials.length > 0 && (
-        <section id="section-materials" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
-          <h2 style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-secondary)',
-            margin: '0 0 16px',
-          }}>
-            <ClientLabel labels={{ en: 'Materials Required', te: 'కావలసిన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' }} />
-          </h2>
-          <MaterialsList items={materials} />
-        </section>
-      )}
-
-      {steps.length > 0 && (
-        <section id="section-procedure" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
-          <h2 style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-secondary)',
-            margin: '0 0 16px',
-          }}>
-            <ClientLabel labels={{ en: 'Procedure', te: 'విధానం', ta: 'முறை', hi: 'विधि' }} />
-          </h2>
-          <ProcedureSteps steps={steps} />
-        </section>
-      )}
+      <PujaProfile puja={puja} steps={steps} materials={materials} />
     </div>
   );
 }
