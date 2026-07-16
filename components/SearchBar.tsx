@@ -12,7 +12,7 @@ const PLACEHOLDER: Record<string, string> = {
   hi: 'खोजें…',
 };
 
-export default function SearchBar({ autoFocus = false, onSelect }: { autoFocus?: boolean; onSelect?: () => void } = {}) {
+export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 }: { autoFocus?: boolean; onSelect?: () => void; maxWidth?: number } = {}) {
   const { lang } = useLang();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchRecord[]>([]);
@@ -79,7 +79,7 @@ export default function SearchBar({ autoFocus = false, onSelect }: { autoFocus?:
   };
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth: '480px' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth }}>
       <input
         ref={inputRef}
         type="search"
