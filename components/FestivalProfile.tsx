@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { formatDateLocalized } from '@/lib/utils';
 import type { Festival, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -86,9 +87,7 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
 
         {festival.next_occurrence && (
           <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
-            {label('next', lang)}: {new Date(festival.next_occurrence).toLocaleDateString('en-IN', {
-              year: 'numeric', month: 'long', day: 'numeric',
-            })}
+            {label('next', lang)}: {formatDateLocalized(festival.next_occurrence, lang)}
           </p>
         )}
 

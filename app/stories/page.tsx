@@ -7,6 +7,11 @@ import ClientLabel from '@/components/ClientLabel';
 
 export const revalidate = 3600;
 
+export const metadata = {
+  title: 'Stories & Kathas',
+  description: 'Vrata kathas, puranic stories, and sthala puranas — read sacred stories associated with Hindu festivals, vrathams, and deities.',
+};
+
 const STORY_TYPE_LABELS: Record<string, string> = {
   'vrata-katha': 'Vrata Katha', 'mahatmya': 'Mahatmya',
   'purana-story': 'Purana Story', 'sthala-purana': 'Sthala Purana',

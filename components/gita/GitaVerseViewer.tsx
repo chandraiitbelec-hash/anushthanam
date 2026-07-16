@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
+import { UI } from '@/lib/ui-strings';
 import FontSizeToggle from '@/components/FontSizeToggle';
 import type { GitaVerse, GitaChapter } from '@/lib/gita';
 
@@ -69,6 +70,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
   const { lang } = useLang();
   const { scale } = useFontScale();
   const router = useRouter();
+  const ui = UI[lang];
   const [showSanskrit, setShowSanskrit] = useState(false);
   const [showIast, setShowIast] = useState(false);
   const [showMeaning, setShowMeaning] = useState(true);
@@ -98,26 +100,29 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
       }}>
         {chapters && currentChapter && (
           <select
-            aria-label="Jump to chapter"
+            aria-label={ui.jumpToChapter}
             value={currentChapter}
             onChange={e => router.push(`/bhagavad-gita/${e.target.value}`)}
             style={selectStyle}
           >
-            {chapters.map(ch => (
-              <option key={ch.number} value={ch.number}>Ch {ch.number}: {ch.name_en}</option>
-            ))}
+            {chapters.map(ch => {
+              const chName = (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
+              return (
+                <option key={ch.number} value={ch.number}>{ui.chapterShort(ch.number)} {chName}</option>
+              );
+            })}
           </select>
         )}
         {verses.length > 0 && (
           <select
-            aria-label="Jump to verse"
+            aria-label={ui.jumpToVerse}
             defaultValue=""
             onChange={e => jumpToVerse(e.target.value)}
             style={selectStyle}
           >
-            <option value="" disabled>Verse…</option>
+            <option value="" disabled>{ui.verseEllipsis}</option>
             {verses.map(v => (
-              <option key={v.verse} value={v.verse}>Verse {v.verse}</option>
+              <option key={v.verse} value={v.verse}>{ui.shlokaLabel} {v.verse}</option>
             ))}
           </select>
         )}

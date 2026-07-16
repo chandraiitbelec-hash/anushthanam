@@ -84,14 +84,16 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
               fontSize: '12px',
               color: 'var(--color-gold)',
               fontWeight: 600,
-            }}>{puja.duration_minutes} min</span>
+            }}>
+              {puja.duration_minutes} <ClientLabel labels={{ en: 'min', te: 'నిమి', ta: 'நிமி', hi: 'मिनट' }} />
+            </span>
           )}
         </div>
       </div>
 
       <SectionNav sections={[
-        ...(materials.length > 0 ? [{ id: 'section-materials', label: 'Materials' }] : []),
-        ...(steps.length > 0 ? [{ id: 'section-procedure', label: 'Procedure' }] : []),
+        ...(materials.length > 0 ? [{ id: 'section-materials', label: 'Materials Required', labels: { te: 'కావలసిన సామగ్రి', ta: 'தேவையான பொருட்கள்', hi: 'आवश्यक सामग्री' } }] : []),
+        ...(steps.length > 0 ? [{ id: 'section-procedure', label: 'Procedure', labels: { te: 'విధానం', ta: 'முறை', hi: 'विधि' } }] : []),
       ]} />
 
       {puja.brief_description_en && (
@@ -102,7 +104,12 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
             color: 'var(--color-text-primary)',
             margin: 0,
           }}>
-            {puja.brief_description_en}
+            <ClientLabel labels={{
+              en: puja.brief_description_en,
+              te: puja.brief_description_te || puja.brief_description_en,
+              ta: puja.brief_description_ta || puja.brief_description_en,
+              hi: puja.brief_description_hi || puja.brief_description_en,
+            }} />
           </p>
         </section>
       )}

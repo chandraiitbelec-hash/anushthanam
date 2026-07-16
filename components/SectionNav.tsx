@@ -1,10 +1,16 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLang } from '@/context/LanguageContext';
 
-export type NavSection = { id: string; label: string };
+export type NavSection = {
+  id: string;
+  label: string;
+  labels?: { te?: string; ta?: string; hi?: string };
+};
 
 export default function SectionNav({ sections }: { sections: NavSection[] }) {
+  const { lang } = useLang();
   const [active, setActive] = useState(sections[0]?.id ?? '');
   // Prevent observer from overriding active while the page is mid-smooth-scroll
   const ignoreObserver = useRef(false);
@@ -97,7 +103,7 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
                   minHeight: '36px',
                 }}
               >
-                {s.label}
+                {(lang !== 'en' && s.labels?.[lang as 'te' | 'ta' | 'hi']) || s.label}
               </button>
             );
           })}

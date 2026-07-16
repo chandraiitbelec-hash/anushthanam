@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, KeyboardEvent } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { formatDateLocalized } from '@/lib/utils';
 import type { Vratham, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -60,6 +61,21 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
   ].filter(Boolean) as Tab[];
 
   const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? '');
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>, idx: number) {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const next = (idx + 1) % tabs.length;
+      tabRefs.current[next]?.focus();
+      setActiveTab(tabs[next].id);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prev = (idx - 1 + tabs.length) % tabs.length;
+      tabRefs.current[prev]?.focus();
+      setActiveTab(tabs[prev].id);
+    }
+  }
 
   return (
     <>
@@ -98,9 +114,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
         {vratham.next_occurrence && (
           <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
-            {lbl('next', lang)}: {new Date(vratham.next_occurrence).toLocaleDateString('en-IN', {
-              year: 'numeric', month: 'long', day: 'numeric',
-            })}
+            {lbl('next', lang)}: {formatDateLocalized(vratham.next_occurrence, lang)}
           </p>
         )}
 
@@ -118,19 +132,31 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
           margin: '0 -24px 32px',
           padding: '0 24px',
         }}>
-          <div style={{
-            display: 'flex',
-            gap: '0',
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            WebkitOverflowScrolling: 'touch',
-          }}>
-            {tabs.map(tab => {
+          <div
+            role="tablist"
+            style={{
+              display: 'flex',
+              gap: '0',
+              overflowX: 'auto',
+              scrollbarWidth: 'none',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {tabs.map((tab, idx) => {
               const isActive = tab.id === activeTab;
+              const panelId = `vratham-panel-${tab.id}`;
+              const tabId = `vratham-tab-${tab.id}`;
               return (
                 <button
                   key={tab.id}
+                  id={tabId}
+                  ref={el => { tabRefs.current[idx] = el; }}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={panelId}
+                  tabIndex={isActive ? 0 : -1}
                   onClick={() => setActiveTab(tab.id)}
+                  onKeyDown={e => handleKeyDown(e, idx)}
                   style={{
                     flexShrink: 0,
                     padding: '12px 18px',
@@ -156,35 +182,46 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
       {/* Tab content */}
       {activeTab === 'fasting' && fasting && (
-        <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
-          {fasting}
-        </p>
+        <div role="tabpanel" id="vratham-panel-fasting" aria-labelledby="vratham-tab-fasting">
+          <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
+            {fasting}
+          </p>
+        </div>
       )}
 
       {activeTab === 'benefits' && benefits && (
-        <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
-          {benefits}
-        </p>
+        <div role="tabpanel" id="vratham-panel-benefits" aria-labelledby="vratham-tab-benefits">
+          <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
+            {benefits}
+          </p>
+        </div>
       )}
 
       {activeTab === 'materials' && materials.length > 0 && (
-        <MaterialsList items={materials} />
+        <div role="tabpanel" id="vratham-panel-materials" aria-labelledby="vratham-tab-materials">
+          <MaterialsList items={materials} />
+        </div>
       )}
 
       {activeTab === 'procedure' && steps.length > 0 && (
-        <ProcedureSteps
-          steps={steps}
-          hasPasurams={stanzas.length > 0}
-          onViewPasurams={stanzas.length > 0 ? () => setActiveTab('pasurams') : undefined}
-        />
+        <div role="tabpanel" id="vratham-panel-procedure" aria-labelledby="vratham-tab-procedure">
+          <ProcedureSteps
+            steps={steps}
+            hasPasurams={stanzas.length > 0}
+            onViewPasurams={stanzas.length > 0 ? () => setActiveTab('pasurams') : undefined}
+          />
+        </div>
       )}
 
       {activeTab === 'pasurams' && stanzas.length > 0 && (
-        <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
+        <div role="tabpanel" id="vratham-panel-pasurams" aria-labelledby="vratham-tab-pasurams">
+          <PasuramViewer stanzas={stanzas} startDate={vratham.shloka_start_date || undefined} />
+        </div>
       )}
 
       {activeTab === 'stories' && stories.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div role="tabpanel" id="vratham-panel-stories" aria-labelledby="vratham-tab-stories">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {stories.map((s, idx) => {
             const sr = s as unknown as Record<string, string>;
             const t = sr[`title_${lang}`] || s.title_en;
@@ -220,6 +257,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
               </Link>
             );
           })}
+          </div>
         </div>
       )}
     </>

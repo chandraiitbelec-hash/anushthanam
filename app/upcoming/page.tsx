@@ -8,6 +8,11 @@ import ClientLabel from '@/components/ClientLabel';
 
 export const revalidate = 3600;
 
+export const metadata = {
+  title: 'Upcoming',
+  description: 'Upcoming Hindu festivals and vrathams — dates, tithi, and panchangam details for festivals and observances.',
+};
+
 export default async function UpcomingPage() {
   const [items, today] = await Promise.all([
     getUpcoming(),

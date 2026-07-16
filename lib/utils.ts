@@ -33,3 +33,13 @@ export function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 }
+
+const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
+
+export function formatDateLocalized(dateStr: string, lang: string): string {
+  if (!dateStr) return '';
+  const locale = LOCALE_MAP[lang] ?? 'en-IN';
+  return new Date(`${dateStr}T00:00:00`).toLocaleDateString(locale, {
+    year: 'numeric', month: 'long', day: 'numeric',
+  });
+}
