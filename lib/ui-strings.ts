@@ -56,6 +56,15 @@ type UiStrings = {
   // Site index
   siteIndexIntro: string;
   browseSection: string;
+  // ShlokaViewer share / deep-link
+  share: string;
+  linkCopied: string;
+  copyStanzaLink: string;
+  // Panchangam empty state
+  panchangamNoDataTitle: string;
+  panchangamNoDataBody: string;
+  panchangamNextAvailable: (date: string) => string;
+  viewUpcoming: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -105,6 +114,13 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'Back to home',
     siteIndexIntro: 'Browse everything on Anuṣṭhāna.',
     browseSection: 'Browse',
+    share: 'Share',
+    linkCopied: 'Link copied',
+    copyStanzaLink: 'Copy link to this stanza',
+    panchangamNoDataTitle: 'Panchangam not available for today',
+    panchangamNoDataBody: 'The daily almanac entry for today has not been added yet. Check back soon, or browse upcoming festivals and vrathams below.',
+    panchangamNextAvailable: (date) => `Next entry: ${new Date(date).toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+    viewUpcoming: 'View upcoming festivals & vrathams',
   },
   te: {
     tithi: 'తిథి',
@@ -152,6 +168,13 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
     siteIndexIntro: 'అనుష్ఠానంలోని అన్నింటినీ విహరించండి.',
     browseSection: 'విహరించండి',
+    share: 'షేర్',
+    linkCopied: 'లింక్ కాపీ అయింది',
+    copyStanzaLink: 'ఈ స్తబకానికి లింక్ కాపీ చేయండి',
+    panchangamNoDataTitle: 'ఈ రోజు పంచాంగం అందుబాటులో లేదు',
+    panchangamNoDataBody: 'ఈ రోజు పంచాంగం ఇంకా జోడించబడలేదు. త్వరలో తిరిగి చూడండి, లేదా క్రింద రాబోయే పండుగలు మరియు వ్రతాలు చూడండి.',
+    panchangamNextAvailable: (date) => `తదుపరి నమోదు: ${new Date(date).toLocaleDateString('te-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+    viewUpcoming: 'రాబోయే పండుగలు & వ్రతాలు చూడండి',
   },
   ta: {
     tithi: 'திதி',
@@ -199,6 +222,13 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'முகப்புக்குத் திரும்பு',
     siteIndexIntro: 'அனுஷ்டானத்தில் உள்ள அனைத்தையும் உலாவுங்கள்.',
     browseSection: 'உலாவு',
+    share: 'பகிர்',
+    linkCopied: 'இணைப்பு நகலெடுக்கப்பட்டது',
+    copyStanzaLink: 'இந்த தாவலுக்கான இணைப்பை நகலெடுக்கவும்',
+    panchangamNoDataTitle: 'இன்றைய பஞ்சாங்கம் கிடைக்கவில்லை',
+    panchangamNoDataBody: 'இன்றைய பஞ்சாங்கம் இன்னும் சேர்க்கப்படவில்லை. சீக்கிரம் திரும்பி வாருங்கள், அல்லது கீழே வரவிருக்கும் திருவிழாக்கள் மற்றும் விரதங்களைப் பாருங்கள்.',
+    panchangamNextAvailable: (date) => `அடுத்த பதிவு: ${new Date(date).toLocaleDateString('ta-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+    viewUpcoming: 'வரவிருக்கும் திருவிழாக்கள் & விரதங்களைக் காண்க',
   },
   hi: {
     tithi: 'तिथि',
@@ -246,5 +276,12 @@ export const UI: Record<Language, UiStrings> = {
     backToHome: 'होम पर वापस जाएं',
     siteIndexIntro: 'अनुष्ठान की सारी सामग्री देखें।',
     browseSection: 'देखें',
+    share: 'साझा करें',
+    linkCopied: 'लिंक कॉपी हो गया',
+    copyStanzaLink: 'इस श्लोक का लिंक कॉपी करें',
+    panchangamNoDataTitle: 'आज का पंचांग उपलब्ध नहीं है',
+    panchangamNoDataBody: 'आज का पंचांग अभी तक नहीं जोड़ा गया है। जल्द ही वापस आएं, या नीचे आगामी त्योहार और व्रत देखें।',
+    panchangamNextAvailable: (date) => `अगली प्रविष्टि: ${new Date(date).toLocaleDateString('hi-IN', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+    viewUpcoming: 'आगामी त्योहार और व्रत देखें',
   },
 };
