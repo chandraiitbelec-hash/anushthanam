@@ -4,11 +4,12 @@ import type { Festival } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
+import EmptyState from '@/components/EmptyState';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Festivals | Anushthanam',
+  title: 'Festivals',
   description: 'Hindu festivals calendar — Diwali, Navratri, Ugadi, Pongal and more. Dates, significance, and related prayers.',
 };
 
@@ -25,11 +26,7 @@ export default async function FestivalsPage() {
         countLabels={{ en: 'festivals', te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' }}
       />
       {festivals.length === 0 ? (
-        <div style={{ padding: '64px 32px', textAlign: 'center', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
-          <p style={{ fontSize: '36px', margin: '0 0 16px' }}>🪔</p>
-          <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>No festivals published yet</p>
-          <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Festival listings will appear here once published from the content management system.</p>
-        </div>
+        <EmptyState type="festivals" />
       ) : (
         <div className="entity-grid">
           {festivals.map(f => (

@@ -108,7 +108,7 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
       )}
 
       {materials.length > 0 && (
-        <section id="section-materials" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-materials" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <h2 style={{
             fontSize: '13px',
             fontWeight: 600,
@@ -124,7 +124,7 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
       )}
 
       {steps.length > 0 && (
-        <section id="section-procedure" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-procedure" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <h2 style={{
             fontSize: '13px',
             fontWeight: 600,

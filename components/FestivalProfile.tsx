@@ -29,7 +29,7 @@ function SectionHeading({ id, children }: { id: string; children: React.ReactNod
       fontSize: '13px', fontWeight: 600, textTransform: 'uppercase',
       letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
       margin: '0 0 12px',
-      scrollMarginTop: '137px',
+      scrollMarginTop: 'var(--section-anchor-offset)',
     }}>
       {children}
     </h2>

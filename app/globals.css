@@ -45,6 +45,37 @@
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   --nav-height: 64px;
+  /* Scroll offset for in-page section anchors: 64px nav + 57px sticky chip bar + 16px breathing room.
+     Single source of truth for SectionNav's scrollTo() and each section's scrollMarginTop. */
+  --section-anchor-offset: 137px;
+}
+
+/* Dark mode — the whole UI styles from these CSS variables (inline styles reference
+   var(--color-*)), so remapping them here flips the entire site. Follows the OS
+   preference; no JS, no flash. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--color-bg-dark);
+    --color-surface: var(--color-surface-dark);
+    --color-border: var(--color-border-dark);
+    --color-text-primary: var(--color-text-primary-dark);
+    --color-text-secondary: var(--color-text-secondary-dark);
+    --color-gold: var(--color-gold-dark);
+    --color-saffron: var(--color-saffron-dark);
+  }
+}
+
+/* Global keyboard focus ring for all interactive elements. Mouse clicks don't
+   trigger :focus-visible, so this is keyboard-only and doesn't affect pointer users. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Entity card focus ring */
@@ -52,6 +83,37 @@
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
   border-radius: 12px;
+}
+
+/* Screen-reader-only utility (visually hidden, still announced) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip-to-content link — hidden until focused, then pinned top-left */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--color-gold);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 8px;
 }
 
 body {

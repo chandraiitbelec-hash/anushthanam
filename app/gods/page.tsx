@@ -4,11 +4,12 @@ import type { God } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
+import EmptyState from '@/components/EmptyState';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Gods & Goddesses | Anushthanam',
+  title: 'Gods & Goddesses',
   description: 'Browse Hindu deities — learn about Shiva, Vishnu, Devi, Ganesha and more. Shlokas, pujas, and stories for each deity.',
 };
 
@@ -25,11 +26,7 @@ export default async function GodsPage() {
         countLabels={{ en: 'deities', te: 'దేవతలు', ta: 'தெய்வங்கள்', hi: 'देवता' }}
       />
       {gods.length === 0 ? (
-        <div style={{ padding: '64px 32px', textAlign: 'center', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
-          <p style={{ fontSize: '36px', margin: '0 0 16px' }}>🕉</p>
-          <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>No deities published yet</p>
-          <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Gods and goddesses will appear here once published from the content management system.</p>
-        </div>
+        <EmptyState type="gods" />
       ) : (
         <div className="entity-grid">
           {gods.map(god => (

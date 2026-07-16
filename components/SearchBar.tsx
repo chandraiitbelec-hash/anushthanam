@@ -87,6 +87,7 @@ export default function SearchBar({ autoFocus = false, onSelect }: { autoFocus?:
         onChange={e => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setOpen(true)}
         placeholder={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
+        aria-label={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
         style={{
           width: '100%',
           padding: '10px 16px',
@@ -95,7 +96,6 @@ export default function SearchBar({ autoFocus = false, onSelect }: { autoFocus?:
           background: 'var(--color-surface)',
           color: 'var(--color-text-primary)',
           fontSize: '14px',
-          outline: 'none',
           boxSizing: 'border-box',
         }}
       />

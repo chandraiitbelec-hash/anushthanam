@@ -41,6 +41,7 @@ type UiStrings = {
   footerUpcoming: string;
   footerPanchangam: string;
   footerSiteIndex: string;
+  footerStories: string;
   // Search
   searchBuilding: string;
   searchNoResults: (q: string) => string;
@@ -48,6 +49,13 @@ type UiStrings = {
   related: string;
   // UpcomingList
   daysAway: (n: number) => string;
+  // Not found
+  notFoundTitle: string;
+  notFoundBody: string;
+  backToHome: string;
+  // Site index
+  siteIndexIntro: string;
+  browseSection: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -87,10 +95,16 @@ export const UI: Record<Language, UiStrings> = {
     footerUpcoming: 'Upcoming',
     footerPanchangam: 'Panchangam',
     footerSiteIndex: 'Site Index',
+    footerStories: 'Stories',
     searchBuilding: 'Search index is being built — it will be available after the next site deploy.',
     searchNoResults: (q) => `No results for "${q}"`,
     related: 'Related',
     daysAway: (n) => `in ${n} day${n > 1 ? 's' : ''}`,
+    notFoundTitle: 'Page not found',
+    notFoundBody: "The page you're looking for doesn't exist or may have moved.",
+    backToHome: 'Back to home',
+    siteIndexIntro: 'Browse everything on Anuṣṭhāna.',
+    browseSection: 'Browse',
   },
   te: {
     tithi: 'తిథి',
@@ -128,10 +142,16 @@ export const UI: Record<Language, UiStrings> = {
     footerUpcoming: 'రాబోయేవి',
     footerPanchangam: 'పంచాంగం',
     footerSiteIndex: 'సైట్ విషయసూచిక',
+    footerStories: 'కథలు',
     searchBuilding: 'సెర్చ్ ఇండెక్స్ తయారవుతోంది — తదుపరి డిప్లాయ్ తర్వాత అందుబాటులో ఉంటుంది.',
     searchNoResults: (q) => `"${q}" కోసం ఫలితాలు లేవు`,
     related: 'సంబంధిత',
     daysAway: (n) => `${n} రోజుల్లో`,
+    notFoundTitle: 'పేజీ కనబడలేదు',
+    notFoundBody: 'మీరు వెతుకుతున్న పేజీ లేదు లేదా తరలించబడి ఉండవచ్చు.',
+    backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
+    siteIndexIntro: 'అనుష్ఠానంలోని అన్నింటినీ విహరించండి.',
+    browseSection: 'విహరించండి',
   },
   ta: {
     tithi: 'திதி',
@@ -169,10 +189,16 @@ export const UI: Record<Language, UiStrings> = {
     footerUpcoming: 'வரவிருப்பவை',
     footerPanchangam: 'பஞ்சாங்கம்',
     footerSiteIndex: 'தள அட்டவணை',
+    footerStories: 'கதைகள்',
     searchBuilding: 'தேடல் குறியீடு உருவாகிறது — அடுத்த வரிசையீட்டிற்குப் பிறகு கிடைக்கும்.',
     searchNoResults: (q) => `"${q}" க்கு முடிவுகள் இல்லை`,
     related: 'தொடர்புடையவை',
     daysAway: (n) => `${n} நாட்களில்`,
+    notFoundTitle: 'பக்கம் கிடைக்கவில்லை',
+    notFoundBody: 'நீங்கள் தேடும் பக்கம் இல்லை அல்லது நகர்த்தப்பட்டிருக்கலாம்.',
+    backToHome: 'முகப்புக்குத் திரும்பு',
+    siteIndexIntro: 'அனுஷ்டானத்தில் உள்ள அனைத்தையும் உலாவுங்கள்.',
+    browseSection: 'உலாவு',
   },
   hi: {
     tithi: 'तिथि',
@@ -210,9 +236,15 @@ export const UI: Record<Language, UiStrings> = {
     footerUpcoming: 'आगामी',
     footerPanchangam: 'पंचांग',
     footerSiteIndex: 'साइट अनुक्रमणिका',
+    footerStories: 'कथाएं',
     searchBuilding: 'खोज अनुक्रमणिका बन रही है — अगले डिप्लॉय के बाद उपलब्ध होगी।',
     searchNoResults: (q) => `"${q}" के लिए कोई परिणाम नहीं`,
     related: 'संबंधित',
     daysAway: (n) => `${n} दिन में`,
+    notFoundTitle: 'पृष्ठ नहीं मिला',
+    notFoundBody: 'आप जिस पृष्ठ को खोज रहे हैं वह मौजूद नहीं है या हटा दिया गया है।',
+    backToHome: 'होम पर वापस जाएं',
+    siteIndexIntro: 'अनुष्ठान की सारी सामग्री देखें।',
+    browseSection: 'देखें',
   },
 };

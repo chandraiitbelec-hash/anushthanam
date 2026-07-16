@@ -64,6 +64,22 @@ export const getSheetRows = unstable_cache(
   { revalidate: 3600 }
 );
 
+// Some tabs (notably shloka_stanzas, ~4MB) exceed unstable_cache's 2MB payload
+// limit. When that happens Next throws "Failed to set Next.js data cache" and
+// silently re-fetches the entire tab from Sheets on every request. Cache those
+// tabs in-process with a TTL matching `revalidate` instead: fetched once per
+// server process / build per hour, sliced per-slug by callers.
+const LARGE_TAB_TTL_MS = 3600 * 1000;
+const largeTabMemo = new Map<string, { rows: Record<string, string>[]; expires: number }>();
+
+export async function getSheetRowsLarge(tabName: string): Promise<Record<string, string>[]> {
+  const cached = largeTabMemo.get(tabName);
+  if (cached && cached.expires > Date.now()) return cached.rows;
+  const rows = await fetchSheetRows(tabName);
+  largeTabMemo.set(tabName, { rows, expires: Date.now() + LARGE_TAB_TTL_MS });
+  return rows;
+}
+
 export async function getPublished(tabName: string): Promise<Record<string, string>[]> {
   const rows = await getSheetRows(tabName);
   return rows.filter(row => row.status === 'published');

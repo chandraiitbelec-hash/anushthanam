@@ -17,7 +17,9 @@ export function pageMeta(
   const url = `${SITE_URL}${path}`;
   const desc = trunc(description, 155);
   return {
-    title: `${title} | ${SITE_NAME}`,
+    // Bare title — the root layout's title template ("%s | Anuṣṭhāna") adds the
+    // brand suffix. Appending it here too produced "X | Anuṣṭhāna | Anuṣṭhāna".
+    title,
     description: desc,
     alternates: { canonical: url },
     openGraph: {

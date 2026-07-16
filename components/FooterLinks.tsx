@@ -15,6 +15,9 @@ export default function FooterLinks() {
       <a href="/panchangam" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
         {ui.footerPanchangam}
       </a>
+      <a href="/stories" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
+        {ui.footerStories}
+      </a>
       <a href="/index" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>
         {ui.footerSiteIndex}
       </a>

@@ -1,4 +1,4 @@
-import { getSheetRows, getPublished } from './sheets';
+import { getSheetRows, getSheetRowsLarge, getPublished } from './sheets';
 import type { GodLink, ProcedureStep, MaterialItem } from './types';
 
 export async function getGodLinks(): Promise<GodLink[]> {
@@ -60,7 +60,7 @@ export async function getMaterialItems(groupSlug: string): Promise<MaterialItem[
 }
 
 export async function getShlokaStanzas(shlokaSlug: string) {
-  const rows = await getSheetRows('shloka_stanzas');
+  const rows = await getSheetRowsLarge('shloka_stanzas');
   return rows
     .filter(r => r.shloka_slug === shlokaSlug)
     .map(r => ({

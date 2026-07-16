@@ -93,6 +93,7 @@ export default function SearchPage() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
+          aria-label={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
           disabled={!ready}
           style={{
             width: '100%',
@@ -102,7 +103,6 @@ export default function SearchPage() {
             background: 'var(--color-surface)',
             color: 'var(--color-text-primary)',
             fontSize: '16px',
-            outline: 'none',
             boxSizing: 'border-box',
           }}
         />

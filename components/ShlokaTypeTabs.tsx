@@ -43,9 +43,7 @@ export default function ShlokaTypeTabs({ groups }: { groups: Group[] }) {
         <div style={{
           display: 'flex',
           gap: 0,
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-          WebkitOverflowScrolling: 'touch',
+          flexWrap: 'wrap',
         }}>
           {groups.map(g => {
             const isActive = g.type === active;

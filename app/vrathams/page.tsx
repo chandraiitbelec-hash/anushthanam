@@ -4,11 +4,12 @@ import type { Vratham } from '@/lib/types';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
+import EmptyState from '@/components/EmptyState';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Vrathams & Vows | Anushthanam',
+  title: 'Vrathams & Vows',
   description: 'Hindu vrathams and religious vows — fasting days, observance days, and their significance with prayers and procedures.',
 };
 
@@ -25,11 +26,7 @@ export default async function VrathamsPage() {
         countLabels={{ en: 'vrathams', te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }}
       />
       {vrathams.length === 0 ? (
-        <div style={{ padding: '64px 32px', textAlign: 'center', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
-          <p style={{ fontSize: '36px', margin: '0 0 16px' }}>🙏</p>
-          <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>No vrathams published yet</p>
-          <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0 }}>Vow and fasting guides will appear here once published from the content management system.</p>
-        </div>
+        <EmptyState type="vrathams" />
       ) : (
         <div className="entity-grid entity-grid--3col">
           {vrathams.map(v => (

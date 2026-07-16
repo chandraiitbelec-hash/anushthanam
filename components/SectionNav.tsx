@@ -45,8 +45,10 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
       ignoreObserver.current = false;
     }, 900);
 
-    // 64px nav + 57px chip bar + 16px breathing room = 137px
-    const top = el.getBoundingClientRect().top + window.scrollY - 137;
+    // Offset by the sticky nav + chip bar (single source of truth: --section-anchor-offset)
+    const offsetStr = getComputedStyle(document.documentElement).getPropertyValue('--section-anchor-offset');
+    const offset = parseInt(offsetStr, 10) || 137;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: 'smooth' });
   }
 

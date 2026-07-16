@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { FontScaleProvider } from '@/context/FontScaleContext';
+import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
 
@@ -89,13 +90,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
+      {/* Set <html lang> from the stored preference before paint so assistive tech
+          announces content in the right language and there's no lang-attribute flash. */}
+      <Script id="lang-init" strategy="beforeInteractive">
+        {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
+      </Script>
       <body>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <LanguageProvider>
         <FontScaleProvider>
           <Nav />
-          <main>{children}</main>
+          <main id="main-content">{children}</main>
           <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
             <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '16px', color: 'var(--color-text-primary)' }}>Anuṣṭhāna</span>

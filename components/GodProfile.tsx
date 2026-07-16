@@ -166,7 +166,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Iconography */}
       {iconography && (
-        <section id="section-iconography" style={{ marginBottom: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-iconography" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('iconography', lang)}</SectionHeading>
           <p style={{
             fontSize: '15px',
@@ -181,7 +181,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related shlokas */}
       {shlokas.length > 0 && (
-        <section id="section-shlokas" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-shlokas" style={{ marginTop: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('shlokas', lang)}</SectionHeading>
           <LinkedChips items={shlokas} lang={lang} />
         </section>
@@ -189,7 +189,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related pujas */}
       {pujas.length > 0 && (
-        <section id="section-pujas" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-pujas" style={{ marginTop: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('pujas', lang)}</SectionHeading>
           <LinkedChips items={pujas} lang={lang} />
         </section>
@@ -197,7 +197,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
 
       {/* Related festivals */}
       {festivals.length > 0 && (
-        <section id="section-festivals" style={{ marginTop: '32px', scrollMarginTop: '137px' }}>
+        <section id="section-festivals" style={{ marginTop: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('festivals', lang)}</SectionHeading>
           <LinkedChips items={festivals} lang={lang} />
         </section>

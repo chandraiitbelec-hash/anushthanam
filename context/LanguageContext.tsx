@@ -20,12 +20,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('anushthanam-lang') as Language | null;
     if (saved && ['en', 'te', 'ta', 'hi'].includes(saved)) {
       setLangState(saved);
+      document.documentElement.lang = saved;
     }
   }, []);
 
   function setLang(l: Language) {
     setLangState(l);
     localStorage.setItem('anushthanam-lang', l);
+    document.documentElement.lang = l;
   }
 
   return (

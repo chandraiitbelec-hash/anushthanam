@@ -35,6 +35,15 @@ const SCRIPT_CLASS: Record<ScriptLayer, string> = {
   roman_iast: 'script-iast',
 };
 
+// BCP-47 lang for each script layer, so assistive tech announces each run correctly.
+// Recited verse in Devanagari/roman here is Sanskrit ('sa'); native-script layers use their language.
+const SCRIPT_LANG: Record<ScriptLayer, string> = {
+  script_devanagari: 'sa',
+  script_telugu: 'te',
+  script_tamil: 'ta',
+  roman_iast: 'sa',
+};
+
 const MEANING_LABEL: Record<string, string> = {
   en: 'Meaning', te: 'అర్థం', ta: 'பொருள்', hi: 'अर्थ',
 };
@@ -43,11 +52,48 @@ const IAST_LABEL: Record<string, string> = {
   en: 'देवनागरी', te: 'IAST', ta: 'IAST', hi: 'IAST',
 };
 
+const COPY_LABEL: Record<string, string> = {
+  en: 'Copy', te: 'కాపీ', ta: 'நகல்', hi: 'कॉपी',
+};
+
+const COPIED_LABEL: Record<string, string> = {
+  en: 'Copied', te: 'కాపీ అయింది', ta: 'நகலெடுக்கப்பட்டது', hi: 'कॉपी हो गया',
+};
+
+// Copy with a legacy execCommand fallback for contexts where the async
+// Clipboard API is blocked (sandboxed iframes, some in-app browsers).
+async function copyText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    /* fall through to legacy path */
+  }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[]; type?: ShlokaType }) {
   const { lang } = useLang();
   const { scale } = useFontScale();
   const [showExtra, setShowExtra] = useState(false);
   const [showMeaning, setShowMeaning] = useState(true);
+  const [copied, setCopied] = useState(false);
   const isNamavali = type ? NAMAVALI_TYPES.includes(type) : false;
 
   const primaryScript = LANG_TO_SCRIPT[lang] ?? 'roman_iast';
@@ -55,6 +101,18 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
   const extraScript: ScriptLayer = lang === 'en' ? 'script_devanagari' : 'roman_iast';
 
   const hasMeaning = stanzas.some(s => Boolean(getMeaning(s, lang)));
+
+  async function copyAll() {
+    const text = stanzas
+      .map(s => (s[primaryScript as keyof ShlokaStanza] as string) || '')
+      .filter(Boolean)
+      .map(t => splitStanzaLines(t).join('\n'))
+      .join('\n\n');
+    if (await copyText(text)) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
 
   function pill(active: boolean, accent: 'gold' | 'saffron') {
     const color = accent === 'gold' ? 'var(--color-gold)' : 'var(--color-saffron)';
@@ -91,6 +149,13 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
           </button>
         )}
         <FontSizeToggle />
+        <button
+          onClick={copyAll}
+          aria-label={COPY_LABEL[lang] ?? 'Copy'}
+          style={{ ...pill(false, 'gold'), marginLeft: 'auto' }}
+        >
+          {copied ? `✓ ${COPIED_LABEL[lang] ?? 'Copied'}` : `⧉ ${COPY_LABEL[lang] ?? 'Copy'}`}
+        </button>
       </div>
 
       {/* Stanzas */}
@@ -117,12 +182,12 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
               }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
                   {primaryText && (
-                    <div className={SCRIPT_CLASS[primaryScript]}>
+                    <div className={SCRIPT_CLASS[primaryScript]} lang={SCRIPT_LANG[primaryScript]}>
                       {splitStanzaLines(primaryText).map((line, li) => <div key={li}>{line}</div>)}
                     </div>
                   )}
                   {showExtra && extraText && (
-                    <div className={SCRIPT_CLASS[extraScript]} style={{ opacity: 0.75, fontSize: '14px' }}>
+                    <div className={SCRIPT_CLASS[extraScript]} lang={SCRIPT_LANG[extraScript]} style={{ opacity: 0.75, fontSize: '14px' }}>
                       {splitStanzaLines(extraText).map((line, li) => <div key={li}>{line}</div>)}
                     </div>
                   )}
@@ -169,13 +234,13 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {primaryText && (
-                    <div className={SCRIPT_CLASS[primaryScript]}>
+                    <div className={SCRIPT_CLASS[primaryScript]} lang={SCRIPT_LANG[primaryScript]}>
                       {splitStanzaLines(primaryText).map((line, i) => <div key={i}>{line}</div>)}
                     </div>
                   )}
 
                   {showExtra && extraText && (
-                    <div className={SCRIPT_CLASS[extraScript]} style={{ opacity: 0.75 }}>
+                    <div className={SCRIPT_CLASS[extraScript]} lang={SCRIPT_LANG[extraScript]} style={{ opacity: 0.75 }}>
                       {splitStanzaLines(extraText).map((line, i) => <div key={i}>{line}</div>)}
                     </div>
                   )}
