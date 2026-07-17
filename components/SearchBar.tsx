@@ -70,8 +70,15 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
         setOpen(false);
       }
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false);
+    }
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKey);
+    };
   }, []);
 
   const TYPE_ICON: Record<string, string> = {

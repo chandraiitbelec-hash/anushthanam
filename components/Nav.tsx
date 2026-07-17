@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import type { Theme } from '@/context/ThemeContext';
 import SearchBar from '@/components/SearchBar';
+import { useDismissable } from '@/hooks/useDismissable';
 import { UI } from '@/lib/ui-strings';
 
 import type { Language } from '@/lib/types';
@@ -27,29 +28,15 @@ export default function Nav() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Dismiss each popover on outside-click / Escape.
+  const searchRef = useDismissable<HTMLDivElement>(searchOpen, () => setSearchOpen(false));
+  const langRef = useDismissable<HTMLDivElement>(langOpen, () => setLangOpen(false));
+  useDismissable<HTMLDivElement>(mobileOpen, () => setMobileOpen(false), { escapeOnly: true });
 
   function linkLabel(link: typeof NAV_LINKS[0]) {
     return link[`label_${lang}` as keyof typeof link] || link.label_en;
   }
-
-  useEffect(() => {
-    if (!searchOpen) return;
-    function handleClick(e: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setSearchOpen(false);
-      }
-    }
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setSearchOpen(false);
-    }
-    document.addEventListener('mousedown', handleClick);
-    document.addEventListener('keydown', handleKey);
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-      document.removeEventListener('keydown', handleKey);
-    };
-  }, [searchOpen]);
 
   return (
     <>
@@ -199,10 +186,12 @@ export default function Nav() {
             </div>
 
             {/* Language switcher — CSS hides this on mobile */}
-            <div className="nav-desktop" style={{ position: 'relative' }}>
+            <div ref={langRef} className="nav-desktop" style={{ position: 'relative' }}>
               <button
                 onClick={() => setLangOpen(o => !o)}
                 aria-label="Switch language"
+                aria-expanded={langOpen}
+                aria-haspopup="true"
                 style={{
                   fontSize: '13px',
                   color: 'var(--color-text-secondary)',
