@@ -1,0 +1,33 @@
+{
+  "_note": "Localized notes for santoshi-mata. Fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "santoshi-mata",
+      "step_number": 2,
+      "notes_en": "Avoid sour foods strictly — this is the most important rule of this vrat",
+      "notes_te": "పులుపు పదార్థాలు ఖచ్చితంగా వద్దు — ఇది ఈ వ్రతంలో అత్యంత ముఖ్యమైన నియమం",
+      "notes_ta": "புளிப்பான உணவுகளை கண்டிப்பாகத் தவிர்க்கவும் — இது இந்த வ்ரதத்தின் மிக முக்கியமான விதி",
+      "notes_hi": "खट्टी चीजें सख्ती से वर्जित हैं — यह इस व्रत का सबसे महत्त्वपूर्ण नियम है"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "santoshi-mata",
+      "item_order": 2,
+      "item_name_en": "Jaggery (gur)",
+      "substitution_note_en": "The primary prasad",
+      "substitution_note_te": "ముఖ్యమైన ప్రసాదం",
+      "substitution_note_ta": "முக்கிய பிரசாதம்",
+      "substitution_note_hi": "मुख्य प्रसाद"
+    },
+    {
+      "group_slug": "santoshi-mata",
+      "item_order": 3,
+      "item_name_en": "Roasted chickpeas (chana)",
+      "substitution_note_en": "The primary prasad",
+      "substitution_note_te": "ముఖ్యమైన ప్రసాదం",
+      "substitution_note_ta": "முக்கிய பிரசாதம்",
+      "substitution_note_hi": "मुख्य प्रसाद"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "_note": "Localized notes for ekadashi-vratham. Fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "ekadashi-vratham",
+      "item_order": 2,
+      "item_name_en": "Tulsi leaves",
+      "substitution_note_en": "Essential — must not be omitted for Vishnu worship",
+      "substitution_note_te": "తప్పనిసరి — విష్ణు పూజలో ఇది వదలకూడదు",
+      "substitution_note_ta": "அத்தியாவசியம் — விஷ்ணு வழிபாட்டில் தவிர்க்கக் கூடாது",
+      "substitution_note_hi": "अनिवार्य — विष्णु पूजा में इसे छोड़ना नहीं चाहिए"
+    }
+  ]
+}

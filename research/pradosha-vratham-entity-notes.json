@@ -1,0 +1,15 @@
+{
+  "_note": "Localized notes for pradosha-vratham. Fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "pradosha-vratham",
+      "item_order": 8,
+      "item_name_en": "Dhatura flower",
+      "substitution_note_en": "Especially dear to Shiva, if available",
+      "substitution_note_te": "శివునికి అత్యంత ప్రియమైనది, లభ్యమైతే వాడండి",
+      "substitution_note_ta": "சிவனுக்கு மிகவும் பிரியமானது, கிடைத்தால் பயன்படுத்தவும்",
+      "substitution_note_hi": "शिव को अत्यंत प्रिय है, यदि उपलब्ध हो तो उपयोग करें"
+    }
+  ]
+}

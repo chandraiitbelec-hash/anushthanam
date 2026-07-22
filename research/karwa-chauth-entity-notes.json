@@ -1,0 +1,15 @@
+{
+  "_note": "Localized notes for karwa-chauth. Fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "karwa-chauth",
+      "item_order": 2,
+      "item_name_en": "Sieve (chhalni)",
+      "substitution_note_en": "For viewing moon and husband",
+      "substitution_note_te": "చంద్రుడు మరియు భర్తను చూడడానికి",
+      "substitution_note_ta": "சந்திரனையும் கணவரையும் பார்ப்பதற்காக",
+      "substitution_note_hi": "चाँद और पति को देखने के लिए"
+    }
+  ]
+}

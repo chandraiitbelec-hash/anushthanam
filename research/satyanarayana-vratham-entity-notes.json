@@ -1,0 +1,42 @@
+{
+  "_note": "Localized notes for satyanarayana-vratham. Uploader matches by (parent_slug + notes_en) and (group_slug + item_name_en + substitution_note_en). Fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "satyanarayana-vratham",
+      "step_number": 5,
+      "notes_en": "The five stories cover: the sage Narada asking Vishnu about the best vratham, a poor brahmin who performs the puja, a king who is cured of illness, a merchant saved from trouble, and the story of Tungsadhwaja.",
+      "notes_te": "అయిదు కథలు: శ్రేష్ఠమైన వ్రతాన్ని గురించి నారద మహర్షి విష్ణువుని అడగడం, ఒక పేద బ్రాహ్మణుడు పూజ చేయడం, ఒక రాజు రోగం నయమవడం, ఒక వ్యాపారి కష్టాల నుండి రక్షించబడడం, మరియు తుంగ్‌సాధ్వజుని కథ.",
+      "notes_ta": "ஐந்து கதைகள்: நாரத முனிவர் விஷ்ணுவிடம் சிறந்த வ்ரதத்தைப் பற்றி கேட்பது, ஒரு ஏழை பிராமணன் பூஜை செய்வது, ஒரு அரசன் நோயிலிருந்து குணமடைவது, ஒரு வணிகன் துன்பத்திலிருந்து காப்பாற்றப்படுவது, மற்றும் துங்கசத்வஜனின் கதை.",
+      "notes_hi": "पाँच कथाएँ: नारद मुनि द्वारा विष्णु से श्रेष्ठ व्रत के बारे में पूछना, एक निर्धन ब्राह्मण का पूजा करना, एक राजा का रोगमुक्त होना, एक व्यापारी का संकट से बचना, तथा तुंगसाध्वज की कथा।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "satyanarayana-vratham",
+      "item_order": 7,
+      "item_name_en": "Sugar",
+      "substitution_note_en": "For panchamrit and sheera prasad",
+      "substitution_note_te": "పంచామృతం మరియు శీర ప్రసాదం కోసం",
+      "substitution_note_ta": "பஞ்சாமிர்தம் மற்றும் ஷீரா பிரசாதத்திற்காக",
+      "substitution_note_hi": "पंचामृत और शीरा प्रसाद के लिए"
+    },
+    {
+      "group_slug": "satyanarayana-vratham",
+      "item_order": 8,
+      "item_name_en": "Semolina (sooji/rava)",
+      "substitution_note_en": "For sheera prasad",
+      "substitution_note_te": "శీర ప్రసాదం కోసం",
+      "substitution_note_ta": "ஷீரா பிரசாதத்திற்காக",
+      "substitution_note_hi": "शीरा प्रसाद के लिए"
+    },
+    {
+      "group_slug": "satyanarayana-vratham",
+      "item_order": 17,
+      "item_name_en": "Banana leaves",
+      "substitution_note_en": "For serving prasad",
+      "substitution_note_te": "ప్రసాదం అందించడానికి",
+      "substitution_note_ta": "பிரசாதம் வழங்குவதற்காக",
+      "substitution_note_hi": "प्रसाद परोसने के लिए"
+    }
+  ]
+}
