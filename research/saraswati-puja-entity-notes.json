@@ -1,0 +1,24 @@
+{
+  "_note": "Localized notes for saraswati-puja. Uploader matches by (group_slug + substitution_note_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "saraswati-puja",
+      "item_order": 3,
+      "item_name_en": "White jasmine flowers",
+      "substitution_note_en": "White or light-coloured flowers preferred; marigold acceptable",
+      "substitution_note_te": "తెల్లని లేదా లేత రంగు పూలు ఉత్తమం; బంతి పూలు కూడా పనికొస్తాయి",
+      "substitution_note_ta": "வெண்ணிற அல்லது இளஞ்சாயல் மலர்கள் சிறந்தவை; மரிகோல்டு ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "सफेद या हल्के रंग के फूल उत्तम; गेंदा भी स्वीकार्य है"
+    },
+    {
+      "group_slug": "saraswati-puja",
+      "item_order": 9,
+      "item_name_en": "Musical instruments (optional, to bless)",
+      "substitution_note_en": "Place at the altar to receive Saraswati's blessing",
+      "substitution_note_te": "సరస్వతీ ఆశీర్వాదం కోసం వేదిక మీద ఉంచండి",
+      "substitution_note_ta": "சரஸ்வதியின் ஆசீர்வாதம் பெற பீடத்தில் வையுங்கள்",
+      "substitution_note_hi": "सरस्वती का आशीर्वाद पाने के लिए वेदी पर रखें"
+    }
+  ]
+}

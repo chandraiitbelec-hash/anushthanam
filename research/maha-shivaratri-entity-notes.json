@@ -1,0 +1,15 @@
+{
+  "_note": "Localized notes for maha-shivaratri. Uploader matches by (group_slug + substitution_note_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "maha-shivaratri",
+      "item_order": 10,
+      "item_name_en": "Dhatura",
+      "substitution_note_en": "if available",
+      "substitution_note_te": "అందుబాటులో ఉంటే",
+      "substitution_note_ta": "கிடைத்தால்",
+      "substitution_note_hi": "उपलब्ध हो तो"
+    }
+  ]
+}
