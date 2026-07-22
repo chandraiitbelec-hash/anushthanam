@@ -1,0 +1,6 @@
+{
+  "_note": "Localized notes for vasant-panchami. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) and fills only empty te/ta/hi cells.",
+  "_audit": "2026-07-23: No procedure_steps (parent_type=festival) or material_items exist for this slug. Nothing to translate.",
+  "procedure_steps_notes": [],
+  "material_items_notes": []
+}
