@@ -1,0 +1,14 @@
+{
+  "_note": "Localized notes for dhanurmasa-vratam. Uploader matches by (parent_slug + step_number) for steps and (group_slug + item_order) for materials, filling only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "dhanurmasa-vratam",
+      "step_number": 4,
+      "notes_en": "Day 1 Margazhi Thingal · Day 2 Vaiyathu Vazhvirgal · Day 3 Ongi Ulagalantha · Day 4 Aazhi Mazhai Kanna · Day 5 Mayanai Mannu · Days 6–15 awakening companions · Days 16–23 at Krishna's mansion · Days 24–30 surrender & phala shruti",
+      "notes_te": "రోజు 1 మార్గళి థింగళ్ · రోజు 2 వైయత్తు వాళ్విర్గాళ్ · రోజు 3 ఓంగి ఉలగళంత · రోజు 4 ఆళి మళై కన్నా · రోజు 5 మాయనై మన్ను · రోజులు 6–15 సఖులను మేల్కొల్పడం · రోజులు 16–23 కృష్ణుని మందిరంలో · రోజులు 24–30 శరణాగతి మరియు ఫల శ్రుతి",
+      "notes_ta": "நாள் 1 மார்கழி திங்கள் · நாள் 2 வையத்து வாழ்விர்காள் · நாள் 3 ஓங்கி உலகளந்த · நாள் 4 ஆழி மழை கண்ணா · நாள் 5 மாயனை மன்னு · நாட்கள் 6–15 தோழிகளை எழுப்புதல் · நாட்கள் 16–23 கண்ணனின் மாளிகையில் · நாட்கள் 24–30 சரணாகதியும் பலசுருதியும்",
+      "notes_hi": "दिन 1 मार्गळि थिंगळ् · दिन 2 वैयत्तु वाळ्विर्गाळ् · दिन 3 ओंगि उलगळन्त · दिन 4 आळि मळै कण्णा · दिन 5 मायनै मन्नु · दिन 6–15 सखियों को जगाना · दिन 16–23 कृष्ण के मंदिर में · दिन 24–30 शरणागति और फल श्रुति"
+    }
+  ],
+  "material_items_notes": []
+}

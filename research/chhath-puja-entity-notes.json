@@ -1,0 +1,15 @@
+{
+  "_note": "Localized notes for chhath-puja. Uploader matches by (group_slug + item_order) for materials, filling only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "chhath-puja",
+      "item_order": 2,
+      "item_name_en": "Thekua (wheat-jaggery cookies)",
+      "substitution_note_en": "The primary ritual offering",
+      "substitution_note_te": "ముఖ్యమైన ఆచారపరమైన నైవేద్యం",
+      "substitution_note_ta": "முதன்மையான சடங்கு நைவேத்யம்",
+      "substitution_note_hi": "मुख्य अनुष्ठान प्रसाद"
+    }
+  ]
+}

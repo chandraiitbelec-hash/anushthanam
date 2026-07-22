@@ -1,0 +1,24 @@
+{
+  "_note": "Localized notes for sankashti-chaturthi-vratham. Uploader matches by (group_slug + item_order) for materials, filling only empty te/ta/hi cells.",
+  "procedure_steps_notes": [],
+  "material_items_notes": [
+    {
+      "group_slug": "sankashti-chaturthi-vratham",
+      "item_order": 2,
+      "item_name_en": "21 Durva grass bundles (must)",
+      "substitution_note_en": "Do not skip — Ganesha accepts no worship without durva",
+      "substitution_note_te": "వదిలివేయకూడదు — దూర్వ లేకుండా గణేశుడు పూజను స్వీకరించడు",
+      "substitution_note_ta": "தவிர்க்கக் கூடாது — துர்வா இல்லாமல் கணேசர் வழிபாட்டை ஏற்கமாட்டார்",
+      "substitution_note_hi": "न छोड़ें — दूर्वा के बिना गणेश पूजा स्वीकार नहीं करते"
+    },
+    {
+      "group_slug": "sankashti-chaturthi-vratham",
+      "item_order": 4,
+      "item_name_en": "Copper arghya pot (with milk + rice + sandalwood)",
+      "substitution_note_en": "For moonrise arghya",
+      "substitution_note_te": "చంద్రోదయ అర్ఘ్యం కొరకు",
+      "substitution_note_ta": "சந்திர உதயத்தில் அர்க்யம் வழங்குவதற்காக",
+      "substitution_note_hi": "चंद्रोदय अर्घ्य के लिए"
+    }
+  ]
+}
