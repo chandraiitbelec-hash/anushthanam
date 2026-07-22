@@ -1,0 +1,40 @@
+{
+  "_note": "Localized notes for saraswati-puja. Step 1 notes_en had [FLAG-4] stripped by cleanup-internal-flag-notes.mjs. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) / (slug + regional_variation_notes_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "saraswati-puja",
+      "step_number": 1,
+      "notes_en": "Tamil Nadu: books placed on Golu display, not used for 9 days, then returned after Vidyarambham on Vijayadasami.",
+      "notes_te": "తమిళనాడు: పుస్తకాలు గోలు (బొమ్మల కొలువు) ప్రదర్శనలో ఉంచుతారు; 9 రోజులు ఉపయోగించరు, విజయదశమిన విద్యారంభం తరువాత తిరిగి ఇస్తారు.",
+      "notes_ta": "தமிழ்நாடு: புத்தகங்கள் கொலு (பொம்மை கொலு) காட்சியில் வைக்கப்படுகின்றன; 9 நாட்கள் பயன்படுத்தப்படுவதில்லை, விஜயதசமியில் வித்யாரம்பத்திற்கு பிறகு திரும்ப எடுக்கப்படுகின்றன.",
+      "notes_hi": "तमिलनाडु: पुस्तकें गोलू (बम्मई कोलू) प्रदर्शनी में रखी जाती हैं; 9 दिनों तक उपयोग नहीं होतीं, विजयादशमी पर विद्यारंभ के बाद वापस की जाती हैं।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "saraswati-puja",
+      "item_order": 3,
+      "item_name_en": "White jasmine flowers",
+      "substitution_note_en": "White or light-coloured flowers preferred; marigold acceptable",
+      "substitution_note_te": "తెల్లని లేదా లేత రంగు పూలు ఇష్టపడతారు; మరిగె కూడా పనికి వస్తుంది",
+      "substitution_note_ta": "வெள்ளை அல்லது வெளிர் நிற மலர்கள் விரும்பப்படுகின்றன; மரிகோல்டும் ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "सफेद या हल्के रंग के फूल पसंद किए जाते हैं; गेंदा भी स्वीकार्य है"
+    },
+    {
+      "group_slug": "saraswati-puja",
+      "item_order": 9,
+      "item_name_en": "Musical instruments (optional, to bless)",
+      "substitution_note_en": "Place at the altar to receive Saraswati's blessing",
+      "substitution_note_te": "సరస్వతీమాత ఆశీర్వాదం పొందేందుకు వేదికపై ఉంచండి",
+      "substitution_note_ta": "சரஸ்வதி தேவியின் ஆசீர்வாதம் பெற பீடத்தில் வையுங்கள்",
+      "substitution_note_hi": "सरस्वती जी का आशीर्वाद प्राप्त करने के लिए वेदी पर रखें"
+    }
+  ],
+  "puja_regional_notes": {
+    "slug": "saraswati-puja",
+    "regional_variation_notes_en": "In Tamil Nadu the Golu (Bommai Kolu) display is set up for Navaratri; books are removed from display on Saraswati Puja day (9th day) and returned after Vidyarambham on the 10th. In AP/TG, Vidyarambham is the primary focus. In Bengal, Saraswati Puja is observed separately in Magha month (Jan-Feb).",
+    "regional_variation_notes_te": "తమిళనాడులో నవరాత్రుల కోసం గోలు (బొమ్మల కొలువు) ప్రదర్శన ఏర్పాటు చేస్తారు; సరస్వతీ పూజ రోజున (9వ రోజు) ప్రదర్శన నుండి పుస్తకాలు తీసివేసి 10వ రోజు విద్యారంభం తరువాత తిరిగి ఉంచుతారు. AP/TG లో విద్యారంభమే ప్రధాన ఆచారం. బెంగాల్‌లో సరస్వతీ పూజ మాఘ మాసంలో (జన-ఫిబ్ర) ప్రత్యేకంగా జరుపుతారు.",
+    "regional_variation_notes_ta": "தமிழ்நாட்டில் நவராத்திரிக்கு கொலு (பொம்மை கொலு) காட்சி ஏற்படுத்தப்படுகிறது; சரஸ்வதி பூஜை நாளில் (9வது நாள்) காட்சியிலிருந்து புத்தகங்கள் எடுக்கப்பட்டு 10வது நாள் வித்யாரம்பத்திற்குப் பிறகு திரும்ப வைக்கப்படுகின்றன. AP/TG இல் வித்யாரம்பமே முக்கிய கவனம். வங்காளத்தில் சரஸ்வதி பூஜை மாக மாதத்தில் (ஜன-பிப்) தனியே கொண்டாடப்படுகிறது.",
+    "regional_variation_notes_hi": "तमिलनाडु में नवरात्रि के लिए गोलू (बम्मई कोलू) प्रदर्शन लगाई जाती है; सरस्वती पूजा के दिन (9वें दिन) प्रदर्शनी से पुस्तकें हटाई जाती हैं और 10वें दिन विद्यारंभ के बाद वापस रखी जाती हैं। AP/TG में विद्यारंभ ही मुख्य केंद्र है। बंगाल में सरस्वती पूजा माघ मास (जन-फर) में अलग से मनाई जाती है।"
+  }
+}

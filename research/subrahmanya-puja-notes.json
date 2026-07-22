@@ -1,0 +1,81 @@
+{
+  "_note": "Localized notes for subrahmanya-puja. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) / (slug + regional_variation_notes_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "subrahmanya-puja",
+      "step_number": 1,
+      "notes_en": "If gotra is unknown, use 'Kashyapa' as a common default.",
+      "notes_te": "గోత్రం తెలియకపోతే, సాధారణ డిఫాల్ట్‌గా 'కాశ్యప' ఉపయోగించవచ్చు.",
+      "notes_ta": "கோத்திரம் தெரியாவிட்டால், பொதுவான இயல்புநிலையாக 'காஸ்யப' பயன்படுத்தலாம்.",
+      "notes_hi": "यदि गोत्र अज्ञात हो, तो सामान्य डिफॉल्ट के रूप में 'काश्यप' उपयोग करें।"
+    },
+    {
+      "parent_slug": "subrahmanya-puja",
+      "step_number": 3,
+      "notes_en": "The Shadakshari mantra 'Saravana Bhava' (six syllables: Sa-Ra-Va-Na-Bha-Va) is the primary mantra of Lord Murugan/Subrahmanya.",
+      "notes_te": "షడాక్షరీ మంత్రం 'షరవణ భవ' (ఆరు అక్షరాలు: శ-ర-వ-న-భ-వ) మురుగన్/సుబ్రహ్మణ్యస్వామి యొక్క ప్రధాన మంత్రం.",
+      "notes_ta": "ஷடாக்ஷரி மந்திரம் 'சரவண பவ' (ஆறு எழுத்துக்கள்: ச-ர-வ-ண-ப-வ) முருகன்/சுப்பிரமண்யனின் முக்கிய மந்திரம்.",
+      "notes_hi": "षडाक्षर मंत्र 'शरवण भव' (छः अक्षर: श-र-व-ण-भ-व) भगवान मुरुगन/सुब्रह्मण्य का मुख्य मंत्र है।"
+    },
+    {
+      "parent_slug": "subrahmanya-puja",
+      "step_number": 4,
+      "notes_en": "The Vel (spear) is the primary symbol of Subrahmanya. 'Arohara' is the traditional Tamil battle cry invoking Murugan's victory.",
+      "notes_te": "వేల్ (ఈటె) సుబ్రహ్మణ్యస్వామి యొక్క ప్రధాన చిహ్నం. 'అరోహరా' అనేది మురుగన్ విజయాన్ని ఆహ్వానించే సంప్రదాయ తమిళ జయఘోష.",
+      "notes_ta": "வேல் (ஈட்டி) சுப்பிரமண்யனின் முக்கிய குறியீடு. 'அரோஹரா' என்பது முருகன் வெற்றியை வணங்கும் மரபான தமிழ் வீர முழக்கம்.",
+      "notes_hi": "वेल (भाला) सुब्रह्मण्य का प्राथमिक प्रतीक है। 'अरोहरा' मुरुगन की विजय का आह्वान करने वाला परंपरागत तमिल जयघोष है।"
+    },
+    {
+      "parent_slug": "subrahmanya-puja",
+      "step_number": 5,
+      "notes_en": "If abhishekam is not possible, simply offer the panchamritam in a vessel before the idol and use it as prasad later.",
+      "notes_te": "అభిషేకం సాధ్యం కాకపోతే, పంచామృతాన్ని ఒక పాత్రలో విగ్రహం ముందు ఉంచి తరువాత ప్రసాదంగా వాడవచ్చు.",
+      "notes_ta": "அபிஷேகம் சாத்தியமில்லாவிட்டால், பஞ்சாமிர்தத்தை ஒரு பாத்திரத்தில் சிலை முன் வைத்து பின்னர் பிரசாதமாக பயன்படுத்தலாம்.",
+      "notes_hi": "यदि अभिषेक संभव न हो, तो पंचामृत को एक पात्र में मूर्ति के सामने रखें और बाद में प्रसाद के रूप में उपयोग करें।"
+    },
+    {
+      "parent_slug": "subrahmanya-puja",
+      "step_number": 7,
+      "notes_en": "Kanda Sashti Kavasam is more commonly recited in Tamil traditions; Subrahmanya Bhujangam is standard in Telugu/Kannada/Sanskrit traditions.",
+      "notes_te": "కందసష్టి కవసం తమిళ సంప్రదాయాల్లో ఎక్కువగా పఠిస్తారు; సుబ్రహ్మణ్య భుజంగం తెలుగు/కన్నడ/సంస్కృత సంప్రదాయాల్లో సాధారణం.",
+      "notes_ta": "கந்த சஷ்டி கவசம் தமிழ் மரபுகளில் மிகவும் பொதுவாக ஓதப்படுகிறது; சுப்பிரமண்ய புஜங்கம் தெலுங்கு/கன்னட/சமஸ்கிருத மரபுகளில் வழக்கமானது.",
+      "notes_hi": "कंद षष्टी कवसम् तमिल परंपराओं में अधिक प्रचलित है; सुब्रह्मण्य भुजंगम तेलुगु/कन्नड/संस्कृत परंपराओं में मानक है।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "subrahmanya-puja",
+      "item_order": 2,
+      "item_name_en": "Vel (small spear symbol or icon)",
+      "substitution_note_en": "Visualise the vel during puja if a physical one is unavailable",
+      "substitution_note_te": "భౌతిక వేల్ లేకుంటే, పూజ సమయంలో మనసులో వేల్‌ను ధ్యానించవచ్చు",
+      "substitution_note_ta": "உடல் ரீதியான வேல் இல்லாவிட்டால், பூஜையின் போது மனதில் வேலை தியானிக்கலாம்",
+      "substitution_note_hi": "यदि भौतिक वेल उपलब्ध न हो, तो पूजा के दौरान मन में वेल का ध्यान करें"
+    },
+    {
+      "group_slug": "subrahmanya-puja",
+      "item_order": 3,
+      "item_name_en": "Red flowers (red lotus, red roses, or red hibiscus)",
+      "substitution_note_en": "Red flowers are most auspicious; marigold or yellow flowers also acceptable",
+      "substitution_note_te": "ఎర్రటి పూలు అత్యంత శుభప్రదం; మరిగె లేదా పసుపు పూలు కూడా అంగీకారయోగ్యం",
+      "substitution_note_ta": "சிவப்பு மலர்கள் மிகவும் சுபகரமானவை; மரிகோல்டு அல்லது மஞ்சள் மலர்களும் ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "लाल फूल सर्वाधिक शुभ हैं; गेंदे या पीले फूल भी स्वीकार्य हैं"
+    },
+    {
+      "group_slug": "subrahmanya-puja",
+      "item_order": 12,
+      "item_name_en": "Peacock feathers (for decoration)",
+      "substitution_note_en": "The peacock is Subrahmanya's vahana; feathers are auspicious decorations",
+      "substitution_note_te": "నెమలి సుబ్రహ్మణ్యస్వామి వాహనం; ఈకలు శుభప్రదమైన అలంకరణలు",
+      "substitution_note_ta": "மயில் சுப்பிரமண்யனின் வாகனம்; தோகைகள் சுபகரமான அலங்காரங்கள்",
+      "substitution_note_hi": "मोर सुब्रह्मण्य का वाहन है; पंख शुभ सजावट हैं"
+    }
+  ],
+  "puja_regional_notes": {
+    "slug": "subrahmanya-puja",
+    "regional_variation_notes_en": "Tamil Nadu: Murugan is the patron deity of Tamil Nadu; Sashti (sixth tithi) is the primary fasting and puja day. Kanda Sashti Kavasam and Thirupugazh are recited. Panakam (jaggery-water-cardamom drink) and vadai (fried lentil donut) are traditional offerings at Murugan temples. The six sacred abodes (Arupadai Veedu) — Tiruchendur, Palani, Swamimalai, Thiruparankundram, Pazhamudircholai, Thiruttani — are key pilgrimage sites. AP/TG: Known as Subrahmanya or Karthikeya; Friday puja on every Shukravara; peacock feathers and vel are used. Karnataka: Subrahmanya temples often combine snake worship (Sarpa Devata aspect); Kukke Subrahmanya is a major pilgrimage temple. Maharashtra/North India: Kartikeya is worshipped mainly on Sashti; less prevalent as a daily puja deity. The home puja described here is the simplified Friday/Sashti form.",
+    "regional_variation_notes_te": "తమిళనాడు: మురుగన్ తమిళనాడు ఆరాధ్య దైవం; షష్టి (ఆరవ తిథి) ప్రధాన ఉపవాస మరియు పూజ రోజు. కందసష్టి కవసం మరియు తిరుపుకழ் పఠిస్తారు. పానకం (బెల్లం-నీళ్ళు-యాలకులు) మరియు వడ మురుగన్ దేవాలయాల్లో సాంప్రదాయ నైవేద్యాలు. ఆరుపడై వీడు — తిరుచెందూర్, పళని, స్వామిమలై, తిరుపరంగుంద్రం, పళముడిర్‌చోలై, తిరుత్తణి — ముఖ్యమైన యాత్రా స్థలాలు. AP/TG: సుబ్రహ్మణ్య లేదా కార్తికేయుడు అని పిలుస్తారు; ప్రతి శుక్రవారం పూజ; నెమలి ఈకలు మరియు వేల్ ఉపయోగిస్తారు. కర్ణాటక: సుబ్రహ్మణ్య దేవాలయాల్లో తరచుగా సర్పదేవత ఆరాధన కూడా జరుగుతుంది; కుక్కే సుబ్రహ్మణ్య ముఖ్య పుణ్యక్షేత్రం. మహారాష్ట్ర/ఉత్తర భారతం: కార్తికేయుని ప్రధానంగా షష్టిలో పూజిస్తారు; నిత్య పూజ దైవంగా తక్కువ ప్రచారంలో ఉన్నారు. ఇక్కడ వివరించిన గృహ పూజ సరళీకృత శుక్రవారం/షష్టి రూపం.",
+    "regional_variation_notes_ta": "தமிழ்நாடு: முருகன் தமிழ்நாட்டின் குலதெய்வம்; சஷ்டி (ஆறாவது திதி) முக்கிய விரதம் மற்றும் பூஜை நாள். கந்த சஷ்டி கவசமும் திருப்புகழும் ஓதப்படுகின்றன. பானகம் (வெல்லம்-நீர்-ஏலக்காய்) மற்றும் வடை முருகன் கோயில்களில் மரபான காணிக்கைகள். ஆறுபடை வீடு — திருசெந்தூர், பழனி, சுவாமிமலை, திருப்பரங்குன்றம், பழமுதிர்ச்சோலை, திருத்தணி — முக்கிய யாத்திரை தலங்கள். AP/TG: சுப்பிரமண்ய அல்லது கார்த்திகேயன் என்று அழைக்கப்படுகிறார்; ஒவ்வொரு வெள்ளிக்கிழமையும் பூஜை; மயில் தோகைகளும் வேலும் பயன்படுத்தப்படுகின்றன. கர்நாடகா: சுப்பிரமண்ய கோயில்களில் பெரும்பாலும் சர்ப்ப தேவதை வழிபாடும் இணைக்கப்படுகிறது; குக்கே சுப்பிரமண்ய முக்கிய யாத்திரை தலம். மகாராஷ்டிரா/வட இந்தியா: கார்த்திகேயன் முக்கியமாக சஷ்டியில் வழிபடப்படுகிறார். இங்கு விவரிக்கப்பட்ட வீட்டு பூஜை எளிமையான வெள்ளி/சஷ்டி வடிவம்.",
+    "regional_variation_notes_hi": "तमिलनाडु: मुरुगन तमिलनाडु के कुलदेवता हैं; सष्टी (छठी तिथि) मुख्य उपवास और पूजा का दिन है। कंद सष्टी कवसम् और तिरुपुगझ पढ़े जाते हैं। पानकम् (गुड़-जल-इलायची) और वड़ा मुरुगन मंदिरों में परंपरागत अर्पण हैं। आरुपदई वीडु — तिरुचेंदूर, पलनी, स्वामिमलई, तिरुपरंगुंड्रम, पझमुदिर्चोलई, तिरुत्तणी — प्रमुख तीर्थ स्थल हैं। AP/TG: सुब्रह्मण्य या कार्तिकेय कहलाते हैं; हर शुक्रवार पूजा; मोर पंख और वेल उपयोग होते हैं। कर्नाटका: सुब्रह्मण्य मंदिरों में अक्सर सर्पदेवता पूजा भी होती है; कुक्के सुब्रह्मण्य प्रमुख तीर्थस्थल है। महाराष्ट्र/उत्तर भारत: कार्तिकेय मुख्यतः सष्टी पर पूजे जाते हैं। यहाँ वर्णित गृह पूजा सरलीकृत शुक्रवार/सष्टी रूप है।"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "_note": "Localized notes for hanuman-puja. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) / (slug + regional_variation_notes_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "hanuman-puja",
+      "step_number": 1,
+      "notes_en": "If gotra is unknown, use 'Kashyapa' as a common default.",
+      "notes_te": "గోత్రం తెలియకపోతే, సాధారణ డిఫాల్ట్‌గా 'కాశ్యప' ఉపయోగించవచ్చు.",
+      "notes_ta": "கோத்திரம் தெரியாவிட்டால், பொதுவான இயல்புநிலையாக 'காஸ்யப' பயன்படுத்தலாம்.",
+      "notes_hi": "यदि गोत्र अज्ञात हो, तो सामान्य डिफॉल्ट के रूप में 'काश्यप' उपयोग करें।"
+    },
+    {
+      "parent_slug": "hanuman-puja",
+      "step_number": 3,
+      "notes_en": "Sesame (til) oil is most auspicious for Hanuman's lamp; mustard oil is also common in North India.",
+      "notes_te": "తిల (నువ్వుల) నూనె హనుమంతుడి దీపానికి అత్యంత శుభప్రదం; నల్లాల నూనె కూడా ఉత్తర భారతంలో సాధారణంగా ఉపయోగిస్తారు.",
+      "notes_ta": "எள் (தில்) எண்ணெய் ஹனுமான் விளக்கிற்கு மிகவும் சுபகரமானது; கடுகு எண்ணெயும் வட இந்தியாவில் பொதுவாக பயன்படுத்தப்படுகிறது.",
+      "notes_hi": "तिल का तेल हनुमान जी के दीप के लिए सर्वाधिक शुभ है; सरसों का तेल भी उत्तर भारत में सामान्यतः प्रयुक्त होता है।"
+    },
+    {
+      "parent_slug": "hanuman-puja",
+      "step_number": 4,
+      "notes_en": "Some traditions apply sindoor only to the forehead or chest of the idol; full-body application is common at major Hanuman temples.",
+      "notes_te": "కొన్ని సంప్రదాయాలు విగ్రహం నుదుటికి లేదా రొమ్ముకు మాత్రమే సింధూరం అలదుతాయి; ప్రధాన హనుమాన్ దేవాలయాలలో శరీరమంతా అలదడం సాధారణం.",
+      "notes_ta": "சில மரபுகளில் சிலையின் நெற்றி அல்லது நெஞ்சில் மட்டும் சிந்தூரம் பூசுவர்; பெரிய ஹனுமான் கோயில்களில் முழு உடலிலும் பூசுவது வழக்கம்.",
+      "notes_hi": "कुछ परंपराओं में मूर्ति के माथे या सीने पर ही सिंदूर लगाया जाता है; प्रमुख हनुमान मंदिरों में पूरे शरीर पर सिंदूर लगाना सामान्य है।"
+    },
+    {
+      "parent_slug": "hanuman-puja",
+      "step_number": 5,
+      "notes_en": "Tulasi leaves are also accepted; do not offer white or yellow flowers without red/orange ones.",
+      "notes_te": "తులసి ఆకులు కూడా అంగీకరిస్తారు; ఎర్రటి/నారింజ పూలు లేకుండా తెల్లటి లేదా పసుపు పూలు అర్పించకూడదు.",
+      "notes_ta": "துளசி இலைகளும் ஏற்றுக்கொள்ளப்படுகின்றன; சிவப்பு/ஆரஞ்சு மலர்கள் இல்லாமல் வெள்ளை அல்லது மஞ்சள் மலர்கள் மட்டும் அர்ப்பணிக்காதீர்கள்.",
+      "notes_hi": "तुलसी पत्ते भी स्वीकार्य हैं; लाल/नारंगी फूलों के बिना केवल सफेद या पीले फूल न अर्पित करें।"
+    },
+    {
+      "parent_slug": "hanuman-puja",
+      "step_number": 7,
+      "notes_en": "Alternatively recite Bajrang Baan or Sundara Kanda from Ramayana for a longer puja.",
+      "notes_te": "ప్రత్యామ్నాయంగా, పొడవైన పూజ కోసం బజరంగ్ బాణ్ లేదా రామాయణం నుండి సుందర కాండ పఠించవచ్చు.",
+      "notes_ta": "மாற்றாக, நீண்ட பூஜைக்கு பஜரங் பாண் அல்லது ராமாயணத்திலிருந்து சுந்தர காண்டம் ஓதலாம்.",
+      "notes_hi": "वैकल्पिक रूप से लंबी पूजा के लिए बजरंग बाण या रामायण से सुंदर काण्ड का पाठ करें।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 2,
+      "item_name_en": "Sindoor (red vermilion)",
+      "substitution_note_en": "Essential for Hanuman puja; no substitute",
+      "substitution_note_te": "హనుమాన్ పూజకు అత్యవసరం; ప్రత్యామ్నాయం లేదు",
+      "substitution_note_ta": "ஹனுமான் பூஜைக்கு அவசியம்; மாற்று இல்லை",
+      "substitution_note_hi": "हनुमान पूजा के लिए अनिवार्य; कोई विकल्प नहीं"
+    },
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 3,
+      "item_name_en": "Jasmine garland (chameli / mallipoo)",
+      "substitution_note_en": "Marigold garland acceptable if jasmine unavailable",
+      "substitution_note_te": "మల్లె అందుబాటులో లేకుంటే మరిగె మాల వాడవచ్చు",
+      "substitution_note_ta": "மல்லிகை கிடைக்காவிட்டால் மரிகோல்டு மாலை ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "यदि चमेली उपलब्ध न हो तो गेंदे की माला स्वीकार्य है"
+    },
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 4,
+      "item_name_en": "Red or orange marigold flowers",
+      "substitution_note_en": "Red flowers are most auspicious for Hanuman",
+      "substitution_note_te": "హనుమంతుడికి ఎర్రటి పూలు అత్యంత శుభప్రదం",
+      "substitution_note_ta": "ஹனுமானுக்கு சிவப்பு மலர்கள் மிகவும் சுபகரமானவை",
+      "substitution_note_hi": "हनुमान जी के लिए लाल फूल सर्वाधिक शुभ हैं"
+    },
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 5,
+      "item_name_en": "Bananas",
+      "substitution_note_en": "Especially dear to Hanuman; offer as naivedyam",
+      "substitution_note_te": "హనుమంతుడికి విశేష ప్రీతికరం; నైవేద్యంగా అర్పించాలి",
+      "substitution_note_ta": "ஹனுமானுக்கு மிகவும் பிரியமானது; நைவேத்தியமாக அர்ப்பணிக்கவும்",
+      "substitution_note_hi": "हनुमान जी को विशेष रूप से प्रिय; नैवेद्य के रूप में अर्पित करें"
+    },
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 7,
+      "item_name_en": "Sesame oil (for lamp)",
+      "substitution_note_en": "Mustard oil acceptable; ghee also used",
+      "substitution_note_te": "నల్లాల నూనె కూడా పనికి వస్తుంది; నెయ్యి కూడా ఉపయోగిస్తారు",
+      "substitution_note_ta": "கடுகு எண்ணெயும் ஏற்றுக்கொள்ளலாம்; நெய்யும் பயன்படுத்தப்படுகிறது",
+      "substitution_note_hi": "सरसों का तेल भी स्वीकार्य है; घी भी प्रयुक्त होता है"
+    },
+    {
+      "group_slug": "hanuman-puja",
+      "item_order": 12,
+      "item_name_en": "Jaggery",
+      "substitution_note_en": "Offered with coconut as naivedyam",
+      "substitution_note_te": "కొబ్బరికాయతో నైవేద్యంగా అర్పించాలి",
+      "substitution_note_ta": "தேங்காயுடன் நைவேத்தியமாக அர்ப்பணிக்கவும்",
+      "substitution_note_hi": "नारियल के साथ नैवेद्य के रूप में अर्पित करें"
+    }
+  ],
+  "puja_regional_notes": {
+    "slug": "hanuman-puja",
+    "regional_variation_notes_en": "North India (UP/Rajasthan/Delhi): boondi laddoo is the quintessential prasad; sindoor and mustard oil are standard at large Hanuman temples (e.g., Sankat Mochan, Varanasi). South India (AP/TG/KA): deity is called Anjaneya; sesame oil lamps (nuvvula noone) are preferred; panakam (jaggery-water drink) and vada (fried lentil donut) are offered at many temples. Tamil Nadu: Anjaneyar temples offer panchaamirtam and banana prasad. Maharashtra: Maruti is the popular name; Saturday Hanuman puja is a major custom, with coconut and laddoo as prasad. The home puja described here is the simplified daily/weekly form; festival-scale pujas (like Hanuman Jayanti) involve priest-led Vedic rituals beyond this guide.",
+    "regional_variation_notes_te": "ఉత్తర భారతం (UP/రాజస్థాన్/ఢిల్లీ): బూందీ లాడూ ముఖ్యమైన ప్రసాదం; పెద్ద హనుమాన్ దేవాలయాల్లో సింధూరం మరియు నల్లాల నూనె (ఉదా. సంకట్ మోచన్, వారణాసి). దక్షిణ భారతం (AP/TG/KA): ఆంజనేయుడు అని పిలుస్తారు; నువ్వుల నూనె దీపాలు ఇష్టపడతారు; చాలా దేవాలయాల్లో పానకం మరియు వడ అర్పిస్తారు. తమిళనాడు: అంజనేయర్ దేవాలయాల్లో పంచామృతం మరియు అరటి పండు ప్రసాదం. మహారాష్ట్ర: మారుతి అని ప్రసిద్ధం; శనివారపు హనుమాన్ పూజ ప్రధాన సంప్రదాయం, కొబ్బరికాయ మరియు లాడూ ప్రసాదం. ఇక్కడ వివరించిన గృహ పూజ సరళీకృత నిత్య/వారపు రూపం; హనుమాన్ జయంతి వంటి పండుగ స్థాయి పూజలకు ఈ మార్గదర్శిని పరిధి దాటిన వైదిక విధులతో పూజారి అవసరం.",
+    "regional_variation_notes_ta": "வட இந்தியா (UP/ராஜஸ்தான்/டெல்லி): பூந்தி லட்டு முக்கிய பிரசாதம்; பெரிய ஹனுமான் கோயில்களில் சிந்தூரமும் கடுகு எண்ணெயும் வழக்கம் (எ.கா. சங்கட் மோசன், வாரணாசி). தென்னிந்தியா (AP/TG/KA): ஆஞ்சநேயர் என்று அழைக்கப்படுகிறார்; எள் எண்ணெய் விளக்குகள் விரும்பப்படுகின்றன; பல கோயில்களில் பானகம் மற்றும் வடை அர்ப்பணிக்கப்படுகின்றன. தமிழ்நாடு: ஆஞ்சநேயர் கோயில்களில் பஞ்சாமிர்தம் மற்றும் வாழைப்பழம் பிரசாதம். மகாராஷ்டிரா: மாருதி என்று பிரபலமான பெயர்; சனிக்கிழமை ஹனுமான் பூஜை முக்கிய வழக்கம், தேங்காய் மற்றும் லட்டு பிரசாதம். இங்கு விவரிக்கப்பட்ட வீட்டு பூஜை எளிமையான தினசரி/வாராந்திர வடிவம்; ஹனுமான் ஜெயந்தி போன்ற திருவிழா அளவிலான பூஜைகளுக்கு இந்த வழிகாட்டியின் எல்லைக்கு அப்பால் வேதமந்திர சடங்குகளுடன் ஒரு பூஜாரி தேவை.",
+    "regional_variation_notes_hi": "उत्तर भारत (UP/राजस्थान/दिल्ली): बूंदी लड्डू मुख्य प्रसाद है; बड़े हनुमान मंदिरों में सिंदूर और सरसों का तेल सामान्य है (जैसे संकट मोचन, वाराणसी)। दक्षिण भारत (AP/TG/KA): अंजनेय कहलाते हैं; तिल के तेल के दीप पसंद किए जाते हैं; कई मंदिरों में पानकम और वड़ा अर्पित होते हैं। तमिलनाडु: अंजनेयर मंदिरों में पंचामृतम् और केले का प्रसाद। महाराष्ट्र: मारुति नाम प्रचलित है; शनिवार हनुमान पूजा प्रमुख परंपरा है, नारियल और लड्डू का प्रसाद। यहाँ वर्णित गृह पूजा सरलीकृत दैनिक/साप्ताहिक रूप है; हनुमान जयंती जैसे महोत्सव-स्तरीय पूजाओं में वैदिक मंत्रों के साथ पुजारी की आवश्यकता होती है।"
+  }
+}

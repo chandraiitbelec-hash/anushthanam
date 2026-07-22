@@ -1,0 +1,91 @@
+{
+  "_note": "Localized notes for durga-puja. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) / (slug + regional_variation_notes_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "durga-puja",
+      "step_number": 1,
+      "notes_en": "If gotra is unknown, use 'Kashyapa' as a common default.",
+      "notes_te": "గోత్రం తెలియకపోతే, సాధారణ డిఫాల్ట్‌గా 'కాశ్యప' ఉపయోగించవచ్చు.",
+      "notes_ta": "கோத்திரம் தெரியாவிட்டால், பொதுவான இயல்புநிலையாக 'காஸ்யப' பயன்படுத்தலாம்.",
+      "notes_hi": "यदि गोत्र अज्ञात हो, तो सामान्य डिफॉल्ट के रूप में 'काश्यप' उपयोग करें।"
+    },
+    {
+      "parent_slug": "durga-puja",
+      "step_number": 3,
+      "notes_en": "If a metal pot is unavailable, a clean steel cup with mango leaves and a coconut on top is acceptable.",
+      "notes_te": "లోహపాత్ర లేకుంటే, మామిడి ఆకులు పెట్టి పైన కొబ్బరికాయ ఉంచిన శుభ్రమైన స్టీలు గ్లాసు పనికి వస్తుంది.",
+      "notes_ta": "உலோக பாத்திரம் இல்லாவிட்டால், மாவிலை வைத்து மேல் தேங்காய் வைத்த சுத்தமான ஸ்டீல் கோப்பை ஏற்றுக்கொள்ளலாம்.",
+      "notes_hi": "यदि धातु का पात्र उपलब्ध न हो, तो आम के पत्ते लगाकर ऊपर नारियल रखे एक साफ स्टील के गिलास से काम चल सकता है।"
+    },
+    {
+      "parent_slug": "durga-puja",
+      "step_number": 5,
+      "notes_en": "Red flowers are essential for Durga puja; never offer white flowers (associated with Shiva or Saraswati). Hibiscus (mandaram) is traditional in South India.",
+      "notes_te": "దుర్గా పూజలో ఎర్రటి పూలు అత్యవసరం; తెల్లటి పూలు (శివుడు లేదా సరస్వతితో సంబంధమైనవి) అర్పించకూడదు. దక్షిణ భారతంలో మందారం (హిబిస్కస్) సంప్రదాయంగా ఉపయోగిస్తారు.",
+      "notes_ta": "துர்கா பூஜையில் சிவப்பு மலர்கள் அவசியம்; வெள்ளை மலர்கள் (சிவன் அல்லது சரஸ்வதியுடன் தொடர்புடையவை) அர்ப்பணிக்கக் கூடாது. தென்னிந்தியாவில் செம்பருத்தி (மந்தாரம்) மரபுவழியாகப் பயன்படுத்தப்படுகிறது.",
+      "notes_hi": "दुर्गा पूजा में लाल फूल अनिवार्य हैं; सफेद फूल (शिव या सरस्वती से संबंधित) कभी न चढ़ाएं। दक्षिण भारत में गुड़हल (मंदारम) पारंपरिक रूप से उपयोग किया जाता है।"
+    },
+    {
+      "parent_slug": "durga-puja",
+      "step_number": 7,
+      "notes_en": "Alternatively, recite Devi Aparadha Kshamapana Stotram or Mahishasura Mardini Stotram.",
+      "notes_te": "ప్రత్యామ్నాయంగా, దేవీ అపరాధ క్షమాపణ స్తోత్రం లేదా మహిషాసుర మర్దిని స్తోత్రం పఠించవచ్చు.",
+      "notes_ta": "மாற்றாக, தேவி அபராத க்ஷமாபண ஸ்தோத்திரம் அல்லது மஹிஷாசுர மர்தினி ஸ்தோத்திரம் ஓதலாம்.",
+      "notes_hi": "वैकल्पिक रूप से, देवी अपराध क्षमापण स्तोत्र या महिषासुर मर्दिनी स्तोत्र का पाठ करें।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "durga-puja",
+      "item_order": 2,
+      "item_name_en": "Red flowers (hibiscus, roses, or marigold)",
+      "substitution_note_en": "Red flowers are essential; do not use white flowers for Durga puja",
+      "substitution_note_te": "ఎర్రటి పూలు తప్పనిసరి; దుర్గా పూజలో తెల్లటి పూలు ఉపయోగించకూడదు",
+      "substitution_note_ta": "சிவப்பு மலர்கள் அவசியம்; துர்கா பூஜையில் வெள்ளை மலர்கள் பயன்படுத்தக் கூடாது",
+      "substitution_note_hi": "लाल फूल आवश्यक हैं; दुर्गा पूजा में सफेद फूल का उपयोग न करें"
+    },
+    {
+      "group_slug": "durga-puja",
+      "item_order": 3,
+      "item_name_en": "Kumkum (vermilion)",
+      "substitution_note_en": "Essential for Shakti worship; no substitute",
+      "substitution_note_te": "శక్తి ఆరాధనకు అత్యవసరం; ప్రత్యామ్నాయం లేదు",
+      "substitution_note_ta": "சக்தி வழிபாட்டிற்கு அவசியம்; மாற்று இல்லை",
+      "substitution_note_hi": "शक्ति पूजा के लिए अनिवार्य; कोई विकल्प नहीं"
+    },
+    {
+      "group_slug": "durga-puja",
+      "item_order": 6,
+      "item_name_en": "Mango leaves",
+      "substitution_note_en": "For kalash rim; fresh or dried both acceptable",
+      "substitution_note_te": "కళశం అంచుకు; తాజావి లేదా ఎండినవి రెండూ పనికి వస్తాయి",
+      "substitution_note_ta": "கலசத்தின் விளிம்பிற்காக; பச்சையாக அல்லது உலர்ந்ததும் ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "कलश के किनारे के लिए; ताजे या सूखे दोनों स्वीकार्य हैं"
+    },
+    {
+      "group_slug": "durga-puja",
+      "item_order": 10,
+      "item_name_en": "Red cloth for altar",
+      "substitution_note_en": "Red colour is auspicious for Durga; orange or saffron acceptable",
+      "substitution_note_te": "దుర్గమాతకు ఎరుపు రంగు శుభప్రదం; నారింజ లేదా కాషాయ కూడా అంగీకారయోగ్యం",
+      "substitution_note_ta": "துர்காவுக்கு சிவப்பு நிறம் சுபகரமானது; ஆரஞ்சு அல்லது காவி நிறமும் ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "दुर्गा के लिए लाल रंग शुभ है; नारंगी या केसरिया भी स्वीकार्य है"
+    },
+    {
+      "group_slug": "durga-puja",
+      "item_order": 13,
+      "item_name_en": "Sacred thread (kalava / mauli)",
+      "substitution_note_en": "Red or red-and-yellow mauli for Devi",
+      "substitution_note_te": "దేవికి ఎరుపు లేదా ఎరుపు-పసుపు మౌలి ఉపయోగించాలి",
+      "substitution_note_ta": "தேவிக்கு சிவப்பு அல்லது சிவப்பு-மஞ்சள் மௌலி பயன்படுத்தவும்",
+      "substitution_note_hi": "देवी के लिए लाल या लाल-पीला मौली"
+    }
+  ],
+  "puja_regional_notes": {
+    "slug": "durga-puja",
+    "regional_variation_notes_en": "Bengal (Durga Puja festival): khichdi and labra (mixed vegetable curry) are prepared as prasad; the festival spans five days (Shashthi to Dashami) with clay idols immersed at the end. South India (AP/TG/KA): sweet pongal and coconut are standard prasad; celebrated prominently during Navaratri. Maharashtra: sheera (semolina sweet) and fresh fruits. The home puja described here is the simplified single-day version performed any Friday or Tuesday, or on Navaratri; the full festival form requires a priest.",
+    "regional_variation_notes_te": "బెంగాల్ (దుర్గా పూజ పండుగ): ఖిచ్డీ మరియు లాబ్రా (కూరగాయల కూర) ప్రసాదంగా తయారు చేస్తారు; పండుగ ఐదు రోజులు (షష్టి నుండి దశమి) జరుగుతుంది, చివరిలో మట్టి విగ్రహాలు నిమజ్జనం చేస్తారు. దక్షిణ భారతం (AP/TG/KA): తీపి పొంగలి, కొబ్బరికాయ సాధారణ ప్రసాదాలు; నవరాత్రులలో విశేషంగా జరుపుతారు. మహారాష్ట్ర: శీర (రవ్వ తీపి), తాజా పళ్ళు. ఇక్కడ వివరించిన గృహ పూజ ఏ శుక్రవారం, మంగళవారం లేదా నవరాత్రులలో ఆచరించే సరళీకృత ఏకదిన రూపం; పూర్ణ పండుగ రూపానికి పూజారి అవసరం.",
+    "regional_variation_notes_ta": "வங்காளம் (துர்கா பூஜை திருவிழா): கிச்டி மற்றும் லாப்ரா (கலவை காய்கறி கறி) பிரசாதமாக தயாரிக்கப்படுகின்றன; திருவிழா ஐந்து நாட்கள் (சஷ்டி முதல் தசமி) நடைபெறுகிறது, இறுதியில் களிமண் சிலைகள் நீரில் விசர்ஜனம் செய்யப்படுகின்றன. தென்னிந்தியா (AP/TG/KA): சர்க்கரை பொங்கல், தேங்காய் வழக்கமான பிரசாதம்; நவராத்திரியில் சிறப்பாக கொண்டாடப்படுகிறது. மகாராஷ்டிரா: சீரா (ரவை இனிப்பு), பதார்த்த பழங்கள். இங்கு விவரிக்கப்பட்ட வீட்டு பூஜை எந்த வெள்ளி, செவ்வாய் அல்லது நவராத்திரியில் செய்யக்கூடிய எளிமையான ஒரு நாள் வடிவம்; முழு திருவிழா வடிவத்திற்கு ஒரு பூஜாரி தேவை.",
+    "regional_variation_notes_hi": "बंगाल (दुर्गा पूजा उत्सव): प्रसाद में खिचड़ी और लाब्रा (मिश्रित सब्जी की सब्जी) तैयार की जाती है; उत्सव पाँच दिनों (षष्टी से दशमी) तक चलता है, अंत में मिट्टी की मूर्तियाँ विसर्जित की जाती हैं। दक्षिण भारत (AP/TG/KA): मीठा पोंगल और नारियल सामान्य प्रसाद हैं; नवरात्रि के दौरान विशेष रूप से मनाया जाता है। महाराष्ट्र: शीरा (सूजी की मिठाई) और ताजे फल। यहाँ वर्णित गृह पूजा किसी भी शुक्रवार, मंगलवार या नवरात्रि पर की जाने वाली सरलीकृत एक-दिवसीय पूजा है; पूर्ण पर्व-रूप के लिए पुजारी आवश्यक है।"
+  }
+}

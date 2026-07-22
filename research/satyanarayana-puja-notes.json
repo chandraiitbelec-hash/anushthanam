@@ -1,0 +1,66 @@
+{
+  "_note": "Localized notes for satyanarayana-puja. Step 6 notes_en was removed by cleanup-internal-flag-notes.mjs (was [FLAG-2] authoring placeholder) — no translation row needed. Uploader matches by (parent_slug + notes_en) / (group_slug + substitution_note_en) / (slug + regional_variation_notes_en) and fills only empty te/ta/hi cells.",
+  "procedure_steps_notes": [
+    {
+      "parent_slug": "satyanarayana-puja",
+      "step_number": 1,
+      "notes_en": "If gotra is unknown, use \"Kashyapa\" as a common default.",
+      "notes_te": "గోత్రం తెలియకపోతే, సాధారణ డిఫాల్ట్‌గా 'కాశ్యప' ఉపయోగించవచ్చు.",
+      "notes_ta": "கோத்திரம் தெரியாவிட்டால், பொதுவான இயல்புநிலையாக 'காஸ்யப' பயன்படுத்தலாம்.",
+      "notes_hi": "यदि गोत्र अज्ञात हो, तो सामान्य डिफॉल्ट के रूप में 'काश्यप' उपयोग करें।"
+    },
+    {
+      "parent_slug": "satyanarayana-puja",
+      "step_number": 3,
+      "notes_en": "If a kalash is unavailable, a clean steel cup with mango leaves is acceptable.",
+      "notes_te": "కళశం అందుబాటులో లేకుంటే, మామిడి ఆకులు పెట్టిన శుభ్రమైన స్టీలు గ్లాసు పనికి వస్తుంది.",
+      "notes_ta": "கலசம் கிடைக்காவிட்டால், மாவிலை வைத்த சுத்தமான ஸ்டீல் கோப்பை ஏற்றுக்கொள்ளலாம்.",
+      "notes_hi": "यदि कलश उपलब्ध न हो, तो आम के पत्ते लगाया हुआ साफ स्टील का गिलास स्वीकार्य है।"
+    }
+  ],
+  "material_items_notes": [
+    {
+      "group_slug": "satyanarayana-puja",
+      "item_order": 2,
+      "item_name_en": "Plantain (banana) leaves",
+      "substitution_note_en": "Use a clean metal tray if banana leaves unavailable",
+      "substitution_note_te": "అరటి ఆకులు లేకుంటే శుభ్రమైన లోహ పళ్ళెం ఉపయోగించవచ్చు",
+      "substitution_note_ta": "வாழை இலைகள் கிடைக்காவிட்டால் சுத்தமான உலோக தட்டு பயன்படுத்தலாம்",
+      "substitution_note_hi": "केले के पत्ते न मिलें तो साफ धातु की थाली उपयोग करें"
+    },
+    {
+      "group_slug": "satyanarayana-puja",
+      "item_order": 6,
+      "item_name_en": "Tulasi (holy basil) leaves",
+      "substitution_note_en": "Highly recommended for Vishnu-form deities",
+      "substitution_note_te": "విష్ణు స్వరూప దేవతలకు అత్యంత సిఫార్సు చేయబడినది",
+      "substitution_note_ta": "விஷ்ணு வடிவ தெய்வங்களுக்கு மிகவும் பரிந்துரைக்கப்படுகிறது",
+      "substitution_note_hi": "विष्णु-स्वरूप देवताओं के लिए अत्यधिक अनुशंसित"
+    },
+    {
+      "group_slug": "satyanarayana-puja",
+      "item_order": 7,
+      "item_name_en": "Flowers (lotus or fragrant flowers)",
+      "substitution_note_en": "Marigold or jasmine acceptable",
+      "substitution_note_te": "మరిగె లేదా మల్లె కూడా అంగీకారయోగ్యం",
+      "substitution_note_ta": "மரிகோல்டு அல்லது மல்லிகையும் ஏற்றுக்கொள்ளலாம்",
+      "substitution_note_hi": "गेंदा या चमेली भी स्वीकार्य है"
+    },
+    {
+      "group_slug": "satyanarayana-puja",
+      "item_order": 13,
+      "item_name_en": "Semolina or wheat flour (for prasad)",
+      "substitution_note_en": "North Indian variant; South India uses banana and coconut instead",
+      "substitution_note_te": "ఉత్తరాది వేరియంట్; దక్షిణ భారతంలో బదులుగా అరటి పండు మరియు కొబ్బరికాయ ఉపయోగిస్తారు",
+      "substitution_note_ta": "வட இந்திய வகை; தென்னிந்தியாவில் பதிலாக வாழைப்பழமும் தேங்காயும் பயன்படுத்தப்படுகின்றன",
+      "substitution_note_hi": "उत्तर भारतीय संस्करण; दक्षिण भारत में इसके बजाय केला और नारियल उपयोग होता है"
+    }
+  ],
+  "puja_regional_notes": {
+    "slug": "satyanarayana-puja",
+    "regional_variation_notes_en": "North India: prasad is suji (semolina) halwa. South India (AP/TG/KA): banana, coconut, and sweet pongal. Coastal Andhra: panchamrit and tender coconut. Priests in some families read all five chapters of the Satyanarayana Katha; simplified home versions cover the core story.",
+    "regional_variation_notes_te": "ఉత్తర భారతం: ప్రసాదం సూజి (రవ్వ) హల్వా. దక్షిణ భారతం (AP/TG/KA): అరటి పండు, కొబ్బరికాయ మరియు తీపి పొంగలి. తీర ఆంధ్ర: పంచామృతం మరియు లేత కొబ్బరి. కొన్ని కుటుంబాల పూజారులు సత్యనారాయణ కథ యొక్క అన్ని ఐదు అధ్యాయాలు పఠిస్తారు; సరళీకృత గృహ పద్ధతులు కీలక కథను మాత్రమే చెప్తాయి.",
+    "regional_variation_notes_ta": "வட இந்தியா: பிரசாதம் சூஜி (ரவை) அல்வா. தென்னிந்தியா (AP/TG/KA): வாழைப்பழம், தேங்காய், சர்க்கரை பொங்கல். கோஸ்டல் ஆந்திரா: பஞ்சாமிர்தம் மற்றும் இளநீர். சில குடும்பங்களில் பூஜாரிகள் சத்தியநாராயண கதையின் ஐந்து அத்தியாயங்களையும் படிக்கிறார்கள்; எளிமைப்படுத்தப்பட்ட வீட்டு முறைகள் முக்கிய கதையை மட்டும் உள்ளடக்குகின்றன.",
+    "regional_variation_notes_hi": "उत्तर भारत: प्रसाद सूजी (रवे) का हलवा। दक्षिण भारत (AP/TG/KA): केला, नारियल और मीठा पोंगल। कोस्टल आंध्र: पंचामृत और ताजा नारियल। कुछ परिवारों के पुजारी सत्यनारायण कथा के सभी पाँच अध्याय पढ़ते हैं; सरलीकृत घरेलू संस्करण मूल कथा को कवर करते हैं।"
+  }
+}
