@@ -106,14 +106,14 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
               )
             )}
 
-            {step.notes_en && (
-              <p style={{
+            {(step[`notes_${lang}` as keyof ProcedureStep] as string || step.notes_en) && (
+              <p className={scriptClass} style={{
                 fontSize: '12px',
                 color: 'var(--color-text-secondary)',
                 margin: '8px 0 0',
                 fontStyle: 'italic',
               }}>
-                {step.notes_en}
+                {step[`notes_${lang}` as keyof ProcedureStep] as string || step.notes_en}
               </p>
             )}
           </div>

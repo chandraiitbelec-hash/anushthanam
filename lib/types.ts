@@ -106,6 +106,9 @@ export type Puja = {
   prasad_ta: string;
   prasad_hi: string;
   regional_variation_notes_en: string;
+  regional_variation_notes_te: string;
+  regional_variation_notes_ta: string;
+  regional_variation_notes_hi: string;
   status: Status;
   translation_status: TranslationStatus;
   // TRUE → shown in "Daily & Frequent" grid; FALSE → occasions-only.
@@ -235,6 +238,9 @@ export type ProcedureStep = {
   recite_shloka_slug: string;
   recite_stanza_range: string;
   notes_en: string;
+  notes_te: string;
+  notes_ta: string;
+  notes_hi: string;
 };
 
 export type MaterialItem = {
@@ -244,9 +250,17 @@ export type MaterialItem = {
   item_name_te: string;
   item_name_ta: string;
   item_name_hi: string;
+  // Quantity keeps numerals as digits; only the unit/descriptor words are localized
+  // (e.g. en "2 cups" → te "2 కప్పులు"). quantity_en is the fallback.
   quantity_en: string;
+  quantity_te: string;
+  quantity_ta: string;
+  quantity_hi: string;
   is_optional: boolean;
   substitution_note_en: string;
+  substitution_note_te: string;
+  substitution_note_ta: string;
+  substitution_note_hi: string;
 };
 
 export type PanchangamDay = {

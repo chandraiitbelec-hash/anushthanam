@@ -37,6 +37,9 @@ export async function getProcedureSteps(parentSlug: string): Promise<ProcedureSt
       recite_shloka_slug: r.recite_shloka_slug,
       recite_stanza_range: r.recite_stanza_range,
       notes_en: r.notes_en,
+      notes_te: r.notes_te,
+      notes_ta: r.notes_ta,
+      notes_hi: r.notes_hi,
     }))
     .sort((a, b) => a.step_number - b.step_number);
 }
@@ -53,8 +56,14 @@ export async function getMaterialItems(groupSlug: string): Promise<MaterialItem[
       item_name_ta: r.item_name_ta,
       item_name_hi: r.item_name_hi,
       quantity_en: r.quantity_en,
+      quantity_te: r.quantity_te,
+      quantity_ta: r.quantity_ta,
+      quantity_hi: r.quantity_hi,
       is_optional: r.is_optional?.toLowerCase() === 'true',
       substitution_note_en: r.substitution_note_en,
+      substitution_note_te: r.substitution_note_te,
+      substitution_note_ta: r.substitution_note_ta,
+      substitution_note_hi: r.substitution_note_hi,
     }))
     .sort((a, b) => a.item_order - b.item_order);
 }
@@ -105,6 +114,9 @@ function rowToPuja(r: Record<string, string>): Puja {
     prasad_ta: r.prasad_ta,
     prasad_hi: r.prasad_hi,
     regional_variation_notes_en: r.regional_variation_notes_en,
+    regional_variation_notes_te: r.regional_variation_notes_te,
+    regional_variation_notes_ta: r.regional_variation_notes_ta,
+    regional_variation_notes_hi: r.regional_variation_notes_hi,
     status: r.status as Puja['status'],
     translation_status: r.translation_status as Puja['translation_status'],
     frequent: r.frequent?.toUpperCase() === 'TRUE',
