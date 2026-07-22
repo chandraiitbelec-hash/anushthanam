@@ -1,5 +1,5 @@
 import { getSheetRows, getSheetRowsLarge, getPublished } from './sheets';
-import type { GodLink, ProcedureStep, MaterialItem } from './types';
+import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion } from './types';
 
 export async function getGodLinks(): Promise<GodLink[]> {
   const rows = await getSheetRows('god_links');
@@ -83,6 +83,95 @@ export async function getShlokaStanzas(shlokaSlug: string) {
 export async function getStoriesForParent(parentSlug: string) {
   const rows = await getPublished('stories_index');
   return rows.filter(r => r.parent_slug === parentSlug);
+}
+
+function rowToPuja(r: Record<string, string>): Puja {
+  return {
+    slug: r.slug,
+    title_en: r.title_en,
+    title_te: r.title_te,
+    title_ta: r.title_ta,
+    title_hi: r.title_hi,
+    deity_slug: r.deity_slug,
+    occasion_type: r.occasion_type as Puja['occasion_type'],
+    duration_minutes: parseInt(r.duration_minutes) || 0,
+    brief_description_en: r.brief_description_en,
+    brief_description_te: r.brief_description_te,
+    brief_description_ta: r.brief_description_ta,
+    brief_description_hi: r.brief_description_hi,
+    materials_group_slug: r.materials_group_slug,
+    prasad_en: r.prasad_en,
+    prasad_te: r.prasad_te,
+    prasad_ta: r.prasad_ta,
+    prasad_hi: r.prasad_hi,
+    regional_variation_notes_en: r.regional_variation_notes_en,
+    status: r.status as Puja['status'],
+    translation_status: r.translation_status as Puja['translation_status'],
+    frequent: r.frequent?.toUpperCase() === 'TRUE',
+  };
+}
+
+// Returns published pujas where frequent=TRUE, sorted by title_en.
+export async function getFrequentPujas(): Promise<Puja[]> {
+  const rows = await getPublished('pujas');
+  return rows.filter(r => r.frequent?.toUpperCase() === 'TRUE').map(rowToPuja);
+}
+
+// Returns all published occasions ordered by display_order.
+export async function getOccasions(): Promise<Occasion[]> {
+  const rows = await getPublished('occasions');
+  return rows
+    .map(r => ({
+      slug: r.slug,
+      title_en: r.title_en,
+      title_te: r.title_te,
+      title_ta: r.title_ta,
+      title_hi: r.title_hi,
+      description_en: r.description_en,
+      description_te: r.description_te,
+      description_ta: r.description_ta,
+      description_hi: r.description_hi,
+      icon: r.icon,
+      display_order: parseInt(r.display_order) || 0,
+      status: r.status as Occasion['status'],
+    }))
+    .sort((a, b) => a.display_order - b.display_order);
+}
+
+// Returns ordered published Puja[] for a given occasion slug via puja_occasions join tab.
+export async function resolveOccasionPujas(occasionSlug: string): Promise<Puja[]> {
+  const [joinRows, pujaRows] = await Promise.all([
+    getSheetRows('puja_occasions'),
+    getPublished('pujas'),
+  ]);
+  const pujaIndex = new Map(pujaRows.map(r => [r.slug, r]));
+  return joinRows
+    .filter(r => r.occasion_slug === occasionSlug)
+    .sort((a, b) => (parseInt(a.display_order) || 0) - (parseInt(b.display_order) || 0))
+    .map(r => pujaIndex.get(r.puja_slug))
+    .filter((r): r is Record<string, string> => Boolean(r))
+    .map(rowToPuja);
+}
+
+// Returns occasionSlug → ordered Puja[] for ALL occasions in one fetch.
+// Used by /pujas list page to hydrate PujasBrowser without N+1 calls.
+export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
+  const [joinRows, pujaRows] = await Promise.all([
+    getSheetRows('puja_occasions'),
+    getPublished('pujas'),
+  ]);
+  const pujaIndex = new Map(pujaRows.map(r => [r.slug, r]));
+  const sorted = [...joinRows].sort(
+    (a, b) => (parseInt(a.display_order) || 0) - (parseInt(b.display_order) || 0)
+  );
+  const result: Record<string, Puja[]> = {};
+  for (const r of sorted) {
+    const pujaRow = pujaIndex.get(r.puja_slug);
+    if (!pujaRow) continue;
+    if (!result[r.occasion_slug]) result[r.occasion_slug] = [];
+    result[r.occasion_slug].push(rowToPuja(pujaRow));
+  }
+  return result;
 }
 
 export async function getUpcoming(limit?: number) {

@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
-import { getPublished } from '@/lib/sheets';
-import type { Puja } from '@/lib/types';
-import EntityCard from '@/components/EntityCard';
+import { getFrequentPujas, getOccasions, getAllOccasionPujas } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
-import ListPageHeader from '@/components/ListPageHeader';
-import EmptyState from '@/components/EmptyState';
+import PujasBrowser from '@/components/PujasBrowser';
 
 export const revalidate = 3600;
 
@@ -14,32 +11,33 @@ export const metadata: Metadata = {
 };
 
 export default async function PujasPage() {
-  const rows = await getPublished('pujas');
-  const pujas = rows as unknown as Puja[];
+  // Tabs `occasions` and `puja_occasions` may not exist in Sheets until the
+  // setup script runs — catch those errors so the page still renders.
+  const [frequentPujas, occasions, occasionPujas] = await Promise.all([
+    getFrequentPujas().catch(() => []),
+    getOccasions().catch(() => []),
+    getAllOccasionPujas().catch(() => ({})),
+  ]);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[{ label: 'Pujas' }]} />
-      <ListPageHeader
-        titles={{ en: 'Pujas', te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' }}
-        count={pujas.length}
-        countLabels={{ en: 'pujas', te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' }}
+
+      <h1 style={{
+        fontFamily: 'var(--font-display)',
+        fontSize: 'clamp(28px, 4vw, 40px)',
+        fontWeight: 600,
+        color: 'var(--color-text-primary)',
+        margin: '0 0 32px',
+      }}>
+        Pujas
+      </h1>
+
+      <PujasBrowser
+        frequentPujas={frequentPujas}
+        occasions={occasions}
+        occasionPujas={occasionPujas}
       />
-      {pujas.length === 0 ? (
-        <EmptyState type="pujas" />
-      ) : (
-        <div className="entity-grid">
-          {pujas.map(p => (
-            <EntityCard
-              key={p.slug}
-              href={`/pujas/${p.slug}`}
-              names={{ en: p.title_en, te: p.title_te, ta: p.title_ta, hi: p.title_hi }}
-              badge={p.duration_minutes ? `${p.duration_minutes} min` : undefined}
-              badgeColor="gold"
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

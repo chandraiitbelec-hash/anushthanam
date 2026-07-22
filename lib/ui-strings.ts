@@ -83,6 +83,13 @@ type UiStrings = {
   themeLight: string;
   themeDark: string;
   themeSystem: string;
+  // Pujas two-section browser
+  pujasDaily: string;
+  pujasOccasions: string;
+  pujasSelectOccasion: string;
+  pujasNoOccasionPujas: string;
+  pujasShowPujas: string;
+  pujasHidePujas: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -152,6 +159,12 @@ export const UI: Record<Language, UiStrings> = {
     themeLight: '☀ Light',
     themeDark: '☾ Dark',
     themeSystem: '⊙ System',
+    pujasDaily: 'Daily & Frequent',
+    pujasOccasions: 'For Occasions',
+    pujasSelectOccasion: 'Select an occasion to see related pujas.',
+    pujasNoOccasionPujas: 'No pujas listed for this occasion yet.',
+    pujasShowPujas: 'Show pujas',
+    pujasHidePujas: 'Hide pujas',
   },
   te: {
     tithi: 'తిథి',
@@ -219,6 +232,12 @@ export const UI: Record<Language, UiStrings> = {
     themeLight: '☀ వెలుతురు',
     themeDark: '☾ చీకటి',
     themeSystem: '⊙ సిస్టమ్',
+    pujasDaily: 'రోజువారీ & తరుచుగా',
+    pujasOccasions: 'సందర్భాల కోసం',
+    pujasSelectOccasion: 'సంబంధిత పూజలు చూడటానికి ఒక సందర్భాన్ని ఎంచుకోండి.',
+    pujasNoOccasionPujas: 'ఈ సందర్భానికి ఇంకా పూజలు జోడించబడలేదు.',
+    pujasShowPujas: 'పూజలు చూపించు',
+    pujasHidePujas: 'పూజలు దాచు',
   },
   ta: {
     tithi: 'திதி',
@@ -286,6 +305,12 @@ export const UI: Record<Language, UiStrings> = {
     themeLight: '☀ வெளிச்சம்',
     themeDark: '☾ இருட்டு',
     themeSystem: '⊙ கணினி',
+    pujasDaily: 'தினசரி & அடிக்கடி',
+    pujasOccasions: 'சந்தர்ப்பங்களுக்கு',
+    pujasSelectOccasion: 'தொடர்புடைய பூஜைகளைக் காண ஒரு சந்தர்ப்பத்தை தேர்ந்தெடுக்கவும்.',
+    pujasNoOccasionPujas: 'இந்த சந்தர்ப்பத்திற்கு இன்னும் பூஜைகள் சேர்க்கப்படவில்லை.',
+    pujasShowPujas: 'பூஜைகள் காட்டு',
+    pujasHidePujas: 'பூஜைகள் மறை',
   },
   hi: {
     tithi: 'तिथि',
@@ -353,5 +378,11 @@ export const UI: Record<Language, UiStrings> = {
     themeLight: '☀ उजाला',
     themeDark: '☾ अंधेरा',
     themeSystem: '⊙ सिस्टम',
+    pujasDaily: 'दैनिक & नियमित',
+    pujasOccasions: 'अवसरों के लिए',
+    pujasSelectOccasion: 'संबंधित पूजाएँ देखने के लिए एक अवसर चुनें।',
+    pujasNoOccasionPujas: 'इस अवसर के लिए अभी तक कोई पूजा नहीं जोड़ी गई है।',
+    pujasShowPujas: 'पूजाएं दिखाएं',
+    pujasHidePujas: 'पूजाएं छुपाएं',
   },
 };

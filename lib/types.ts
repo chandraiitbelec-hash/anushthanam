@@ -108,6 +108,34 @@ export type Puja = {
   regional_variation_notes_en: string;
   status: Status;
   translation_status: TranslationStatus;
+  // TRUE → shown in "Daily & Frequent" grid; FALSE → occasions-only.
+  // A puja can be frequent AND mapped to occasions simultaneously.
+  frequent: boolean;
+};
+
+// Life-occasion (samskara / one-time context).
+// Section 2 of the Pujas experience: "Pujas for Occasions".
+// Many-to-many with Puja via puja_occasions join tab.
+export type Occasion = {
+  slug: string;
+  title_en: string;
+  title_te: string;
+  title_ta: string;
+  title_hi: string;
+  description_en: string;
+  description_te: string;
+  description_ta: string;
+  description_hi: string;
+  icon: string;
+  display_order: number;
+  status: Status;
+};
+
+// Join row from puja_occasions tab.
+export type PujaOccasion = {
+  occasion_slug: string;
+  puja_slug: string;
+  display_order: number;
 };
 
 export type Festival = {

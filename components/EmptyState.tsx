@@ -3,7 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import type { Language } from '@/lib/types';
 
-export type EmptyStateType = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas';
+export type EmptyStateType = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas';
 
 type Copy = { icon: string; title: Record<Language, string>; body: Record<Language, string> };
 
@@ -32,6 +32,16 @@ const COPY: Record<EmptyStateType, Copy> = {
     icon: '📖',
     title: { en: 'No shlokas published yet', te: 'ఇంకా శ్లోకాలు ప్రచురించబడలేదు', ta: 'இன்னும் ஸ்லோகங்கள் வெளியிடப்படவில்லை', hi: 'अभी तक कोई श्लोक प्रकाशित नहीं' },
     body: { en: 'Shlokas and stotras will appear here once published.', te: 'ప్రచురించిన తర్వాత శ్లోకాలు, స్తోత్రాలు ఇక్కడ కనిపిస్తాయి.', ta: 'வெளியிடப்பட்டவுடன் ஸ்லோகங்கள் இங்கே தோன்றும்.', hi: 'प्रकाशित होने पर श्लोक और स्तोत्र यहाँ दिखाई देंगे।' },
+  },
+  occasions: {
+    icon: '🏠',
+    title: { en: 'No occasions published yet', te: 'ఇంకా సందర్భాలు ప్రచురించబడలేదు', ta: 'இன்னும் சந்தர்ப்பங்கள் வெளியிடப்படவில்லை', hi: 'अभी तक कोई अवसर प्रकाशित नहीं' },
+    body: { en: 'Life occasions and samskaras will appear here once published.', te: 'ప్రచురించిన తర్వాత జీవిత సందర్భాలు ఇక్కడ కనిపిస్తాయి.', ta: 'வெளியிடப்பட்டவுடன் வாழ்க்கை சந்தர்ப்பங்கள் இங்கே தோன்றும்.', hi: 'प्रकाशित होने पर जीवन-अवसर यहाँ दिखाई देंगे।' },
+  },
+  'occasion-pujas': {
+    icon: '🪷',
+    title: { en: 'No pujas listed yet', te: 'ఇంకా పూజలు జోడించబడలేదు', ta: 'இன்னும் பூஜைகள் சேர்க்கப்படவில்லை', hi: 'अभी तक कोई पूजा नहीं जोड़ी गई' },
+    body: { en: 'Puja guides for this occasion will appear here once added.', te: 'ఈ సందర్భానికి పూజా మార్గదర్శకాలు జోడించిన తర్వాత ఇక్కడ కనిపిస్తాయి.', ta: 'இந்த சந்தர்ப்பத்திற்கான பூஜை வழிகாட்டிகள் சேர்க்கப்பட்டவுடன் இங்கே தோன்றும்.', hi: 'इस अवसर के लिए पूजा मार्गदर्शिकाएँ जोड़े जाने पर यहाँ दिखाई देंगी।' },
   },
 };
 

@@ -70,9 +70,31 @@ Covers gods, festivals, vrathams, shloka titles — not puja or story body text.
 
 ### Google Sheets tabs
 
-`gods`, `shlokas`, `shloka_stanzas`, `pujas`, `festivals`, `vrathams`, `stories_index`, `god_links`, `procedure_steps`, `material_items`, `panchangam`, `tags`, `config`
+`gods`, `shlokas`, `shloka_stanzas`, `pujas`, `festivals`, `vrathams`, `stories_index`, `god_links`, `procedure_steps`, `material_items`, `panchangam`, `tags`, `config`, `occasions`, `puja_occasions`
 
 `god_links` is the join table for all deity↔entity relationships — never add cross-links directly to entity tabs.
+
+`occasions` holds life-events / samskaras (housewarming, wedding, aksharabhyasam, …) — NOT calendar festivals, NOT vrathams. Schema: `slug, title_en/te/ta/hi, description_en/te/ta/hi, icon (emoji), display_order, status`.
+
+`puja_occasions` is the many-to-many join between pujas and occasions. Schema: `occasion_slug, puja_slug, display_order`. A puja can appear under multiple occasions.
+
+`pujas.frequent` (TRUE|FALSE) — when TRUE the puja appears in the "Daily & Frequent" grid on /pujas. A puja can be `frequent=TRUE` AND also mapped to occasions simultaneously (e.g. Vinayaka Puja).
+
+### /pujas information architecture
+
+`/pujas` has two sections toggled by a tab bar:
+1. **Daily & Frequent** — card grid of pujas where `frequent=TRUE`.
+2. **For Occasions** — accordion list of occasions; selecting one reveals its mapped pujas via `puja_occasions`.
+
+Detail pages (`/pujas/[slug]`, `PujaProfile`) are unchanged.
+
+Helper functions (all in `lib/relations.ts`):
+- `getFrequentPujas()` → `Puja[]` (published, frequent=TRUE)
+- `getOccasions()` → `Occasion[]` (published, ordered by display_order)
+- `resolveOccasionPujas(occasionSlug)` → `Puja[]` (via puja_occasions)
+- `getAllOccasionPujas()` → `Record<string, Puja[]>` (bulk fetch for the list page)
+
+Run `node scripts/setup-puja-occasions.mjs --write` to add the `frequent` column, backfill the 4 starter pujas, and create the `occasions` + `puja_occasions` tabs in Sheets.
 
 ### Environment variables
 
