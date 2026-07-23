@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
-import type { God } from '@/lib/types';
+import { rowToGod } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function GodsPage() {
-  const rows = await getPublished('gods');
-  const gods = rows as unknown as God[];
+  const rows = await getPublished('gods').catch(() => []);
+  const gods = rows.map(rowToGod);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>

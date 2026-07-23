@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
-import type { Puja } from '@/lib/types';
+import { getProcedureSteps, getMaterialItems, rowToPuja } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
 import { pageMeta } from '@/lib/seo';
@@ -9,27 +8,31 @@ import { pageMeta } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('pujas');
-  return (rows as unknown as Puja[]).map(p => ({ slug: p.slug }));
+  const rows = await getPublished('pujas').catch(() => []);
+  return rows.map(rowToPuja).map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const rows = await getPublished('pujas');
-  const puja = (rows as unknown as Puja[]).find(p => p.slug === slug);
-  if (!puja) return { title: 'Anuṣṭhāna' };
-  return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
+  try {
+    const { slug } = await params;
+    const rows = await getPublished('pujas');
+    const puja = rows.map(rowToPuja).find(p => p.slug === slug);
+    if (!puja) return { title: 'Anuṣṭhāna' };
+    return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
+  } catch {
+    return { title: 'Anuṣṭhāna' };
+  }
 }
 
 export default async function PujaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('pujas');
-  const puja = (rows as unknown as Puja[]).find(p => p.slug === slug);
+  const rows = await getPublished('pujas').catch(() => []);
+  const puja = rows.map(rowToPuja).find(p => p.slug === slug);
   if (!puja) notFound();
 
   const [steps, materials] = await Promise.all([
-    getProcedureSteps(slug),
-    getMaterialItems(slug),
+    getProcedureSteps(slug).catch(() => []),
+    getMaterialItems(slug).catch(() => []),
   ]);
 
   return (

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
-import type { Vratham } from '@/lib/types';
+import { rowToVratham } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function VrathamsPage() {
-  const rows = await getPublished('vrathams');
-  const vrathams = rows as unknown as Vratham[];
+  const rows = await getPublished('vrathams').catch(() => []);
+  const vrathams = rows.map(rowToVratham);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>

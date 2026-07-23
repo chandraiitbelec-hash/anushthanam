@@ -1,9 +1,8 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useSyncExternalStore } from 'react';
 
 export type Theme = 'light' | 'dark' | 'system';
-const VALID_THEMES: Theme[] = ['light', 'dark', 'system'];
 
 type ThemeContextType = {
   theme: Theme;
@@ -23,32 +22,29 @@ function applyTheme(t: Theme) {
   }
 }
 
-export function ThemeProvider({
-  children,
-  initialTheme = 'system',
-}: {
-  children: React.ReactNode;
-  initialTheme?: Theme;
-}) {
-  const [theme, setThemeState] = useState<Theme>(initialTheme);
+function subscribe() {
+  return () => {};
+}
 
-  useEffect(() => {
-    // One-time migration: sync localStorage → state when it disagrees with the
-    // server-seeded cookie value (e.g. first visit after cookies were cleared).
-    const saved = localStorage.getItem('anushthanam-theme') as Theme | null;
-    if (saved && VALID_THEMES.includes(saved) && saved !== theme) {
-      setThemeState(saved);
-      applyTheme(saved);
-      document.cookie = `anushthanam-theme=${saved}; path=/; max-age=31536000; SameSite=Lax`;
-    } else {
-      // Reconcile the DOM with the server-seeded value in case SSR set a
-      // data-theme attribute that doesn't match the JS-side initial state.
-      applyTheme(initialTheme);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+function getSnapshot(): Theme {
+  const attr = document.documentElement.getAttribute('data-theme');
+  return attr === 'light' || attr === 'dark' ? attr : 'system';
+}
+
+function getServerSnapshot(): Theme {
+  return 'system';
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // useSyncExternalStore renders 'system' (matching the static SSR shell) during
+  // hydration, then re-renders with the real value the beforeInteractive
+  // theme-init script set as data-theme — without a hydration-mismatch error.
+  const domTheme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [override, setOverride] = useState<Theme | null>(null);
+  const theme = override ?? domTheme;
 
   function setTheme(t: Theme) {
-    setThemeState(t);
+    setOverride(t);
     localStorage.setItem('anushthanam-theme', t);
     document.cookie = `anushthanam-theme=${t}; path=/; max-age=31536000; SameSite=Lax`;
     applyTheme(t);

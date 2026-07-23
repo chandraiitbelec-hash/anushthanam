@@ -15,8 +15,8 @@ export const metadata = {
 
 export default async function UpcomingPage() {
   const [items, today] = await Promise.all([
-    getUpcoming(),
-    getTodayPanchangam(),
+    getUpcoming().catch(() => []),
+    getTodayPanchangam().catch(() => null),
   ]);
 
   return (

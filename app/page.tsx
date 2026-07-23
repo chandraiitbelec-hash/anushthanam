@@ -1,7 +1,7 @@
 import { getPublished } from '@/lib/sheets';
 import { getTodayPanchangam } from '@/lib/panchangam';
 import { todayIST } from '@/lib/utils';
-import type { Festival, Vratham } from '@/lib/types';
+import { rowToFestival, rowToVratham } from '@/lib/relations';
 import { getTodayDevotional } from '@/lib/daily-devotional';
 import DailyDevotional from '@/components/DailyDevotional';
 import HomeSearch, { type PopularGod } from '@/components/HomeSearch';
@@ -23,14 +23,14 @@ function nextByOccurrence<T extends { next_occurrence: string }>(rows: T[]): T |
 
 export default async function HomePage() {
   const [festivalRows, vrathamRows, godRows, today] = await Promise.all([
-    getPublished('festivals'),
-    getPublished('vrathams'),
-    getPublished('gods'),
-    getTodayPanchangam(),
+    getPublished('festivals').catch(() => []),
+    getPublished('vrathams').catch(() => []),
+    getPublished('gods').catch(() => []),
+    getTodayPanchangam().catch(() => null),
   ]);
 
-  const nextFestival = nextByOccurrence(festivalRows as unknown as Festival[]);
-  const nextVratham = nextByOccurrence(vrathamRows as unknown as Vratham[]);
+  const nextFestival = nextByOccurrence(festivalRows.map(rowToFestival));
+  const nextVratham = nextByOccurrence(vrathamRows.map(rowToVratham));
 
   const godBySlug = new Map(godRows.map(g => [g.slug, g]));
   const popularGods: PopularGod[] = POPULAR_GOD_SLUGS

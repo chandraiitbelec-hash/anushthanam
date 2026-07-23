@@ -4,16 +4,10 @@ import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { FontScaleProvider } from '@/context/FontScaleContext';
 import { ThemeProvider } from '@/context/ThemeContext';
-import type { Theme } from '@/context/ThemeContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
-import { cookies } from 'next/headers';
-import type { Language } from '@/lib/types';
 import { SITE_URL } from '@/lib/seo';
-
-const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
-const VALID_THEMES: Theme[] = ['light', 'dark', 'system'];
 
 const cormorant = Cormorant_Garamond({
   weight: ['400', '600'],
@@ -92,45 +86,34 @@ export const metadata: Metadata = {
   },
 };
 
-// Reading `cookies()` opts this layout into dynamic rendering (per-request).
-// Trade-off accepted: the HTML shell is rendered at the edge per request so the
-// correct language is painted on first load with no client-side flash. The heavy
-// data fetches (Sheets, Docs) still happen at build time / ISR in each page
-// segment, so content is not re-fetched per user. Vercel edge rendering is fast
-// enough that this is imperceptible.
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  const cookieLang = cookieStore.get('anushthanam-lang')?.value as Language | undefined;
-  const initialLang: Language = cookieLang && VALID_LANGS.includes(cookieLang) ? cookieLang : 'en';
-
-  const cookieTheme = cookieStore.get('anushthanam-theme')?.value as Theme | undefined;
-  const initialTheme: Theme = cookieTheme && VALID_THEMES.includes(cookieTheme) ? cookieTheme : 'system';
-  // Only set data-theme for explicit overrides; system = no attribute (OS media query governs)
-  const dataTheme = initialTheme === 'system' ? undefined : initialTheme;
-
+// Fully static: no cookies() read here, so this layout (and every page under it)
+// can be prerendered/ISR'd instead of forced into per-request dynamic rendering.
+// lang/theme are seeded entirely client-side, pre-paint, by the inline scripts
+// below (cookie first, then localStorage) — LanguageProvider/ThemeProvider read
+// the resulting DOM state back via lazy useState initializers on mount.
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
-      lang={initialLang}
-      {...(dataTheme ? { 'data-theme': dataTheme } : {})}
+      lang="en"
       suppressHydrationWarning
       className={`${cormorant.variable} ${notoSans.variable} ${notoTelugu.variable} ${notoTamil.variable} ${notoDevanagari.variable} ${notoSerifDevanagari.variable}`}
     >
       <body>
-        {/* lang-init script: fast-path for setting <html lang> when the cookie is absent
-            but localStorage still has a preference (e.g. first visit after clearing cookies).
+        {/* lang-init script: reads the anushthanam-lang cookie (source of truth),
+            falling back to localStorage, and sets <html lang> before paint.
             Placed as first child of <body> — beforeInteractive still executes before hydration,
             and this avoids the React 19 "<html> cannot contain a nested <script>" warning. */}
         <Script id="lang-init" strategy="beforeInteractive">
-          {`try{var l=localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
+          {`try{var m=document.cookie.match(/(?:^|; )anushthanam-lang=([^;]*)/);var l=m?decodeURIComponent(m[1]):localStorage.getItem('anushthanam-lang');if(l&&['en','te','ta','hi'].indexOf(l)>-1)document.documentElement.lang=l;}catch(e){}`}
         </Script>
-        {/* theme-init: apply the stored theme preference before paint to avoid flash.
-            Runs before hydration — mirrors the lang-init approach above. */}
+        {/* theme-init: reads the anushthanam-theme cookie, falling back to localStorage,
+            and applies data-theme before paint to avoid a flash. */}
         <Script id="theme-init" strategy="beforeInteractive">
-          {`try{var t=localStorage.getItem('anushthanam-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(t==='system')document.documentElement.removeAttribute('data-theme');}catch(e){}`}
+          {`try{var m=document.cookie.match(/(?:^|; )anushthanam-theme=([^;]*)/);var t=m?decodeURIComponent(m[1]):localStorage.getItem('anushthanam-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(t==='system')document.documentElement.removeAttribute('data-theme');}catch(e){}`}
         </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
-        <ThemeProvider initialTheme={initialTheme}>
-        <LanguageProvider initialLang={initialLang}>
+        <ThemeProvider>
+        <LanguageProvider>
         <FontScaleProvider>
           <Nav />
           <main id="main-content">{children}</main>

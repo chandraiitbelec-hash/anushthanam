@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getProcedureSteps, getMaterialItems, getStoriesForParent, getShlokaStanzas } from '@/lib/relations';
-import type { Vratham, God, Story, ShlokaStanza } from '@/lib/types';
+import { getProcedureSteps, getMaterialItems, getStoriesForParent, getShlokaStanzas, rowToVratham, rowToGod } from '@/lib/relations';
+import type { ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
@@ -10,40 +10,42 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('vrathams');
-  return (rows as unknown as Vratham[]).map(v => ({ slug: v.slug }));
+  const rows = await getPublished('vrathams').catch(() => []);
+  return rows.map(rowToVratham).map(v => ({ slug: v.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const rows = await getPublished('vrathams');
-  const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
-  if (!vratham) return { title: 'Anuṣṭhāna' };
-  const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
-  return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
+  try {
+    const { slug } = await params;
+    const rows = await getPublished('vrathams');
+    const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
+    if (!vratham) return { title: 'Anuṣṭhāna' };
+    const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
+    return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
+  } catch {
+    return { title: 'Anuṣṭhāna' };
+  }
 }
 
 export default async function VrathamPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('vrathams');
-  const vratham = (rows as unknown as Vratham[]).find(v => v.slug === slug);
+  const rows = await getPublished('vrathams').catch(() => []);
+  const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
   if (!vratham) notFound();
 
-  const [steps, materials, godRows, storyRows, stanzas] = await Promise.all([
-    getProcedureSteps(slug),
-    getMaterialItems(slug),
-    getPublished('gods'),
-    getStoriesForParent(slug),
-    vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([]),
+  const [steps, materials, godRows, stories, stanzas] = await Promise.all([
+    getProcedureSteps(slug).catch(() => []),
+    getMaterialItems(slug).catch(() => []),
+    getPublished('gods').catch(() => []),
+    getStoriesForParent(slug).catch(() => []),
+    (vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([])).catch(() => []),
   ]);
 
   const deities: DeityRef[] = vratham.deity_slug
-    ? (godRows as unknown as God[])
+    ? godRows.map(rowToGod)
         .filter(g => g.slug === vratham.deity_slug)
         .map(g => ({ slug: g.slug, name_en: g.name_en, name_te: g.name_te, name_ta: g.name_ta, name_hi: g.name_hi }))
     : [];
-
-  const stories = storyRows as unknown as Story[];
 
   const jsonLd = {
     '@context': 'https://schema.org',

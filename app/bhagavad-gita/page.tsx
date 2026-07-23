@@ -3,6 +3,8 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ChapterGrid from '@/components/gita/ChapterGrid';
 import GitaIndexHero from '@/components/gita/GitaIndexHero';
 
+export const revalidate = 3600;
+
 export const metadata = {
   title: 'Bhagavad Gita — All 18 Chapters',
   description:

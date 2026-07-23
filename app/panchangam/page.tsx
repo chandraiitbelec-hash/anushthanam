@@ -16,9 +16,9 @@ export const metadata = pageMeta(
 
 export default async function PanchangamPage() {
   const [today, all, next] = await Promise.all([
-    getTodayPanchangam(),
-    getAllPanchangam(),
-    getNextPanchangam(),
+    getTodayPanchangam().catch(() => null),
+    getAllPanchangam().catch(() => []),
+    getNextPanchangam().catch(() => null),
   ]);
 
   return (

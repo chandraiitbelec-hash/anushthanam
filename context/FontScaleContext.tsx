@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useSyncExternalStore } from 'react';
 
 export type FontScale = 1 | 1.15 | 1.3;
 
@@ -16,20 +16,31 @@ const FontScaleContext = createContext<FontScaleContextType>({
   cycleScale: () => {},
 });
 
-export function FontScaleProvider({ children }: { children: React.ReactNode }) {
-  const [scale, setScaleState] = useState<FontScale>(1);
+function subscribe() {
+  return () => {};
+}
 
-  useEffect(() => {
-    const saved = Number(localStorage.getItem('anushthanam-font-scale'));
-    if (SCALES.includes(saved as FontScale)) setScaleState(saved as FontScale);
-  }, []);
+function getSnapshot(): FontScale {
+  const saved = Number(localStorage.getItem('anushthanam-font-scale'));
+  return SCALES.includes(saved as FontScale) ? (saved as FontScale) : 1;
+}
+
+function getServerSnapshot(): FontScale {
+  return 1;
+}
+
+export function FontScaleProvider({ children }: { children: React.ReactNode }) {
+  // useSyncExternalStore renders scale=1 during hydration (matching SSR), then
+  // re-renders with the real localStorage value right after mount — avoiding
+  // a hydration-mismatch error without setState-in-effect.
+  const savedScale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [override, setOverride] = useState<FontScale | null>(null);
+  const scale = override ?? savedScale;
 
   function cycleScale() {
-    setScaleState(prev => {
-      const next = SCALES[(SCALES.indexOf(prev) + 1) % SCALES.length];
-      localStorage.setItem('anushthanam-font-scale', String(next));
-      return next;
-    });
+    const next = SCALES[(SCALES.indexOf(scale) + 1) % SCALES.length];
+    localStorage.setItem('anushthanam-font-scale', String(next));
+    setOverride(next);
   }
 
   return (

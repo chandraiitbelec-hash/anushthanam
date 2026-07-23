@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPublished } from '@/lib/sheets';
-import type { Story, Festival, Vratham } from '@/lib/types';
+import { rowToStory, rowToFestival, rowToVratham } from '@/lib/relations';
+import type { Story } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
 import ClientLabel from '@/components/ClientLabel';
@@ -19,14 +20,14 @@ const STORY_TYPE_LABELS: Record<string, string> = {
 
 export default async function StoriesPage() {
   const [storyRows, festivalRows, vrathamRows] = await Promise.all([
-    getPublished('stories_index'),
-    getPublished('festivals'),
-    getPublished('vrathams'),
+    getPublished('stories_index').catch(() => []),
+    getPublished('festivals').catch(() => []),
+    getPublished('vrathams').catch(() => []),
   ]);
 
-  const stories = storyRows as unknown as Story[];
-  const festivals = festivalRows as unknown as Festival[];
-  const vrathams = vrathamRows as unknown as Vratham[];
+  const stories = storyRows.map(rowToStory);
+  const festivals = festivalRows.map(rowToFestival);
+  const vrathams = vrathamRows.map(rowToVratham);
 
   // Build parent title lookup — keyed by `${parent_type}-${parent_slug}` to avoid
   // collisions when a festival and a vratham share the same slug (e.g. "maha-shivaratri").

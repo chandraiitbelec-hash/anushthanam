@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getPublished } from '@/lib/sheets';
 import { getGitaChapters } from '@/lib/gita';
 import { SITE_URL } from '@/lib/seo';
-import type { God, Festival, Vratham, Shloka, Story, Puja } from '@/lib/types';
+import { rowToGod, rowToFestival, rowToVratham, rowToShloka, rowToStory, rowToPuja } from '@/lib/relations';
 
 function url(path: string, priority: number, changeFreq: MetadataRoute.Sitemap[0]['changeFrequency'] = 'monthly') {
   return { url: `${SITE_URL}${path}`, priority, changeFrequency: changeFreq };
@@ -10,12 +10,12 @@ function url(path: string, priority: number, changeFreq: MetadataRoute.Sitemap[0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [gods, festivals, vrathams, shlokas, stories, pujas] = await Promise.all([
-    getPublished('gods'),
-    getPublished('festivals'),
-    getPublished('vrathams'),
-    getPublished('shlokas'),
-    getPublished('stories_index'),
-    getPublished('pujas'),
+    getPublished('gods').catch(() => []),
+    getPublished('festivals').catch(() => []),
+    getPublished('vrathams').catch(() => []),
+    getPublished('shlokas').catch(() => []),
+    getPublished('stories_index').catch(() => []),
+    getPublished('pujas').catch(() => []),
   ]);
 
   const staticPages = [
@@ -36,23 +36,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const gitaChapterPages = getGitaChapters().map(c =>
     url(`/bhagavad-gita/${c.number}`, 0.7, 'monthly')
   );
-  const pujaPages = (pujas as unknown as Puja[]).map(p =>
+  const pujaPages = pujas.map(rowToPuja).map(p =>
     url(`/pujas/${p.slug}`, 0.8)
   );
 
-  const godPages = (gods as unknown as God[]).map(g =>
+  const godPages = gods.map(rowToGod).map(g =>
     url(`/gods/${g.slug}`, 0.8)
   );
-  const festivalPages = (festivals as unknown as Festival[]).map(f =>
+  const festivalPages = festivals.map(rowToFestival).map(f =>
     url(`/festivals/${f.slug}`, 0.8)
   );
-  const vrathamPages = (vrathams as unknown as Vratham[]).map(v =>
+  const vrathamPages = vrathams.map(rowToVratham).map(v =>
     url(`/vrathams/${v.slug}`, 0.8)
   );
-  const shlokaPages = (shlokas as unknown as Shloka[]).map(s =>
+  const shlokaPages = shlokas.map(rowToShloka).map(s =>
     url(`/shlokas/${s.slug}`, 0.7)
   );
-  const storyPages = (stories as unknown as Story[]).map(s =>
+  const storyPages = stories.map(rowToStory).map(s =>
     url(`/stories/${s.slug}`, 0.7)
   );
 

@@ -16,11 +16,11 @@ function byEnglish(a: { names: { en: string } }, b: { names: { en: string } }) {
 
 export default async function SiteIndexPage() {
   const [gods, shlokas, festivals, vrathams, pujas] = await Promise.all([
-    getPublished('gods'),
-    getPublished('shlokas'),
-    getPublished('festivals'),
-    getPublished('vrathams'),
-    getPublished('pujas'),
+    getPublished('gods').catch(() => []),
+    getPublished('shlokas').catch(() => []),
+    getPublished('festivals').catch(() => []),
+    getPublished('vrathams').catch(() => []),
+    getPublished('pujas').catch(() => []),
   ]);
 
   const mapNamed = (rows: Record<string, string>[]) =>

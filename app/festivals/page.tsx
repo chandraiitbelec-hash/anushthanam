@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
-import type { Festival } from '@/lib/types';
+import { rowToFestival } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function FestivalsPage() {
-  const rows = await getPublished('festivals');
-  const festivals = rows as unknown as Festival[];
+  const rows = await getPublished('festivals').catch(() => []);
+  const festivals = rows.map(rowToFestival);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>

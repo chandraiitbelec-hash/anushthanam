@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getShlokaStanzas } from '@/lib/relations';
-import type { Shloka } from '@/lib/types';
+import { getShlokaStanzas, rowToShloka } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
@@ -10,26 +9,30 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('shlokas');
-  return (rows as unknown as Shloka[]).map(s => ({ slug: s.slug }));
+  const rows = await getPublished('shlokas').catch(() => []);
+  return rows.map(rowToShloka).map(s => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const rows = await getPublished('shlokas');
-  const shloka = (rows as unknown as Shloka[]).find(s => s.slug === slug);
-  if (!shloka) return { title: 'Anuṣṭhāna' };
-  const typeLabel = shloka.type ? `${shloka.type.charAt(0).toUpperCase()}${shloka.type.slice(1)}. ` : '';
-  return pageMeta(shloka.title_en, typeLabel + (shloka.brief_intro_en || ''), `/shlokas/${slug}`);
+  try {
+    const { slug } = await params;
+    const rows = await getPublished('shlokas');
+    const shloka = rows.map(rowToShloka).find(s => s.slug === slug);
+    if (!shloka) return { title: 'Anuṣṭhāna' };
+    const typeLabel = shloka.type ? `${shloka.type.charAt(0).toUpperCase()}${shloka.type.slice(1)}. ` : '';
+    return pageMeta(shloka.title_en, typeLabel + (shloka.brief_intro_en || ''), `/shlokas/${slug}`);
+  } catch {
+    return { title: 'Anuṣṭhāna' };
+  }
 }
 
 export default async function ShlokaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('shlokas');
-  const shloka = (rows as unknown as Shloka[]).find(s => s.slug === slug);
+  const rows = await getPublished('shlokas').catch(() => []);
+  const shloka = rows.map(rowToShloka).find(s => s.slug === slug);
   if (!shloka) notFound();
 
-  const stanzas = await getShlokaStanzas(slug);
+  const stanzas = await getShlokaStanzas(slug).catch(() => []);
 
   const jsonLd = {
     '@context': 'https://schema.org',

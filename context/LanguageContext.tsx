@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useSyncExternalStore } from 'react';
 import type { Language } from '@/lib/types';
 
 const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
@@ -15,28 +15,29 @@ const LanguageContext = createContext<LanguageContextType>({
   setLang: () => {},
 });
 
-export function LanguageProvider({
-  children,
-  initialLang = 'en',
-}: {
-  children: React.ReactNode;
-  initialLang?: Language;
-}) {
-  const [lang, setLangState] = useState<Language>(initialLang);
+function subscribe() {
+  return () => {};
+}
 
-  useEffect(() => {
-    // Sync localStorage → state only when it disagrees with the server-seeded value.
-    // This handles the one-time migration for users who had localStorage but no cookie.
-    const saved = localStorage.getItem('anushthanam-lang') as Language | null;
-    if (saved && VALID_LANGS.includes(saved) && saved !== lang) {
-      setLangState(saved);
-      document.documentElement.lang = saved;
-      document.cookie = `anushthanam-lang=${saved}; path=/; max-age=31536000; SameSite=Lax`;
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+function getSnapshot(): Language {
+  const domLang = document.documentElement.lang as Language;
+  return domLang && VALID_LANGS.includes(domLang) ? domLang : 'en';
+}
+
+function getServerSnapshot(): Language {
+  return 'en';
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  // useSyncExternalStore renders 'en' (matching the static SSR shell) during
+  // hydration, then re-renders with the real value the beforeInteractive
+  // lang-init script set on <html lang> — without a hydration-mismatch error.
+  const domLang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [override, setOverride] = useState<Language | null>(null);
+  const lang = override ?? domLang;
 
   function setLang(l: Language) {
-    setLangState(l);
+    setOverride(l);
     localStorage.setItem('anushthanam-lang', l);
     document.cookie = `anushthanam-lang=${l}; path=/; max-age=31536000; SameSite=Lax`;
     document.documentElement.lang = l;
