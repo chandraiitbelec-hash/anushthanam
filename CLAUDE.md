@@ -33,7 +33,7 @@ The root layout (`app/layout.tsx`) does **not** read `cookies()` — it is fully
 
 Language and theme are seeded **client-side, pre-paint**, not from server cookies:
 - Two `beforeInteractive` inline `<Script>` tags at the top of `<body>` (`lang-init`, `theme-init`) read the `anushthanam-lang` / `anushthanam-theme` cookies via `document.cookie`, falling back to `localStorage`, and set `document.documentElement.lang` / `data-theme` before first paint.
-- `LanguageProvider` / `ThemeProvider` then pick up that DOM state via lazy `useState` initializers on mount.
+- `LanguageProvider` / `ThemeProvider` then pick up that DOM state via `useSyncExternalStore`: the server snapshot returns the static-shell default (`'en'` / `'system'`) so hydration matches, then the client snapshot reads the attribute the init script set and React re-renders with the real value — no hydration mismatch, no set-state-in-effect.
 - (The scripts live directly under `<body>`, not `<html>`, to avoid React 19's "`<html>` cannot contain nested `<script>`" warning.)
 
 ### Data flow
