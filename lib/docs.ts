@@ -9,6 +9,21 @@ const getStoriesContent = unstable_cache(
   { revalidate: 3600 }
 );
 
+// Policy: Docs API failures (403/404) must never fail the build or a page render —
+// availability of the rest of the site takes priority over one story's prose. Instead
+// we track every failing doc ID here and surface a loud, greppable summary so a blank
+// story gets noticed rather than silently shipped.
+const failedDocIds = new Set<string>();
+
+function reportFailedDoc(docId: string, status: number) {
+  failedDocIds.add(docId);
+  const prefix = process.env.CI || process.env.VERCEL ? 'CONTENT ERROR' : '[docs]';
+  console.error(
+    `${prefix}: Cannot read doc ${docId} (${status}) — story body will be empty. ` +
+      `${failedDocIds.size} doc(s) failing so far: ${[...failedDocIds].join(', ')}`
+  );
+}
+
 function getDocsAuth() {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
   if (!raw) throw new Error('GOOGLE_SERVICE_ACCOUNT_KEY is not set');
@@ -34,7 +49,7 @@ export async function getStoryBody(docId: string): Promise<string[]> {
   } catch (err: unknown) {
     const status = (err as { status?: number; code?: number }).status ?? (err as { status?: number; code?: number }).code;
     if (status === 403 || status === 404) {
-      console.warn(`[docs] Cannot read doc ${docId} (${status}) — story body will be empty`);
+      reportFailedDoc(docId, status);
       return [];
     }
     throw err;

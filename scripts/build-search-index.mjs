@@ -15,7 +15,12 @@ const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
 const spreadsheetId = process.env.SHEETS_SPREADSHEET_ID;
 
 if (!raw || !spreadsheetId) {
-  console.warn('⚠ Missing GOOGLE_SERVICE_ACCOUNT_KEY or SHEETS_SPREADSHEET_ID — writing empty search index');
+  const message = '⚠ Missing GOOGLE_SERVICE_ACCOUNT_KEY or SHEETS_SPREADSHEET_ID';
+  if (process.env.VERCEL || process.env.CI) {
+    console.error(`${message} — failing build (set VERCEL/CI env vars are present, so a misconfigured deploy must not ship silently broken search)`);
+    process.exit(1);
+  }
+  console.warn(`${message} — writing empty search index (local dev only; this escape hatch is disabled on Vercel/CI)`);
   mkdirSync(join(__dirname, '../public'), { recursive: true });
   writeFileSync(join(__dirname, '../public/search-index.json'), '[]');
   process.exit(0);
