@@ -22,7 +22,9 @@ export function useDismissable<T extends HTMLElement>(
 
   // Keep the latest onClose without re-subscribing on every render.
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return;
