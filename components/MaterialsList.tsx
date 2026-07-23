@@ -67,54 +67,56 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
         </div>
       )}
 
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <ul role="group" aria-label={ui.materialsChecklist} style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {required.map(({ item, i }) => {
           const done = checked.has(i);
           return (
-            <li key={i}
-              role="checkbox"
-              aria-checked={done}
-              tabIndex={0}
-              onClick={() => toggle(i)}
-              onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
-              style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 14px',
-              minHeight: '44px',
-              boxSizing: 'border-box',
-              background: done ? 'var(--color-bg)' : 'var(--color-surface)',
-              border: `1px solid ${done ? 'var(--color-border)' : 'transparent'}`,
-              borderRadius: '8px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              transition: 'background 0.15s, opacity 0.15s',
-              opacity: done ? 0.55 : 1,
-              userSelect: 'none',
-            }}>
-              {/* Checkbox */}
-              <span style={{
-                width: '18px', height: '18px', borderRadius: '4px', flexShrink: 0,
-                border: `2px solid ${done ? 'var(--color-gold)' : 'var(--color-border)'}`,
-                background: done ? 'var(--color-gold)' : 'transparent',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'all 0.15s',
-                color: '#fff', fontSize: '11px', fontWeight: 700,
+            <li key={i}>
+              <div
+                role="checkbox"
+                aria-checked={done}
+                tabIndex={0}
+                onClick={() => toggle(i)}
+                onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
+                style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '10px 14px',
+                minHeight: '44px',
+                boxSizing: 'border-box',
+                background: done ? 'var(--color-bg)' : 'var(--color-surface)',
+                border: `1px solid ${done ? 'var(--color-border)' : 'transparent'}`,
+                borderRadius: '8px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                transition: 'background 0.15s, opacity 0.15s',
+                opacity: done ? 0.55 : 1,
+                userSelect: 'none',
               }}>
-                {done ? '✓' : ''}
-              </span>
-              <span className={nameClass} style={{
-                color: 'var(--color-text-primary)', flex: 1,
-                textDecoration: done ? 'line-through' : 'none',
-              }}>
-                {name(item)}
-              </span>
-              {quantity(item) && (
-                <span className={nameClass} style={{ color: 'var(--color-text-secondary)', fontSize: '12px', flexShrink: 0 }}>
-                  {quantity(item)}
+                {/* Checkbox */}
+                <span style={{
+                  width: '18px', height: '18px', borderRadius: '4px', flexShrink: 0,
+                  border: `2px solid ${done ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                  background: done ? 'var(--color-gold)' : 'transparent',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.15s',
+                  color: '#fff', fontSize: '11px', fontWeight: 700,
+                }}>
+                  {done ? '✓' : ''}
                 </span>
-              )}
+                <span className={nameClass} style={{
+                  color: 'var(--color-text-primary)', flex: 1,
+                  textDecoration: done ? 'line-through' : 'none',
+                }}>
+                  {name(item)}
+                </span>
+                {quantity(item) && (
+                  <span className={nameClass} style={{ color: 'var(--color-text-secondary)', fontSize: '12px', flexShrink: 0 }}>
+                    {quantity(item)}
+                  </span>
+                )}
+              </div>
             </li>
           );
         })}
@@ -122,48 +124,50 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
         {optional.map(({ item, i }) => {
           const done = checked.has(i);
           return (
-            <li key={`opt-${i}`}
-              role="checkbox"
-              aria-checked={done}
-              tabIndex={0}
-              onClick={() => toggle(i)}
-              onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
-              style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 14px',
-              background: done ? 'var(--color-bg)' : 'transparent',
-              border: '1px dashed var(--color-border)',
-              borderRadius: '8px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              opacity: done ? 0.45 : 0.8,
-              transition: 'opacity 0.15s',
-              userSelect: 'none',
-            }}>
-              <span style={{
-                width: '18px', height: '18px', borderRadius: '4px', flexShrink: 0,
-                border: `2px dashed ${done ? 'var(--color-gold)' : 'var(--color-border)'}`,
-                background: done ? 'var(--color-gold)' : 'transparent',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'all 0.15s',
-                color: '#fff', fontSize: '11px', fontWeight: 700,
+            <li key={`opt-${i}`}>
+              <div
+                role="checkbox"
+                aria-checked={done}
+                tabIndex={0}
+                onClick={() => toggle(i)}
+                onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && toggle(i)}
+                style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '10px 14px',
+                background: done ? 'var(--color-bg)' : 'transparent',
+                border: '1px dashed var(--color-border)',
+                borderRadius: '8px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                opacity: done ? 0.45 : 0.8,
+                transition: 'opacity 0.15s',
+                userSelect: 'none',
               }}>
-                {done ? '✓' : ''}
-              </span>
-              <span className={nameClass} style={{
-                color: 'var(--color-text-secondary)', flex: 1,
-                textDecoration: done ? 'line-through' : 'none',
-              }}>
-                {name(item)}
-              </span>
-              <span style={{
-                fontSize: '11px', padding: '2px 6px', borderRadius: '4px',
-                background: 'var(--color-border)', color: 'var(--color-text-secondary)', flexShrink: 0,
-              }}>
-                {ui.optional}
-              </span>
+                <span style={{
+                  width: '18px', height: '18px', borderRadius: '4px', flexShrink: 0,
+                  border: `2px dashed ${done ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                  background: done ? 'var(--color-gold)' : 'transparent',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.15s',
+                  color: '#fff', fontSize: '11px', fontWeight: 700,
+                }}>
+                  {done ? '✓' : ''}
+                </span>
+                <span className={nameClass} style={{
+                  color: 'var(--color-text-secondary)', flex: 1,
+                  textDecoration: done ? 'line-through' : 'none',
+                }}>
+                  {name(item)}
+                </span>
+                <span style={{
+                  fontSize: '11px', padding: '2px 6px', borderRadius: '4px',
+                  background: 'var(--color-border)', color: 'var(--color-text-secondary)', flexShrink: 0,
+                }}>
+                  {ui.optional}
+                </span>
+              </div>
             </li>
           );
         })}

@@ -137,6 +137,7 @@ type UiStrings = {
   optional: string;
   reset: string;
   allItemsGathered: string;
+  materialsChecklist: string;
   // Empty states
   emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas', { title: string; body: string }>;
   // Story content
@@ -269,6 +270,7 @@ export const UI: Record<Language, UiStrings> = {
     optional: 'Optional',
     reset: 'Reset',
     allItemsGathered: 'All items gathered!',
+    materialsChecklist: 'Materials checklist',
     emptyState: {
       gods: { title: 'No deities published yet', body: 'Gods and goddesses will appear here once published.' },
       festivals: { title: 'No festivals published yet', body: 'Festival listings will appear here once published.' },
@@ -401,6 +403,7 @@ export const UI: Record<Language, UiStrings> = {
     optional: 'ఐచ్ఛికం',
     reset: 'రీసెట్',
     allItemsGathered: 'అన్నీ సిద్ధంగా ఉన్నాయి!',
+    materialsChecklist: 'సామగ్రి చెక్‌లిస్ట్',
     emptyState: {
       gods: { title: 'ఇంకా దేవతలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత దేవతలు ఇక్కడ కనిపిస్తారు.' },
       festivals: { title: 'ఇంకా పండుగలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత పండుగలు ఇక్కడ కనిపిస్తాయి.' },
@@ -533,6 +536,7 @@ export const UI: Record<Language, UiStrings> = {
     optional: 'விருப்பத்தேர்வு',
     reset: 'மீட்டமை',
     allItemsGathered: 'அனைத்தும் தயார்!',
+    materialsChecklist: 'பொருட்கள் சரிபார்ப்புப் பட்டியல்',
     emptyState: {
       gods: { title: 'இன்னும் தெய்வங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் தெய்வங்கள் இங்கே தோன்றும்.' },
       festivals: { title: 'இன்னும் திருவிழாக்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் திருவிழாக்கள் இங்கே தோன்றும்.' },
@@ -665,6 +669,7 @@ export const UI: Record<Language, UiStrings> = {
     optional: 'वैकल्पिक',
     reset: 'रीसेट',
     allItemsGathered: 'सब तैयार है!',
+    materialsChecklist: 'सामग्री चेकलिस्ट',
     emptyState: {
       gods: { title: 'अभी तक कोई देवता प्रकाशित नहीं', body: 'प्रकाशित होने पर देवी-देवता यहाँ दिखाई देंगे।' },
       festivals: { title: 'अभी तक कोई त्योहार प्रकाशित नहीं', body: 'प्रकाशित होने पर त्योहार यहाँ दिखाई देंगे।' },
