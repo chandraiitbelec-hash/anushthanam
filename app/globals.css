@@ -44,6 +44,13 @@
   --spacing-24: 96px;
 }
 
+html {
+  /* Reserve the scrollbar's width whether or not it's currently needed, so a
+     document-height change (e.g. from a language switch) never shifts content
+     horizontally by toggling the scrollbar on/off. */
+  scrollbar-gutter: stable;
+}
+
 :root {
   background-color: var(--color-bg);
   color: var(--color-text-primary);

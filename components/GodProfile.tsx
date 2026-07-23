@@ -105,6 +105,9 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
           color: 'var(--color-text-primary)',
           margin: '0 0 4px',
           lineHeight: lang === 'te' ? 1.5 : lang === 'ta' ? 1.45 : lang === 'hi' ? 1.3 : 1.15,
+          // Tallest script variant (Telugu, 1.5 line-height) sets a floor so
+          // switching scripts doesn't shift the page start.
+          minHeight: 'calc(clamp(32px, 5vw, 52px) * 1.5)',
         }}>
           {name}
         </h1>
@@ -120,12 +123,14 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
           </p>
         )}
 
-        {/* English subtitle when viewing another language */}
-        {lang !== 'en' && god.name_en && (
+        {/* English subtitle — permanent slot so its height never appears/disappears
+            on language switch; hidden (not removed) when already viewing English. */}
+        {god.name_en && (
           <p style={{
             fontSize: '15px',
             color: 'var(--color-text-secondary)',
             margin: '0 0 12px',
+            visibility: lang === 'en' ? 'hidden' : 'visible',
           }}>
             {god.name_en}
           </p>

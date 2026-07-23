@@ -51,13 +51,15 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
         color: 'var(--color-text-primary)',
         margin: '0 0 12px',
         lineHeight: 1.2,
+        // Tallest script variant sets a floor so switching scripts doesn't shift the page start.
+        minHeight: 'calc(clamp(26px, 4vw, 44px) * 1.4)',
       }}>
         {title}
       </h1>
 
-      {/* Subtitle: English title when viewing in another language */}
-      {lang !== 'en' && story.title_en && (
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: '0 0 12px' }}>
+      {/* Subtitle: English title — permanent slot, hidden (not removed) in English */}
+      {story.title_en && (
+        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: '0 0 12px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
           {story.title_en}
         </p>
       )}
@@ -100,20 +102,21 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
       }}>
         {paras.length > 0 && (
           <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {isFallback && (
-              <p style={{
-                fontSize: '12px',
-                color: 'var(--color-text-secondary)',
-                fontStyle: 'italic',
-                margin: 0,
-                padding: '6px 10px',
-                background: 'rgba(184,134,11,0.06)',
-                border: '1px solid rgba(184,134,11,0.2)',
-                borderRadius: '6px',
-              }}>
-                {UI[lang].storyFallbackNote}
-              </p>
-            )}
+            {/* Fallback note — permanent slot, hidden (not removed) when not falling back,
+                so it never appears/disappears mid-scroll as the language toggles. */}
+            <p style={{
+              fontSize: '12px',
+              color: 'var(--color-text-secondary)',
+              fontStyle: 'italic',
+              margin: 0,
+              padding: '6px 10px',
+              background: 'rgba(184,134,11,0.06)',
+              border: '1px solid rgba(184,134,11,0.2)',
+              borderRadius: '6px',
+              visibility: isFallback ? 'visible' : 'hidden',
+            }}>
+              {UI[lang].storyFallbackNote}
+            </p>
             {paras.map((para, i) => (
               <p key={i} className={isFallback ? '' : nameClass} style={{
                 fontSize: '15px',

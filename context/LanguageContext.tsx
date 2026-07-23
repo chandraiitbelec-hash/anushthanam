@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useSyncExternalStore } from 'react';
+import { createContext, useContext, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { Language } from '@/lib/types';
 
 const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
@@ -28,6 +28,23 @@ function getServerSnapshot(): Language {
   return 'en';
 }
 
+// Nearest element to the "reading position" (just below the sticky nav/chip
+// bar) at the moment a language switch is requested, plus its viewport offset
+// so we can put it back there once the reflow from the switch has settled.
+type ScrollAnchor = { el: Element; offset: number } | { scrollY: number };
+
+function anchorY(): number {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue('--section-anchor-offset');
+  const n = parseFloat(raw);
+  return Number.isFinite(n) ? n : 140;
+}
+
+function captureScrollAnchor(): ScrollAnchor {
+  const el = document.elementFromPoint(window.innerWidth / 2, anchorY());
+  if (el) return { el, offset: el.getBoundingClientRect().top };
+  return { scrollY: window.scrollY };
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // useSyncExternalStore renders 'en' (matching the static SSR shell) during
   // hydration, then re-renders with the real value the beforeInteractive
@@ -35,8 +52,34 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const domLang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [override, setOverride] = useState<Language | null>(null);
   const lang = override ?? domLang;
+  const pendingAnchor = useRef<ScrollAnchor | null>(null);
+
+  // Runs after every language-driven re-render commits. Per-language content
+  // (subtitles, line-heights, fonts) reflows every block on the page, which
+  // would otherwise yank the reading position around; put the anchor element
+  // back at the offset it held right before the switch. If the anchor element
+  // itself unmounted, there's nothing to re-align to, so scrollY just stays
+  // where the browser already left it (the documented fallback).
+  useLayoutEffect(() => {
+    const anchor = pendingAnchor.current;
+    if (!anchor) return;
+    pendingAnchor.current = null;
+
+    // Two frames: one for this commit's own paint, one for late-settling
+    // reflow (webfont swaps, etc.) triggered by the language change.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if ('el' in anchor) {
+          if (!anchor.el.isConnected) return;
+          const delta = anchor.el.getBoundingClientRect().top - anchor.offset;
+          if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+        }
+      });
+    });
+  }, [lang]);
 
   function setLang(l: Language) {
+    pendingAnchor.current = captureScrollAnchor();
     setOverride(l);
     localStorage.setItem('anushthanam-lang', l);
     document.cookie = `anushthanam-lang=${l}; path=/; max-age=31536000; SameSite=Lax`;

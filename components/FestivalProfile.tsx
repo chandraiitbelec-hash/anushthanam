@@ -49,12 +49,14 @@ export default function FestivalProfile({ festival, steps, materials, stories, d
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 8px',
+          // Tallest script variant sets a floor so switching scripts doesn't shift the page start.
+          minHeight: 'calc(clamp(32px, 5vw, 52px) * 1.5)',
         }}>
           {title}
         </h1>
 
-        {lang !== 'en' && festival.title_en && (
-          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 10px' }}>
+        {festival.title_en && (
+          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 10px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
             {festival.title_en}
           </p>
         )}

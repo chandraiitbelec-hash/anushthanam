@@ -55,12 +55,14 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 8px',
+          // Tallest script variant sets a floor so switching scripts doesn't shift the page start.
+          minHeight: 'calc(clamp(32px, 5vw, 52px) * 1.5)',
         }}>
           {title}
         </h1>
 
-        {lang !== 'en' && vratham.title_en && (
-          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 8px' }}>
+        {vratham.title_en && (
+          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 8px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
             {vratham.title_en}
           </p>
         )}
