@@ -16,23 +16,10 @@
  * Run: node scripts/fix-misc-data-bugs.mjs          (dry run)
  *      node scripts/fix-misc-data-bugs.mjs --write  (apply)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
-
-const WRITE = process.argv.includes('--write');
-
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const WRITE = parseWriteFlag(process.argv);
+const sheets = await getSheetsClient();
 
 async function getSheet(tab, range = 'A:ZZ') {
   const res = await sheets.spreadsheets.values.get({ spreadsheetId: SPREADSHEET_ID, range: `${tab}!${range}` });
@@ -90,17 +77,6 @@ const updates = [];
     updates.push({ range: `god_links!A${rowIdx + 2}:D${rowIdx + 2}`, values: [['', '', '', '']] });
     console.log(`[3] Clearing god_links row ${rowIdx + 2}: narada -> narada-ashtothram (shloka does not exist)`);
   }
-}
-
-function colLetter(i) {
-  let s = '';
-  i += 1;
-  while (i > 0) {
-    const m = (i - 1) % 26;
-    s = String.fromCharCode(65 + m) + s;
-    i = Math.floor((i - m) / 26);
-  }
-  return s;
 }
 
 console.log(`\n${updates.length} cell range(s) to update.`);

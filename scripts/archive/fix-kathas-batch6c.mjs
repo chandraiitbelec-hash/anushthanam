@@ -3,11 +3,12 @@ import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const auth = new google.auth.GoogleAuth({ credentials: key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
+const WRITE = process.argv.includes('--write');
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
 
 async function getAllRows() {
@@ -19,6 +20,7 @@ async function getSheetId() {
   return meta.data.sheets.find(s => s.properties.title === 'stories_content').properties.sheetId;
 }
 async function deleteRows(sheetId, indices) {
+  if (!WRITE) { console.log(`  [DRY RUN] would delete ${indices.length} row(s)`); return; }
   const sorted = [...indices].sort((a, b) => b - a);
   await sheets.spreadsheets.batchUpdate({
     spreadsheetId: SPREADSHEET_ID,
@@ -26,6 +28,7 @@ async function deleteRows(sheetId, indices) {
   });
 }
 async function appendRows(rows) {
+  if (!WRITE) { console.log(`  [DRY RUN] would append ${rows.length} row(s)`); return; }
   await sheets.spreadsheets.values.append({ spreadsheetId: SPREADSHEET_ID, range: 'stories_content!A:D', valueInputOption: 'RAW', requestBody: { values: rows } });
 }
 
@@ -55,3 +58,4 @@ await deleteRows(sheetId, existing.map(e => e.i));
 const newRows = chhathTa.map((p, i) => ['chhath-puja-katha', 'ta', String(i + 1), p]);
 await appendRows(newRows);
 console.log(`Done. Deleted ${existing.length} rows, added ${chhathTa.length} paragraphs.`);
+if (!WRITE) console.log('\nDry run only — no changes written. Re-run with --write to apply.');

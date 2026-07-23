@@ -18,17 +18,15 @@
  *   node scripts/upload-entity-notes.mjs <slug>          (dry run)
  *   node scripts/upload-entity-notes.mjs <slug> --write  (apply)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
 const SLUG = process.argv[2];
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 
 if (!SLUG) {
   console.error('Usage: node scripts/upload-entity-notes.mjs <slug> [--write]');
@@ -48,19 +46,7 @@ const { procedure_steps_notes = [], material_items_notes = [] } = data;
 
 // ─── Sheet connection ─────────────────────────────────────────────────────────
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
-
-function colLetter(i) {
-  let s = '';
-  i += 1;
-  while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); }
-  return s;
-}
+const sheets = await getSheetsClient();
 
 // ─── Fetch current sheet data ─────────────────────────────────────────────────
 

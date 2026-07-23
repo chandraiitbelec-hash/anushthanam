@@ -5,8 +5,11 @@
 import { google } from 'googleapis';
 import { readFileSync } from 'fs';
 import { config } from 'dotenv';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-config({ path: '../.env.local' });
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, '../.env.local') });
 
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const spreadsheetId = process.env.SHEETS_SPREADSHEET_ID;

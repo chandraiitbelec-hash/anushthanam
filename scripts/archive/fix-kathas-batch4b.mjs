@@ -10,11 +10,12 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
 const auth = new google.auth.GoogleAuth({ credentials: key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
+const WRITE = process.argv.includes('--write');
 
 // ── CONTENT ────────────────────────────────────────────────────────────────
 
@@ -153,6 +154,10 @@ async function getSheetId() {
 }
 
 async function deleteRows(sheetId, rowIndices) {
+  if (!WRITE) {
+    console.log(`  [DRY RUN] would delete ${rowIndices.length} row(s)`);
+    return;
+  }
   const sorted = [...rowIndices].sort((a, b) => b - a);
   const requests = sorted.map(i => ({
     deleteDimension: {
@@ -166,6 +171,10 @@ async function deleteRows(sheetId, rowIndices) {
 }
 
 async function appendRows(rows) {
+  if (!WRITE) {
+    console.log(`  [DRY RUN] would append ${rows.length} row(s)`);
+    return;
+  }
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
     range: 'stories_content!A:D',
@@ -205,3 +214,4 @@ for (const { slug, lang, paragraphs } of tasks) {
 
 console.log(`✓ Deleted ${totalDeleted} old rows`);
 console.log(`✓ Added ${totalAdded} paragraphs`);
+if (!WRITE) console.log('\nDry run only — no changes written. Re-run with --write to apply.');

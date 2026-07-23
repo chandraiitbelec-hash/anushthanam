@@ -3,7 +3,11 @@
 
 import { google } from 'googleapis';
 import { config } from 'dotenv';
-config({ path: '../.env.local' });
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, '../../.env.local') });
 
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const spreadsheetId = process.env.SHEETS_SPREADSHEET_ID;

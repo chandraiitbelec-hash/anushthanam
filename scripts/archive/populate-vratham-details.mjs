@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { google } from 'googleapis';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: join(__dirname, '..', '.env.local') });
+config({ path: join(__dirname, '..', '..', '.env.local') });
 
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const spreadsheetId = process.env.SHEETS_SPREADSHEET_ID;

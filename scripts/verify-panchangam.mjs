@@ -6,17 +6,9 @@
  * Usage: node scripts/verify-panchangam.mjs
  */
 
-import dotenv from 'dotenv';
-import { google } from 'googleapis';
-dotenv.config({ path: '.env.local' });
+import { getSheetsClient, SPREADSHEET_ID } from './lib-sheets.mjs';
 
-const creds = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
-const auth = new google.auth.GoogleAuth({
-  credentials: creds,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-});
-const sheets = google.sheets({ version: 'v4', auth });
-const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const sheets = await getSheetsClient();
 
 async function main() {
   const res = await sheets.spreadsheets.values.get({

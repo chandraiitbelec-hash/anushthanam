@@ -14,15 +14,9 @@
  * Run: node scripts/fix-shiva-tandava-missing-meanings.mjs          (dry run)
  *      node scripts/fix-shiva-tandava-missing-meanings.mjs --write  (apply)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter, getTabWithHeaders } from './lib-sheets.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
-
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 const SLUG = 'shiva-tandava-stotram';
 
 const MEANINGS = {
@@ -30,25 +24,20 @@ const MEANINGS = {
   15: 'May that form of Shiva arise for the victory of the world -- resplendent with the auspicious glow of the fierce submarine fire, invoked by the cries of the maidens who are the eight great siddhis, his eye thrown wide open, resounding like auspicious wedding music, adorned with the mantra "Shiva" as his ornament.',
 };
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-
-const res = await sheets.spreadsheets.values.get({ spreadsheetId: process.env.SHEETS_SPREADSHEET_ID, range: 'shloka_stanzas!A:H' });
-const rows = res.data.values;
+const { rows, col } = await getTabWithHeaders('shloka_stanzas');
+const cSlug = col('shloka_slug');
+const cStanza = col('stanza_number');
+const cMeaningEn = col('meaning_en');
 
 const targets = [];
 rows.forEach((r, i) => {
-  if (r[0] === SLUG && (r[1] === '14' || r[1] === '15')) {
-    const sheetRow = i + 1;
-    if (r[7]) {
-      console.log(`Stanza ${r[1]} (row ${sheetRow}) already has a meaning -- skipping: "${r[7].slice(0, 60)}..."`);
+  if (r[cSlug] === SLUG && (r[cStanza] === '14' || r[cStanza] === '15')) {
+    const sheetRow = i + 2; // +1 header, +1 1-based
+    if (r[cMeaningEn]) {
+      console.log(`Stanza ${r[cStanza]} (row ${sheetRow}) already has a meaning -- skipping: "${r[cMeaningEn].slice(0, 60)}..."`);
       return;
     }
-    targets.push({ sheetRow, stanza: parseInt(r[1], 10) });
+    targets.push({ sheetRow, stanza: parseInt(r[cStanza], 10) });
   }
 });
 
@@ -61,12 +50,13 @@ if (!WRITE) {
   if (targets.length === 0) {
     console.log('Nothing to write.');
   } else {
+    const sheets = await getSheetsClient();
     await sheets.spreadsheets.values.batchUpdate({
-      spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
+      spreadsheetId: SPREADSHEET_ID,
       requestBody: {
         valueInputOption: 'RAW',
         data: targets.map(t => ({
-          range: `shloka_stanzas!H${t.sheetRow}`,
+          range: `shloka_stanzas!${colLetter(cMeaningEn)}${t.sheetRow}`,
           values: [[MEANINGS[t.stanza]]],
         })),
       },

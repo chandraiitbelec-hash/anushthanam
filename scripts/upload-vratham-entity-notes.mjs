@@ -19,16 +19,14 @@
  *   node scripts/upload-vratham-entity-notes.mjs --all --write                      (apply all)
  */
 
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 const ALL = process.argv.includes('--all');
 const slugArg = process.argv.find(a => a.startsWith('--slug='));
 
@@ -61,19 +59,7 @@ if (ALL) {
 
 // ─── Sheet connection ─────────────────────────────────────────────────────────
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
-
-function colLetter(i) {
-  let s = '';
-  i += 1;
-  while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); }
-  return s;
-}
+const sheets = await getSheetsClient();
 
 // ─── Read both tabs once ──────────────────────────────────────────────────────
 

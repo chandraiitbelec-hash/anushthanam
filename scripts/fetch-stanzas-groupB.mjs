@@ -5,14 +5,12 @@
  * Usage: node scripts/fetch-stanzas-groupB.mjs [--slug <slug>]
  *   --slug <slug>  Only fetch this slug (default: all Group B)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { writeFileSync, mkdirSync } from 'fs';
+import { getTabWithHeaders } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
 const GROUP_B_SLUGS = [
   'soundarya-lahari',
@@ -26,37 +24,37 @@ const SLUGS = slugArg !== -1 && process.argv[slugArg + 1]
   ? [process.argv[slugArg + 1]]
   : GROUP_B_SLUGS;
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-
-const res = await sheets.spreadsheets.values.get({
-  spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
-  range: 'shloka_stanzas!A:L',
-});
-const rows = res.data.values || [];
-const [header, ...dataRows] = rows;
+const { headers: header, rows: dataRows, col } = await getTabWithHeaders('shloka_stanzas');
 console.log('Header:', header?.join(' | '));
+
+const cSlug = col('shloka_slug');
+const cStanza = col('stanza_number');
+const cLabel = col('stanza_label');
+const cDeva = col('script_devanagari');
+const cTelugu = col('script_telugu');
+const cTamil = col('script_tamil');
+const cIast = col('roman_iast');
+const cMeaningEn = col('meaning_en');
+const cMeaningTe = col('meaning_te');
+const cMeaningTa = col('meaning_ta');
+const cMeaningHi = col('meaning_hi');
 
 const researchDir = resolve(__dirname, '../research');
 mkdirSync(researchDir, { recursive: true });
 
 for (const slug of SLUGS) {
-  const slugRows = dataRows.filter(r => r[0] === slug);
+  const slugRows = dataRows.filter(r => r[cSlug] === slug);
   const stanzas = slugRows.map(r => ({
-    stanza_number: parseInt(r[1], 10),
-    stanza_label: r[2] || '',
-    script_devanagari: r[3] || '',
-    script_telugu: r[4] || '',
-    script_tamil: r[5] || '',
-    roman_iast: r[6] || '',
-    meaning_en: r[7] || '',
-    meaning_te: r[8] || '',
-    meaning_ta: r[9] || '',
-    meaning_hi: r[10] || '',
+    stanza_number: parseInt(r[cStanza], 10),
+    stanza_label: r[cLabel] || '',
+    script_devanagari: r[cDeva] || '',
+    script_telugu: r[cTelugu] || '',
+    script_tamil: r[cTamil] || '',
+    roman_iast: r[cIast] || '',
+    meaning_en: r[cMeaningEn] || '',
+    meaning_te: r[cMeaningTe] || '',
+    meaning_ta: r[cMeaningTa] || '',
+    meaning_hi: r[cMeaningHi] || '',
   }));
 
   const outPath = resolve(researchDir, `${slug}-stanzas.json`);

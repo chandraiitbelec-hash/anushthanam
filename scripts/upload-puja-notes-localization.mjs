@@ -14,16 +14,14 @@
  *   node scripts/upload-puja-notes-localization.mjs --write               (apply, all slugs)
  *   node scripts/upload-puja-notes-localization.mjs --slug=shiva-puja --write
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 const slugArg = process.argv.find(a => a.startsWith('--slug='));
 
 // Batch 1 slugs owned by this script
@@ -35,13 +33,6 @@ const TARGET_SLUGS = slugArg ? [slugArg.replace('--slug=', '')] : ALL_SLUGS;
 /** Strip leading [FLAG…]/[NOTE] authoring tags and trim */
 function normalize(str) {
   return (str || '').replace(/^\s*\[[^\]]+\]\s*/g, '').trim();
-}
-
-function colLetter(i) {
-  let s = '';
-  i += 1;
-  while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); }
-  return s;
 }
 
 // ─── Load notes JSON files ────────────────────────────────────────────────────
@@ -63,12 +54,7 @@ if (!Object.keys(notesMap).length) {
 
 // ─── Sheet connection ─────────────────────────────────────────────────────────
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const sheets = await getSheetsClient();
 
 async function fetchSheet(tab) {
   const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${tab}!A:ZZ` });

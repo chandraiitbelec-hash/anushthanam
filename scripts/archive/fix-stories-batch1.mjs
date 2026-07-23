@@ -9,11 +9,12 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
 const auth = new google.auth.GoogleAuth({ credentials: key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
+const WRITE = process.argv.includes('--write');
 
 // ── CONTENT ────────────────────────────────────────────────────────────────
 
@@ -148,6 +149,23 @@ async function run() {
   const scSheet = metaRes.data.sheets.find(s => s.properties.title === 'stories_content');
   const scSheetId = scSheet.properties.sheetId;
 
+  const newRows = [];
+  for (const [slug, langs] of Object.entries(stories)) {
+    for (const [lang, paras] of Object.entries(langs)) {
+      paras.forEach((text, i) => newRows.push([slug, lang, String(i + 1), '', text]));
+    }
+  }
+
+  if (!WRITE) {
+    console.log(`[DRY RUN] would delete ${rowsToDelete.length} old row(s)`);
+    console.log(`[DRY RUN] would append ${newRows.length} paragraph(s)`);
+    console.log('\nDry run only — no changes written. Re-run with --write to apply.');
+    for (const [slug, langs] of Object.entries(stories)) {
+      console.log(`  ${slug}: te=${langs.te?.length} ta=${langs.ta?.length} hi=${langs.hi?.length}`);
+    }
+    return;
+  }
+
   if (rowsToDelete.length > 0) {
     const deleteRequests = rowsToDelete.sort((a, b) => b - a).map(rowNum => ({
       deleteDimension: {
@@ -160,13 +178,6 @@ async function run() {
     console.log(`✓ Deleted ${rowsToDelete.length} old rows`);
   }
 
-  const newRows = [];
-  for (const [slug, langs] of Object.entries(stories)) {
-    for (const [lang, paras] of Object.entries(langs)) {
-      paras.forEach((text, i) => newRows.push([slug, lang, String(i + 1), '', text]));
-    }
-  }
-
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID, range: 'stories_content!A1',
     valueInputOption: 'RAW', requestBody: { values: newRows },
@@ -174,7 +185,6 @@ async function run() {
 
   console.log(`✓ Added ${newRows.length} paragraphs`);
   for (const [slug, langs] of Object.entries(stories)) {
-    const en = langs.te?.length ?? 0;
     console.log(`  ${slug}: te=${langs.te?.length} ta=${langs.ta?.length} hi=${langs.hi?.length}`);
   }
 }

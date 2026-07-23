@@ -9,7 +9,7 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;

@@ -9,7 +9,7 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
@@ -18,6 +18,7 @@ const auth = new google.auth.GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 const sheets = google.sheets({ version: 'v4', auth });
+const WRITE = process.argv.includes('--write');
 
 // ── CORRECTED TELUGU PARAGRAPHS ────────────────────────────────────────────
 // Each story now matches the English paragraph count exactly.
@@ -115,16 +116,20 @@ async function run() {
       { col: vTitleHiIdx, value: 'सत्यनारायण स्वामी व्रत' },
     ];
 
-    for (const { col, value } of updates) {
-      const colLetter = String.fromCharCode(65 + col);
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `vrathams!${colLetter}${sheetRow}`,
-        valueInputOption: 'RAW',
-        requestBody: { values: [[value]] },
-      });
+    if (!WRITE) {
+      console.log(`[DRY RUN] would update vratham title (row ${sheetRow}) to "Satyanarayana Swamy Vratham" in 4 languages`);
+    } else {
+      for (const { col, value } of updates) {
+        const colLetter = String.fromCharCode(65 + col);
+        await sheets.spreadsheets.values.update({
+          spreadsheetId: SPREADSHEET_ID,
+          range: `vrathams!${colLetter}${sheetRow}`,
+          valueInputOption: 'RAW',
+          requestBody: { values: [[value]] },
+        });
+      }
+      console.log('✓ Updated vratham title to "Satyanarayana Swamy Vratham"');
     }
-    console.log('✓ Updated vratham title to "Satyanarayana Swamy Vratham"');
   }
 
   // ── 2. Replace Telugu story paragraphs ───────────────────────────────────
@@ -146,6 +151,25 @@ async function run() {
       rowsToDelete.push(i + 2); // +1 for header, +1 for 1-based
     }
   });
+
+  // Append new Telugu paragraphs
+  const newRows = [];
+  for (const [slug, paras] of Object.entries(teluguStories)) {
+    paras.forEach((text, i) => {
+      newRows.push([slug, 'te', String(i + 1), '', text]);
+    });
+  }
+
+  if (!WRITE) {
+    console.log(`[DRY RUN] would delete ${rowsToDelete.length} old Telugu story row(s)`);
+    console.log(`[DRY RUN] would append ${newRows.length} Telugu story paragraph(s)`);
+    console.log('\nDry run only — no changes written. Re-run with --write to apply.');
+    console.log('\nParagraph counts after fix:');
+    for (const [slug, paras] of Object.entries(teluguStories)) {
+      console.log(`  ${slug}: te=${paras.length}`);
+    }
+    return;
+  }
 
   // Get sheet ID for stories_content
   const metaRes = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
@@ -170,14 +194,6 @@ async function run() {
       requestBody: { requests: deleteRequests },
     });
     console.log(`✓ Deleted ${rowsToDelete.length} old Telugu story rows`);
-  }
-
-  // Append new Telugu paragraphs
-  const newRows = [];
-  for (const [slug, paras] of Object.entries(teluguStories)) {
-    paras.forEach((text, i) => {
-      newRows.push([slug, 'te', String(i + 1), '', text]);
-    });
   }
 
   await sheets.spreadsheets.values.append({

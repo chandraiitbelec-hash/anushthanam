@@ -8,11 +8,12 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+dotenv.config({ path: resolve(__dirname, '../../.env.local') });
 const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
 const auth = new google.auth.GoogleAuth({ credentials: key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
+const WRITE = process.argv.includes('--write');
 
 const stories = {
   'ekadashi-katha': {
@@ -84,6 +85,7 @@ async function getSheetId() {
   return meta.data.sheets.find(s => s.properties.title === 'stories_content').properties.sheetId;
 }
 async function deleteRows(sheetId, indices) {
+  if (!WRITE) { console.log(`  [DRY RUN] would delete ${indices.length} row(s)`); return; }
   const sorted = [...indices].sort((a, b) => b - a);
   await sheets.spreadsheets.batchUpdate({
     spreadsheetId: SPREADSHEET_ID,
@@ -91,6 +93,7 @@ async function deleteRows(sheetId, indices) {
   });
 }
 async function appendRows(rows) {
+  if (!WRITE) { console.log(`  [DRY RUN] would append ${rows.length} row(s)`); return; }
   await sheets.spreadsheets.values.append({ spreadsheetId: SPREADSHEET_ID, range: 'stories_content!A:D', valueInputOption: 'RAW', requestBody: { values: rows } });
 }
 
@@ -109,3 +112,4 @@ for (const [slug, langs] of Object.entries(stories)) {
 }
 console.log(`✓ Deleted ${totalDeleted} old rows`);
 console.log(`✓ Added ${totalAdded} paragraphs`);
+if (!WRITE) console.log('\nDry run only — no changes written. Re-run with --write to apply.');

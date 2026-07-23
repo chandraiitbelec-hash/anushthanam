@@ -14,15 +14,9 @@
  * Safe to re-run — checks existing state before writing.
  */
 
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
-
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 
 const OCCASIONS_HEADERS = [
   'slug','title_en','title_te','title_ta','title_hi',
@@ -43,13 +37,7 @@ const FREQUENT_MAP = {
   'lakshmi-puja':       'TRUE',
 };
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const sheets = await getSheetsClient();
 
 console.log('\n══ setup-puja-occasions.mjs ══════════════════════════════════');
 console.log(`Mode: ${WRITE ? '⚡ WRITE' : '🔍 DRY RUN (pass --write to apply)'}`);
@@ -81,12 +69,6 @@ async function writeValues(tab, range, values) {
     requestBody: { values },
   });
   console.log(`  ✓ wrote ${tab}!${range}`);
-}
-
-function colLetter(zeroIdx) {
-  return zeroIdx < 26
-    ? String.fromCharCode(65 + zeroIdx)
-    : 'A' + String.fromCharCode(65 + (zeroIdx - 26));
 }
 
 async function ensureTab(title, existingTabs) {

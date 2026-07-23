@@ -4,21 +4,12 @@
  *
  * Usage:
  *   node scripts/update-upcoming-dates-2026.mjs          ← dry run (prints changes, writes nothing)
- *   node scripts/update-upcoming-dates-2026.mjs --apply  ← actually writes to Sheets
+ *   node scripts/update-upcoming-dates-2026.mjs --write  ← actually writes to Sheets
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
-const APPLY = process.argv.includes('--apply');
-
-const key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
-const auth = new google.auth.GoogleAuth({ credentials: key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-const sheets = google.sheets({ version: 'v4', auth });
-const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const APPLY = parseWriteFlag(process.argv);
+const sheets = await getSheetsClient();
 
 // ─── Verified dates from the audited Jul–Dec 2026 Hindu calendar ─────────────
 
@@ -60,17 +51,6 @@ const VRATHAM_UPDATES = {
   'dhanurmasa-vratam':           { date: '2026-12-16', note: 'Sun enters Sagittarius (Dhanu Rashi); 30-day Margazhi vow; ends ~Jan 14 2027' },
 };
 
-function colToLetter(index) {
-  let letter = '';
-  let n = index + 1;
-  while (n > 0) {
-    const rem = (n - 1) % 26;
-    letter = String.fromCharCode(65 + rem) + letter;
-    n = Math.floor((n - 1) / 26);
-  }
-  return letter;
-}
-
 async function processTab(tab, updates) {
   const res = await sheets.spreadsheets.values.get({ spreadsheetId: SPREADSHEET_ID, range: `${tab}!A:Z` });
   const [header, ...rows] = res.data.values || [];
@@ -107,11 +87,11 @@ async function processTab(tab, updates) {
     console.log(`  match ${slug} → ${update.date}  [${update.note}]`);
 
     batchData.push({
-      range: `${tab}!${colToLetter(occCol)}${rowNum}`,
+      range: `${tab}!${colLetter(occCol)}${rowNum}`,
       values: [[update.date]],
     });
     batchData.push({
-      range: `${tab}!${colToLetter(noteCol)}${rowNum}`,
+      range: `${tab}!${colLetter(noteCol)}${rowNum}`,
       values: [[update.note]],
     });
     matched++;
@@ -126,7 +106,7 @@ async function processTab(tab, updates) {
     });
     console.log(`  ✓ Written to Sheets`);
   } else if (!APPLY) {
-    console.log(`  (dry run — pass --apply to write)`);
+    console.log(`  (dry run — pass --write to apply)`);
   }
 
   return matched;
