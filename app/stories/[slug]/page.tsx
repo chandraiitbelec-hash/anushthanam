@@ -5,7 +5,7 @@ import { getStoriesForParent } from '@/lib/relations';
 import type { Story, Festival, Vratham } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import StoryContent from '@/components/StoryContent';
-import { pageMeta, SITE_URL } from '@/lib/seo';
+import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -77,7 +77,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Stories', labels: { te: 'కథలు', ta: 'கதைகள்', hi: 'कथाएं' }, href: '/stories' },
         ...(parent ? [{ label: parent.title_en, labels: { te: parent.title_te, ta: parent.title_ta, hi: parent.title_hi }, href: parent.href }] : []),

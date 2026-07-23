@@ -5,7 +5,7 @@ import type { Vratham, God, Story, ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
-import { pageMeta, SITE_URL } from '@/lib/seo';
+import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -59,7 +59,7 @@ export default async function VrathamPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Vrathams', labels: { te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }, href: '/vrathams' },
         { label: vratham.title_en, labels: { te: vratham.title_te, ta: vratham.title_ta, hi: vratham.title_hi } },

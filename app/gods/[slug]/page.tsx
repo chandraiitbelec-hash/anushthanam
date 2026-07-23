@@ -4,7 +4,7 @@ import { getLinksForGod } from '@/lib/relations';
 import type { God, GodLink, Shloka, Festival } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import GodProfile from '@/components/GodProfile';
-import { pageMeta, SITE_URL } from '@/lib/seo';
+import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -74,7 +74,7 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Gods', labels: { te: 'దేవతలు', ta: 'தெய்வங்கள்', hi: 'देवता' }, href: '/gods' },
         { label: god.name_en, labels: { te: god.name_te, ta: god.name_ta, hi: god.name_hi } },

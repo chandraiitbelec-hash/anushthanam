@@ -137,7 +137,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               gap: '12px',
               padding: '10px 14px',
               background: done ? 'var(--color-bg)' : 'transparent',
-              border: `1px dashed ${done ? 'var(--color-border)' : 'var(--color-border)'}`,
+              border: '1px dashed var(--color-border)',
               borderRadius: '8px',
               fontSize: '14px',
               cursor: 'pointer',

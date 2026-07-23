@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLang, SITE_NAMES, LANGUAGE_LABELS, LANGUAGES } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import type { Theme } from '@/context/ThemeContext';
@@ -33,6 +33,23 @@ export default function Nav() {
   const searchRef = useDismissable<HTMLDivElement>(searchOpen, () => setSearchOpen(false));
   const langRef = useDismissable<HTMLDivElement>(langOpen, () => setLangOpen(false));
   useDismissable<HTMLDivElement>(mobileOpen, () => setMobileOpen(false), { escapeOnly: true });
+
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
+  const isFirstRender = useRef(true);
+
+  // Move focus into the drawer when it opens, and back to the toggle when it closes.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (mobileOpen) {
+      mobileNavRef.current?.querySelector<HTMLElement>('a, button')?.focus();
+    } else {
+      hamburgerRef.current?.focus();
+    }
+  }, [mobileOpen]);
 
   function linkLabel(link: typeof NAV_LINKS[0]) {
     return link[`label_${lang}` as keyof typeof link] || link.label_en;
@@ -265,9 +282,11 @@ export default function Nav() {
 
             {/* Hamburger — CSS hides this on desktop */}
             <button
+              ref={hamburgerRef}
               onClick={() => setMobileOpen(o => !o)}
               className="nav-hamburger"
-              aria-label="Open menu"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--color-text-primary)', fontSize: '22px',
@@ -290,6 +309,7 @@ export default function Nav() {
           onClick={() => setMobileOpen(false)}
         >
           <nav
+            ref={mobileNavRef}
             onClick={e => e.stopPropagation()}
             style={{
               position: 'absolute', top: '64px', left: 0, right: 0,

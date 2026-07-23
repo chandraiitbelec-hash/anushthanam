@@ -87,6 +87,7 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
               <button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
+                aria-current={isActive ? 'true' : undefined}
                 style={{
                   flexShrink: 0,
                   padding: '5px 16px',

@@ -5,7 +5,7 @@ import type { Shloka } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
-import { pageMeta, SITE_URL } from '@/lib/seo';
+import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -44,7 +44,7 @@ export default async function ShlokaPage({ params }: { params: Promise<{ slug: s
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Shlokas', labels: { te: 'శ్లోకాలు', ta: 'ஸ்லோகங்கள்', hi: 'श्लोक' }, href: '/shlokas' },
         { label: shloka.title_en, labels: { te: shloka.title_te, ta: shloka.title_ta, hi: shloka.title_hi } },

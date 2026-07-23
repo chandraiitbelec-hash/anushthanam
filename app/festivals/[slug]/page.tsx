@@ -5,7 +5,7 @@ import type { Festival, Story, God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import FestivalProfile from '@/components/FestivalProfile';
-import { pageMeta, SITE_URL } from '@/lib/seo';
+import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -60,7 +60,7 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Festivals', labels: { te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' }, href: '/festivals' },
         { label: festival.title_en, labels: { te: festival.title_te, ta: festival.title_ta, hi: festival.title_hi } },
