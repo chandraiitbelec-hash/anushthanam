@@ -6,19 +6,10 @@ import EntityCard from '@/components/EntityCard';
 import { TabList, TabPanel, useTabs } from './Tabs';
 import type { Shloka, Language } from '@/lib/types';
 
-const TYPE_LABELS: Record<string, Record<Language, string>> = {
-  ashtothram:   { en: 'Ashtothram',   te: 'అష్టోత్తరం',   ta: 'அஷ்டோத்திரம்',  hi: 'अष्टोत्तरम्' },
-  sahasranamam: { en: 'Sahasranamam', te: 'సహస్రనామం',    ta: 'சஹஸ்ரநாமம்',    hi: 'सहस्रनामम्' },
-  chalisa:      { en: 'Chalisa',      te: 'చాలీసా',        ta: 'சாலீசா',         hi: 'चालीसा' },
-  stotra:       { en: 'Stotra',       te: 'స్తోత్రం',      ta: 'ஸ்தோத்திரம்',   hi: 'स्तोत्र' },
-  kavacham:     { en: 'Kavacham',     te: 'కవచం',          ta: 'கவசம்',          hi: 'कवचम्' },
-  suprabhatam:  { en: 'Suprabhatam',  te: 'సుప్రభాతం',    ta: 'சுப்ரபாதம்',    hi: 'सुप्रभातम्' },
-  namavali:     { en: 'Namavali',     te: 'నామావళి',       ta: 'நாமாவளி',       hi: 'नामावली' },
-  other:        { en: 'Other',        te: 'ఇతరాలు',        ta: 'மற்றவை',         hi: 'अन्य' },
-};
-
 function typeLabel(type: string, lang: Language) {
-  return TYPE_LABELS[type]?.[lang] ?? TYPE_LABELS[type]?.en ?? type.charAt(0).toUpperCase() + type.slice(1);
+  const ui = UI[lang];
+  const key = ('shlokaType' + type.charAt(0).toUpperCase() + type.slice(1)) as keyof typeof ui;
+  return (ui[key] as string) ?? type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 type Group = { type: string; shlokas: Shloka[] };

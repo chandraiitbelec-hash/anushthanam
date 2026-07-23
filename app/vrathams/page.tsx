@@ -19,7 +19,7 @@ export default async function VrathamsPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Vrathams' }]} />
+      <Breadcrumb crumbs={[{ label: 'Vrathams', labels: { te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' } }]} />
       <ListPageHeader
         titles={{ en: 'Vrathams & Vows', te: 'వ్రతాలు', ta: 'விரதங்கள்', hi: 'व्रत' }}
         count={vrathams.length}

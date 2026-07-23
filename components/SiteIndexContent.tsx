@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import EntityCard from '@/components/EntityCard';
 
 type IndexEntity = { slug: string; names: { en: string; te?: string; ta?: string; hi?: string; sa?: string } };
@@ -28,10 +29,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
   const { lang } = useLang();
   const ui = UI[lang];
 
-  const titleClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const titleClass = scriptClass(lang);
 
   return (
     <>

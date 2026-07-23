@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import SectionNav, { type NavSection } from '@/components/SectionNav';
-import type { God } from '@/lib/types';
+import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
+import type { God, Language } from '@/lib/types';
 
 type LinkedEntity = {
   slug: string;
@@ -22,15 +24,17 @@ type Props = {
   festivals: LinkedEntity[];
 };
 
-const SECTION_LABELS: Record<string, Record<string, string>> = {
-  iconography: { en: 'Iconography', te: 'ఆకృతి', ta: 'உருவ அமைப்பு', hi: 'प्रतिमा विज्ञान' },
-  shlokas:     { en: 'Shlokas & Stotras', te: 'శ్లోకాలు & స్తోత్రాలు', ta: 'ஸ்லோகங்கள் & ஸ்தோத்திரங்கள்', hi: 'श्लोक & स्तोत्र' },
-  pujas:       { en: 'Pujas', te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' },
-  festivals:   { en: 'Festivals', te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' },
+// "Shlokas & Stotras" is a distinct, longer heading from the plain UI.shlokas label
+const SHLOKAS_HEADING: Record<Language, string> = {
+  en: 'Shlokas & Stotras', te: 'శ్లోకాలు & స్తోత్రాలు', ta: 'ஸ்லோகங்கள் & ஸ்தோத்திரங்கள்', hi: 'श्लोक & स्तोत्र',
 };
 
-function label(key: string, lang: string) {
-  return SECTION_LABELS[key]?.[lang] ?? SECTION_LABELS[key]?.en ?? key;
+function label(key: string, lang: Language) {
+  if (key === 'iconography') return UI[lang].godIconography;
+  if (key === 'shlokas') return SHLOKAS_HEADING[lang];
+  if (key === 'pujas') return UI[lang].pujas;
+  if (key === 'festivals') return UI[lang].festivals;
+  return key;
 }
 
 function nameInLang(e: LinkedEntity, lang: string) {
@@ -81,10 +85,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
   const description = (god as unknown as Record<string, string>)[`description_${lang}`] || god.description_en;
   const iconography = (god as unknown as Record<string, string>)[`iconography_${lang}`] || god.iconography_en;
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   const navSections: NavSection[] = [
     ...(iconography ? [{ id: 'section-iconography', label: label('iconography', lang) }] : []),

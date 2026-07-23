@@ -1,12 +1,13 @@
 'use client';
 
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+import { LOCALE_MAP } from '@/lib/utils';
 import type { PanchangamDay } from '@/lib/types';
-
-const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
 
 export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[] }) {
   const { lang } = useLang();
+  const ui = UI[lang];
   const locale = LOCALE_MAP[lang] ?? 'en-IN';
   const r = (day: PanchangamDay) => day as unknown as Record<string, string>;
 
@@ -46,7 +47,7 @@ export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[]
       </div>
       {days.length === 30 && (
         <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '12px', textAlign: 'center' }}>
-          Showing 30 days
+          {ui.showingDays(30)}
         </p>
       )}
     </>

@@ -2,22 +2,11 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
-import type { Festival, Vratham, PanchangamDay, Language } from '@/lib/types';
+import { UI } from '@/lib/ui-strings';
+import { LOCALE_MAP, scriptClass } from '@/lib/utils';
+import type { Festival, Vratham, PanchangamDay } from '@/lib/types';
 
-const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
-
-const EXPLORE_LABEL = { en: 'Explore', te: 'అన్వేషించండి', ta: 'ஆராயுங்கள்', hi: 'खोजें' };
-
-type LabelSet = { en: string; te: string; ta: string; hi: string };
-
-const CARD_LABELS: Record<string, LabelSet> = {
-  gods:       { en: 'Gods',       te: 'దేవతలు',   ta: 'தேவர்கள்',      hi: 'देवता' },
-  festivals:  { en: 'Festivals',  te: 'పండుగలు',  ta: 'திருவிழாக்கள்', hi: 'त्योहार' },
-  vrathams:   { en: 'Vrathams',   te: 'వ్రతాలు',  ta: 'விரதங்கள்',     hi: 'व्रत' },
-  pujas:      { en: 'Pujas',      te: 'పూజలు',    ta: 'பூஜைகள்',       hi: 'पूजा' },
-  shlokas:    { en: 'Shlokas',    te: 'శ్లోకాలు', ta: 'ஸ்லோகங்கள்',    hi: 'श्लोक' },
-  panchangam: { en: 'Panchangam', te: 'పంచాంగం',  ta: 'பஞ்சாங்கம்',    hi: 'पंचांग' },
-};
+type CardKey = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'panchangam';
 
 type Props = {
   nextFestival: Festival | null;
@@ -27,14 +16,11 @@ type Props = {
 
 export default function ExploreGrid({ nextFestival, nextVratham, today }: Props) {
   const { lang } = useLang();
+  const ui = UI[lang];
+  const nameClass = scriptClass(lang);
 
-  const scriptClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
-
-  function cardLabel(key: string) {
-    return CARD_LABELS[key][lang as keyof LabelSet] || CARD_LABELS[key].en;
+  function cardLabel(key: CardKey) {
+    return ui[key];
   }
 
   function entityTitle(entity: Record<string, string>) {
@@ -60,7 +46,7 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
     ? `${entityTitle(nextVratham as unknown as Record<string, string>)} · ${formatDate(nextVratham.next_occurrence)}`
     : null;
 
-  const cards: { href: string; key: string; preview: string | null }[] = [
+  const cards: { href: string; key: CardKey; preview: string | null }[] = [
     { href: '/gods',       key: 'gods',       preview: null },
     { href: '/festivals',  key: 'festivals',  preview: festivalPreview },
     { href: '/vrathams',   key: 'vrathams',   preview: vrathamPreview },
@@ -78,7 +64,7 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
         color: 'var(--color-text-primary)',
         margin: '0 0 24px',
       }}>
-        {EXPLORE_LABEL[lang as Language] || EXPLORE_LABEL.en}
+        {ui.exploreLabel}
       </h2>
       <div className="explore-grid">
         {cards.map(card => (
@@ -95,14 +81,14 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
             onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
             onMouseOut={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
           >
-            <span className={scriptClass} style={{
+            <span className={nameClass} style={{
               fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
               fontWeight: 600,
             }}>
               {cardLabel(card.key)}
             </span>
             {card.preview && (
-              <span className={scriptClass} style={{
+              <span className={nameClass} style={{
                 display: 'block',
                 marginTop: '6px',
                 fontSize: '13px',

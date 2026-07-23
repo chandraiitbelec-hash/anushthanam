@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import FontSizeToggle from '@/components/FontSizeToggle';
 import type { GitaVerse, GitaChapter } from '@/lib/gita';
 
@@ -24,12 +25,9 @@ const SCRIPT_CLASS: Record<string, string> = {
   sanskrit: 'script-devanagari-serif',
 };
 
-const TOGGLE_LABELS: Record<string, { devanagari: string; iast: string; meaning: string }> = {
-  en: { devanagari: 'Sanskrit', iast: 'IAST', meaning: 'Meaning' },
-  te: { devanagari: 'Sanskrit', iast: 'IAST', meaning: 'అర్థం' },
-  ta: { devanagari: 'Sanskrit', iast: 'IAST', meaning: 'பொருள்' },
-  hi: { devanagari: 'Sanskrit', iast: 'IAST', meaning: 'अर्थ' },
-};
+// "Sanskrit"/"IAST" toggle button text is identical across all UI languages
+const DEVANAGARI_TOGGLE = 'Sanskrit';
+const IAST_TOGGLE = 'IAST';
 
 function pill(active: boolean): React.CSSProperties {
   return {
@@ -76,7 +74,6 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
   const [showMeaning, setShowMeaning] = useState(true);
 
   const primaryKey = PRIMARY_SCRIPT[lang] ?? 'iast';
-  const labels = TOGGLE_LABELS[lang] ?? TOGGLE_LABELS.en;
 
   // For en, primary is already IAST so "extra" toggle is Sanskrit devanagari
   // For other langs, primary is native script so extras are Sanskrit + IAST
@@ -128,21 +125,21 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
         )}
         {!isEnglish && (
           <button aria-pressed={showSanskrit} onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
-            {labels.devanagari}
+            {DEVANAGARI_TOGGLE}
           </button>
         )}
         {!isEnglish && (
           <button aria-pressed={showIast} onClick={() => setShowIast(v => !v)} style={pill(showIast)}>
-            {labels.iast}
+            {IAST_TOGGLE}
           </button>
         )}
         {isEnglish && (
           <button aria-pressed={showSanskrit} onClick={() => setShowSanskrit(v => !v)} style={pill(showSanskrit)}>
-            {labels.devanagari}
+            {DEVANAGARI_TOGGLE}
           </button>
         )}
         <button aria-pressed={showMeaning} onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning)}>
-          {labels.meaning}
+          {ui.meaning}
         </button>
         <FontSizeToggle />
       </div>
@@ -214,11 +211,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
                     fontSize: 'calc(14px * var(--content-font-scale, 1))',
                     color: 'var(--color-text-secondary)',
                     lineHeight: 1.75,
-                  }} className={
-                    lang === 'te' ? 'script-telugu' :
-                    lang === 'ta' ? 'script-tamil' :
-                    lang === 'hi' ? 'script-devanagari' : ''
-                  }>
+                  }} className={scriptClass(lang)}>
                     {meaning}
                   </div>
                 )}

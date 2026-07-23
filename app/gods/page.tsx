@@ -19,7 +19,7 @@ export default async function GodsPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Gods' }]} />
+      <Breadcrumb crumbs={[{ label: 'Gods', labels: { te: 'దేవతలు', ta: 'தேவர்கள்', hi: 'देवता' } }]} />
       <ListPageHeader
         titles={{ en: 'Gods & Goddesses', te: 'దేవతలు', ta: 'தேவர்கள்', hi: 'देवी-देवता' }}
         count={gods.length}

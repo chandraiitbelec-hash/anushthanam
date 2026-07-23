@@ -1,6 +1,7 @@
 'use client';
 
 import { useLang } from '@/context/LanguageContext';
+import { scriptClass } from '@/lib/utils';
 
 type Props = {
   titles: { en: string; te: string; ta: string; hi: string };
@@ -14,10 +15,7 @@ export default function ListPageHeader({ titles, count, countLabels }: Props) {
   const title = titles[lang as keyof typeof titles] ?? titles.en;
   const countLabel = countLabels[lang as keyof typeof countLabels] ?? countLabels.en;
 
-  const titleClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const titleClass = scriptClass(lang);
 
   return (
     <>

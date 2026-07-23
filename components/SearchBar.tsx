@@ -3,17 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 import type { SearchRecord } from '@/lib/types';
-
-const PLACEHOLDER: Record<string, string> = {
-  en: 'Search gods, shlokas, festivals…',
-  te: 'వెతకండి…',
-  ta: 'தேடு…',
-  hi: 'खोजें…',
-};
 
 export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 }: { autoFocus?: boolean; onSelect?: () => void; maxWidth?: number } = {}) {
   const { lang } = useLang();
+  const ui = UI[lang];
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchRecord[]>([]);
   const [open, setOpen] = useState(false);
@@ -85,6 +80,10 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
     god: '🕉', shloka: '📖', festival: '🪔', vratham: '🙏',
   };
 
+  const TYPE_LABEL: Record<string, string> = {
+    god: ui.deityLabel, shloka: ui.shlokaLabel, festival: ui.festivalWord, vratham: ui.vrathamWord,
+  };
+
   return (
     <div ref={containerRef} style={{ position: 'relative', width: '100%', maxWidth }}>
       <input
@@ -93,8 +92,8 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
         value={query}
         onChange={e => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setOpen(true)}
-        placeholder={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
-        aria-label={PLACEHOLDER[lang] ?? PLACEHOLDER.en}
+        placeholder={ui.searchPlaceholder}
+        aria-label={ui.searchPlaceholder}
         style={{
           width: '100%',
           padding: '10px 16px',
@@ -138,8 +137,8 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
               <span style={{ flex: 1, fontSize: '14px', fontWeight: 500 }}>
                 {r[`name_${lang}` as keyof SearchRecord] as string || r.name_en}
               </span>
-              <span style={{ fontSize: '11px', color: 'var(--color-text-secondary)', textTransform: 'capitalize' }}>
-                {r.type}
+              <span style={{ fontSize: '11px', color: 'var(--color-text-secondary)' }}>
+                {TYPE_LABEL[r.type] ?? r.type}
               </span>
             </Link>
           ))}

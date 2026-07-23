@@ -1,6 +1,7 @@
 'use client';
 
 import { useLang } from '@/context/LanguageContext';
+import { scriptClass } from '@/lib/utils';
 import type { Shloka } from '@/lib/types';
 
 export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
@@ -9,10 +10,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
   const title = (shloka as unknown as Record<string, string>)[`title_${lang}`] || shloka.title_en;
   const intro = (shloka as unknown as Record<string, string>)[`brief_intro_${lang}`] || shloka.brief_intro_en;
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   return (
     <>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getFrequentPujas, getOccasions, getAllOccasionPujas } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujasBrowser from '@/components/PujasBrowser';
+import ScriptH1 from '@/components/ScriptH1';
 
 export const revalidate = 3600;
 
@@ -21,17 +22,17 @@ export default async function PujasPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Pujas' }]} />
+      <Breadcrumb crumbs={[{ label: 'Pujas', labels: { te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' } }]} />
 
-      <h1 style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(28px, 4vw, 40px)',
-        fontWeight: 600,
-        color: 'var(--color-text-primary)',
-        margin: '0 0 32px',
-      }}>
-        Pujas
-      </h1>
+      <ScriptH1
+        labels={{ en: 'Pujas', te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' }}
+        style={{
+          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontWeight: 600,
+          color: 'var(--color-text-primary)',
+          margin: '0 0 32px',
+        }}
+      />
 
       <PujasBrowser
         frequentPujas={frequentPujas}

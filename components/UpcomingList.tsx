@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
-
-const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
+import { LOCALE_MAP, scriptClass } from '@/lib/utils';
 
 export type UpcomingItem = {
   type: 'festival' | 'vratham';
@@ -15,24 +14,6 @@ export type UpcomingItem = {
   title_hi: string;
   next_occurrence: string;
   next_occurrence_note_en: string;
-};
-
-const EMPTY_LABELS = {
-  en: { heading: 'No upcoming dates set', sub: 'Festival dates are updated before each season. Check back soon.' },
-  te: { heading: 'రాబోయే తేదీలు నిర్ణయించబడలేదు', sub: 'పండుగ తేదీలు ప్రతి సీజన్ ముందు నవీకరించబడతాయి. త్వరలో తనిఖీ చేయండి.' },
-  ta: { heading: 'வரவிருக்கும் நாட்கள் நிர்ணயிக்கப்படவில்லை', sub: 'திருவிழா நாட்கள் ஒவ்வொரு பருவத்திற்கும் முன் புதுப்பிக்கப்படும். விரைவில் சரிபாருங்கள்.' },
-  hi: { heading: 'आगामी तिथियाँ अभी निर्धारित नहीं', sub: 'त्योहार की तारीखें हर मौसम से पहले अपडेट की जाती हैं। जल्द वापस देखें।' },
-};
-
-const TYPE_LABELS = {
-  en: { festival: 'Festival', vratham: 'Vratham' },
-  te: { festival: 'పండుగ', vratham: 'వ్రతం' },
-  ta: { festival: 'திருவிழா', vratham: 'விரதம்' },
-  hi: { festival: 'त्योहार', vratham: 'व्रत' },
-};
-
-const TODAY_LABELS = {
-  en: 'Today', te: 'నేడు', ta: 'இன்று', hi: 'आज',
 };
 
 function getDaysUntil(dateStr: string): number {
@@ -57,17 +38,14 @@ function groupByMonth(items: UpcomingItem[], locale: string) {
 
 export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
   const { lang } = useLang();
+  const ui = UI[lang];
 
   const getTitle = (item: UpcomingItem) =>
     (item as Record<string, string>)[`title_${lang}`] || item.title_en;
 
-  const scriptClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   if (items.length === 0) {
-    const labels = EMPTY_LABELS[lang as keyof typeof EMPTY_LABELS] ?? EMPTY_LABELS.en;
     return (
       <div style={{
         padding: '48px 32px',
@@ -78,10 +56,10 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
       }}>
         <p style={{ fontSize: '36px', margin: '0 0 16px', lineHeight: 1 }}>🪔</p>
         <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>
-          {labels.heading}
+          {ui.upcomingEmptyHeading}
         </p>
         <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0, maxWidth: '340px', marginLeft: 'auto', marginRight: 'auto' }}>
-          {labels.sub}
+          {ui.upcomingEmptySub}
         </p>
       </div>
     );
@@ -89,7 +67,6 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
 
   const locale = LOCALE_MAP[lang] ?? 'en-IN';
   const groups = groupByMonth(items, locale);
-  const typeLabels = TYPE_LABELS[lang as keyof typeof TYPE_LABELS] ?? TYPE_LABELS.en;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -177,7 +154,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
 
                   {/* Content */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p className={lang !== 'en' ? scriptClass : undefined} style={{
+                    <p className={lang !== 'en' ? nameClass : undefined} style={{
                       fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
                       fontSize: lang === 'en' ? '18px' : '16px',
                       fontWeight: 600,
@@ -201,7 +178,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                         color: isFestival ? 'var(--color-saffron)' : 'var(--color-green)',
                         fontWeight: 600,
                       }}>
-                        {isFestival ? typeLabels.festival : typeLabels.vratham}
+                        {isFestival ? ui.festivalWord : ui.vrathamWord}
                       </span>
                       {item.next_occurrence_note_en && (
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
@@ -216,12 +193,12 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                           borderRadius: '20px',
                           background: 'rgba(184,134,11,0.14)',
                         }}>
-                          {TODAY_LABELS[lang as keyof typeof TODAY_LABELS] ?? TODAY_LABELS.en}
+                          {ui.todayLabelUpcoming}
                         </span>
                       )}
                       {isSoon && (
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
-                          {UI[lang as keyof typeof UI]?.daysAway(days)}
+                          {ui.daysAway(days)}
                         </span>
                       )}
                     </div>

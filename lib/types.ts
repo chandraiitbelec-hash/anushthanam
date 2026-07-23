@@ -4,12 +4,6 @@ export type Status = 'draft' | 'review' | 'published';
 
 export type TranslationStatus = 'en-only' | 'partial' | 'complete';
 
-export type TranslationResult = {
-  value: string;
-  isFallback: boolean;
-  lang: Language;
-};
-
 export type God = {
   slug: string;
   name_en: string;

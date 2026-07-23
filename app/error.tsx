@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 
 export default function ErrorPage({
   error,
@@ -14,10 +15,7 @@ export default function ErrorPage({
   const { lang } = useLang();
   const ui = UI[lang];
 
-  const titleClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const titleClass = scriptClass(lang);
 
   return (
     <div

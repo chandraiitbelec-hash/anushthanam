@@ -1,20 +1,12 @@
 'use client';
 
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import type { Puja, ProcedureStep, MaterialItem } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
 import { TabList, TabPanel, useTabs } from './Tabs';
-
-const LABELS: Record<string, Record<string, string>> = {
-  materials: { en: 'Materials', te: 'సామగ్రి', ta: 'பொருட்கள்', hi: 'सामग्री' },
-  procedure: { en: 'Procedure', te: 'విధానం',  ta: 'நடைமுறை',   hi: 'विधि' },
-  min:       { en: 'min',       te: 'నిమి',      ta: 'நிமி',      hi: 'मिनट' },
-};
-
-function lbl(key: string, lang: string) {
-  return LABELS[key]?.[lang] ?? LABELS[key]?.en ?? key;
-}
 
 type Tab = { id: string; label: string };
 
@@ -31,14 +23,11 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
   const title = r[`title_${lang}`] || puja.title_en;
   const description = r[`brief_description_${lang}`] || puja.brief_description_en;
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   const tabs: Tab[] = [
-    materials.length > 0 && { id: 'materials', label: lbl('materials', lang) },
-    steps.length > 0     && { id: 'procedure', label: lbl('procedure', lang) },
+    materials.length > 0 && { id: 'materials', label: UI[lang].materials },
+    steps.length > 0     && { id: 'procedure', label: UI[lang].procedure },
   ].filter(Boolean) as Tab[];
 
   const { activeTab, setActiveTab, tabRefs, handleKeyDown } = useTabs(tabs);
@@ -65,7 +54,7 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
 
         {puja.duration_minutes && (
           <p style={{ fontSize: '14px', color: 'var(--color-gold)', fontWeight: 500, margin: '0 0 16px' }}>
-            {puja.duration_minutes} {lbl('min', lang)}
+            {puja.duration_minutes} {UI[lang].minutesShort}
           </p>
         )}
 

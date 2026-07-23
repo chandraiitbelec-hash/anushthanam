@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import StoryPartPicker from './StoryPartPicker';
 import type { Story } from '@/lib/types';
 
@@ -27,16 +28,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
   const paras     = bodies[bodyLang] ?? [];
   const isFallback = lang !== 'en' && bodyLang === 'en' && paras.length > 0;
 
-  const FALLBACK_NOTE: Record<string, string> = {
-    te: 'పూర్తి కథ ఇంకా తెలుగులో అందుబాటులో లేదు — ఇంగ్లీష్‌లో చదువుతున్నారు',
-    ta: 'முழு கதை இன்னும் தமிழில் கிடைக்கவில்லை — ஆங்கிலத்தில் படிக்கிறீர்கள்',
-    hi: 'पूरी कथा अभी हिंदी में उपलब्ध नहीं है — अंग्रेज़ी में पढ़ रहे हैं',
-  };
-
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil'  :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   return (
     <>
@@ -119,7 +111,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
                 border: '1px solid rgba(184,134,11,0.2)',
                 borderRadius: '6px',
               }}>
-                {FALLBACK_NOTE[lang]}
+                {UI[lang].storyFallbackNote}
               </p>
             )}
             {paras.map((para, i) => (

@@ -9,9 +9,9 @@ import { UI } from '@/lib/ui-strings';
 import type { ShlokaStanza, ScriptLayer, ShlokaType, Language } from '@/lib/types';
 
 // Meanings are only ever authored in meaning_en for most content so far — fall
-// back to it the same way the rest of the site falls back to _en (see
-// lib/utils.ts's t()/tVal()), instead of silently hiding the meaning when the
-// active UI language has no translated meaning of its own.
+// back to it the same way the rest of the site falls back to _en, instead of
+// silently hiding the meaning when the active UI language has no translated
+// meaning of its own.
 function getMeaning(stanza: ShlokaStanza, lang: Language): string {
   const direct = stanza[`meaning_${lang}` as keyof ShlokaStanza] as string;
   return direct || stanza.meaning_en;
@@ -43,22 +43,6 @@ const SCRIPT_LANG: Record<ScriptLayer, string> = {
   script_telugu: 'te',
   script_tamil: 'ta',
   roman_iast: 'sa',
-};
-
-const MEANING_LABEL: Record<string, string> = {
-  en: 'Meaning', te: 'అర్థం', ta: 'பொருள்', hi: 'अर्थ',
-};
-
-const IAST_LABEL: Record<string, string> = {
-  en: 'देवनागरी', te: 'IAST', ta: 'IAST', hi: 'IAST',
-};
-
-const COPY_LABEL: Record<string, string> = {
-  en: 'Copy', te: 'కాపీ', ta: 'நகல்', hi: 'कॉपी',
-};
-
-const COPIED_LABEL: Record<string, string> = {
-  en: 'Copied', te: 'కాపీ అయింది', ta: 'நகலெடுக்கப்பட்டது', hi: 'कॉपी हो गया',
 };
 
 // Copy with a legacy execCommand fallback for contexts where the async
@@ -178,20 +162,20 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
         borderBottom: '1px solid var(--color-border)',
       }}>
         <button aria-pressed={showExtra} onClick={() => setShowExtra(v => !v)} style={pill(showExtra, 'gold')}>
-          {IAST_LABEL[lang] ?? 'IAST'}
+          {UI[lang].iastToggleLabel}
         </button>
         {hasMeaning && (
           <button aria-pressed={showMeaning} onClick={() => setShowMeaning(v => !v)} style={pill(showMeaning, 'saffron')}>
-            {MEANING_LABEL[lang] ?? 'Meaning'}
+            {UI[lang].meaning}
           </button>
         )}
         <FontSizeToggle />
         <button
           onClick={copyAll}
-          aria-label={COPY_LABEL[lang] ?? 'Copy'}
+          aria-label={UI[lang].copyLabel}
           style={{ ...pill(false, 'gold'), marginLeft: 'auto' }}
         >
-          {copied ? `✓ ${COPIED_LABEL[lang] ?? 'Copied'}` : `⧉ ${COPY_LABEL[lang] ?? 'Copy'}`}
+          {copied ? `✓ ${UI[lang].copiedLabel}` : `⧉ ${UI[lang].copyLabel}`}
         </button>
         <button
           onClick={shareOrCopyUrl}

@@ -1,7 +1,8 @@
 'use client';
 
 import { useLang } from '@/context/LanguageContext';
-import { formatDateLocalized } from '@/lib/utils';
+import { formatDateLocalized, scriptClass } from '@/lib/utils';
+import { UI } from '@/lib/ui-strings';
 import type { Vratham, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -11,21 +12,6 @@ import StoryLinkList from './StoryLinkList';
 import { TabList, TabPanel, useTabs } from './Tabs';
 import type { DeityRef } from './DeityChips';
 import type { ShlokaStanza } from '@/lib/types';
-
-const LABELS: Record<string, Record<string, string>> = {
-  fasting:   { en: 'Fasting',      te: 'ఉపవాసం',    ta: 'உபவாசம்',    hi: 'उपवास' },
-  benefits:  { en: 'Benefits',     te: 'ఫలితాలు',    ta: 'பலன்கள்',     hi: 'लाभ' },
-  materials: { en: 'Materials',    te: 'సామగ్రి',     ta: 'பொருட்கள்',   hi: 'सामग्री' },
-  procedure: { en: 'Procedure',    te: 'విధానం',      ta: 'நடைமுறை',     hi: 'विधि' },
-  pasurams:  { en: 'Pasurams',     te: 'పాశురాలు',   ta: 'பாசுரங்கள்',   hi: 'पासुर' },
-  story:     { en: 'Vrata Katha',  te: 'వ్రత కథ',    ta: 'விரத கதை',    hi: 'व्रत कथा' },
-  readStory: { en: 'Read',         te: 'చదవండి',      ta: 'படிக்க',       hi: 'पढ़ें' },
-  next:      { en: 'Next',         te: 'తదుపరి',      ta: 'அடுத்தது',    hi: 'अगला' },
-};
-
-function lbl(key: string, lang: string) {
-  return LABELS[key]?.[lang] ?? LABELS[key]?.en ?? key;
-}
 
 type Tab = { id: string; label: string };
 
@@ -46,18 +32,15 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
   const fasting  = r[`fasting_rules_${lang}`] || vratham.fasting_rules_en;
   const benefits = r[`benefits_${lang}`]      || vratham.benefits_en;
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   const tabs: Tab[] = [
-    fasting              && { id: 'fasting',   label: lbl('fasting', lang) },
-    benefits             && { id: 'benefits',  label: lbl('benefits', lang) },
-    materials.length > 0 && { id: 'materials', label: lbl('materials', lang) },
-    steps.length > 0     && { id: 'procedure', label: lbl('procedure', lang) },
-    stanzas.length > 0   && { id: 'pasurams',  label: lbl('pasurams', lang) },
-    stories.length > 0   && { id: 'stories',   label: lbl('story', lang) },
+    fasting              && { id: 'fasting',   label: UI[lang].fasting },
+    benefits             && { id: 'benefits',  label: UI[lang].benefits },
+    materials.length > 0 && { id: 'materials', label: UI[lang].materials },
+    steps.length > 0     && { id: 'procedure', label: UI[lang].procedure },
+    stanzas.length > 0   && { id: 'pasurams',  label: UI[lang].pasurams },
+    stories.length > 0   && { id: 'stories',   label: UI[lang].vrataKatha },
   ].filter(Boolean) as Tab[];
 
   const { activeTab, setActiveTab, tabRefs, handleKeyDown } = useTabs(tabs);
@@ -99,7 +82,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
         {vratham.next_occurrence && (
           <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
-            {lbl('next', lang)}: {formatDateLocalized(vratham.next_occurrence, lang)}
+            {UI[lang].next}: {formatDateLocalized(vratham.next_occurrence, lang)}
           </p>
         )}
 
@@ -160,7 +143,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
       {stories.length > 0 && (
         <TabPanel id="stories" activeTab={activeTab} idPrefix="vratham">
-          <StoryLinkList stories={stories} readLabel={lbl('readStory', lang)} />
+          <StoryLinkList stories={stories} readLabel={UI[lang].readStory} />
         </TabPanel>
       )}
     </>

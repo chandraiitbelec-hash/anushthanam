@@ -2,18 +2,13 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import type { GitaChapter } from '@/lib/gita';
-
-const VERSE_LABEL: Record<string, string> = {
-  en: 'verses', te: 'శ్లోకాలు', ta: 'வசனங்கள்', hi: 'श्लोक',
-};
-
-const CHAPTER_LABEL: Record<string, string> = {
-  en: 'Chapter', te: 'అధ్యాయం', ta: 'அத்தியாயம்', hi: 'अध्याय',
-};
 
 export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
   const { lang } = useLang();
+  const ui = UI[lang];
 
   function chapterName(ch: GitaChapter) {
     return (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
@@ -62,7 +57,7 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontSize: '11px', color: 'var(--color-text-secondary)', margin: '0 0 2px', letterSpacing: '0.04em' }}>
-              {CHAPTER_LABEL[lang] ?? 'Chapter'} {ch.number}
+              {ui.gitaChapterWord} {ch.number}
             </p>
             <p style={{
               fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
@@ -71,11 +66,7 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
               color: 'var(--color-text-primary)',
               margin: '0 0 2px',
               lineHeight: 1.3,
-            }} className={
-              lang === 'te' ? 'script-telugu' :
-              lang === 'ta' ? 'script-tamil' :
-              lang === 'hi' ? 'script-devanagari' : ''
-            }>
+            }} className={scriptClass(lang)}>
               {chapterName(ch)}
             </p>
             {lang !== 'en' && (
@@ -84,7 +75,7 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
               </p>
             )}
             <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: 0 }}>
-              {ch.verse_count} {VERSE_LABEL[lang] ?? 'verses'}
+              {ch.verse_count} {ui.gitaVerseWord}
             </p>
           </div>
         </Link>

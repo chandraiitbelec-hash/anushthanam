@@ -1,24 +1,3 @@
-import type { Language, TranslationResult } from './types';
-
-export function t(
-  record: Record<string, string>,
-  field: string,
-  lang: Language
-): TranslationResult {
-  const direct = record[`${field}_${lang}`];
-  if (direct) return { value: direct, isFallback: false, lang };
-  const fallback = record[`${field}_en`] || '';
-  return { value: fallback, isFallback: true, lang: 'en' };
-}
-
-export function tVal(
-  record: Record<string, string>,
-  field: string,
-  lang: Language
-): string {
-  return t(record, field, lang).value;
-}
-
 // Split a stanza cell on | to get individual lines
 export function splitStanzaLines(text: string): string[] {
   return text.split('|').map(s => s.trim()).filter(Boolean);
@@ -40,7 +19,7 @@ export function formatDate(dateStr: string): string {
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
+export const LOCALE_MAP: Record<string, string> = { en: 'en-IN', te: 'te-IN', ta: 'ta-IN', hi: 'hi-IN' };
 
 export function formatDateLocalized(dateStr: string, lang: string): string {
   if (!dateStr) return '';
@@ -48,4 +27,15 @@ export function formatDateLocalized(dateStr: string, lang: string): string {
   return new Date(`${dateStr}T00:00:00`).toLocaleDateString(locale, {
     year: 'numeric', month: 'long', day: 'numeric',
   });
+}
+
+const SCRIPT_CLASS_MAP: Record<string, string> = {
+  te: 'script-telugu',
+  ta: 'script-tamil',
+  hi: 'script-devanagari',
+};
+
+// Native-script CSS class for a UI language; '' for en (uses the default Latin font stack).
+export function scriptClass(lang: string): string {
+  return SCRIPT_CLASS_MAP[lang] ?? '';
 }

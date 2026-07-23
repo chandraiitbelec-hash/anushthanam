@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { scriptClass } from '@/lib/utils';
 import SearchBar from '@/components/SearchBar';
 
 export type PopularGod = { slug: string; names: { en: string; te?: string; ta?: string; hi?: string } };
@@ -9,10 +10,7 @@ export type PopularGod = { slug: string; names: { en: string; te?: string; ta?: 
 export default function HomeSearch({ popular }: { popular: PopularGod[] }) {
   const { lang } = useLang();
 
-  const scriptClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   const godName = (g: PopularGod) => (g.names as Record<string, string>)[lang] || g.names.en;
 
@@ -29,7 +27,7 @@ export default function HomeSearch({ popular }: { popular: PopularGod[] }) {
               <Link
                 key={g.slug}
                 href={`/gods/${g.slug}`}
-                className={scriptClass}
+                className={nameClass}
                 style={{
                   fontSize: '13px',
                   padding: '6px 14px',

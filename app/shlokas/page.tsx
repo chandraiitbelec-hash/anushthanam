@@ -36,7 +36,7 @@ export default async function ShlokasPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Shlokas' }]} />
+      <Breadcrumb crumbs={[{ label: 'Shlokas', labels: { te: 'శ్లోకాలు', ta: 'ஸ்லோகங்கள்', hi: 'श्लोक' } }]} />
       <ListPageHeader
         titles={{ en: 'Shlokas & Stotras', te: 'శ్లోకాలు & స్తోత్రాలు', ta: 'ஸ்லோகங்கள் & ஸ்தோத்திரங்கள்', hi: 'श्लोक & स्तोत्र' }}
         count={shlokas.length}

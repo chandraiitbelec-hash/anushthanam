@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { scriptClass } from '@/lib/utils';
 import type { Story } from '@/lib/types';
 
 type Props = {
@@ -12,10 +13,7 @@ type Props = {
 export default function StoryLinkList({ stories, readLabel }: Props) {
   const { lang } = useLang();
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

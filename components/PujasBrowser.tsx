@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import type { Puja, Occasion } from '@/lib/types';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import EntityCard from './EntityCard';
 import EmptyState from './EmptyState';
 import { TabList, TabPanel, useTabs } from './Tabs';
@@ -30,10 +31,7 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
     setExpandedOccasion(prev => (prev === slug ? null : slug));
   }
 
-  const nameClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   return (
     <>

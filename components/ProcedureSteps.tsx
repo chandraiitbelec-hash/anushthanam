@@ -2,16 +2,13 @@
 
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import type { ProcedureStep } from '@/lib/types';
 
 export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: { steps: ProcedureStep[]; hasPasurams?: boolean; onViewPasurams?: () => void }) {
   const { lang } = useLang();
   const ui = UI[lang];
-
-  const scriptClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const nameClass = scriptClass(lang);
 
   function title(step: ProcedureStep) {
     return step[`step_title_${lang}` as keyof ProcedureStep] as string || step.step_title_en;
@@ -50,7 +47,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p className={scriptClass} style={{
+            <p className={nameClass} style={{
               fontWeight: 500,
               fontSize: '15px',
               margin: '0 0 6px',
@@ -60,7 +57,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
             </p>
 
             {instruction(step) && (
-              <p className={scriptClass} style={{
+              <p className={nameClass} style={{
                 fontSize: '14px',
                 color: 'var(--color-text-secondary)',
                 margin: '0',
@@ -107,7 +104,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
             )}
 
             {(step[`notes_${lang}` as keyof ProcedureStep] as string || step.notes_en) && (
-              <p className={scriptClass} style={{
+              <p className={nameClass} style={{
                 fontSize: '12px',
                 color: 'var(--color-text-secondary)',
                 margin: '8px 0 0',

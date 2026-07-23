@@ -90,6 +90,72 @@ type UiStrings = {
   pujasNoOccasionPujas: string;
   pujasShowPujas: string;
   pujasHidePujas: string;
+  // Iconography (GodProfile)
+  godIconography: string;
+  // Shared entity-detail labels (Puja/Festival/Vratham profiles)
+  materials: string;
+  significance: string;
+  festivalStories: string;
+  readStory: string;
+  next: string;
+  fasting: string;
+  benefits: string;
+  pasurams: string;
+  vrataKatha: string;
+  // Shloka type tab labels
+  shlokaTypeAshtothram: string;
+  shlokaTypeSahasranamam: string;
+  shlokaTypeChalisa: string;
+  shlokaTypeStotra: string;
+  shlokaTypeKavacham: string;
+  shlokaTypeSuprabhatam: string;
+  shlokaTypeNamavali: string;
+  shlokaTypeOther: string;
+  // Bhagavad Gita
+  gitaChapterWord: string;
+  gitaVerseWord: string;
+  gitaTitle: string;
+  gitaHeroSubtitle: (chapterCount: number, verseCount: number) => string;
+  meaning: string;
+  iastToggleLabel: string;
+  copyLabel: string;
+  copiedLabel: string;
+  // Deity chips / explore grid
+  deityLabel: string;
+  exploreLabel: string;
+  // Upcoming list
+  upcomingEmptyHeading: string;
+  upcomingEmptySub: string;
+  festivalWord: string;
+  vrathamWord: string;
+  todayLabelUpcoming: string;
+  // Search
+  searchPlaceholder: string;
+  // Breadcrumb
+  home: string;
+  // Materials list
+  optional: string;
+  reset: string;
+  allItemsGathered: string;
+  // Empty states
+  emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas', { title: string; body: string }>;
+  // Story content
+  storyFallbackNote: string;
+  // Daily devotional
+  devotionalHeading: string;
+  shlokaOfDay: string;
+  storyOfDay: string;
+  reflection: string;
+  // Nav
+  navSearchLabel: string;
+  navSwitchLanguage: string;
+  navOpenMenu: string;
+  navCloseMenu: string;
+  navLanguageHeading: string;
+  // Font size toggle
+  adjustTextSize: string;
+  // Panchangam upcoming
+  showingDays: (n: number) => string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -165,6 +231,65 @@ export const UI: Record<Language, UiStrings> = {
     pujasNoOccasionPujas: 'No pujas listed for this occasion yet.',
     pujasShowPujas: 'Show pujas',
     pujasHidePujas: 'Hide pujas',
+    godIconography: 'Iconography',
+    materials: 'Materials',
+    significance: 'Significance',
+    festivalStories: 'Stories',
+    readStory: 'Read',
+    next: 'Next',
+    fasting: 'Fasting',
+    benefits: 'Benefits',
+    pasurams: 'Pasurams',
+    vrataKatha: 'Vrata Katha',
+    shlokaTypeAshtothram: 'Ashtothram',
+    shlokaTypeSahasranamam: 'Sahasranamam',
+    shlokaTypeChalisa: 'Chalisa',
+    shlokaTypeStotra: 'Stotra',
+    shlokaTypeKavacham: 'Kavacham',
+    shlokaTypeSuprabhatam: 'Suprabhatam',
+    shlokaTypeNamavali: 'Namavali',
+    shlokaTypeOther: 'Other',
+    gitaChapterWord: 'Chapter',
+    gitaVerseWord: 'verses',
+    gitaTitle: 'Srimad Bhagavad Gita',
+    gitaHeroSubtitle: (chapterCount, verseCount) => `${chapterCount} chapters · ${verseCount} slokas · Sanskrit with Telugu, Tamil, Hindi & English`,
+    meaning: 'Meaning',
+    iastToggleLabel: 'देवनागरी',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
+    deityLabel: 'Deity',
+    exploreLabel: 'Explore',
+    upcomingEmptyHeading: 'No upcoming dates set',
+    upcomingEmptySub: 'Festival dates are updated before each season. Check back soon.',
+    festivalWord: 'Festival',
+    vrathamWord: 'Vratham',
+    todayLabelUpcoming: 'Today',
+    searchPlaceholder: 'Search gods, shlokas, festivals…',
+    home: 'Home',
+    optional: 'Optional',
+    reset: 'Reset',
+    allItemsGathered: 'All items gathered!',
+    emptyState: {
+      gods: { title: 'No deities published yet', body: 'Gods and goddesses will appear here once published.' },
+      festivals: { title: 'No festivals published yet', body: 'Festival listings will appear here once published.' },
+      vrathams: { title: 'No vrathams published yet', body: 'Vow and fasting guides will appear here once published.' },
+      pujas: { title: 'No pujas published yet', body: 'Puja guides will appear here once published.' },
+      shlokas: { title: 'No shlokas published yet', body: 'Shlokas and stotras will appear here once published.' },
+      occasions: { title: 'No occasions published yet', body: 'Life occasions and samskaras will appear here once published.' },
+      'occasion-pujas': { title: 'No pujas listed yet', body: 'Puja guides for this occasion will appear here once added.' },
+    },
+    storyFallbackNote: '',
+    devotionalHeading: "Today's Devotional",
+    shlokaOfDay: 'Shloka of the Day',
+    storyOfDay: 'Story of the Day',
+    reflection: 'Reflection',
+    navSearchLabel: 'Search',
+    navSwitchLanguage: 'Switch language',
+    navOpenMenu: 'Open menu',
+    navCloseMenu: 'Close menu',
+    navLanguageHeading: 'Language',
+    adjustTextSize: 'Adjust text size',
+    showingDays: (n) => `Showing ${n} days`,
   },
   te: {
     tithi: 'తిథి',
@@ -238,6 +363,65 @@ export const UI: Record<Language, UiStrings> = {
     pujasNoOccasionPujas: 'ఈ సందర్భానికి ఇంకా పూజలు జోడించబడలేదు.',
     pujasShowPujas: 'పూజలు చూపించు',
     pujasHidePujas: 'పూజలు దాచు',
+    godIconography: 'ఆకృతి',
+    materials: 'సామగ్రి',
+    significance: 'ప్రాముఖ్యత',
+    festivalStories: 'కథలు',
+    readStory: 'చదవండి',
+    next: 'తదుపరి',
+    fasting: 'ఉపవాసం',
+    benefits: 'ఫలితాలు',
+    pasurams: 'పాశురాలు',
+    vrataKatha: 'వ్రత కథ',
+    shlokaTypeAshtothram: 'అష్టోత్తరం',
+    shlokaTypeSahasranamam: 'సహస్రనామం',
+    shlokaTypeChalisa: 'చాలీసా',
+    shlokaTypeStotra: 'స్తోత్రం',
+    shlokaTypeKavacham: 'కవచం',
+    shlokaTypeSuprabhatam: 'సుప్రభాతం',
+    shlokaTypeNamavali: 'నామావళి',
+    shlokaTypeOther: 'ఇతరాలు',
+    gitaChapterWord: 'అధ్యాయం',
+    gitaVerseWord: 'శ్లోకాలు',
+    gitaTitle: 'శ్రీమద్ భగవద్గీత',
+    gitaHeroSubtitle: (chapterCount, verseCount) => `${chapterCount} అధ్యాయాలు · ${verseCount} శ్లోకాలు · తెలుగు, తమిళం, హిందీ & ఇంగ్లీష్ అర్థాలతో`,
+    meaning: 'అర్థం',
+    iastToggleLabel: 'IAST',
+    copyLabel: 'కాపీ',
+    copiedLabel: 'కాపీ అయింది',
+    deityLabel: 'దేవత',
+    exploreLabel: 'అన్వేషించండి',
+    upcomingEmptyHeading: 'రాబోయే తేదీలు నిర్ణయించబడలేదు',
+    upcomingEmptySub: 'పండుగ తేదీలు ప్రతి సీజన్ ముందు నవీకరించబడతాయి. త్వరలో తనిఖీ చేయండి.',
+    festivalWord: 'పండుగ',
+    vrathamWord: 'వ్రతం',
+    todayLabelUpcoming: 'నేడు',
+    searchPlaceholder: 'వెతకండి…',
+    home: 'హోమ్',
+    optional: 'ఐచ్ఛికం',
+    reset: 'రీసెట్',
+    allItemsGathered: 'అన్నీ సిద్ధంగా ఉన్నాయి!',
+    emptyState: {
+      gods: { title: 'ఇంకా దేవతలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత దేవతలు ఇక్కడ కనిపిస్తారు.' },
+      festivals: { title: 'ఇంకా పండుగలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత పండుగలు ఇక్కడ కనిపిస్తాయి.' },
+      vrathams: { title: 'ఇంకా వ్రతాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత వ్రత మార్గదర్శకాలు ఇక్కడ కనిపిస్తాయి.' },
+      pujas: { title: 'ఇంకా పూజలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత పూజా మార్గదర్శకాలు ఇక్కడ కనిపిస్తాయి.' },
+      shlokas: { title: 'ఇంకా శ్లోకాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత శ్లోకాలు, స్తోత్రాలు ఇక్కడ కనిపిస్తాయి.' },
+      occasions: { title: 'ఇంకా సందర్భాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత జీవిత సందర్భాలు ఇక్కడ కనిపిస్తాయి.' },
+      'occasion-pujas': { title: 'ఇంకా పూజలు జోడించబడలేదు', body: 'ఈ సందర్భానికి పూజా మార్గదర్శకాలు జోడించిన తర్వాత ఇక్కడ కనిపిస్తాయి.' },
+    },
+    storyFallbackNote: 'పూర్తి కథ ఇంకా తెలుగులో అందుబాటులో లేదు — ఇంగ్లీష్‌లో చదువుతున్నారు',
+    devotionalHeading: 'నేటి భక్తి',
+    shlokaOfDay: 'నేటి శ్లోకం',
+    storyOfDay: 'నేటి కథ',
+    reflection: 'చింతన',
+    navSearchLabel: 'వెతకండి',
+    navSwitchLanguage: 'భాష మార్చండి',
+    navOpenMenu: 'మెనూ తెరవండి',
+    navCloseMenu: 'మెనూ మూసివేయండి',
+    navLanguageHeading: 'భాష',
+    adjustTextSize: 'టెక్స్ట్ పరిమాణం మార్చండి',
+    showingDays: (n) => `${n} రోజులు చూపిస్తోంది`,
   },
   ta: {
     tithi: 'திதி',
@@ -311,6 +495,65 @@ export const UI: Record<Language, UiStrings> = {
     pujasNoOccasionPujas: 'இந்த சந்தர்ப்பத்திற்கு இன்னும் பூஜைகள் சேர்க்கப்படவில்லை.',
     pujasShowPujas: 'பூஜைகள் காட்டு',
     pujasHidePujas: 'பூஜைகள் மறை',
+    godIconography: 'உருவ அமைப்பு',
+    materials: 'பொருட்கள்',
+    significance: 'முக்கியத்துவம்',
+    festivalStories: 'கதைகள்',
+    readStory: 'படிக்க',
+    next: 'அடுத்தது',
+    fasting: 'உபவாசம்',
+    benefits: 'பலன்கள்',
+    pasurams: 'பாசுரங்கள்',
+    vrataKatha: 'விரத கதை',
+    shlokaTypeAshtothram: 'அஷ்டோத்திரம்',
+    shlokaTypeSahasranamam: 'சஹஸ்ரநாமம்',
+    shlokaTypeChalisa: 'சாலீசா',
+    shlokaTypeStotra: 'ஸ்தோத்திரம்',
+    shlokaTypeKavacham: 'கவசம்',
+    shlokaTypeSuprabhatam: 'சுப்ரபாதம்',
+    shlokaTypeNamavali: 'நாமாவளி',
+    shlokaTypeOther: 'மற்றவை',
+    gitaChapterWord: 'அத்தியாயம்',
+    gitaVerseWord: 'வசனங்கள்',
+    gitaTitle: 'ஸ்ரீமத் பகவத் கீதை',
+    gitaHeroSubtitle: (chapterCount, verseCount) => `${chapterCount} அத்தியாயங்கள் · ${verseCount} ஸ்லோகங்கள் · தெலுங்கு, தமிழ், இந்தி & ஆங்கிலம்`,
+    meaning: 'பொருள்',
+    iastToggleLabel: 'IAST',
+    copyLabel: 'நகல்',
+    copiedLabel: 'நகலெடுக்கப்பட்டது',
+    deityLabel: 'தெய்வம்',
+    exploreLabel: 'ஆராயுங்கள்',
+    upcomingEmptyHeading: 'வரவிருக்கும் நாட்கள் நிர்ணயிக்கப்படவில்லை',
+    upcomingEmptySub: 'திருவிழா நாட்கள் ஒவ்வொரு பருவத்திற்கும் முன் புதுப்பிக்கப்படும். விரைவில் சரிபாருங்கள்.',
+    festivalWord: 'திருவிழா',
+    vrathamWord: 'விரதம்',
+    todayLabelUpcoming: 'இன்று',
+    searchPlaceholder: 'தேடு…',
+    home: 'முகப்பு',
+    optional: 'விருப்பத்தேர்வு',
+    reset: 'மீட்டமை',
+    allItemsGathered: 'அனைத்தும் தயார்!',
+    emptyState: {
+      gods: { title: 'இன்னும் தெய்வங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் தெய்வங்கள் இங்கே தோன்றும்.' },
+      festivals: { title: 'இன்னும் திருவிழாக்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் திருவிழாக்கள் இங்கே தோன்றும்.' },
+      vrathams: { title: 'இன்னும் விரதங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் விரத வழிகாட்டிகள் இங்கே தோன்றும்.' },
+      pujas: { title: 'இன்னும் பூஜைகள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் பூஜை வழிகாட்டிகள் இங்கே தோன்றும்.' },
+      shlokas: { title: 'இன்னும் ஸ்லோகங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் ஸ்லோகங்கள் இங்கே தோன்றும்.' },
+      occasions: { title: 'இன்னும் சந்தர்ப்பங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் வாழ்க்கை சந்தர்ப்பங்கள் இங்கே தோன்றும்.' },
+      'occasion-pujas': { title: 'இன்னும் பூஜைகள் சேர்க்கப்படவில்லை', body: 'இந்த சந்தர்ப்பத்திற்கான பூஜை வழிகாட்டிகள் சேர்க்கப்பட்டவுடன் இங்கே தோன்றும்.' },
+    },
+    storyFallbackNote: 'முழு கதை இன்னும் தமிழில் கிடைக்கவில்லை — ஆங்கிலத்தில் படிக்கிறீர்கள்',
+    devotionalHeading: 'இன்றைய பக்தி',
+    shlokaOfDay: 'இன்றைய ஸ்லோகம்',
+    storyOfDay: 'இன்றைய கதை',
+    reflection: 'சிந்தனை',
+    navSearchLabel: 'தேடு',
+    navSwitchLanguage: 'மொழியை மாற்று',
+    navOpenMenu: 'மெனுவைத் திற',
+    navCloseMenu: 'மெனுவை மூடு',
+    navLanguageHeading: 'மொழி',
+    adjustTextSize: 'உரை அளவை மாற்று',
+    showingDays: (n) => `${n} நாட்கள் காட்டப்படுகின்றன`,
   },
   hi: {
     tithi: 'तिथि',
@@ -384,5 +627,64 @@ export const UI: Record<Language, UiStrings> = {
     pujasNoOccasionPujas: 'इस अवसर के लिए अभी तक कोई पूजा नहीं जोड़ी गई है।',
     pujasShowPujas: 'पूजाएं दिखाएं',
     pujasHidePujas: 'पूजाएं छुपाएं',
+    godIconography: 'प्रतिमा विज्ञान',
+    materials: 'सामग्री',
+    significance: 'महत्व',
+    festivalStories: 'कथाएं',
+    readStory: 'पढ़ें',
+    next: 'अगला',
+    fasting: 'उपवास',
+    benefits: 'लाभ',
+    pasurams: 'पासुर',
+    vrataKatha: 'व्रत कथा',
+    shlokaTypeAshtothram: 'अष्टोत्तरम्',
+    shlokaTypeSahasranamam: 'सहस्रनामम्',
+    shlokaTypeChalisa: 'चालीसा',
+    shlokaTypeStotra: 'स्तोत्र',
+    shlokaTypeKavacham: 'कवचम्',
+    shlokaTypeSuprabhatam: 'सुप्रभातम्',
+    shlokaTypeNamavali: 'नामावली',
+    shlokaTypeOther: 'अन्य',
+    gitaChapterWord: 'अध्याय',
+    gitaVerseWord: 'श्लोक',
+    gitaTitle: 'श्रीमद् भगवद्गीता',
+    gitaHeroSubtitle: (chapterCount, verseCount) => `${chapterCount} अध्याय · ${verseCount} श्लोक · तेलुगु, तमिल, हिंदी और अंग्रेज़ी अर्थों के साथ`,
+    meaning: 'अर्थ',
+    iastToggleLabel: 'IAST',
+    copyLabel: 'कॉपी',
+    copiedLabel: 'कॉपी हो गया',
+    deityLabel: 'देवता',
+    exploreLabel: 'खोजें',
+    upcomingEmptyHeading: 'आगामी तिथियाँ अभी निर्धारित नहीं',
+    upcomingEmptySub: 'त्योहार की तारीखें हर मौसम से पहले अपडेट की जाती हैं। जल्द वापस देखें।',
+    festivalWord: 'त्योहार',
+    vrathamWord: 'व्रत',
+    todayLabelUpcoming: 'आज',
+    searchPlaceholder: 'खोजें…',
+    home: 'होम',
+    optional: 'वैकल्पिक',
+    reset: 'रीसेट',
+    allItemsGathered: 'सब तैयार है!',
+    emptyState: {
+      gods: { title: 'अभी तक कोई देवता प्रकाशित नहीं', body: 'प्रकाशित होने पर देवी-देवता यहाँ दिखाई देंगे।' },
+      festivals: { title: 'अभी तक कोई त्योहार प्रकाशित नहीं', body: 'प्रकाशित होने पर त्योहार यहाँ दिखाई देंगे।' },
+      vrathams: { title: 'अभी तक कोई व्रत प्रकाशित नहीं', body: 'प्रकाशित होने पर व्रत मार्गदर्शिकाएँ यहाँ दिखाई देंगी।' },
+      pujas: { title: 'अभी तक कोई पूजा प्रकाशित नहीं', body: 'प्रकाशित होने पर पूजा मार्गदर्शिकाएँ यहाँ दिखाई देंगी।' },
+      shlokas: { title: 'अभी तक कोई श्लोक प्रकाशित नहीं', body: 'प्रकाशित होने पर श्लोक और स्तोत्र यहाँ दिखाई देंगे।' },
+      occasions: { title: 'अभी तक कोई अवसर प्रकाशित नहीं', body: 'प्रकाशित होने पर जीवन-अवसर यहाँ दिखाई देंगे।' },
+      'occasion-pujas': { title: 'अभी तक कोई पूजा नहीं जोड़ी गई', body: 'इस अवसर के लिए पूजा मार्गदर्शिकाएँ जोड़े जाने पर यहाँ दिखाई देंगी।' },
+    },
+    storyFallbackNote: 'पूरी कथा अभी हिंदी में उपलब्ध नहीं है — अंग्रेज़ी में पढ़ रहे हैं',
+    devotionalHeading: 'आज की भक्ति',
+    shlokaOfDay: 'आज का श्लोक',
+    storyOfDay: 'आज की कहानी',
+    reflection: 'चिंतन',
+    navSearchLabel: 'खोजें',
+    navSwitchLanguage: 'भाषा बदलें',
+    navOpenMenu: 'मेनू खोलें',
+    navCloseMenu: 'मेनू बंद करें',
+    navLanguageHeading: 'भाषा',
+    adjustTextSize: 'टेक्स्ट आकार समायोजित करें',
+    showingDays: (n) => `${n} दिन दिखाए जा रहे हैं`,
   },
 };

@@ -1,17 +1,20 @@
 'use client';
 
+import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
+import { UI } from '@/lib/ui-strings';
 
 const SCALE_LABEL: Record<number, string> = { 1: 'A', 1.15: 'A+', 1.3: 'A++' };
 
 export default function FontSizeToggle() {
+  const { lang } = useLang();
   const { scale, cycleScale } = useFontScale();
 
   return (
     <button
       onClick={cycleScale}
-      aria-label="Adjust text size"
-      title="Adjust text size"
+      aria-label={UI[lang].adjustTextSize}
+      title={UI[lang].adjustTextSize}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

@@ -2,17 +2,14 @@
 
 import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import type { MaterialItem } from '@/lib/types';
-
-const OPTIONAL_LABEL: Record<string, string> = {
-  en: 'Optional', te: 'ఐచ్ఛికం', ta: 'விருப்பத்தேர்வு', hi: 'वैकल्पिक',
-};
-const RESET_LABEL: Record<string, string> = {
-  en: 'Reset', te: 'రీసెట్', ta: 'மீட்டமை', hi: 'रीसेट',
-};
 
 export default function MaterialsList({ items }: { items: MaterialItem[] }) {
   const { lang } = useLang();
+  const ui = UI[lang];
+  const nameClass = scriptClass(lang);
   const [checked, setChecked] = useState<Set<number>>(new Set());
 
   function toggle(idx: number) {
@@ -54,7 +51,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                 fontSize: '12px', color: 'var(--color-text-secondary)',
                 padding: 0, textDecoration: 'underline',
               }}>
-                {RESET_LABEL[lang]}
+                {ui.reset}
               </button>
             )}
           </div>
@@ -107,14 +104,14 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               }}>
                 {done ? '✓' : ''}
               </span>
-              <span className={lang !== 'en' ? (lang === 'te' ? 'script-telugu' : lang === 'ta' ? 'script-tamil' : 'script-devanagari') : ''} style={{
+              <span className={nameClass} style={{
                 color: 'var(--color-text-primary)', flex: 1,
                 textDecoration: done ? 'line-through' : 'none',
               }}>
                 {name(item)}
               </span>
               {quantity(item) && (
-                <span className={lang !== 'en' ? (lang === 'te' ? 'script-telugu' : lang === 'ta' ? 'script-tamil' : 'script-devanagari') : ''} style={{ color: 'var(--color-text-secondary)', fontSize: '12px', flexShrink: 0 }}>
+                <span className={nameClass} style={{ color: 'var(--color-text-secondary)', fontSize: '12px', flexShrink: 0 }}>
                   {quantity(item)}
                 </span>
               )}
@@ -155,7 +152,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
               }}>
                 {done ? '✓' : ''}
               </span>
-              <span className={lang !== 'en' ? (lang === 'te' ? 'script-telugu' : lang === 'ta' ? 'script-tamil' : 'script-devanagari') : ''} style={{
+              <span className={nameClass} style={{
                 color: 'var(--color-text-secondary)', flex: 1,
                 textDecoration: done ? 'line-through' : 'none',
               }}>
@@ -165,7 +162,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                 fontSize: '11px', padding: '2px 6px', borderRadius: '4px',
                 background: 'var(--color-border)', color: 'var(--color-text-secondary)', flexShrink: 0,
               }}>
-                {OPTIONAL_LABEL[lang]}
+                {ui.optional}
               </span>
             </li>
           );
@@ -174,7 +171,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
 
       {allDone && (
         <p style={{ marginTop: '12px', fontSize: '13px', color: 'var(--color-green, #3d6b4f)', fontWeight: 500 }}>
-          {lang === 'te' ? 'అన్నీ సిద్ధంగా ఉన్నాయి!' : lang === 'ta' ? 'அனைத்தும் தயார்!' : lang === 'hi' ? 'सब तैयार है!' : 'All items gathered!'}
+          {ui.allItemsGathered}
         </p>
       )}
     </div>

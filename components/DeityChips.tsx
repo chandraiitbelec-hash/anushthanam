@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
 
 export type DeityRef = {
   slug: string;
@@ -11,10 +12,6 @@ export type DeityRef = {
   name_hi: string;
 };
 
-const LABEL: Record<string, string> = {
-  en: 'Deity', te: 'దేవత', ta: 'தெய்வம்', hi: 'देवता',
-};
-
 export default function DeityChips({ deities }: { deities: DeityRef[] }) {
   const { lang } = useLang();
   if (!deities.length) return null;
@@ -22,7 +19,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
       <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-secondary)', flexShrink: 0 }}>
-        {LABEL[lang]}:
+        {UI[lang].deityLabel}:
       </span>
       {deities.map(d => {
         const name = (d as unknown as Record<string, string>)[`name_${lang}`] || d.name_en;

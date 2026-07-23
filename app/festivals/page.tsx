@@ -19,7 +19,7 @@ export default async function FestivalsPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Festivals' }]} />
+      <Breadcrumb crumbs={[{ label: 'Festivals', labels: { te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' } }]} />
       <ListPageHeader
         titles={{ en: 'Festivals', te: 'పండుగలు', ta: 'திருவிழாக்கள்', hi: 'त्योहार' }}
         count={festivals.length}

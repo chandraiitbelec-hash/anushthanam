@@ -21,7 +21,7 @@ export default async function UpcomingPage() {
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
-      <Breadcrumb crumbs={[{ label: 'Upcoming' }]} />
+      <Breadcrumb crumbs={[{ label: 'Upcoming', labels: { te: 'రాబోయేవి', ta: 'வரவிருக்கும்', hi: 'आगामी' } }]} />
 
       <ListPageHeader
         titles={{ en: 'Upcoming', te: 'రాబోయేవి', ta: 'வரவிருக்கும்', hi: 'आगामी' }}

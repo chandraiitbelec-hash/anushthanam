@@ -11,15 +11,17 @@ import { UI } from '@/lib/ui-strings';
 
 import type { Language } from '@/lib/types';
 
-const NAV_LINKS = [
-  { href: '/gods',           label_en: 'Gods',          label_te: 'దేవతలు',       label_ta: 'தேவர்கள்',      label_hi: 'देवता' },
-  { href: '/festivals',      label_en: 'Festivals',     label_te: 'పండుగలు',      label_ta: 'திருவிழாக்கள்', label_hi: 'त्योहार' },
-  { href: '/vrathams',       label_en: 'Vrathams',      label_te: 'వ్రతాలు',      label_ta: 'விரதங்கள்',     label_hi: 'व्रत' },
-  { href: '/pujas',          label_en: 'Pujas',         label_te: 'పూజలు',        label_ta: 'பூஜைகள்',       label_hi: 'पूजा' },
-  { href: '/shlokas',        label_en: 'Shlokas',       label_te: 'శ్లోకాలు',     label_ta: 'ஸ்லோகங்கள்',    label_hi: 'श्लोक' },
-  { href: '/bhagavad-gita',  label_en: 'Bhagavad Gita', label_te: 'భగవద్గీత',     label_ta: 'பகவத் கீதை',    label_hi: 'भगवद्गीता' },
-  { href: '/panchangam',     label_en: 'Panchangam',    label_te: 'పంచాంగం',      label_ta: 'பஞ்சாங்கம்',    label_hi: 'पंचांग' },
-  { href: '/upcoming',       label_en: 'Upcoming',      label_te: 'రాబోయేవి',     label_ta: 'வரவிருக்கும்',  label_hi: 'आगामी' },
+type NavLink = { href: string; key: keyof typeof UI['en'] };
+
+const NAV_LINKS: NavLink[] = [
+  { href: '/gods',           key: 'gods' },
+  { href: '/festivals',      key: 'festivals' },
+  { href: '/vrathams',       key: 'vrathams' },
+  { href: '/pujas',          key: 'pujas' },
+  { href: '/shlokas',        key: 'shlokas' },
+  { href: '/bhagavad-gita',  key: 'bhagavadGita' },
+  { href: '/panchangam',     key: 'panchangam' },
+  { href: '/upcoming',       key: 'upcoming' },
 ];
 
 export default function Nav() {
@@ -51,8 +53,8 @@ export default function Nav() {
     }
   }, [mobileOpen]);
 
-  function linkLabel(link: typeof NAV_LINKS[0]) {
-    return link[`label_${lang}` as keyof typeof link] || link.label_en;
+  function linkLabel(link: NavLink) {
+    return UI[lang][link.key] as string;
   }
 
   return (
@@ -168,7 +170,7 @@ export default function Nav() {
             <div ref={searchRef} style={{ position: 'relative' }}>
               <button
                 onClick={() => setSearchOpen(o => !o)}
-                aria-label="Search"
+                aria-label={UI[lang].navSearchLabel}
                 aria-expanded={searchOpen}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -206,7 +208,7 @@ export default function Nav() {
             <div ref={langRef} className="nav-desktop" style={{ position: 'relative' }}>
               <button
                 onClick={() => setLangOpen(o => !o)}
-                aria-label="Switch language"
+                aria-label={UI[lang].navSwitchLanguage}
                 aria-expanded={langOpen}
                 aria-haspopup="true"
                 style={{
@@ -285,7 +287,7 @@ export default function Nav() {
               ref={hamburgerRef}
               onClick={() => setMobileOpen(o => !o)}
               className="nav-hamburger"
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-label={mobileOpen ? UI[lang].navCloseMenu : UI[lang].navOpenMenu}
               aria-expanded={mobileOpen}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
@@ -341,7 +343,7 @@ export default function Nav() {
                 letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
                 margin: '0 0 10px',
               }}>
-                {lang === 'te' ? 'భాష' : lang === 'ta' ? 'மொழி' : lang === 'hi' ? 'भाषा' : 'Language'}
+                {UI[lang].navLanguageHeading}
               </p>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {LANGUAGES.map(l => (

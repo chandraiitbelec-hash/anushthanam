@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
+import { scriptClass } from '@/lib/utils';
 
 type Names = { en: string; te?: string; ta?: string; hi?: string; sa?: string };
 
@@ -20,10 +21,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
   // show English as muted subtitle when viewing another language
   const subtitle = lang !== 'en' && names.en !== title ? names.en : undefined;
 
-  const titleClass =
-    lang === 'te' ? 'script-telugu' :
-    lang === 'ta' ? 'script-tamil' :
-    lang === 'hi' ? 'script-devanagari' : '';
+  const titleClass = scriptClass(lang);
 
   const badgeColors = {
     gold:    { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold)' },

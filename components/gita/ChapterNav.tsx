@@ -1,9 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { useLang } from '@/context/LanguageContext';
+import { UI } from '@/lib/ui-strings';
+import { scriptClass } from '@/lib/utils';
 import type { GitaChapter } from '@/lib/gita';
 
+function chapterName(ch: GitaChapter, lang: string) {
+  return (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
+}
+
 export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; next: GitaChapter | null }) {
+  const { lang } = useLang();
+  const ui = UI[lang];
+  const nameClass = scriptClass(lang);
+
   return (
     <div style={{
       display: 'flex',
@@ -25,8 +36,8 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
-          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← Chapter {prev.number}</span>
-          <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600 }}>{prev.name_en}</span>
+          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← {ui.chapterLabel(prev.number)}</span>
+          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: '17px', fontWeight: 600 }}>{chapterName(prev, lang)}</span>
         </Link>
       ) : <div />}
 
@@ -43,8 +54,8 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
-          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Chapter {next.number} →</span>
-          <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '17px', fontWeight: 600 }}>{next.name_en}</span>
+          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{ui.chapterLabel(next.number)} →</span>
+          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: '17px', fontWeight: 600 }}>{chapterName(next, lang)}</span>
         </Link>
       ) : <div />}
     </div>
