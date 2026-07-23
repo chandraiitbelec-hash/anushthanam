@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://anushthanam.vercel.app';
+import { SITE_URL } from '@/lib/seo';
 
 // AI crawlers to opt out of. These are separate user-agents from the search
 // crawlers (Googlebot, Bingbot, DuckDuckBot), so blocking them does NOT affect

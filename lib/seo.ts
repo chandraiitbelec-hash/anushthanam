@@ -3,6 +3,10 @@ export const SITE_URL =
 
 export const SITE_NAME = 'Anuṣṭhāna';
 
+export function jsonLdString(obj: unknown): string {
+  return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+
 export function trunc(s: string, max: number): string {
   if (!s) return '';
   return s.length <= max ? s : s.slice(0, max - 1) + '…';

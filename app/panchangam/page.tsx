@@ -4,8 +4,15 @@ import PanchangamEmptyState from '@/components/PanchangamEmptyState';
 import PanchangamUpcomingList from '@/components/PanchangamUpcomingList';
 import Breadcrumb from '@/components/Breadcrumb';
 import ClientLabel from '@/components/ClientLabel';
+import { pageMeta } from '@/lib/seo';
 
 export const revalidate = 3600;
+
+export const metadata = pageMeta(
+  'Panchangam',
+  'Daily Hindu panchangam — tithi, nakshatra, yoga, karana, sunrise and sunset times.',
+  '/panchangam'
+);
 
 export default async function PanchangamPage() {
   const [today, all, next] = await Promise.all([

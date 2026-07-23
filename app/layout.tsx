@@ -10,6 +10,7 @@ import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
 import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
+import { SITE_URL } from '@/lib/seo';
 
 const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
 const VALID_THEMES: Theme[] = ['light', 'dark', 'system'];
@@ -57,8 +58,6 @@ const notoSerifDevanagari = Noto_Serif_Devanagari({
   variable: '--font-noto-serif-devanagari',
   display: 'optional',
 });
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://anushthanam.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

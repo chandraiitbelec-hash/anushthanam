@@ -4,6 +4,7 @@ import { getProcedureSteps, getMaterialItems } from '@/lib/relations';
 import type { Puja } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
+import { pageMeta } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -16,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const rows = await getPublished('pujas');
   const puja = (rows as unknown as Puja[]).find(p => p.slug === slug);
-  // Bare title — the root layout's title template appends "| Anuṣṭhāna" (avoids a double suffix)
-  return { title: puja ? puja.title_en : 'Puja' };
+  if (!puja) return { title: 'Anuṣṭhāna' };
+  return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
 }
 
 export default async function PujaPage({ params }: { params: Promise<{ slug: string }> }) {
