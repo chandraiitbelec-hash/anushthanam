@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, KeyboardEvent } from 'react';
+import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import type { Puja, Occasion } from '@/lib/types';
 import { UI } from '@/lib/ui-strings';
 import EntityCard from './EntityCard';
 import EmptyState from './EmptyState';
+import { TabList, TabPanel, useTabs } from './Tabs';
 
 type Props = {
   frequentPujas: Puja[];
@@ -13,34 +14,17 @@ type Props = {
   occasionPujas: Record<string, Puja[]>;
 };
 
-type SectionId = 'frequent' | 'occasions';
-
 export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }: Props) {
   const { lang } = useLang();
   const ui = UI[lang];
 
-  const [activeSection, setActiveSection] = useState<SectionId>('frequent');
   const [expandedOccasion, setExpandedOccasion] = useState<string | null>(null);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const sections: { id: SectionId; label: string }[] = [
+  const sections = [
     { id: 'frequent',  label: ui.pujasDaily },
     { id: 'occasions', label: ui.pujasOccasions },
   ];
-
-  function handleTabKeyDown(e: KeyboardEvent<HTMLButtonElement>, idx: number) {
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      const next = (idx + 1) % sections.length;
-      tabRefs.current[next]?.focus();
-      setActiveSection(sections[next].id);
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      const prev = (idx - 1 + sections.length) % sections.length;
-      tabRefs.current[prev]?.focus();
-      setActiveSection(sections[prev].id);
-    }
-  }
+  const { activeTab: activeSection, setActiveTab: setActiveSection, tabRefs, handleKeyDown } = useTabs(sections);
 
   function toggleOccasion(slug: string) {
     setExpandedOccasion(prev => (prev === slug ? null : slug));
@@ -54,68 +38,18 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
   return (
     <>
       {/* Section tab bar — sticky, matches PujaProfile/FestivalProfile pattern */}
-      <div style={{
-        position: 'sticky',
-        top: 'var(--nav-height)',
-        zIndex: 10,
-        background: 'var(--color-bg)',
-        borderBottom: '1px solid var(--color-border)',
-        margin: '0 -24px 32px',
-        padding: '0 24px',
-      }}>
-        <div
-          role="tablist"
-          aria-label={ui.pujas}
-          style={{
-            display: 'flex',
-            gap: 0,
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
-          {sections.map((section, idx) => {
-            const isActive = activeSection === section.id;
-            return (
-              <button
-                key={section.id}
-                id={`pujas-tab-${section.id}`}
-                ref={el => { tabRefs.current[idx] = el; }}
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`pujas-panel-${section.id}`}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => setActiveSection(section.id)}
-                onKeyDown={e => handleTabKeyDown(e, idx)}
-                style={{
-                  flexShrink: 0,
-                  padding: '12px 18px',
-                  background: 'transparent',
-                  border: 'none',
-                  borderBottom: `2px solid ${isActive ? 'var(--color-gold)' : 'transparent'}`,
-                  fontSize: '13px',
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? 'var(--color-gold)' : 'var(--color-text-secondary)',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'color 0.15s, border-color 0.15s',
-                  minHeight: '44px',
-                }}
-              >
-                {section.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <TabList
+        tabs={sections}
+        activeTab={activeSection}
+        onSelect={setActiveSection}
+        tabRefs={tabRefs}
+        handleKeyDown={handleKeyDown}
+        ariaLabel={ui.pujas}
+        idPrefix="pujas"
+      />
 
       {/* Panel 1 — Daily & Frequent (kept in DOM for SEO) */}
-      <div
-        role="tabpanel"
-        id="pujas-panel-frequent"
-        aria-labelledby="pujas-tab-frequent"
-        hidden={activeSection !== 'frequent'}
-      >
+      <TabPanel id="frequent" activeTab={activeSection} idPrefix="pujas">
         {frequentPujas.length === 0 ? (
           <EmptyState type="pujas" />
         ) : (
@@ -131,15 +65,10 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
             ))}
           </div>
         )}
-      </div>
+      </TabPanel>
 
       {/* Panel 2 — For Occasions (kept in DOM for SEO) */}
-      <div
-        role="tabpanel"
-        id="pujas-panel-occasions"
-        aria-labelledby="pujas-tab-occasions"
-        hidden={activeSection !== 'occasions'}
-      >
+      <TabPanel id="occasions" activeTab={activeSection} idPrefix="pujas">
         {occasions.length === 0 ? (
           <EmptyState type="occasions" />
         ) : (
@@ -256,7 +185,7 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
             })}
           </div>
         )}
-      </div>
+      </TabPanel>
     </>
   );
 }
