@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, KeyboardEvent } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import type { Puja, ProcedureStep, MaterialItem } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
+import { TabList, TabPanel, useTabs } from './Tabs';
 
 const LABELS: Record<string, Record<string, string>> = {
   materials: { en: 'Materials', te: 'సామగ్రి', ta: 'பொருட்கள்', hi: 'सामग्री' },
@@ -41,22 +41,7 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
     steps.length > 0     && { id: 'procedure', label: lbl('procedure', lang) },
   ].filter(Boolean) as Tab[];
 
-  const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? '');
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>, idx: number) {
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      const next = (idx + 1) % tabs.length;
-      tabRefs.current[next]?.focus();
-      setActiveTab(tabs[next].id);
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      const prev = (idx - 1 + tabs.length) % tabs.length;
-      tabRefs.current[prev]?.focus();
-      setActiveTab(tabs[prev].id);
-    }
-  }
+  const { activeTab, setActiveTab, tabRefs, handleKeyDown } = useTabs(tabs);
 
   return (
     <>
@@ -93,61 +78,15 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
 
       {/* Tab bar */}
       {tabs.length > 1 && (
-        <div style={{
-          position: 'sticky',
-          top: 'var(--nav-height)',
-          zIndex: 10,
-          background: 'var(--color-bg)',
-          borderBottom: '1px solid var(--color-border)',
-          margin: '0 -24px 32px',
-          padding: '0 24px',
-        }}>
-          <div
-            role="tablist"
-            style={{
-              display: 'flex',
-              gap: '0',
-              overflowX: 'auto',
-              scrollbarWidth: 'none',
-              WebkitOverflowScrolling: 'touch',
-            }}
-          >
-            {tabs.map((tab, idx) => {
-              const isActive = tab.id === activeTab;
-              const panelId = `puja-panel-${tab.id}`;
-              const tabId = `puja-tab-${tab.id}`;
-              return (
-                <button
-                  key={tab.id}
-                  id={tabId}
-                  ref={el => { tabRefs.current[idx] = el; }}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-controls={panelId}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => setActiveTab(tab.id)}
-                  onKeyDown={e => handleKeyDown(e, idx)}
-                  style={{
-                    flexShrink: 0,
-                    padding: '12px 18px',
-                    background: 'transparent',
-                    border: 'none',
-                    borderBottom: `2px solid ${isActive ? 'var(--color-gold)' : 'transparent'}`,
-                    fontSize: '13px',
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive ? 'var(--color-gold)' : 'var(--color-text-secondary)',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'color 0.15s, border-color 0.15s',
-                    minHeight: '44px',
-                  }}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <TabList
+          tabs={tabs}
+          activeTab={activeTab}
+          onSelect={setActiveTab}
+          tabRefs={tabRefs}
+          handleKeyDown={handleKeyDown}
+          ariaLabel={title}
+          idPrefix="puja"
+        />
       )}
 
       {/* Single-section pages get a heading since there's no tab bar to label the content */}
@@ -163,15 +102,15 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
 
       {/* Tab panels — all rendered, inactive ones hidden (kept in the DOM for SEO) */}
       {materials.length > 0 && (
-        <div role="tabpanel" id="puja-panel-materials" aria-labelledby="puja-tab-materials" hidden={tabs.length > 1 && activeTab !== 'materials'}>
+        <TabPanel id="materials" activeTab={activeTab} idPrefix="puja">
           <MaterialsList items={materials} />
-        </div>
+        </TabPanel>
       )}
 
       {steps.length > 0 && (
-        <div role="tabpanel" id="puja-panel-procedure" aria-labelledby="puja-tab-procedure" hidden={tabs.length > 1 && activeTab !== 'procedure'}>
+        <TabPanel id="procedure" activeTab={activeTab} idPrefix="puja">
           <ProcedureSteps steps={steps} />
-        </div>
+        </TabPanel>
       )}
     </>
   );
