@@ -56,19 +56,6 @@ export async function getStoryBody(docId: string): Promise<string[]> {
   }
 }
 
-// Throttled batch fetcher — spaces requests 200ms apart to avoid Docs API HTTP 429
-export async function getStoryBodiesBatched(
-  docIds: string[]
-): Promise<Record<string, string[]>> {
-  const results: Record<string, string[]> = {};
-  for (const docId of docIds) {
-    if (!docId) continue;
-    results[docId] = await getStoryBody(docId);
-    await new Promise(resolve => setTimeout(resolve, 200));
-  }
-  return results;
-}
-
 // Read story paragraphs from the stories_content Sheets tab.
 // Used when gdoc_id is empty (content stored in Sheet instead of a Doc).
 export async function getStoryBodyFromSheet(

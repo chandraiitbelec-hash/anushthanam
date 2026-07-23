@@ -317,10 +317,10 @@ export async function getUpcoming(limit?: number) {
   const items = [
     ...festivals
       .filter(f => f.next_occurrence >= today)
-      .map(f => ({ type: 'festival' as const, slug: f.slug, title_en: f.title_en, title_te: f.title_te, title_ta: f.title_ta, title_hi: f.title_hi, next_occurrence: f.next_occurrence, next_occurrence_note_en: f.next_occurrence_note_en || '', illustration_drive_id: f.illustration_drive_id })),
+      .map(f => ({ type: 'festival' as const, slug: f.slug, title_en: f.title_en, title_te: f.title_te, title_ta: f.title_ta, title_hi: f.title_hi, next_occurrence: f.next_occurrence, next_occurrence_note_en: f.next_occurrence_note_en || '' })),
     ...vrathams
       .filter(v => v.next_occurrence >= today)
-      .map(v => ({ type: 'vratham' as const, slug: v.slug, title_en: v.title_en, title_te: v.title_te, title_ta: v.title_ta, title_hi: v.title_hi, next_occurrence: v.next_occurrence, next_occurrence_note_en: v.next_occurrence_note_en || '', illustration_drive_id: '' })),
+      .map(v => ({ type: 'vratham' as const, slug: v.slug, title_en: v.title_en, title_te: v.title_te, title_ta: v.title_ta, title_hi: v.title_hi, next_occurrence: v.next_occurrence, next_occurrence_note_en: v.next_occurrence_note_en || '' })),
   ].sort((a, b) => a.next_occurrence.localeCompare(b.next_occurrence));
 
   return limit ? items.slice(0, limit) : items;

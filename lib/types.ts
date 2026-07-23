@@ -286,7 +286,6 @@ export type SearchRecord = {
   alternate_names?: string;
   shloka_type?: string;
   url: string;
-  illustration_drive_id?: string;
 };
 
 export type ShlokaViewerState = {

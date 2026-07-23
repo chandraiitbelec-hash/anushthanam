@@ -64,10 +64,10 @@ Publishing is intentional: a "Publish to site" menu in Apps Script triggers the 
 | File | Purpose |
 |------|---------|
 | `lib/sheets.ts` | `getSheetRows()` / `getSheetRowsLarge()` / `getPublished()` — reads from Google Sheets via service account, with the caching behavior above |
-| `lib/docs.ts` | `getStoryBody()` (Docs API, still used when a story has `gdoc_id_{lang}` set) and `getStoryBodyFromSheet()` (reads `stories_content` tab) — see Stories below. `getStoryBodiesBatched()` exists but is currently unused (no callers) |
+| `lib/docs.ts` | `getStoryBody()` (Docs API, still used when a story has `gdoc_id_{lang}` set) and `getStoryBodyFromSheet()` (reads `stories_content` tab) — see Stories below |
 | `lib/types.ts` | All entity types |
 | `lib/relations.ts` | Cross-entity resolution (god_links, linked slugs, occasion↔puja resolution) |
-| `lib/search-index.ts` | `buildSearchIndex()` helper — the actual build-time index writer is `scripts/build-search-index.mjs` (see Search index below), which does not import this file |
+| `lib/search-config.ts` | Shared Fuse.js options (`keys`/`threshold`/`minMatchCharLength`) used by both `SearchBar` and `SearchPage` |
 | `lib/stanzas.ts` + `lib/data/stanzas/` | Shloka stanza content as static per-slug JSON (exported from Sheets by `scripts/export-shloka-stanzas.mjs`) — the serving path for `getShlokaStanzas` |
 | `lib/panchangam.ts` | Reads the panchangam tab, exposes today's and date-specific data |
 | `lib/ui-strings.ts` | Centralized UI-string dictionary — see Language / translation pattern below |
@@ -98,11 +98,9 @@ Published story bodies are read from the `stories_content` tab (`story_slug, lan
 
 `gdoc_id_en/te/ta/hi` on `stories_index` is **not** dead — it's still a live per-language override: `app/stories/[slug]/page.tsx` uses the Docs API (`getStoryBody`) for a given language when that story's `gdoc_id_{lang}` is populated, and falls back to `stories_content` otherwise (including for `en`). Migrating a story into `stories_content` means clearing its `gdoc_id_{lang}` values (see `scripts/upload-stories-content.mjs`) so the fallback path takes over.
 
-`getStoryBodiesBatched()` (200ms-throttled batch fetch) still exists in `lib/docs.ts` but has no current callers — treat as dead code unless you're reviving batched Docs fetching.
-
 ### Search index
 
-Built by `scripts/build-search-index.mjs`, run via the `prebuild` npm script before every `next build` (not by `lib/search-index.ts`, which is an unused library-level duplicate of the same logic). Covers gods, festivals, vrathams, shloka titles — not puja or story body text. Fuse.js threshold: 0.35 (intentionally loose for phonetic deity name variants).
+Built by `scripts/build-search-index.mjs`, run via the `prebuild` npm script before every `next build`. Covers gods, festivals, vrathams, shloka titles — not puja or story body text. Fuse.js threshold: 0.35 (intentionally loose for phonetic deity name variants); the client-side search options live in `lib/search-config.ts`, shared by `SearchBar` and `SearchPage`.
 
 On Vercel/CI (`process.env.VERCEL || process.env.CI`), missing `GOOGLE_SERVICE_ACCOUNT_KEY` or `SHEETS_SPREADSHEET_ID` **hard-fails the build** (`process.exit(1)`). Locally, missing env instead logs a warning and writes an empty `public/search-index.json` so `npm run build` still succeeds without credentials.
 

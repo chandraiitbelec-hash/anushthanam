@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { searchFuseOptions } from '@/lib/search-config';
 import type { SearchRecord } from '@/lib/types';
 
 export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 }: { autoFocus?: boolean; onSelect?: () => void; maxWidth?: number } = {}) {
@@ -13,7 +14,6 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
   const [results, setResults] = useState<SearchRecord[]>([]);
   const [open, setOpen] = useState(false);
   const [fuseReady, setFuseReady] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fuseRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,17 +31,7 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
       ]);
       if (cancelled) return;
       const index: SearchRecord[] = await res.json();
-      fuseRef.current = new Fuse(index, {
-        threshold: 0.35,
-        keys: [
-          { name: 'name_en', weight: 0.4 },
-          { name: 'name_te', weight: 0.2 },
-          { name: 'name_ta', weight: 0.2 },
-          { name: 'name_hi', weight: 0.1 },
-          { name: 'name_sa', weight: 0.05 },
-          { name: 'alternate_names', weight: 0.05 },
-        ],
-      });
+      fuseRef.current = new Fuse(index, searchFuseOptions);
       setFuseReady(true);
     }
     init().catch(() => {});
@@ -53,7 +43,6 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
       setResults([]);
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const hits: any[] = fuseRef.current.search(query.trim(), { limit: 8 });
     setResults(hits.map((h: { item: SearchRecord }) => h.item));
     setOpen(hits.length > 0);
