@@ -1,4 +1,5 @@
 import { getSheetRows, getSheetRowsLarge, getPublished } from './sheets';
+import { todayIST } from './utils';
 import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion } from './types';
 
 export async function getGodLinks(): Promise<GodLink[]> {
@@ -192,7 +193,7 @@ export async function getUpcoming(limit?: number) {
     getPublished('vrathams'),
   ]);
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
 
   const items = [
     ...festivals

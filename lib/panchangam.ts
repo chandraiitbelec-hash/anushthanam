@@ -1,4 +1,5 @@
 import { getSheetRows } from './sheets';
+import { todayIST } from './utils';
 import type { PanchangamDay } from './types';
 
 export async function getAllPanchangam(): Promise<PanchangamDay[]> {
@@ -23,7 +24,7 @@ export async function getAllPanchangam(): Promise<PanchangamDay[]> {
 }
 
 export async function getTodayPanchangam(): Promise<PanchangamDay | null> {
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
   const all = await getAllPanchangam();
   return all.find(d => d.date === today) ?? null;
 }
@@ -34,7 +35,7 @@ export async function getPanchangamForDate(date: string): Promise<PanchangamDay 
 }
 
 export async function getNextPanchangam(): Promise<PanchangamDay | null> {
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
   const all = await getAllPanchangam();
   return all.find(d => d.date > today) ?? null;
 }

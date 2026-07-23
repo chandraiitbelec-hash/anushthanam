@@ -24,6 +24,12 @@ export function splitStanzaLines(text: string): string[] {
   return text.split('|').map(s => s.trim()).filter(Boolean);
 }
 
+// Audience is India-only; hardcoding IST avoids UTC dates being ~5:30h behind
+// (e.g. midnight-5:30am IST would otherwise read as "yesterday").
+export function todayIST(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+}
+
 export function slugToTitle(slug: string): string {
   return slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
