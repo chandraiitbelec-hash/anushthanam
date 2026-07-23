@@ -254,7 +254,7 @@ export const UI: Record<Language, UiStrings> = {
     gitaTitle: 'Srimad Bhagavad Gita',
     gitaHeroSubtitle: (chapterCount, verseCount) => `${chapterCount} chapters · ${verseCount} slokas · Sanskrit with Telugu, Tamil, Hindi & English`,
     meaning: 'Meaning',
-    iastToggleLabel: 'देवनागरी',
+    iastToggleLabel: 'Devanagari',
     copyLabel: 'Copy',
     copiedLabel: 'Copied',
     deityLabel: 'Deity',
