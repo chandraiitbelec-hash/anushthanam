@@ -35,7 +35,7 @@ function pill(active: boolean): React.CSSProperties {
     borderRadius: '20px',
     border: `1px solid ${active ? 'var(--color-gold)' : 'var(--color-border)'}`,
     background: active ? 'rgba(184,134,11,0.1)' : 'transparent',
-    color: active ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+    color: active ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
     fontSize: '13px',
     fontWeight: 500,
     cursor: 'pointer',
@@ -166,7 +166,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
               <p style={{
                 fontSize: '11px',
                 fontWeight: 600,
-                color: 'var(--color-gold)',
+                color: 'var(--color-gold-text)',
                 margin: '0 0 12px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',

@@ -110,7 +110,7 @@ export function TabList({
                 borderBottom: `2px solid ${isActive ? 'var(--color-gold)' : 'transparent'}`,
                 fontSize: '13px',
                 fontWeight: isActive ? 600 : 400,
-                color: isActive ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+                color: isActive ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'color 0.15s, border-color 0.15s',

@@ -36,7 +36,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
       {!parent && (
         <Link href="/stories" style={{
           display: 'inline-flex', alignItems: 'center', gap: '4px',
-          fontSize: '13px', color: 'var(--color-gold)', fontWeight: 500,
+          fontSize: '13px', color: 'var(--color-gold-text)', fontWeight: 500,
           textDecoration: 'none', marginBottom: '12px',
         }}>
           ← {UI[lang].storiesLabel}
@@ -72,7 +72,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
             background: 'rgba(212,98,42,0.1)',
             border: '1px solid var(--color-saffron)',
             borderRadius: '20px',
-            fontSize: '12px', color: 'var(--color-saffron)', fontWeight: 600,
+            fontSize: '12px', color: 'var(--color-saffron-text)', fontWeight: 600,
             textTransform: 'capitalize',
           }}>
             {story.story_type.replace(/-/g, ' ')}

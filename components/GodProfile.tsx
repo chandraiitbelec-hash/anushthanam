@@ -144,7 +144,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
               border: '1px solid var(--color-gold)',
               borderRadius: '20px',
               fontSize: '12px',
-              color: 'var(--color-gold)',
+              color: 'var(--color-gold-text)',
               fontWeight: 600,
               textTransform: 'capitalize',
             }}>

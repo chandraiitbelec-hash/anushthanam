@@ -29,7 +29,7 @@ export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
                 textDecoration: 'none',
                 padding: '8px 4px',
               }}
-                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
                 onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
               >
                 {displayLabel}

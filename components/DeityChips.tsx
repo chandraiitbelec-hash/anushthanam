@@ -34,7 +34,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
             borderRadius: '20px',
             fontSize: '13px',
             fontWeight: 500,
-            color: 'var(--color-gold)',
+            color: 'var(--color-gold-text)',
             textDecoration: 'none',
             transition: 'background 0.15s',
           }}

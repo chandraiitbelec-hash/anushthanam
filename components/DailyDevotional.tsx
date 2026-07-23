@@ -26,7 +26,7 @@ function Pill({ label, active, onClick, controls }: { label: string; active: boo
         borderRadius: '20px',
         border: `1px solid ${active ? 'var(--color-gold)' : 'var(--color-border)'}`,
         background: active ? 'rgba(184,134,11,0.1)' : 'transparent',
-        color: active ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+        color: active ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
         fontSize: '13px',
         fontWeight: active ? 600 : 400,
         cursor: 'pointer',
@@ -66,7 +66,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
         {/* Always-visible row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <div>
-            <p style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-gold)', margin: '0 0 1px' }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-gold-text)', margin: '0 0 1px' }}>
               {ui.devotionalHeading}
             </p>
             <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: 0 }}>
@@ -123,7 +123,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
             </div>
 
             <div style={{ background: 'rgba(184,134,11,0.06)', border: '1px solid rgba(184,134,11,0.18)', borderRadius: '8px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold)', margin: '0 0 6px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold-text)', margin: '0 0 6px' }}>
                 {ui.reflection}
               </p>
               <p className={nameClass} style={{ fontSize: '13px', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-secondary)', margin: 0, fontStyle: lang === 'en' ? 'italic' : 'normal' }}>
@@ -141,7 +141,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
                 {langField(entry.story as unknown as Record<string, string>, 'title', lang)}
               </h3>
               {entry.story.source && (
-                <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-saffron)', background: 'rgba(212,98,42,0.08)', padding: '2px 8px', borderRadius: '4px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-saffron-text)', background: 'rgba(212,98,42,0.08)', padding: '2px 8px', borderRadius: '4px' }}>
                   {entry.story.source}
                 </span>
               )}

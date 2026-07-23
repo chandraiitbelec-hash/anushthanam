@@ -37,7 +37,7 @@ export default function HomeSearch({ popular }: { popular: PopularGod[] }) {
                   color: 'var(--color-text-secondary)',
                   textDecoration: 'none',
                 }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold)'; }}
+                onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold-text)'; }}
                 onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
               >
                 {godName(g)}

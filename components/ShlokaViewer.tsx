@@ -136,14 +136,15 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
   }
 
   function pill(active: boolean, accent: 'gold' | 'saffron') {
-    const color = accent === 'gold' ? 'var(--color-gold)' : 'var(--color-saffron)';
+    const borderColor = accent === 'gold' ? 'var(--color-gold)' : 'var(--color-saffron)';
+    const textColor = accent === 'gold' ? 'var(--color-gold-text)' : 'var(--color-saffron-text)';
     const bg = accent === 'gold' ? 'rgba(184,134,11,0.1)' : 'rgba(212,98,42,0.1)';
     return {
       padding: '6px 14px',
       borderRadius: '20px',
-      border: `1px solid ${active ? color : 'var(--color-border)'}`,
+      border: `1px solid ${active ? borderColor : 'var(--color-border)'}`,
       background: active ? bg : 'transparent',
-      color: active ? color : 'var(--color-text-secondary)',
+      color: active ? textColor : 'var(--color-text-secondary)',
       fontSize: '13px',
       fontWeight: 500,
       cursor: 'pointer',
@@ -233,7 +234,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 {isMilestone && (
                   <span style={{
-                    fontSize: '12px', fontWeight: 600, color: 'var(--color-gold)', flexShrink: 0,
+                    fontSize: '12px', fontWeight: 600, color: 'var(--color-gold-text)', flexShrink: 0,
                   }}>
                     ({stanza.stanza_number})
                   </span>
@@ -277,7 +278,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    color: stanzaCopied === stanza.stanza_number ? 'var(--color-gold)' : 'var(--color-text-secondary)',
+                    color: stanzaCopied === stanza.stanza_number ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
                     fontSize: '14px',
                     padding: '4px 6px',
                     borderRadius: '4px',
@@ -290,7 +291,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 {stanza.stanza_label && (
                   <p style={{
-                    fontSize: '12px', fontWeight: 500, color: 'var(--color-gold)',
+                    fontSize: '12px', fontWeight: 500, color: 'var(--color-gold-text)',
                     margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em',
                   }}>
                     {stanza.stanza_label}

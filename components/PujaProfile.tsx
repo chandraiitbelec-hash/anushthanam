@@ -55,7 +55,7 @@ export default function PujaProfile({ puja, steps, materials }: Props) {
         )}
 
         {puja.duration_minutes && (
-          <p style={{ fontSize: '14px', color: 'var(--color-gold)', fontWeight: 500, margin: '0 0 16px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-gold-text)', fontWeight: 500, margin: '0 0 16px' }}>
             {puja.duration_minutes} {UI[lang].minutesShort}
           </p>
         )}

@@ -82,7 +82,7 @@ export default function PanchangamEmptyState({ nextDate }: Props) {
         <p style={{
           fontSize: '13px',
           fontWeight: 500,
-          color: 'var(--color-gold)',
+          color: 'var(--color-gold-text)',
           margin: '0 0 24px',
         }}>
           {ui.panchangamNextAvailable(nextDate)}

@@ -30,7 +30,7 @@ export default function ErrorPage({
       }}
     >
       <p style={{ fontSize: '40px', margin: 0 }} aria-hidden="true">🪔</p>
-      <p style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-saffron)', margin: 0 }}>
+      <p style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-saffron-text)', margin: 0 }}>
         Error
       </p>
       <h1

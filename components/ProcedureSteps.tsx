@@ -74,7 +74,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
                   style={{
                     marginTop: '8px',
                     fontSize: '12px',
-                    color: 'var(--color-gold)',
+                    color: 'var(--color-gold-text)',
                     background: 'none',
                     border: 'none',
                     fontWeight: 500,
@@ -91,7 +91,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
                   style={{
                     marginTop: '8px',
                     fontSize: '12px',
-                    color: 'var(--color-gold)',
+                    color: 'var(--color-gold-text)',
                     textDecoration: 'none',
                     fontWeight: 500,
                     display: 'inline-block',

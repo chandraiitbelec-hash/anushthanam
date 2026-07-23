@@ -83,7 +83,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         </div>
 
         {vratham.next_occurrence && (
-          <p style={{ fontSize: '14px', color: 'var(--color-saffron)', fontWeight: 500, margin: '0 0 16px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-saffron-text)', fontWeight: 500, margin: '0 0 16px' }}>
             {UI[lang].next}: {formatDateLocalized(vratham.next_occurrence, lang)}
           </p>
         )}

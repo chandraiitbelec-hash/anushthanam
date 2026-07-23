@@ -38,7 +38,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
           <span className={nameClass}>{r[`nakshatra_${lang}`] || day.nakshatra_en}</span>
         </span>
         {specialEvent && (
-          <span className={nameClass} style={{ color: 'var(--color-gold)', fontWeight: 500 }}>
+          <span className={nameClass} style={{ color: 'var(--color-gold-text)', fontWeight: 500 }}>
             {specialEvent}
           </span>
         )}
@@ -67,7 +67,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
         <p className={nameClass} style={{
           fontSize: '13px',
           fontWeight: 600,
-          color: 'var(--color-saffron)',
+          color: 'var(--color-saffron-text)',
           margin: '0 0 12px',
           letterSpacing: '0.05em',
         }}>

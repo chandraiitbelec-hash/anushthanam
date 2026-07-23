@@ -24,8 +24,8 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
   const titleClass = scriptClass(lang);
 
   const badgeColors = {
-    gold:    { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold)' },
-    saffron: { bg: 'rgba(212,98,42,0.1)', color: 'var(--color-saffron)' },
+    gold:    { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold-text)' },
+    saffron: { bg: 'rgba(212,98,42,0.1)', color: 'var(--color-saffron-text)' },
     green:   { bg: 'rgba(61,107,79,0.1)', color: 'var(--color-green)' },
   };
   const bc = badgeColors[badgeColor];
@@ -82,7 +82,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       {meta && (
         <p style={{
           fontSize: '11px',
-          color: 'var(--color-gold)',
+          color: 'var(--color-gold-text)',
           margin: 0,
           fontWeight: 500,
         }}>

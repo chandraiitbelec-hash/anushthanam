@@ -155,7 +155,7 @@ export default function Nav() {
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
               }}
-                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
                 onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
               >
                 {linkLabel(link)}
@@ -243,7 +243,7 @@ export default function Nav() {
                         display: 'block', width: '100%', textAlign: 'left',
                         padding: '10px 16px',
                         fontSize: '13px',
-                        color: l === lang ? 'var(--color-gold)' : 'var(--color-text-primary)',
+                        color: l === lang ? 'var(--color-gold-text)' : 'var(--color-text-primary)',
                         background: l === lang ? 'rgba(184,134,11,0.08)' : 'none',
                         border: 'none',
                         cursor: 'pointer',

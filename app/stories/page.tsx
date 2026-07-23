@@ -104,7 +104,7 @@ export default async function StoriesPage() {
                     border: '1px solid var(--color-gold)',
                     borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '12px', fontWeight: 700, color: 'var(--color-gold)',
+                    fontSize: '12px', fontWeight: 700, color: 'var(--color-gold-text)',
                   }}>
                     {idx + 1}
                   </span>
@@ -118,7 +118,7 @@ export default async function StoriesPage() {
                       background: 'rgba(212,98,42,0.08)',
                       border: '1px solid var(--color-saffron)',
                       borderRadius: '12px',
-                      color: 'var(--color-saffron)', fontWeight: 600,
+                      color: 'var(--color-saffron-text)', fontWeight: 600,
                       textTransform: 'uppercase', letterSpacing: '0.05em',
                     }}>
                       {STORY_TYPE_LABELS[s.story_type] ?? s.story_type}

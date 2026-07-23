@@ -38,7 +38,7 @@ export default function StoryLinkList({ stories, readLabel }: Props) {
                 width: '24px', height: '24px', flexShrink: 0,
                 background: 'rgba(184,134,11,0.1)', border: '1px solid var(--color-gold)',
                 borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '11px', fontWeight: 700, color: 'var(--color-gold)',
+                fontSize: '11px', fontWeight: 700, color: 'var(--color-gold-text)',
               }}>{idx + 1}</span>
             )}
             <span className={nameClass} style={{
@@ -46,7 +46,7 @@ export default function StoryLinkList({ stories, readLabel }: Props) {
               fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
               color: 'var(--color-text-primary)',
             }}>{t}</span>
-            <span style={{ fontSize: '12px', color: 'var(--color-gold)', fontWeight: 600, flexShrink: 0 }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-gold-text)', fontWeight: 600, flexShrink: 0 }}>
               {readLabel} →
             </span>
           </Link>

@@ -50,7 +50,7 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
           fontWeight: 600,
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
-          color: 'var(--color-gold)',
+          color: 'var(--color-gold-text)',
           margin: '0 0 6px',
         }}>
           <ClientLabel labels={{

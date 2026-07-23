@@ -37,7 +37,7 @@ export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[]
                 {day.paksha} {r(day)[`tithi_${lang}`] || day.tithi_en} · {r(day)[`nakshatra_${lang}`] || day.nakshatra_en}
               </p>
               {(r(day)[`special_event_${lang}`] || day.special_event_en) && (
-                <p style={{ fontSize: '13px', color: 'var(--color-saffron)', fontWeight: 500, margin: 0 }}>
+                <p style={{ fontSize: '13px', color: 'var(--color-saffron-text)', fontWeight: 500, margin: 0 }}>
                   {r(day)[`special_event_${lang}`] || day.special_event_en}
                 </p>
               )}

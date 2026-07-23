@@ -33,7 +33,7 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           flexDirection: 'column',
           gap: '2px',
         }}
-          onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+          onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
           <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← {ui.chapterLabel(prev.number)}</span>
@@ -51,7 +51,7 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           gap: '2px',
           textAlign: 'right',
         }}
-          onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold)')}
+          onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
           <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{ui.chapterLabel(next.number)} →</span>
