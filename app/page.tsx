@@ -1,6 +1,8 @@
 import { getPublished } from '@/lib/sheets';
 import { getTodayPanchangam } from '@/lib/panchangam';
+import { todayIST } from '@/lib/utils';
 import type { Festival, Vratham } from '@/lib/types';
+import { getTodayDevotional } from '@/lib/daily-devotional';
 import DailyDevotional from '@/components/DailyDevotional';
 import HomeSearch, { type PopularGod } from '@/components/HomeSearch';
 import ExploreGrid from '@/components/ExploreGrid';
@@ -12,7 +14,7 @@ export const revalidate = 3600;
 const POPULAR_GOD_SLUGS = ['ganesha', 'shiva', 'vishnu', 'lakshmi', 'durga', 'hanuman', 'venkateswara', 'saraswati'];
 
 function nextByOccurrence<T extends { next_occurrence: string }>(rows: T[]): T | null {
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
   const upcoming = rows
     .filter(r => r.next_occurrence >= today)
     .sort((a, b) => a.next_occurrence.localeCompare(b.next_occurrence));
@@ -36,9 +38,11 @@ export default async function HomePage() {
     .filter((g): g is Record<string, string> => Boolean(g))
     .map(g => ({ slug: g.slug, names: { en: g.name_en, te: g.name_te, ta: g.name_ta, hi: g.name_hi } }));
 
+  const devotionalEntry = getTodayDevotional();
+
   return (
     <div>
-      <DailyDevotional />
+      <DailyDevotional entry={devotionalEntry} />
       <HomeSearch popular={popularGods} />
       <ExploreGrid nextFestival={nextFestival} nextVratham={nextVratham} today={today} />
     </div>

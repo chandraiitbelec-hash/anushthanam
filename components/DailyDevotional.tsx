@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
-import devotionalData from '@/lib/data/daily-devotional.json';
+import type { DailyDevotionalEntry as Entry } from '@/lib/daily-devotional';
 
-type Entry = typeof devotionalData[0];
 type Tab = 'shloka' | 'story';
 
 const LABELS = {
@@ -14,12 +13,6 @@ const LABELS = {
   meaning: { en: 'Meaning',            te: 'అర్థం',        ta: 'பொருள்',         hi: 'अर्थ' },
   reflect: { en: 'Reflection',         te: 'చింతన',        ta: 'சிந்தனை',        hi: 'चिंतन' },
 };
-
-function todayEntry(): Entry {
-  const start = new Date(new Date().getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((Date.now() - start.getTime()) / 86400000);
-  return devotionalData[dayOfYear % devotionalData.length] as Entry;
-}
 
 function t(map: Record<string, string>, lang: string): string {
   return map[lang] ?? map.en;
@@ -61,10 +54,9 @@ function Pill({ label, active, onClick, controls }: { label: string; active: boo
   );
 }
 
-export default function DailyDevotional() {
+export default function DailyDevotional({ entry }: { entry: Entry }) {
   const { lang } = useLang();
   const [open, setOpen] = useState<Tab | null>(null);
-  const entry = todayEntry();
 
   const scriptClass =
     lang === 'te' ? 'script-telugu' :
