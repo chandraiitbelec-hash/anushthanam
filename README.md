@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anushthanam
 
-## Getting Started
+A Hindu devotion reference site covering gods (devatas), shlokas, stotras, pujas, festivals, vrathams, and panchangam — for Telugu, Tamil, Hindi, and English speakers. No e-commerce, no user accounts.
 
-First, run the development server:
+Built with Next.js (App Router) + TypeScript + Tailwind CSS, statically generated and deployed on Vercel with ISR.
+
+## Prerequisites
+
+- Node.js and npm
+- A Google Cloud service account with **read-only** access to the project's Google Sheet (and Docs, for legacy story content)
+- The service account's JSON key
+- The Sheet must be **shared with the service account's email** (found in the key JSON as `client_email`) as at least Viewer — otherwise Sheets API calls will fail with a permission error
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local` at the repo root with the following variables (see `CLAUDE.md` for full details on what each one gates):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+GOOGLE_SERVICE_ACCOUNT_KEY=
+SHEETS_SPREADSHEET_ID=
+NEXT_PUBLIC_SITE_URL=
+DRIVE_FOLDER_ID=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `GOOGLE_SERVICE_ACCOUNT_KEY` — the full service-account JSON key, as a single-line string
+- `SHEETS_SPREADSHEET_ID` — the ID of the Google Sheet (from its URL), shared with the service account as above
+- `NEXT_PUBLIC_SITE_URL` — the site's canonical public URL, used for SEO/sitemap generation
+- `DRIVE_FOLDER_ID` — Drive folder ID used for content assets
 
-## Learn More
+Never commit `.env.local` or paste real values into commits, issues, or chat.
 
-To learn more about Next.js, take a look at the following resources:
+## Commands
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev     # local dev server at http://localhost:3000
+npm run build   # prebuild writes public/search-index.json, then next build (static generation)
+npm run lint    # eslint .
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`npm run build` needs valid Sheets credentials to fetch content; without them locally it still succeeds but with an empty search index (see `CLAUDE.md`). On Vercel/CI, missing credentials fail the build intentionally.
 
-## Deploy on Vercel
+## Where content lives
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+All structured content (gods, shlokas, pujas, festivals, vrathams, panchangam, etc.) lives in **Google Sheets**, read at build/runtime through `lib/sheets.ts`. Each tab has a `status` column (`draft` / `review` / `published`) — only `published` rows ever reach the site. Long-form story prose lives in the `stories_content` Sheets tab, with a legacy per-language Google Docs override still supported for a subset of stories.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Publishing from Sheets to the live site is done via the "Publish to site" menu in the spreadsheet's Apps Script, which triggers a Vercel deploy hook.
+
+**Never run `vercel` or deploy directly from this machine** — always push to GitHub; the user manages Vercel deploys from there.
+
+See [CLAUDE.md](CLAUDE.md) for the full architecture (rendering model, caching layer, tab schemas, translation pattern, scripts conventions) and [STOTRA_UPLOAD_PIPELINE.md](STOTRA_UPLOAD_PIPELINE.md) for the workflow used to add a new stotra/shloka's content end-to-end.
