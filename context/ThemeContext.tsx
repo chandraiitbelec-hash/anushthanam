@@ -31,15 +31,19 @@ function getSnapshot(): Theme {
   return attr === 'light' || attr === 'dark' ? attr : 'system';
 }
 
-function getServerSnapshot(): Theme {
-  return 'system';
-}
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // useSyncExternalStore renders 'system' (matching the static SSR shell) during
-  // hydration, then re-renders with the real value the beforeInteractive
-  // theme-init script set as data-theme — without a hydration-mismatch error.
-  const domTheme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+export function ThemeProvider({
+  children,
+  initialTheme = 'system',
+}: {
+  children: React.ReactNode;
+  initialTheme?: Theme;
+}) {
+  // The server snapshot is the cookie-derived theme the layout used to render
+  // the HTML (data-theme attribute), so SSR, hydration, and client state agree
+  // from the first byte. The client snapshot reads the DOM attribute so the
+  // cookie-less/localStorage case (set pre-paint by theme-init) reconciles
+  // without a hydration-mismatch error.
+  const domTheme = useSyncExternalStore(subscribe, getSnapshot, () => initialTheme);
   const [override, setOverride] = useState<Theme | null>(null);
   const theme = override ?? domTheme;
 

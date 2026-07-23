@@ -24,10 +24,6 @@ function getSnapshot(): Language {
   return domLang && VALID_LANGS.includes(domLang) ? domLang : 'en';
 }
 
-function getServerSnapshot(): Language {
-  return 'en';
-}
-
 // Nearest element to the "reading position" (just below the sticky nav/chip
 // bar) at the moment a language switch is requested, plus its viewport offset
 // so we can put it back there once the reflow from the switch has settled.
@@ -45,11 +41,19 @@ function captureScrollAnchor(): ScrollAnchor {
   return { scrollY: window.scrollY };
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // useSyncExternalStore renders 'en' (matching the static SSR shell) during
-  // hydration, then re-renders with the real value the beforeInteractive
-  // lang-init script set on <html lang> — without a hydration-mismatch error.
-  const domLang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+export function LanguageProvider({
+  children,
+  initialLang = 'en',
+}: {
+  children: React.ReactNode;
+  initialLang?: Language;
+}) {
+  // The server snapshot is the cookie-derived language the layout used to render
+  // the HTML, so SSR markup, hydration, and client state all agree from the first
+  // byte — no post-hydration language flip. The client snapshot reads <html lang>
+  // so the rare cookie-less/localStorage-migration case (set pre-paint by the
+  // lang-init script) still reconciles without a hydration-mismatch error.
+  const domLang = useSyncExternalStore(subscribe, getSnapshot, () => initialLang);
   const [override, setOverride] = useState<Language | null>(null);
   const lang = override ?? domLang;
   const pendingAnchor = useRef<ScrollAnchor | null>(null);
