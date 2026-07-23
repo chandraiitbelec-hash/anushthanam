@@ -162,7 +162,34 @@ script correctly too (find it via `document.querySelectorAll('button')` and
 match on text content — see prior scripts' verification steps for the exact
 pattern).
 
-## Step 7 — commit and push
+## Step 7 — re-export the static stanza JSON
+
+`app/shlokas/[slug]` and `app/vrathams/[slug]` read stanzas from static JSON
+(`lib/data/stanzas/<slug>.json`, one file per shloka) via `lib/stanzas.ts`,
+not live from Sheets — Sheets stays the authoring surface, but the built site
+reads a build-time export instead of paying a Sheets API round trip (and the
+`unstable_cache` 2MB limit) on every cold start. After `--write` has landed
+your new rows in the `shloka_stanzas` tab, regenerate the JSON:
+
+```bash
+node scripts/export-shloka-stanzas.mjs
+```
+
+This is a **manual step, run once per upload** — deliberately not wired into
+`prebuild` alongside `build-search-index.mjs`. Search-index rebuilds must
+reflect every deploy because ordinary Sheets edits (status flips, typo fixes)
+happen independently of code pushes; stanza content only changes when an
+upload script runs, so tying the export to that event (rather than to every
+build) avoids adding a live Sheets dependency to routine deploys and keeps the
+static-JSON win intact. Commit the regenerated file(s) under
+`lib/data/stanzas/` in the same commit as the upload script.
+
+If you forget this step, `lib/stanzas.ts` still works — it falls back to a
+live Sheets fetch for any slug missing a JSON file and logs a `CONTENT ERROR`
+to the server console, so nothing breaks, but re-run the export before
+merging so the site is not permanently relying on the fallback path.
+
+## Step 8 — commit and push
 
 Standard commit message, roughly: what was uploaded, how it was sourced/verified,
 any notable discrepancy resolutions or flagged gaps. **Avoid apostrophes and

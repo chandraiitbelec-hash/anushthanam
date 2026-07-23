@@ -1,4 +1,4 @@
-import { getSheetRows, getSheetRowsLarge, getPublished } from './sheets';
+import { getSheetRows, getPublished } from './sheets';
 import { todayIST } from './utils';
 import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story } from './types';
 
@@ -67,27 +67,6 @@ export async function getMaterialItems(groupSlug: string): Promise<MaterialItem[
       substitution_note_hi: r.substitution_note_hi,
     }))
     .sort((a, b) => a.item_order - b.item_order);
-}
-
-export async function getShlokaStanzas(shlokaSlug: string) {
-  const rows = await getSheetRowsLarge('shloka_stanzas');
-  return rows
-    .filter(r => r.shloka_slug === shlokaSlug)
-    .map(r => ({
-      shloka_slug: r.shloka_slug,
-      stanza_number: parseInt(r.stanza_number) || 0,
-      stanza_label: r.stanza_label,
-      script_devanagari: r.script_devanagari,
-      script_telugu: r.script_telugu,
-      script_tamil: r.script_tamil,
-      roman_iast: r.roman_iast,
-      meaning_en: r.meaning_en,
-      meaning_te: r.meaning_te,
-      meaning_ta: r.meaning_ta,
-      meaning_hi: r.meaning_hi,
-      notes_en: r.notes_en,
-    }))
-    .sort((a, b) => a.stanza_number - b.stanza_number);
 }
 
 export async function getStoriesForParent(parentSlug: string): Promise<Story[]> {

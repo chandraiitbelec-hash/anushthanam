@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getProcedureSteps, getMaterialItems, getStoriesForParent, getShlokaStanzas, rowToVratham, rowToGod } from '@/lib/relations';
+import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToVratham, rowToGod } from '@/lib/relations';
+import { getShlokaStanzas } from '@/lib/stanzas';
 import type { ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';

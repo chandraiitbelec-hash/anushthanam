@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
-import { getShlokaStanzas, rowToShloka } from '@/lib/relations';
+import { rowToShloka } from '@/lib/relations';
+import { getShlokaStanzas } from '@/lib/stanzas';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
