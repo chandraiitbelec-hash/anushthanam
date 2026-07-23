@@ -1,16 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
-import { splitStanzaLines } from '@/lib/utils';
+import { splitStanzaLines, todayIST } from '@/lib/utils';
 import type { ShlokaStanza } from '@/lib/types';
 
 function getTodayDayNumber(startDateStr: string): number | null {
-  const start = new Date(startDateStr);
-  const today = new Date();
-  start.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
+  const start = new Date(startDateStr + 'T00:00:00');
+  const today = new Date(todayIST() + 'T00:00:00');
   const diff = Math.floor((today.getTime() - start.getTime()) / 86400000);
   return diff >= 0 && diff < 30 ? diff + 1 : null;
 }
@@ -44,7 +42,7 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
       {/* Eyebrow label */}
       {stanza.stanza_label && (
         <p style={{
-          fontSize: '10px', fontWeight: 600, color: 'var(--color-gold)',
+          fontSize: '10px', fontWeight: 600, color: 'var(--color-gold-text)',
           margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.07em',
         }}>
           {stanza.stanza_label}
@@ -117,8 +115,20 @@ export default function PasuramViewer({
 }) {
   const { lang } = useLang();
   const ui = UI[lang];
-  const todayDay = startDate ? getTodayDayNumber(startDate) : null;
-  const [selected, setSelected] = useState<number>(todayDay ?? 1);
+  const [todayDay, setTodayDay] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number>(1);
+
+  useEffect(() => {
+    if (!startDate) return;
+    // Deferred a tick past mount (not set synchronously in the effect body) so the
+    // "today" highlight — which the server always renders as null — never disagrees
+    // with what hydration commits, avoiding a hydration mismatch on this value.
+    queueMicrotask(() => {
+      const today = getTodayDayNumber(startDate);
+      setTodayDay(today);
+      if (today) setSelected(today);
+    });
+  }, [startDate]);
 
   const selectedStanza = stanzas.find(s => s.stanza_number === selected);
 
@@ -127,7 +137,7 @@ export default function PasuramViewer({
       {todayDay && (
         <p style={{
           fontSize: '13px',
-          color: 'var(--color-saffron)',
+          color: 'var(--color-saffron-text)',
           fontWeight: 500,
           margin: '0 0 16px',
         }}>
@@ -166,9 +176,9 @@ export default function PasuramViewer({
                   ? 'rgba(212,98,42,0.07)'
                   : 'var(--color-surface)',
                 color: isSelected
-                  ? 'var(--color-gold)'
+                  ? 'var(--color-gold-text)'
                   : isToday
-                  ? 'var(--color-saffron)'
+                  ? 'var(--color-saffron-text)'
                   : 'var(--color-text-secondary)',
                 fontWeight: isSelected || isToday ? 600 : 400,
                 cursor: 'pointer',

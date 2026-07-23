@@ -1,9 +1,10 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
-import { LOCALE_MAP, scriptClass } from '@/lib/utils';
+import { LOCALE_MAP, scriptClass, todayIST } from '@/lib/utils';
 
 export type UpcomingItem = {
   type: 'festival' | 'vratham';
@@ -16,9 +17,8 @@ export type UpcomingItem = {
   next_occurrence_note_en: string;
 };
 
-function getDaysUntil(dateStr: string): number {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+function getDaysUntil(dateStr: string, todayStr: string): number {
+  const today = new Date(todayStr + 'T00:00:00');
   const target = new Date(dateStr + 'T00:00:00');
   return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
@@ -39,6 +39,13 @@ function groupByMonth(items: UpcomingItem[], locale: string) {
 export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
   const { lang } = useLang();
   const ui = UI[lang];
+  const [todayStr, setTodayStr] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Deferred a tick past mount so the today/soon highlight — server-rendered as
+    // unset — never disagrees with what hydration commits.
+    queueMicrotask(() => setTodayStr(todayIST()));
+  }, []);
 
   const getTitle = (item: UpcomingItem) =>
     (item as Record<string, string>)[`title_${lang}`] || item.title_en;
@@ -77,7 +84,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: 'var(--color-gold)',
+            color: 'var(--color-gold-text)',
             margin: '0 0 10px',
             paddingBottom: '8px',
             borderBottom: '1px solid var(--color-border)',
@@ -87,12 +94,12 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {group.items.map(item => {
-              const days = getDaysUntil(item.next_occurrence);
+              const days = todayStr ? getDaysUntil(item.next_occurrence, todayStr) : null;
               const d = new Date(item.next_occurrence + 'T00:00:00');
               const href = `/${item.type === 'festival' ? 'festivals' : 'vrathams'}/${item.slug}`;
               const title = getTitle(item);
               const isToday = days === 0;
-              const isSoon = days > 0 && days <= 7;
+              const isSoon = days !== null && days > 0 && days <= 7;
               const isFestival = item.type === 'festival';
 
               return (
@@ -175,7 +182,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                         padding: '2px 8px',
                         borderRadius: '20px',
                         background: isFestival ? 'rgba(212,98,42,0.1)' : 'rgba(61,107,79,0.1)',
-                        color: isFestival ? 'var(--color-saffron)' : 'var(--color-green)',
+                        color: isFestival ? 'var(--color-saffron-text)' : 'var(--color-green)',
                         fontWeight: 600,
                       }}>
                         {isFestival ? ui.festivalWord : ui.vrathamWord}
@@ -188,7 +195,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       {isToday && (
                         <span style={{
                           fontSize: '11px', fontWeight: 700,
-                          color: 'var(--color-gold)',
+                          color: 'var(--color-gold-text)',
                           padding: '2px 8px',
                           borderRadius: '20px',
                           background: 'rgba(184,134,11,0.14)',
@@ -196,7 +203,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                           {ui.todayLabelUpcoming}
                         </span>
                       )}
-                      {isSoon && (
+                      {isSoon && days !== null && (
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
                           {ui.daysAway(days)}
                         </span>
