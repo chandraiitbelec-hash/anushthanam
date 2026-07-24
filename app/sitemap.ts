@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getGitaChapters } from '@/lib/gita';
 import { SITE_URL } from '@/lib/seo';
@@ -11,12 +11,12 @@ function url(path: string, priority: number, changeFreq: MetadataRoute.Sitemap[0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [gods, festivals, vrathams, shlokas, stories, pujas] = await Promise.all([
-    getPublished(TABS.gods).catch(() => []),
-    getPublished(TABS.festivals).catch(() => []),
-    getPublished(TABS.vrathams).catch(() => []),
-    getPublished(TABS.shlokas).catch(() => []),
-    getPublished(TABS.stories_index).catch(() => []),
-    getPublished(TABS.pujas).catch(() => []),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'sitemap', [])),
+    getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'sitemap', [])),
+    getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'sitemap', [])),
+    getPublished(TABS.shlokas).catch(emptyOnError(TABS.shlokas, 'sitemap', [])),
+    getPublished(TABS.stories_index).catch(emptyOnError(TABS.stories_index, 'sitemap', [])),
+    getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'sitemap', [])),
   ]);
 
   const staticPages = [

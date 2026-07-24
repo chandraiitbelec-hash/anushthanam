@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { getFrequentPujas, getOccasions, getAllOccasionPujas } from '@/lib/relations';
+import { emptyOnError } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujasBrowser from '@/components/PujasBrowser';
 import ScriptH1 from '@/components/ScriptH1';
@@ -15,9 +17,9 @@ export default async function PujasPage() {
   // Tabs `occasions` and `puja_occasions` may not exist in Sheets until the
   // setup script runs — catch those errors so the page still renders.
   const [frequentPujas, occasions, occasionPujas] = await Promise.all([
-    getFrequentPujas().catch(() => []),
-    getOccasions().catch(() => []),
-    getAllOccasionPujas().catch(() => ({})),
+    getFrequentPujas().catch(emptyOnError(TABS.pujas, 'pujas', [])),
+    getOccasions().catch(emptyOnError(TABS.occasions, 'pujas', [])),
+    getAllOccasionPujas().catch(emptyOnError(TABS.puja_occasions, 'pujas', {})),
   ]);
 
   return (

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import SiteIndexContent, { type IndexSection } from '@/components/SiteIndexContent';
@@ -17,11 +17,11 @@ function byEnglish(a: { names: { en: string } }, b: { names: { en: string } }) {
 
 export default async function SiteIndexPage() {
   const [gods, shlokas, festivals, vrathams, pujas] = await Promise.all([
-    getPublished(TABS.gods).catch(() => []),
-    getPublished(TABS.shlokas).catch(() => []),
-    getPublished(TABS.festivals).catch(() => []),
-    getPublished(TABS.vrathams).catch(() => []),
-    getPublished(TABS.pujas).catch(() => []),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'site-index', [])),
+    getPublished(TABS.shlokas).catch(emptyOnError(TABS.shlokas, 'site-index', [])),
+    getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'site-index', [])),
+    getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'site-index', [])),
+    getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'site-index', [])),
   ]);
 
   const mapNamed = (rows: Record<string, string>[]) =>

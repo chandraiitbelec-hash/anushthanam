@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, rowToPuja } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -9,7 +9,7 @@ import { pageMeta } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished(TABS.pujas).catch(() => []);
+  const rows = await getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'pujas/[slug]', []));
   return rows.map(rowToPuja).map(p => ({ slug: p.slug }));
 }
 
@@ -20,20 +20,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const puja = rows.map(rowToPuja).find(p => p.slug === slug);
     if (!puja) return { title: 'Anuṣṭhāna' };
     return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
-  } catch {
+  } catch (err) {
+    emptyOnError(TABS.pujas, 'pujas/[slug]#generateMetadata', undefined)(err);
     return { title: 'Anuṣṭhāna' };
   }
 }
 
 export default async function PujaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished(TABS.pujas).catch(() => []);
+  const rows = await getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'pujas/[slug]', []));
   const puja = rows.map(rowToPuja).find(p => p.slug === slug);
   if (!puja) notFound();
 
   const [steps, materials] = await Promise.all([
-    getProcedureSteps(slug).catch(() => []),
-    getMaterialItems(slug).catch(() => []),
+    getProcedureSteps(slug).catch(emptyOnError(TABS.procedure_steps, 'pujas/[slug]', [])),
+    getMaterialItems(slug).catch(emptyOnError(TABS.material_items, 'pujas/[slug]', [])),
   ]);
 
   return (

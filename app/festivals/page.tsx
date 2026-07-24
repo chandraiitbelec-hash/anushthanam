@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { rowToFestival } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function FestivalsPage() {
-  const rows = await getPublished(TABS.festivals).catch(() => []);
+  const rows = await getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'festivals', []));
   const festivals = rows.map(rowToFestival);
 
   return (

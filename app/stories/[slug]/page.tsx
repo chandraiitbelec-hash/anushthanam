@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getStoryBody, getStoryBodyFromSheet } from '@/lib/docs';
 import { getStoriesForParent, rowToStory, rowToFestival, rowToVratham } from '@/lib/relations';
@@ -12,7 +12,7 @@ export const revalidate = 3600;
 const LANGS = ['en', 'te', 'ta', 'hi'] as const;
 
 export async function generateStaticParams() {
-  const rows = await getPublished(TABS.stories_index).catch(() => []);
+  const rows = await getPublished(TABS.stories_index).catch(emptyOnError(TABS.stories_index, 'stories/[slug]', []));
   return rows.map(rowToStory).map(s => ({ slug: s.slug }));
 }
 
@@ -23,14 +23,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const story = rows.map(rowToStory).find(s => s.slug === slug);
     if (!story) return { title: 'Anuṣṭhāna' };
     return pageMeta(story.title_en, story.brief_summary_en || '', `/stories/${slug}`, 'article');
-  } catch {
+  } catch (err) {
+    emptyOnError(TABS.stories_index, 'stories/[slug]#generateMetadata', undefined)(err);
     return { title: 'Anuṣṭhāna' };
   }
 }
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished(TABS.stories_index).catch(() => []);
+  const rows = await getPublished(TABS.stories_index).catch(emptyOnError(TABS.stories_index, 'stories/[slug]', []));
   const story = rows.map(rowToStory).find(s => s.slug === slug);
   if (!story) notFound();
 
@@ -43,14 +44,14 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     Promise.all(
       LANGS.map(async l => {
         const gdocId = r[`gdoc_id_${l}`];
-        if (gdocId) return [l, await getStoryBody(gdocId).catch(() => [])] as const;
+        if (gdocId) return [l, await getStoryBody(gdocId).catch(emptyOnError(`gdoc:${gdocId}`, 'stories/[slug]', []))] as const;
         // Fall back to stories_content Sheet for every language, not just English
-        return [l, await getStoryBodyFromSheet(slug, l).catch(() => [])] as const;
+        return [l, await getStoryBodyFromSheet(slug, l).catch(emptyOnError(TABS.stories_content, 'stories/[slug]', []))] as const;
       })
     ).then(entries => Object.fromEntries(entries) as Record<string, string[]>),
-    (story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([])).catch(() => []),
-    getPublished(TABS.festivals).catch(() => []),
-    getPublished(TABS.vrathams).catch(() => []),
+    (story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([])).catch(emptyOnError(TABS.stories_index, 'stories/[slug]', [])),
+    getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'stories/[slug]', [])),
+    getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'stories/[slug]', [])),
   ]);
 
   // Resolve parent — include all language variants for client-side rendering

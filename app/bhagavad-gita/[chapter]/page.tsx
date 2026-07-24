@@ -20,7 +20,9 @@ export async function generateMetadata({ params }: { params: Promise<{ chapter: 
       title: `Chapter ${ch.number}: ${ch.name_en} — Bhagavad Gita`,
       description: `${ch.verse_count} slokas of Bhagavad Gita Chapter ${ch.number}: ${ch.name_en} (${ch.name_hi}) with Sanskrit, Telugu, Tamil, Hindi meanings.`,
     };
-  } catch {
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`CONTENT ERROR [bhagavad-gita/[chapter]#generateMetadata]: ${message}`);
     return { title: 'Bhagavad Gita' };
   }
 }

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToFestival, rowToGod } from '@/lib/relations';
 import type { God } from '@/lib/types';
@@ -11,7 +11,7 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished(TABS.festivals).catch(() => []);
+  const rows = await getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'festivals/[slug]', []));
   return rows.map(rowToFestival).map(f => ({ slug: f.slug }));
 }
 
@@ -22,24 +22,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const festival = rows.map(rowToFestival).find(f => f.slug === slug);
     if (!festival) return { title: 'Anuṣṭhāna' };
     return pageMeta(festival.title_en, festival.significance_en || '', `/festivals/${slug}`);
-  } catch {
+  } catch (err) {
+    emptyOnError(TABS.festivals, 'festivals/[slug]#generateMetadata', undefined)(err);
     return { title: 'Anuṣṭhāna' };
   }
 }
 
 export default async function FestivalPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished(TABS.festivals).catch(() => []);
+  const rows = await getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'festivals/[slug]', []));
   const festival = rows.map(rowToFestival).find(f => f.slug === slug);
   if (!festival) notFound();
 
   const materialsSlug = festival.materials_group_slug || festival.slug;
 
   const [steps, materials, stories, godRows] = await Promise.all([
-    getProcedureSteps(festival.slug).catch(() => []),
-    getMaterialItems(materialsSlug).catch(() => []),
-    getStoriesForParent(festival.slug).catch(() => []),
-    getPublished(TABS.gods).catch(() => []),
+    getProcedureSteps(festival.slug).catch(emptyOnError(TABS.procedure_steps, 'festivals/[slug]', [])),
+    getMaterialItems(materialsSlug).catch(emptyOnError(TABS.material_items, 'festivals/[slug]', [])),
+    getStoriesForParent(festival.slug).catch(emptyOnError(TABS.stories_index, 'festivals/[slug]', [])),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'festivals/[slug]', [])),
   ]);
 
   const deitySlugList = festival.deity_slugs

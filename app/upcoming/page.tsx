@@ -1,5 +1,7 @@
 import { getUpcoming } from '@/lib/relations';
 import { getTodayPanchangam } from '@/lib/panchangam';
+import { emptyOnError } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import PanchangamWidget from '@/components/PanchangamWidget';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -15,8 +17,8 @@ export const metadata = {
 
 export default async function UpcomingPage() {
   const [items, today] = await Promise.all([
-    getUpcoming().catch(() => []),
-    getTodayPanchangam().catch(() => null),
+    getUpcoming().catch(emptyOnError(`${TABS.festivals}+${TABS.vrathams}`, 'upcoming', [])),
+    getTodayPanchangam().catch(emptyOnError(TABS.panchangam, 'upcoming', null)),
   ]);
 
   return (

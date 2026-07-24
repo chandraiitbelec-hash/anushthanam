@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { rowToVratham } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function VrathamsPage() {
-  const rows = await getPublished(TABS.vrathams).catch(() => []);
+  const rows = await getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'vrathams', []));
   const vrathams = rows.map(rowToVratham);
 
   return (

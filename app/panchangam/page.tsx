@@ -1,4 +1,6 @@
 import { getAllPanchangam, getTodayPanchangam, getNextPanchangam } from '@/lib/panchangam';
+import { emptyOnError } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import PanchangamWidget from '@/components/PanchangamWidget';
 import PanchangamEmptyState from '@/components/PanchangamEmptyState';
 import PanchangamUpcomingList from '@/components/PanchangamUpcomingList';
@@ -16,9 +18,9 @@ export const metadata = pageMeta(
 
 export default async function PanchangamPage() {
   const [today, all, next] = await Promise.all([
-    getTodayPanchangam().catch(() => null),
-    getAllPanchangam().catch(() => []),
-    getNextPanchangam().catch(() => null),
+    getTodayPanchangam().catch(emptyOnError(TABS.panchangam, 'panchangam', null)),
+    getAllPanchangam().catch(emptyOnError(TABS.panchangam, 'panchangam', [])),
+    getNextPanchangam().catch(emptyOnError(TABS.panchangam, 'panchangam', null)),
   ]);
 
   return (

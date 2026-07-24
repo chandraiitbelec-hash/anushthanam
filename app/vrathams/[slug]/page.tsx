@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToVratham, rowToGod } from '@/lib/relations';
 import { getShlokaStanzas } from '@/lib/stanzas';
@@ -12,7 +12,7 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished(TABS.vrathams).catch(() => []);
+  const rows = await getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'vrathams/[slug]', []));
   return rows.map(rowToVratham).map(v => ({ slug: v.slug }));
 }
 
@@ -24,23 +24,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!vratham) return { title: 'Anuṣṭhāna' };
     const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
     return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
-  } catch {
+  } catch (err) {
+    emptyOnError(TABS.vrathams, 'vrathams/[slug]#generateMetadata', undefined)(err);
     return { title: 'Anuṣṭhāna' };
   }
 }
 
 export default async function VrathamPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished(TABS.vrathams).catch(() => []);
+  const rows = await getPublished(TABS.vrathams).catch(emptyOnError(TABS.vrathams, 'vrathams/[slug]', []));
   const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
   if (!vratham) notFound();
 
   const [steps, materials, godRows, stories, stanzas] = await Promise.all([
-    getProcedureSteps(slug).catch(() => []),
-    getMaterialItems(slug).catch(() => []),
-    getPublished(TABS.gods).catch(() => []),
-    getStoriesForParent(slug).catch(() => []),
-    (vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([])).catch(() => []),
+    getProcedureSteps(slug).catch(emptyOnError(TABS.procedure_steps, 'vrathams/[slug]', [])),
+    getMaterialItems(slug).catch(emptyOnError(TABS.material_items, 'vrathams/[slug]', [])),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'vrathams/[slug]', [])),
+    getStoriesForParent(slug).catch(emptyOnError(TABS.stories_index, 'vrathams/[slug]', [])),
+    (vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([])).catch(emptyOnError(TABS.shloka_stanzas, 'vrathams/[slug]', [])),
   ]);
 
   const deities: DeityRef[] = vratham.deity_slug

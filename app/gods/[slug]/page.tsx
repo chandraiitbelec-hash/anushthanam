@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getLinksForGod, rowToGod } from '@/lib/relations';
 import type { GodLink } from '@/lib/types';
@@ -10,7 +10,7 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished(TABS.gods).catch(() => []);
+  const rows = await getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'gods/[slug]', []));
   return rows.map(rowToGod).map(g => ({ slug: g.slug }));
 }
 
@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!god) return { title: 'Anuṣṭhāna' };
     const altNames = god.alternate_names_en ? ` Also known as ${god.alternate_names_en}.` : '';
     return pageMeta(god.name_en, (god.description_en || '') + altNames, `/gods/${slug}`);
-  } catch {
+  } catch (err) {
+    emptyOnError(TABS.gods, 'gods/[slug]#generateMetadata', undefined)(err);
     return { title: 'Anuṣṭhāna' };
   }
 }
@@ -31,11 +32,11 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
   const { slug } = await params;
 
   const [godRows, rawLinks, shlokaRows, festivalRows, pujaRows] = await Promise.all([
-    getPublished(TABS.gods).catch(() => []),
-    getLinksForGod(slug).catch(() => []),
-    getPublished(TABS.shlokas).catch(() => []),
-    getPublished(TABS.festivals).catch(() => []),
-    getPublished(TABS.pujas).catch(() => []),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'gods/[slug]', [])),
+    getLinksForGod(slug).catch(emptyOnError(TABS.god_links, 'gods/[slug]', [])),
+    getPublished(TABS.shlokas).catch(emptyOnError(TABS.shlokas, 'gods/[slug]', [])),
+    getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'gods/[slug]', [])),
+    getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'gods/[slug]', [])),
   ]);
 
   const god = godRows.map(rowToGod).find(g => g.slug === slug);

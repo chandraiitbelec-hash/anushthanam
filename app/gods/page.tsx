@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPublished } from '@/lib/sheets';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { rowToGod } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function GodsPage() {
-  const rows = await getPublished(TABS.gods).catch(() => []);
+  const rows = await getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'gods', []));
   const gods = rows.map(rowToGod);
 
   return (
