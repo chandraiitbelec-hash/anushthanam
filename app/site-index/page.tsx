@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import SiteIndexContent, { type IndexSection } from '@/components/SiteIndexContent';
 
@@ -16,11 +17,11 @@ function byEnglish(a: { names: { en: string } }, b: { names: { en: string } }) {
 
 export default async function SiteIndexPage() {
   const [gods, shlokas, festivals, vrathams, pujas] = await Promise.all([
-    getPublished('gods').catch(() => []),
-    getPublished('shlokas').catch(() => []),
-    getPublished('festivals').catch(() => []),
-    getPublished('vrathams').catch(() => []),
-    getPublished('pujas').catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
+    getPublished(TABS.shlokas).catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.vrathams).catch(() => []),
+    getPublished(TABS.pujas).catch(() => []),
   ]);
 
   const mapNamed = (rows: Record<string, string>[]) =>

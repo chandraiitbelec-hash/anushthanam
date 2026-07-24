@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getGitaChapters } from '@/lib/gita';
 import { SITE_URL } from '@/lib/seo';
 import { rowToGod, rowToFestival, rowToVratham, rowToShloka, rowToStory, rowToPuja } from '@/lib/relations';
@@ -10,12 +11,12 @@ function url(path: string, priority: number, changeFreq: MetadataRoute.Sitemap[0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [gods, festivals, vrathams, shlokas, stories, pujas] = await Promise.all([
-    getPublished('gods').catch(() => []),
-    getPublished('festivals').catch(() => []),
-    getPublished('vrathams').catch(() => []),
-    getPublished('shlokas').catch(() => []),
-    getPublished('stories_index').catch(() => []),
-    getPublished('pujas').catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.vrathams).catch(() => []),
+    getPublished(TABS.shlokas).catch(() => []),
+    getPublished(TABS.stories_index).catch(() => []),
+    getPublished(TABS.pujas).catch(() => []),
   ]);
 
   const staticPages = [

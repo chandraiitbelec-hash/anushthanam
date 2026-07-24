@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToFestival, rowToGod } from '@/lib/relations';
 import type { God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
@@ -10,14 +11,14 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('festivals').catch(() => []);
+  const rows = await getPublished(TABS.festivals).catch(() => []);
   return rows.map(rowToFestival).map(f => ({ slug: f.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const rows = await getPublished('festivals');
+    const rows = await getPublished(TABS.festivals);
     const festival = rows.map(rowToFestival).find(f => f.slug === slug);
     if (!festival) return { title: 'Anuṣṭhāna' };
     return pageMeta(festival.title_en, festival.significance_en || '', `/festivals/${slug}`);
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function FestivalPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('festivals').catch(() => []);
+  const rows = await getPublished(TABS.festivals).catch(() => []);
   const festival = rows.map(rowToFestival).find(f => f.slug === slug);
   if (!festival) notFound();
 
@@ -38,7 +39,7 @@ export default async function FestivalPage({ params }: { params: Promise<{ slug:
     getProcedureSteps(festival.slug).catch(() => []),
     getMaterialItems(materialsSlug).catch(() => []),
     getStoriesForParent(festival.slug).catch(() => []),
-    getPublished('gods').catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
   ]);
 
   const deitySlugList = festival.deity_slugs

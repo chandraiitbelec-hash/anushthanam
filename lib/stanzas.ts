@@ -1,4 +1,5 @@
 import { getSheetRowsLarge } from './sheets';
+import { TABS } from './tabs';
 import type { ShlokaStanza } from './types';
 
 type RawStanzaRow = Record<string, string>;
@@ -22,7 +23,7 @@ function toStanza(r: RawStanzaRow): ShlokaStanza {
 
 async function getShlokaStanzasFromSheetsFallback(shlokaSlug: string): Promise<ShlokaStanza[]> {
   console.error(`CONTENT ERROR: no static JSON for shloka_slug "${shlokaSlug}" — falling back to live Sheets fetch. Run scripts/export-shloka-stanzas.mjs to fix.`);
-  const rows = await getSheetRowsLarge('shloka_stanzas');
+  const rows = await getSheetRowsLarge(TABS.shloka_stanzas);
   return rows
     .filter(r => r.shloka_slug === shlokaSlug)
     .map(toStanza)

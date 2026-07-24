@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { rowToStory, rowToFestival, rowToVratham } from '@/lib/relations';
 import type { Story } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -20,9 +21,9 @@ const STORY_TYPE_LABELS: Record<string, string> = {
 
 export default async function StoriesPage() {
   const [storyRows, festivalRows, vrathamRows] = await Promise.all([
-    getPublished('stories_index').catch(() => []),
-    getPublished('festivals').catch(() => []),
-    getPublished('vrathams').catch(() => []),
+    getPublished(TABS.stories_index).catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.vrathams).catch(() => []),
   ]);
 
   const stories = storyRows.map(rowToStory);

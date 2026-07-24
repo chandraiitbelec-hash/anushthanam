@@ -1,10 +1,11 @@
 import { google } from 'googleapis';
 import { getSheetRows } from './sheets';
+import { TABS } from './tabs';
 import { unstable_cache } from 'next/cache';
 
 // Cache the entire stories_content tab for the build; revalidate every hour
 const getStoriesContent = unstable_cache(
-  () => getSheetRows('stories_content'),
+  () => getSheetRows(TABS.stories_content),
   ['stories_content'],
   { revalidate: 3600 }
 );

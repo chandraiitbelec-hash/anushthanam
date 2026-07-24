@@ -1,9 +1,10 @@
 import { getSheetRows } from './sheets';
+import { TABS } from './tabs';
 import { todayIST } from './utils';
 import type { PanchangamDay } from './types';
 
 export async function getAllPanchangam(): Promise<PanchangamDay[]> {
-  const rows = await getSheetRows('panchangam');
+  const rows = await getSheetRows(TABS.panchangam);
   return rows.map(r => ({
     date: r.date,
     tithi_en: r.tithi_en,

@@ -1,4 +1,5 @@
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getTodayPanchangam } from '@/lib/panchangam';
 import { todayIST } from '@/lib/utils';
 import { rowToFestival, rowToVratham } from '@/lib/relations';
@@ -23,9 +24,9 @@ function nextByOccurrence<T extends { next_occurrence: string }>(rows: T[]): T |
 
 export default async function HomePage() {
   const [festivalRows, vrathamRows, godRows, today] = await Promise.all([
-    getPublished('festivals').catch(() => []),
-    getPublished('vrathams').catch(() => []),
-    getPublished('gods').catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.vrathams).catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
     getTodayPanchangam().catch(() => null),
   ]);
 

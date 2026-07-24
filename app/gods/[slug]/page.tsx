@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getLinksForGod, rowToGod } from '@/lib/relations';
 import type { GodLink } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -9,14 +10,14 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('gods').catch(() => []);
+  const rows = await getPublished(TABS.gods).catch(() => []);
   return rows.map(rowToGod).map(g => ({ slug: g.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const rows = await getPublished('gods');
+    const rows = await getPublished(TABS.gods);
     const god = rows.map(rowToGod).find(g => g.slug === slug);
     if (!god) return { title: 'Anuṣṭhāna' };
     const altNames = god.alternate_names_en ? ` Also known as ${god.alternate_names_en}.` : '';
@@ -30,11 +31,11 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
   const { slug } = await params;
 
   const [godRows, rawLinks, shlokaRows, festivalRows, pujaRows] = await Promise.all([
-    getPublished('gods').catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
     getLinksForGod(slug).catch(() => []),
-    getPublished('shlokas').catch(() => []),
-    getPublished('festivals').catch(() => []),
-    getPublished('pujas').catch(() => []),
+    getPublished(TABS.shlokas).catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.pujas).catch(() => []),
   ]);
 
   const god = godRows.map(rowToGod).find(g => g.slug === slug);

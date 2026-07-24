@@ -1,9 +1,10 @@
 import { getSheetRows, getPublished } from './sheets';
+import { TABS } from './tabs';
 import { todayIST } from './utils';
 import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story } from './types';
 
 export async function getGodLinks(): Promise<GodLink[]> {
-  const rows = await getSheetRows('god_links');
+  const rows = await getSheetRows(TABS.god_links);
   return rows.map(r => ({
     god_slug: r.god_slug,
     entity_type: r.entity_type as GodLink['entity_type'],
@@ -20,7 +21,7 @@ export async function getLinksForGod(godSlug: string): Promise<GodLink[]> {
 }
 
 export async function getProcedureSteps(parentSlug: string): Promise<ProcedureStep[]> {
-  const rows = await getSheetRows('procedure_steps');
+  const rows = await getSheetRows(TABS.procedure_steps);
   return rows
     .filter(r => r.parent_slug === parentSlug)
     .map(r => ({
@@ -46,7 +47,7 @@ export async function getProcedureSteps(parentSlug: string): Promise<ProcedureSt
 }
 
 export async function getMaterialItems(groupSlug: string): Promise<MaterialItem[]> {
-  const rows = await getSheetRows('material_items');
+  const rows = await getSheetRows(TABS.material_items);
   return rows
     .filter(r => r.group_slug === groupSlug)
     .map(r => ({
@@ -70,7 +71,7 @@ export async function getMaterialItems(groupSlug: string): Promise<MaterialItem[
 }
 
 export async function getStoriesForParent(parentSlug: string): Promise<Story[]> {
-  const rows = await getPublished('stories_index');
+  const rows = await getPublished(TABS.stories_index);
   return rows.filter(r => r.parent_slug === parentSlug).map(rowToStory);
 }
 
@@ -245,13 +246,13 @@ export function rowToStory(r: Record<string, string>): Story {
 
 // Returns published pujas where frequent=TRUE, sorted by title_en.
 export async function getFrequentPujas(): Promise<Puja[]> {
-  const rows = await getPublished('pujas');
+  const rows = await getPublished(TABS.pujas);
   return rows.filter(r => r.frequent?.toUpperCase() === 'TRUE').map(rowToPuja);
 }
 
 // Returns all published occasions ordered by display_order.
 export async function getOccasions(): Promise<Occasion[]> {
-  const rows = await getPublished('occasions');
+  const rows = await getPublished(TABS.occasions);
   return rows
     .map(r => ({
       slug: r.slug,
@@ -273,8 +274,8 @@ export async function getOccasions(): Promise<Occasion[]> {
 // Returns ordered published Puja[] for a given occasion slug via puja_occasions join tab.
 export async function resolveOccasionPujas(occasionSlug: string): Promise<Puja[]> {
   const [joinRows, pujaRows] = await Promise.all([
-    getSheetRows('puja_occasions'),
-    getPublished('pujas'),
+    getSheetRows(TABS.puja_occasions),
+    getPublished(TABS.pujas),
   ]);
   const pujaIndex = new Map(pujaRows.map(r => [r.slug, r]));
   return joinRows
@@ -289,8 +290,8 @@ export async function resolveOccasionPujas(occasionSlug: string): Promise<Puja[]
 // Used by /pujas list page to hydrate PujasBrowser without N+1 calls.
 export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
   const [joinRows, pujaRows] = await Promise.all([
-    getSheetRows('puja_occasions'),
-    getPublished('pujas'),
+    getSheetRows(TABS.puja_occasions),
+    getPublished(TABS.pujas),
   ]);
   const pujaIndex = new Map(pujaRows.map(r => [r.slug, r]));
   const sorted = [...joinRows].sort(
@@ -308,8 +309,8 @@ export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
 
 export async function getUpcoming(limit?: number) {
   const [festivals, vrathams] = await Promise.all([
-    getPublished('festivals'),
-    getPublished('vrathams'),
+    getPublished(TABS.festivals),
+    getPublished(TABS.vrathams),
   ]);
 
   const today = todayIST();

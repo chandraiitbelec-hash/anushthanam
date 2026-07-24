@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToVratham, rowToGod } from '@/lib/relations';
 import { getShlokaStanzas } from '@/lib/stanzas';
 import type { ShlokaStanza } from '@/lib/types';
@@ -11,14 +12,14 @@ import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('vrathams').catch(() => []);
+  const rows = await getPublished(TABS.vrathams).catch(() => []);
   return rows.map(rowToVratham).map(v => ({ slug: v.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const rows = await getPublished('vrathams');
+    const rows = await getPublished(TABS.vrathams);
     const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
     if (!vratham) return { title: 'Anuṣṭhāna' };
     const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
@@ -30,14 +31,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function VrathamPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('vrathams').catch(() => []);
+  const rows = await getPublished(TABS.vrathams).catch(() => []);
   const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
   if (!vratham) notFound();
 
   const [steps, materials, godRows, stories, stanzas] = await Promise.all([
     getProcedureSteps(slug).catch(() => []),
     getMaterialItems(slug).catch(() => []),
-    getPublished('gods').catch(() => []),
+    getPublished(TABS.gods).catch(() => []),
     getStoriesForParent(slug).catch(() => []),
     (vratham.shloka_slug ? getShlokaStanzas(vratham.shloka_slug) : Promise.resolve([])).catch(() => []),
   ]);

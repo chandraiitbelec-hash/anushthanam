@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { rowToShloka } from '@/lib/relations';
 import type { Shloka } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 const TYPE_ORDER = ['ashtothram', 'sahasranamam', 'chalisa', 'stotra', 'kavacham', 'suprabhatam', 'namavali'];
 
 export default async function ShlokasPage() {
-  const rows = await getPublished('shlokas').catch(() => []);
+  const rows = await getPublished(TABS.shlokas).catch(() => []);
   const shlokas = rows.map(rowToShloka);
 
   const byType = shlokas.reduce<Record<string, Shloka[]>>((acc, s) => {

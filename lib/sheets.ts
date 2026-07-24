@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import { unstable_cache } from 'next/cache';
+import { TABS, type Tab } from './tabs';
 
 function getAuth() {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
@@ -19,7 +20,7 @@ function getAuth() {
 // unstable_cache deduplicates after the first resolve; this deduplicates before.
 const inflight = new Map<string, Promise<Record<string, string>[]>>();
 
-async function fetchWithRetry(tabName: string): Promise<Record<string, string>[]> {
+async function fetchWithRetry(tabName: Tab): Promise<Record<string, string>[]> {
   const MAX_RETRIES = 5;
   let delay = 2000;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
@@ -49,7 +50,7 @@ async function fetchWithRetry(tabName: string): Promise<Record<string, string>[]
   throw new Error(`Failed to fetch sheet tab "${tabName}" after ${MAX_RETRIES} retries`);
 }
 
-function fetchSheetRows(tabName: string): Promise<Record<string, string>[]> {
+function fetchSheetRows(tabName: Tab): Promise<Record<string, string>[]> {
   const existing = inflight.get(tabName);
   if (existing) return existing;
   const promise = fetchWithRetry(tabName).finally(() => inflight.delete(tabName));
@@ -72,7 +73,7 @@ export const getSheetRows = unstable_cache(
 const LARGE_TAB_TTL_MS = 3600 * 1000;
 const largeTabMemo = new Map<string, { rows: Record<string, string>[]; expires: number }>();
 
-export async function getSheetRowsLarge(tabName: string): Promise<Record<string, string>[]> {
+export async function getSheetRowsLarge(tabName: Tab): Promise<Record<string, string>[]> {
   const cached = largeTabMemo.get(tabName);
   if (cached && cached.expires > Date.now()) return cached.rows;
   const rows = await fetchSheetRows(tabName);
@@ -80,12 +81,23 @@ export async function getSheetRowsLarge(tabName: string): Promise<Record<string,
   return rows;
 }
 
-export async function getPublished(tabName: string): Promise<Record<string, string>[]> {
+export async function getPublished(tabName: Tab): Promise<Record<string, string>[]> {
   const rows = await getSheetRows(tabName);
   return rows.filter(row => row.status === 'published');
 }
 
 export async function getConfig(): Promise<Record<string, string>> {
-  const rows = await getSheetRows('config');
+  const rows = await getSheetRows(TABS.config);
   return Object.fromEntries(rows.map(row => [row.key, row.value]));
+}
+
+// Availability policy: a Sheets fetch failure must never blank a page — pages
+// degrade to EmptyState instead. That silently hides a renamed tab/column,
+// so this logs a greppable line before returning the same empty fallback.
+export function emptyOnError<T>(tab: string, page: string, fallback: T) {
+  return (err: unknown): T => {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`CONTENT ERROR [${page}]: fetch failed for tab ${tab}: ${message}`);
+    return fallback;
+  };
 }

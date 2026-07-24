@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPublished } from '@/lib/sheets';
+import { TABS } from '@/lib/tabs';
 import { getStoryBody, getStoryBodyFromSheet } from '@/lib/docs';
 import { getStoriesForParent, rowToStory, rowToFestival, rowToVratham } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -11,14 +12,14 @@ export const revalidate = 3600;
 const LANGS = ['en', 'te', 'ta', 'hi'] as const;
 
 export async function generateStaticParams() {
-  const rows = await getPublished('stories_index').catch(() => []);
+  const rows = await getPublished(TABS.stories_index).catch(() => []);
   return rows.map(rowToStory).map(s => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const rows = await getPublished('stories_index');
+    const rows = await getPublished(TABS.stories_index);
     const story = rows.map(rowToStory).find(s => s.slug === slug);
     if (!story) return { title: 'Anuṣṭhāna' };
     return pageMeta(story.title_en, story.brief_summary_en || '', `/stories/${slug}`, 'article');
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const rows = await getPublished('stories_index').catch(() => []);
+  const rows = await getPublished(TABS.stories_index).catch(() => []);
   const story = rows.map(rowToStory).find(s => s.slug === slug);
   if (!story) notFound();
 
@@ -48,8 +49,8 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       })
     ).then(entries => Object.fromEntries(entries) as Record<string, string[]>),
     (story.parent_slug ? getStoriesForParent(story.parent_slug) : Promise.resolve([])).catch(() => []),
-    getPublished('festivals').catch(() => []),
-    getPublished('vrathams').catch(() => []),
+    getPublished(TABS.festivals).catch(() => []),
+    getPublished(TABS.vrathams).catch(() => []),
   ]);
 
   // Resolve parent — include all language variants for client-side rendering
