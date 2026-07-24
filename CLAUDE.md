@@ -10,7 +10,7 @@ GitHub: https://github.com/chandraiitbelec-hash/anushthanam
 
 ## Stack
 
-- **Frontend:** Next.js 16.2.9 (App Router), React 19.2.4, TypeScript, Tailwind CSS. Builds run on Turbopack (Next 16's default build engine — no opt-in config needed).
+- **Frontend:** Next.js 16.2.9 (App Router), React 19.2.4, TypeScript. Styling is inline styles + CSS variables (`@theme` tokens in `app/globals.css`); Tailwind v4 is present only for base/preflight, not as the component-styling method. Builds run on Turbopack (Next 16's default build engine — no opt-in config needed).
 - **CMS:** Google Sheets (structured data) + Google Docs (legacy long-form prose) + a Sheets tab (`stories_content`) for current story bodies
 - **Search:** Client-side Fuse.js over `public/search-index.json` (built at `prebuild` time, before `next build`)
 - **Deployment:** Vercel with static generation + ISR (`revalidate = 3600`) + manual deploy hook triggered from Sheets Apps Script
@@ -82,9 +82,9 @@ Every entity has `status`: `draft` | `review` | `published`. Only `published` ro
 
 ### Language / translation pattern
 
-The old `t(record, field, lang)` helper and `TranslationBadge` component have been **removed** (not present in the app anymore). Current pattern:
+The old `t(record, field, lang)` helper and `TranslationBadge` component were removed (zero adoption), then reintroduced properly as `localize()` — see below. Current pattern:
 
-- Per-entity content still has `field_en`, `field_te`, `field_ta`, `field_hi` columns; components fall back inline: `field_${lang} || field_en`.
+- Per-entity content still has `field_en`, `field_te`, `field_ta`, `field_hi` columns. `localize(entity, field, lang)` (`lib/localize.ts`) is the sanctioned accessor: `entity[`${field}_${lang}`] || entity[`${field}_en`] || ''`, with whitespace-only values trimmed before the truthiness check. `field` is constrained via a template-literal mapped type to bases where `${field}_en` exists and is a string on the entity's type, so a typo'd field name is a compile error rather than a silently-`undefined` read — this is why the inline `entity as unknown as Record<string, string>` cast pattern from before is gone; don't reintroduce it. A second overload covers genuinely untyped Sheets rows (Record<string, string>) for cases without a typed entity yet.
 - All UI chrome strings (labels, nav, breadcrumbs, buttons — not entity content) are centralized in `lib/ui-strings.ts`: a typed `UiStrings` shape (~90 keys, some as functions like `partOf(n, total)`) with a hand-written table per language (`UI.en`, `UI.te`, `UI.ta`, `UI.hi`). Add new UI copy here, not as inline literals or ad hoc per-component label maps.
 - `scriptClass(lang)` (`lib/utils.ts`) maps a language to its native-script CSS class (`te→script-telugu`, `ta→script-tamil`, `hi→script-devanagari`, `en→''`) for correct font/line-height rendering.
 - There is no translation-coverage tooling checked in currently; if one gets added it should be read-only (report, not mutate).
