@@ -1,7 +1,10 @@
 import { getSheetRows, getPublished } from './sheets';
 import { TABS } from './tabs';
 import { todayIST } from './utils';
-import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story } from './types';
+import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story, Status, TranslationStatus } from './types';
+
+const VALID_STATUSES: Status[] = ['draft', 'review', 'published'];
+const VALID_TRANSLATION_STATUSES: TranslationStatus[] = ['en-only', 'partial', 'complete'];
 
 export async function getGodLinks(): Promise<GodLink[]> {
   const rows = await getSheetRows(TABS.god_links);
@@ -75,6 +78,10 @@ export async function getStoriesForParent(parentSlug: string): Promise<Story[]> 
   return rows.filter(r => r.parent_slug === parentSlug).map(rowToStory);
 }
 
+const VALID_OCCASION_TYPES: Puja['occasion_type'][] = [
+  'daily', 'weekly', 'monthly', 'festival-specific', 'vratham-specific', 'general',
+];
+
 export function rowToPuja(r: Record<string, string>): Puja {
   return {
     slug: r.slug,
@@ -83,7 +90,7 @@ export function rowToPuja(r: Record<string, string>): Puja {
     title_ta: r.title_ta,
     title_hi: r.title_hi,
     deity_slug: r.deity_slug,
-    occasion_type: r.occasion_type as Puja['occasion_type'],
+    occasion_type: (VALID_OCCASION_TYPES.includes(r.occasion_type as Puja['occasion_type']) ? r.occasion_type : 'general') as Puja['occasion_type'],
     duration_minutes: parseInt(r.duration_minutes) || 0,
     brief_description_en: r.brief_description_en,
     brief_description_te: r.brief_description_te,
@@ -104,6 +111,10 @@ export function rowToPuja(r: Record<string, string>): Puja {
   };
 }
 
+const VALID_TRADITIONS: God['tradition'][] = [
+  'shaiva', 'vaishnava', 'shakta', 'ganapatya', 'saura', 'kaumara', 'smartha',
+];
+
 export function rowToGod(r: Record<string, string>): God {
   return {
     slug: r.slug,
@@ -113,7 +124,7 @@ export function rowToGod(r: Record<string, string>): God {
     name_hi: r.name_hi,
     name_sa: r.name_sa,
     alternate_names_en: r.alternate_names_en,
-    tradition: (r.tradition || 'smartha') as God['tradition'],
+    tradition: (VALID_TRADITIONS.includes(r.tradition as God['tradition']) ? r.tradition : 'smartha') as God['tradition'],
     description_en: r.description_en,
     description_te: r.description_te,
     description_ta: r.description_ta,
@@ -151,8 +162,8 @@ export function rowToFestival(r: Record<string, string>): Festival {
     linked_story_slug: r.linked_story_slug,
     materials_group_slug: r.materials_group_slug,
     regional_notes_en: r.regional_notes_en,
-    status: (r.status || 'draft') as Festival['status'],
-    translation_status: (r.translation_status || 'en-only') as Festival['translation_status'],
+    status: (VALID_STATUSES.includes(r.status as Status) ? r.status : 'draft') as Festival['status'],
+    translation_status: (VALID_TRANSLATION_STATUSES.includes(r.translation_status as TranslationStatus) ? r.translation_status : 'en-only') as Festival['translation_status'],
   };
 }
 
@@ -182,8 +193,8 @@ export function rowToVratham(r: Record<string, string>): Vratham {
     linked_story_slug: r.linked_story_slug,
     shloka_slug: r.shloka_slug,
     shloka_start_date: r.shloka_start_date,
-    status: (r.status || 'draft') as Vratham['status'],
-    translation_status: (r.translation_status || 'en-only') as Vratham['translation_status'],
+    status: (VALID_STATUSES.includes(r.status as Status) ? r.status : 'draft') as Vratham['status'],
+    translation_status: (VALID_TRANSLATION_STATUSES.includes(r.translation_status as TranslationStatus) ? r.translation_status : 'en-only') as Vratham['translation_status'],
   };
 }
 
