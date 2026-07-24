@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { GitaChapter } from '@/lib/gita';
 
 export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
@@ -11,7 +12,7 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
   const ui = UI[lang];
 
   function chapterName(ch: GitaChapter) {
-    return (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
+    return localize(ch, 'name', lang);
   }
 
   return (

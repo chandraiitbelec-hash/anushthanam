@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { LOCALE_MAP, scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { Festival, Vratham, PanchangamDay } from '@/lib/types';
 
 type CardKey = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'panchangam';
@@ -23,27 +24,22 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
     return ui[key];
   }
 
-  function entityTitle(entity: Record<string, string>) {
-    return entity[`title_${lang}`] || entity.title_en;
-  }
-
   function formatDate(dateStr: string) {
     const locale = LOCALE_MAP[lang] ?? 'en-IN';
     return new Date(`${dateStr}T00:00:00`).toLocaleDateString(locale, { day: 'numeric', month: 'short' });
   }
 
   const panchangamPreview = today
-    ? [(today as unknown as Record<string, string>)[`tithi_${lang}`] || today.tithi_en,
-       (today as unknown as Record<string, string>)[`nakshatra_${lang}`] || today.nakshatra_en]
+    ? [localize(today, 'tithi', lang), localize(today, 'nakshatra', lang)]
         .filter(Boolean).join(' · ')
     : null;
 
   const festivalPreview = nextFestival
-    ? `${entityTitle(nextFestival as unknown as Record<string, string>)} · ${formatDate(nextFestival.next_occurrence)}`
+    ? `${localize(nextFestival, 'title', lang)} · ${formatDate(nextFestival.next_occurrence)}`
     : null;
 
   const vrathamPreview = nextVratham
-    ? `${entityTitle(nextVratham as unknown as Record<string, string>)} · ${formatDate(nextVratham.next_occurrence)}`
+    ? `${localize(nextVratham, 'title', lang)} · ${formatDate(nextVratham.next_occurrence)}`
     : null;
 
   const cards: { href: string; key: CardKey; preview: string | null }[] = [

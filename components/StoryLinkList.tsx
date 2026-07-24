@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { Story } from '@/lib/types';
 
 type Props = {
@@ -18,8 +19,7 @@ export default function StoryLinkList({ stories, readLabel }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {stories.map((s, idx) => {
-        const sr = s as unknown as Record<string, string>;
-        const t = sr[`title_${lang}`] || s.title_en;
+        const t = localize(s, 'title', lang);
         return (
           <Link key={s.slug} href={`/stories/${s.slug}`} style={{
             display: 'flex', alignItems: 'center', gap: '12px',

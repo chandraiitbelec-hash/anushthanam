@@ -3,6 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { formatDateLocalized, scriptClass } from '@/lib/utils';
 import { UI } from '@/lib/ui-strings';
+import { localize } from '@/lib/localize';
 import type { Festival, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -24,9 +25,8 @@ type Props = {
 export default function FestivalProfile({ festival, steps, materials, stories, deities }: Props) {
   const { lang } = useLang();
 
-  const r = festival as unknown as Record<string, string>;
-  const title        = r[`title_${lang}`]        || festival.title_en;
-  const significance = r[`significance_${lang}`] || festival.significance_en;
+  const title        = localize(festival, 'title', lang);
+  const significance = localize(festival, 'significance', lang);
 
   const nameClass = scriptClass(lang);
 

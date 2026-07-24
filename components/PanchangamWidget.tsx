@@ -3,6 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { PanchangamDay } from '@/lib/types';
 
 type Props = { day: PanchangamDay | null; compact?: boolean };
@@ -12,8 +13,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
   const ui = UI[lang];
   if (!day) return null;
 
-  const r = day as unknown as Record<string, string>;
-  const specialEvent = r[`special_event_${lang}`] || day.special_event_en;
+  const specialEvent = localize(day, 'special_event', lang);
 
   const nameClass = scriptClass(lang);
 
@@ -31,11 +31,11 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
       }}>
         <span>
           <b style={{ color: 'var(--color-text-secondary)' }}>{ui.tithi}: </b>
-          <span className={nameClass}>{r[`tithi_${lang}`] || day.tithi_en}</span>
+          <span className={nameClass}>{localize(day, 'tithi', lang)}</span>
         </span>
         <span>
           <b style={{ color: 'var(--color-text-secondary)' }}>{ui.nakshatra}: </b>
-          <span className={nameClass}>{r[`nakshatra_${lang}`] || day.nakshatra_en}</span>
+          <span className={nameClass}>{localize(day, 'nakshatra', lang)}</span>
         </span>
         {specialEvent && (
           <span className={nameClass} style={{ color: 'var(--color-gold-text)', fontWeight: 500 }}>
@@ -47,10 +47,10 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
   }
 
   const fields = [
-    { label: ui.tithi, value: `${day.paksha} ${r[`tithi_${lang}`] || day.tithi_en}` },
-    { label: ui.nakshatra, value: r[`nakshatra_${lang}`] || day.nakshatra_en },
-    { label: ui.yoga, value: r[`yoga_${lang}`] || day.yoga_en },
-    { label: ui.karana, value: r[`karana_${lang}`] || day.karana_en },
+    { label: ui.tithi, value: `${day.paksha} ${localize(day, 'tithi', lang)}` },
+    { label: ui.nakshatra, value: localize(day, 'nakshatra', lang) },
+    { label: ui.yoga, value: localize(day, 'yoga', lang) },
+    { label: ui.karana, value: localize(day, 'karana', lang) },
     { label: ui.sunrise, value: day.sunrise },
     { label: ui.sunset, value: day.sunset },
     { label: ui.rahuKalam, value: day.rahu_kalam },
@@ -79,7 +79,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
         color: 'var(--color-text-secondary)',
         margin: '0 0 16px',
       }}>
-        <span className={nameClass}>{r[`lunar_month_${lang}`] || day.lunar_month_en}</span>{' '}
+        <span className={nameClass}>{localize(day, 'lunar_month', lang)}</span>{' '}
         <span className={nameClass}>{ui.masa}</span>
       </p>
       <div style={{

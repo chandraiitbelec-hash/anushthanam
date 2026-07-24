@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { MaterialItem } from '@/lib/types';
 
 export default function MaterialsList({ items }: { items: MaterialItem[] }) {
@@ -21,12 +22,12 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
   }
 
   function name(item: MaterialItem) {
-    return (item as unknown as Record<string, string>)[`item_name_${lang}`] || item.item_name_en;
+    return localize(item, 'item_name', lang);
   }
 
   // Numerals stay as digits; only the unit/descriptor words are localized.
   function quantity(item: MaterialItem) {
-    return (item as unknown as Record<string, string>)[`quantity_${lang}`] || item.quantity_en;
+    return localize(item, 'quantity', lang);
   }
 
   const required = items.map((item, i) => ({ item, i })).filter(({ item }) => !item.is_optional);

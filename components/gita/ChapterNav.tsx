@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { GitaChapter } from '@/lib/gita';
+import type { Language } from '@/lib/types';
 
-function chapterName(ch: GitaChapter, lang: string) {
-  return (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
+function chapterName(ch: GitaChapter, lang: Language) {
+  return localize(ch, 'name', lang);
 }
 
 export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; next: GitaChapter | null }) {

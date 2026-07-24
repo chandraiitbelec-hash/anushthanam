@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { localize } from '@/lib/localize';
 
 export type DeityRef = {
   slug: string;
@@ -22,7 +23,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
         {UI[lang].deityLabel}:
       </span>
       {deities.map(d => {
-        const name = (d as unknown as Record<string, string>)[`name_${lang}`] || d.name_en;
+        const name = localize(d, 'name', lang);
         return (
           <Link key={d.slug} href={`/gods/${d.slug}`} style={{
             display: 'inline-flex',

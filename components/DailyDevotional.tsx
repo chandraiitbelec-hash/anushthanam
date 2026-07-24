@@ -4,13 +4,10 @@ import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { DailyDevotionalEntry as Entry } from '@/lib/daily-devotional';
 
 type Tab = 'shloka' | 'story';
-
-function langField(obj: Record<string, string>, field: string, lang: string): string {
-  return obj[`${field}_${lang}`] || obj[`${field}_en`] || '';
-}
 
 function Pill({ label, active, onClick, controls }: { label: string; active: boolean; onClick: () => void; controls: string }) {
   return (
@@ -87,12 +84,12 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
               {/* Show shloka in user's script; Sanskrit (Devanagari) shown below as reference for non-Hindi */}
               {lang === 'te' && (
                 <p className="script-telugu" style={{ fontSize: '18px', lineHeight: 2.0, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
-                  {(entry.shloka as unknown as Record<string, string>).script_te}
+                  {entry.shloka.script_te}
                 </p>
               )}
               {lang === 'ta' && (
                 <p className="script-tamil" style={{ fontSize: '18px', lineHeight: 2.1, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
-                  {(entry.shloka as unknown as Record<string, string>).script_ta}
+                  {entry.shloka.script_ta}
                 </p>
               )}
               {(lang === 'en' || lang === 'hi') && (
@@ -118,7 +115,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
                 {ui.meaning}
               </p>
               <p className={nameClass} style={{ fontSize: '14px', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-primary)', margin: 0 }}>
-                {langField(entry.shloka as unknown as Record<string, string>, 'meaning', lang)}
+                {localize(entry.shloka, 'meaning', lang)}
               </p>
             </div>
 
@@ -127,7 +124,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
                 {ui.reflection}
               </p>
               <p className={nameClass} style={{ fontSize: '13px', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-secondary)', margin: 0, fontStyle: lang === 'en' ? 'italic' : 'normal' }}>
-                {langField(entry.shloka as unknown as Record<string, string>, 'reflection', lang)}
+                {localize(entry.shloka, 'reflection', lang)}
               </p>
             </div>
           </div>
@@ -138,7 +135,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
           <div id="daily-story-panel" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <h3 className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: lang === 'en' ? 700 : 500, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
-                {langField(entry.story as unknown as Record<string, string>, 'title', lang)}
+                {localize(entry.story, 'title', lang)}
               </h3>
               {entry.story.source && (
                 <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-saffron-text)', background: 'rgba(212,98,42,0.08)', padding: '2px 8px', borderRadius: '4px' }}>
@@ -148,7 +145,7 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
             </div>
 
             <div className={nameClass} style={{ fontSize: '16px', lineHeight: lang === 'ta' ? 1.95 : lang === 'te' ? 1.85 : 1.8, color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {langField(entry.story as unknown as Record<string, string>, 'body', lang)
+              {localize(entry.story, 'body', lang)
                 .split('\n\n')
                 .map((para, i) => <p key={i} style={{ margin: 0 }}>{para}</p>)}
             </div>

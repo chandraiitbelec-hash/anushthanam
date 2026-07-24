@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { localize } from '@/lib/localize';
 
 type Part = { slug: string; title_en: string; title_te?: string; title_ta?: string; title_hi?: string };
 
@@ -21,8 +22,7 @@ export default function StoryPartPicker({
   const currentIndex = parts.findIndex(p => p.slug === currentSlug);
 
   function partTitle(p: Part) {
-    const r = p as unknown as Record<string, string>;
-    return r[`title_${lang}`] || p.title_en;
+    return localize(p, 'title', lang);
   }
 
   return (

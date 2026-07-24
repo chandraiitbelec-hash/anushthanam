@@ -3,13 +3,13 @@
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { LOCALE_MAP } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { PanchangamDay } from '@/lib/types';
 
 export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[] }) {
   const { lang } = useLang();
   const ui = UI[lang];
   const locale = LOCALE_MAP[lang] ?? 'en-IN';
-  const r = (day: PanchangamDay) => day as unknown as Record<string, string>;
 
   return (
     <>
@@ -34,11 +34,11 @@ export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[]
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '14px', color: 'var(--color-text-primary)', margin: '0 0 2px' }}>
-                {day.paksha} {r(day)[`tithi_${lang}`] || day.tithi_en} · {r(day)[`nakshatra_${lang}`] || day.nakshatra_en}
+                {day.paksha} {localize(day, 'tithi', lang)} · {localize(day, 'nakshatra', lang)}
               </p>
-              {(r(day)[`special_event_${lang}`] || day.special_event_en) && (
+              {localize(day, 'special_event', lang) && (
                 <p style={{ fontSize: '13px', color: 'var(--color-saffron-text)', fontWeight: 500, margin: 0 }}>
-                  {r(day)[`special_event_${lang}`] || day.special_event_en}
+                  {localize(day, 'special_event', lang)}
                 </p>
               )}
             </div>

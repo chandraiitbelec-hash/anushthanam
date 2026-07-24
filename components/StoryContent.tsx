@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import StoryPartPicker from './StoryPartPicker';
 import type { Story } from '@/lib/types';
 
@@ -19,9 +20,7 @@ type Props = {
 export default function StoryContent({ story, bodies, parent, parts }: Props) {
   const { lang } = useLang();
 
-  const r = story as unknown as Record<string, string>;
-
-  const title = r[`title_${lang}`] || story.title_en;
+  const title = localize(story, 'title', lang);
 
   // Pick body in selected language; track if we fell back to English
   const bodyLang  = bodies[lang]?.length ? lang : 'en';

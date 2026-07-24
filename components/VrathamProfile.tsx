@@ -3,6 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { formatDateLocalized, scriptClass } from '@/lib/utils';
 import { UI } from '@/lib/ui-strings';
+import { localize } from '@/lib/localize';
 import type { Vratham, ProcedureStep, MaterialItem, Story } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -27,10 +28,9 @@ type Props = {
 export default function VrathamProfile({ vratham, steps, materials, deities, stories, stanzas }: Props) {
   const { lang } = useLang();
 
-  const r = vratham as unknown as Record<string, string>;
-  const title    = r[`title_${lang}`]         || vratham.title_en;
-  const fasting  = r[`fasting_rules_${lang}`] || vratham.fasting_rules_en;
-  const benefits = r[`benefits_${lang}`]      || vratham.benefits_en;
+  const title    = localize(vratham, 'title', lang);
+  const fasting  = localize(vratham, 'fasting_rules', lang);
+  const benefits = localize(vratham, 'benefits', lang);
 
   const nameClass = scriptClass(lang);
 

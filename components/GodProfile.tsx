@@ -5,6 +5,7 @@ import { useLang } from '@/context/LanguageContext';
 import SectionNav, { type NavSection } from '@/components/SectionNav';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { God, Language } from '@/lib/types';
 
 type LinkedEntity = {
@@ -37,8 +38,8 @@ function label(key: string, lang: Language) {
   return key;
 }
 
-function nameInLang(e: LinkedEntity, lang: string) {
-  return (e as Record<string, string>)[`name_${lang}`] || e.name_en;
+function nameInLang(e: LinkedEntity, lang: Language) {
+  return localize(e, 'name', lang);
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -56,7 +57,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: string }) {
+function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: Language }) {
   if (!items.length) return null;
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -81,9 +82,9 @@ function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: string }) {
 export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
   const { lang } = useLang();
 
-  const name = (god as unknown as Record<string, string>)[`name_${lang}`] || god.name_en;
-  const description = (god as unknown as Record<string, string>)[`description_${lang}`] || god.description_en;
-  const iconography = (god as unknown as Record<string, string>)[`iconography_${lang}`] || god.iconography_en;
+  const name = localize(god, 'name', lang);
+  const description = localize(god, 'description', lang);
+  const iconography = localize(god, 'iconography', lang);
 
   const nameClass = scriptClass(lang);
 

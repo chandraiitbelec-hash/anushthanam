@@ -2,13 +2,14 @@
 
 import { useLang } from '@/context/LanguageContext';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { Shloka } from '@/lib/types';
 
 export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
   const { lang } = useLang();
 
-  const title = (shloka as unknown as Record<string, string>)[`title_${lang}`] || shloka.title_en;
-  const intro = (shloka as unknown as Record<string, string>)[`brief_intro_${lang}`] || shloka.brief_intro_en;
+  const title = localize(shloka, 'title', lang);
+  const intro = localize(shloka, 'brief_intro', lang);
 
   const nameClass = scriptClass(lang);
 

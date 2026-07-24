@@ -5,6 +5,7 @@ import { useLang } from '@/context/LanguageContext';
 import type { Puja, Occasion } from '@/lib/types';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import EntityCard from './EntityCard';
 import EmptyState from './EmptyState';
 import { TabList, TabPanel, useTabs } from './Tabs';
@@ -72,9 +73,8 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {occasions.map(occ => {
-              const ov = occ as unknown as Record<string, string>;
-              const title = ov[`title_${lang}`] || occ.title_en;
-              const description = ov[`description_${lang}`] || occ.description_en;
+              const title = localize(occ, 'title', lang);
+              const description = localize(occ, 'description', lang);
               const isExpanded = expandedOccasion === occ.slug;
               const pujas = occasionPujas[occ.slug] ?? [];
 

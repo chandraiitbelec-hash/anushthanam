@@ -35,15 +35,13 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   const story = rows.map(rowToStory).find(s => s.slug === slug);
   if (!story) notFound();
 
-  const r = story as unknown as Record<string, string>;
-
   // Fetch all available language bodies in parallel.
   // Each lang only makes a Docs API call if a gdoc_id is populated.
   // 'en' falls back to sheet storage if no gdoc_id.
   const [langBodies, siblings, festivalRows, vrathamRows] = await Promise.all([
     Promise.all(
       LANGS.map(async l => {
-        const gdocId = r[`gdoc_id_${l}`];
+        const gdocId = story[`gdoc_id_${l}`];
         if (gdocId) return [l, await getStoryBody(gdocId).catch(emptyOnError(`gdoc:${gdocId}`, 'stories/[slug]', []))] as const;
         // Fall back to stories_content Sheet for every language, not just English
         return [l, await getStoryBodyFromSheet(slug, l).catch(emptyOnError(TABS.stories_content, 'stories/[slug]', []))] as const;

@@ -3,6 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import type { Puja, ProcedureStep, MaterialItem } from '@/lib/types';
 import ProcedureSteps from './ProcedureSteps';
 import MaterialsList from './MaterialsList';
@@ -19,9 +20,8 @@ type Props = {
 export default function PujaProfile({ puja, steps, materials }: Props) {
   const { lang } = useLang();
 
-  const r = puja as unknown as Record<string, string>;
-  const title = r[`title_${lang}`] || puja.title_en;
-  const description = r[`brief_description_${lang}`] || puja.brief_description_en;
+  const title = localize(puja, 'title', lang);
+  const description = localize(puja, 'brief_description', lang);
 
   const nameClass = scriptClass(lang);
 

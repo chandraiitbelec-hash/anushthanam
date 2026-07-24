@@ -6,6 +6,7 @@ import { useLang } from '@/context/LanguageContext';
 import { useFontScale } from '@/context/FontScaleContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
+import { localize } from '@/lib/localize';
 import FontSizeToggle from '@/components/FontSizeToggle';
 import type { GitaVerse, GitaChapter } from '@/lib/gita';
 
@@ -103,7 +104,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
             style={selectStyle}
           >
             {chapters.map(ch => {
-              const chName = (ch as unknown as Record<string, string>)[`name_${lang}`] || ch.name_en;
+              const chName = localize(ch, 'name', lang);
               return (
                 <option key={ch.number} value={ch.number}>{ui.chapterShort(ch.number)} {chName}</option>
               );
@@ -148,7 +149,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {verses.map(v => {
           const primaryText = v[primaryKey] as string;
-          const meaning = (v as unknown as Record<string, string>)[`meaning_${lang}`] || v.meaning_en;
+          const meaning = localize(v, 'meaning', lang);
 
           return (
             <div
