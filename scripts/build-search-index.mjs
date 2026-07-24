@@ -32,16 +32,54 @@ const auth = new google.auth.GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
+// Columns this script reads per tab. A renamed column would otherwise
+// silently degrade to '' in the built index — assert it exists instead.
+const REQUIRED_COLUMNS = {
+  gods: ['slug', 'status', 'name_en', 'name_te', 'name_ta', 'name_hi', 'name_sa', 'alternate_names_en'],
+  festivals: ['slug', 'status', 'title_en', 'title_te', 'title_ta', 'title_hi', 'alternate_names_en'],
+  vrathams: ['slug', 'status', 'title_en', 'title_te', 'title_ta', 'title_hi'],
+  shlokas: ['slug', 'status', 'title_en', 'title_te', 'title_ta', 'title_hi', 'type'],
+};
+
+// Same bounded exponential backoff as lib/sheets.ts fetchWithRetry — a
+// transient 429 must not abort the deploy.
+async function fetchWithRetry(tabName) {
+  const MAX_RETRIES = 5;
+  let delay = 2000;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+      const res = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `${tabName}!A:ZZ`,
+      });
+      return res.data.values ?? [];
+    } catch (err) {
+      const status = err?.status ?? err?.code;
+      if (status === 429 && attempt < MAX_RETRIES) {
+        await new Promise(res => setTimeout(res, delay));
+        delay = Math.min(delay * 2, 30000);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error(`Failed to fetch sheet tab "${tabName}" after ${MAX_RETRIES} retries`);
+}
+
 async function getPublished(tabName) {
-  const client = await auth.getClient();
-  const sheets = google.sheets({ version: 'v4', auth: client });
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${tabName}!A:ZZ`,
-  });
-  const values = res.data.values ?? [];
+  const values = await fetchWithRetry(tabName);
   if (values.length < 1) return [];
   const [headers, ...rows] = values;
+
+  const required = REQUIRED_COLUMNS[tabName] ?? [];
+  const missing = required.filter(c => !headers.includes(c));
+  if (missing.length > 0) {
+    console.error(`✗ build-search-index: tab "${tabName}" is missing column(s): ${missing.join(', ')} — cannot build search index`);
+    process.exit(1);
+  }
+
   return rows
     .map(row => Object.fromEntries(headers.map((h, i) => [h, row[i] ?? ''])))
     .filter(r => r.status === 'published');
