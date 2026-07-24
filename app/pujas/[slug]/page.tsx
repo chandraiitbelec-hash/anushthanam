@@ -4,7 +4,7 @@ import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, rowToPuja } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
-import { pageMeta } from '@/lib/seo';
+import { pageMeta, SITE_NAME } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -18,11 +18,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.pujas);
     const puja = rows.map(rowToPuja).find(p => p.slug === slug);
-    if (!puja) return { title: 'Anuṣṭhāna' };
+    if (!puja) return { title: SITE_NAME };
     return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
   } catch (err) {
     emptyOnError(TABS.pujas, 'pujas/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 

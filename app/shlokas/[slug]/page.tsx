@@ -6,7 +6,7 @@ import { getShlokaStanzas } from '@/lib/stanzas';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
-import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.shlokas);
     const shloka = rows.map(rowToShloka).find(s => s.slug === slug);
-    if (!shloka) return { title: 'Anuṣṭhāna' };
+    if (!shloka) return { title: SITE_NAME };
     const typeLabel = shloka.type ? `${shloka.type.charAt(0).toUpperCase()}${shloka.type.slice(1)}. ` : '';
     return pageMeta(shloka.title_en, typeLabel + (shloka.brief_intro_en || ''), `/shlokas/${slug}`);
   } catch (err) {
     emptyOnError(TABS.shlokas, 'shlokas/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 
@@ -45,7 +45,7 @@ export default async function ShlokaPage({ params }: { params: Promise<{ slug: s
     url: `${SITE_URL}/shlokas/${slug}`,
     inLanguage: shloka.language_of_composition || 'Sanskrit',
     genre: shloka.type,
-    isPartOf: { '@type': 'WebSite', name: 'Anuṣṭhāna', url: SITE_URL },
+    isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
   };
 
   return (

@@ -7,7 +7,7 @@ import type { ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
-import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.vrathams);
     const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
-    if (!vratham) return { title: 'Anuṣṭhāna' };
+    if (!vratham) return { title: SITE_NAME };
     const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
     return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
   } catch (err) {
     emptyOnError(TABS.vrathams, 'vrathams/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 

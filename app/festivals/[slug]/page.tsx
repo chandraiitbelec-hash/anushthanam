@@ -6,7 +6,7 @@ import type { God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import FestivalProfile from '@/components/FestivalProfile';
-import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.festivals);
     const festival = rows.map(rowToFestival).find(f => f.slug === slug);
-    if (!festival) return { title: 'Anuṣṭhāna' };
+    if (!festival) return { title: SITE_NAME };
     return pageMeta(festival.title_en, festival.significance_en || '', `/festivals/${slug}`);
   } catch (err) {
     emptyOnError(TABS.festivals, 'festivals/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 

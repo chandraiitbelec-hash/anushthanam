@@ -5,7 +5,7 @@ import { getStoryBody, getStoryBodyFromSheet } from '@/lib/docs';
 import { getStoriesForParent, rowToStory, rowToFestival, rowToVratham } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import StoryContent from '@/components/StoryContent';
-import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.stories_index);
     const story = rows.map(rowToStory).find(s => s.slug === slug);
-    if (!story) return { title: 'Anuṣṭhāna' };
+    if (!story) return { title: SITE_NAME };
     return pageMeta(story.title_en, story.brief_summary_en || '', `/stories/${slug}`, 'article');
   } catch (err) {
     emptyOnError(TABS.stories_index, 'stories/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 
@@ -77,7 +77,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     url: `${SITE_URL}/stories/${slug}`,
     inLanguage: 'en',
     genre: story.story_type,
-    isPartOf: { '@type': 'WebSite', name: 'Anuṣṭhāna', url: SITE_URL },
+    isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
   };
 
   return (

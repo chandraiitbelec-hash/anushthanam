@@ -8,7 +8,7 @@ import type { Theme } from '@/context/ThemeContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
-import { SITE_URL } from '@/lib/seo';
+import { SITE_URL, SITE_NAME } from '@/lib/seo';
 import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
 
@@ -62,8 +62,8 @@ const notoSerifDevanagari = Noto_Serif_Devanagari({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Anuṣṭhāna — Hindu Devotional Reference',
-    template: '%s | Anuṣṭhāna',
+    default: `${SITE_NAME} — Hindu Devotional Reference`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
     'A reference for Hindu devotional practice — gods, shlokas, pujas, festivals, vrathams, and panchangam. Available in Telugu, Tamil, Hindi and English.',
@@ -72,13 +72,13 @@ export const metadata: Metadata = {
     'festival', 'panchangam', 'telugu devotion', 'tamil devotion',
     'hindi bhakti', 'gods', 'devata', 'katha',
   ],
-  authors: [{ name: 'Anuṣṭhāna' }],
-  creator: 'Anuṣṭhāna',
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
   robots: { index: true, follow: true },
   openGraph: {
     type: 'website',
-    siteName: 'Anuṣṭhāna',
-    title: 'Anuṣṭhāna — Hindu Devotional Reference',
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Hindu Devotional Reference`,
     description:
       'Gods, shlokas, festivals, vrathams, pujas and panchangam — in Telugu, Tamil, Hindi and English.',
     url: SITE_URL,
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Anuṣṭhāna — Hindu Devotional Reference',
+    title: `${SITE_NAME} — Hindu Devotional Reference`,
     description:
       'Gods, shlokas, festivals, vrathams, pujas and panchangam — in Telugu, Tamil, Hindi and English.',
   },

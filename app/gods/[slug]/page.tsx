@@ -5,7 +5,7 @@ import { getLinksForGod, rowToGod } from '@/lib/relations';
 import type { GodLink } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import GodProfile from '@/components/GodProfile';
-import { pageMeta, SITE_URL, jsonLdString } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const rows = await getPublished(TABS.gods);
     const god = rows.map(rowToGod).find(g => g.slug === slug);
-    if (!god) return { title: 'Anuṣṭhāna' };
+    if (!god) return { title: SITE_NAME };
     const altNames = god.alternate_names_en ? ` Also known as ${god.alternate_names_en}.` : '';
     return pageMeta(god.name_en, (god.description_en || '') + altNames, `/gods/${slug}`);
   } catch (err) {
     emptyOnError(TABS.gods, 'gods/[slug]#generateMetadata', undefined)(err);
-    return { title: 'Anuṣṭhāna' };
+    return { title: SITE_NAME };
   }
 }
 

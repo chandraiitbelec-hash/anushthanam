@@ -3,12 +3,13 @@ import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import SiteIndexContent, { type IndexSection } from '@/components/SiteIndexContent';
+import { SITE_NAME } from '@/lib/seo';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'Site Index',
-  description: 'A complete index of gods, shlokas, festivals, vrathams and pujas on Anuṣṭhāna.',
+  description: `A complete index of gods, shlokas, festivals, vrathams and pujas on ${SITE_NAME}.`,
 };
 
 function byEnglish(a: { names: { en: string } }, b: { names: { en: string } }) {
