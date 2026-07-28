@@ -33,21 +33,24 @@ const notoTelugu = Noto_Sans_Telugu({
   weight: ['400', '500', '700'],
   subsets: ['telugu'],
   variable: '--font-noto-telugu',
-  display: 'optional',
+  display: 'swap',
+  adjustFontFallback: true,
 });
 
 const notoTamil = Noto_Sans_Tamil({
   weight: ['400', '500', '700'],
   subsets: ['tamil'],
   variable: '--font-noto-tamil',
-  display: 'optional',
+  display: 'swap',
+  adjustFontFallback: true,
 });
 
 const notoDevanagari = Noto_Sans_Devanagari({
   weight: ['400', '500', '700'],
   subsets: ['devanagari'],
   variable: '--font-noto-devanagari',
-  display: 'optional',
+  display: 'swap',
+  adjustFontFallback: true,
 });
 
 // Traditional serif Devanagari for recited Sanskrit verse text (Bhagavad Gita) —
@@ -56,7 +59,8 @@ const notoSerifDevanagari = Noto_Serif_Devanagari({
   weight: ['400', '500'],
   subsets: ['devanagari'],
   variable: '--font-noto-serif-devanagari',
-  display: 'optional',
+  display: 'swap',
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
