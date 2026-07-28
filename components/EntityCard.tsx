@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLang } from '@/context/LanguageContext';
 import { scriptClass } from '@/lib/utils';
 
@@ -12,9 +13,10 @@ type EntityCardProps = {
   badge?: string;
   badgeColor?: 'gold' | 'saffron' | 'green';
   meta?: string;
+  imageSrc?: string | null;
 };
 
-export default function EntityCard({ href, names, badge, badgeColor = 'gold', meta }: EntityCardProps) {
+export default function EntityCard({ href, names, badge, badgeColor = 'gold', meta, imageSrc }: EntityCardProps) {
   const { lang } = useLang();
 
   const title = (names as Record<string, string>)[lang] || names.en;
@@ -32,7 +34,9 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
 
   return (
     <Link href={href} className="entity-card-link" style={{
-      display: 'block',
+      display: 'flex',
+      gap: imageSrc ? '12px' : 0,
+      alignItems: 'flex-start',
       padding: '14px 16px',
       background: 'var(--color-surface)',
       border: '1px solid var(--color-border)',
@@ -44,6 +48,26 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       onMouseOver={e => (e.currentTarget.style.borderColor = 'var(--color-gold)')}
       onMouseOut={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
     >
+      {imageSrc && (
+        <div style={{
+          width: '44px',
+          height: '44px',
+          flexShrink: 0,
+          borderRadius: '8px',
+          overflow: 'hidden',
+          border: '1px solid var(--color-border)',
+          background: 'var(--color-background)',
+        }}>
+          <Image
+            src={imageSrc}
+            alt={title}
+            width={44}
+            height={44}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </div>
+      )}
+      <div style={{ minWidth: 0, flex: 1 }}>
       {badge && (
         <span style={{
           display: 'inline-block',
@@ -89,6 +113,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
           {meta}
         </p>
       )}
+      </div>
     </Link>
   );
 }

@@ -3,6 +3,7 @@ import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { rowToGod } from '@/lib/relations';
 import EntityCard from '@/components/EntityCard';
+import { godImagePath } from '@/lib/god-images';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
 import EmptyState from '@/components/EmptyState';
@@ -35,6 +36,7 @@ export default async function GodsPage() {
               key={god.slug}
               href={`/gods/${god.slug}`}
               names={{ en: god.name_en, te: god.name_te, ta: god.name_ta, hi: god.name_hi, sa: god.name_sa }}
+              imageSrc={godImagePath(god.slug)}
               badge={god.tradition}
               badgeColor={
                 god.tradition === 'shaiva' ? 'saffron' :

@@ -5,6 +5,7 @@ import { getLinksForGod, rowToGod } from '@/lib/relations';
 import type { GodLink } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import GodProfile from '@/components/GodProfile';
+import { godImagePath } from '@/lib/god-images';
 import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
@@ -85,7 +86,7 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
         { label: 'Gods', labels: { te: 'దేవతలు', ta: 'தெய்வங்கள்', hi: 'देवता' }, href: '/gods' },
         { label: god.name_en, labels: { te: god.name_te, ta: god.name_ta, hi: god.name_hi } },
       ]} />
-      <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} />
+      <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} imagePath={godImagePath(slug)} />
     </div>
   );
 }

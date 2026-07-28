@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLang } from '@/context/LanguageContext';
 import SectionNav, { type NavSection } from '@/components/SectionNav';
 import { UI } from '@/lib/ui-strings';
@@ -23,6 +24,7 @@ type Props = {
   shlokas: LinkedEntity[];
   pujas: LinkedEntity[];
   festivals: LinkedEntity[];
+  imagePath: string | null;
 };
 
 // "Shlokas & Stotras" is a distinct, longer heading from the plain UI.shlokas label
@@ -79,7 +81,7 @@ function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: Language })
   );
 }
 
-export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
+export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }: Props) {
   const { lang } = useLang();
 
   const name = localize(god, 'name', lang);
@@ -98,7 +100,28 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
   return (
     <>
       {/* Header */}
-      <div style={{ marginBottom: '32px' }}>
+      <div style={{ marginBottom: '32px', display: 'flex', gap: imagePath ? '20px' : 0, alignItems: 'flex-start' }}>
+        {imagePath && (
+          <div style={{
+            width: '112px',
+            height: '112px',
+            flexShrink: 0,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
+          }}>
+            <Image
+              src={imagePath}
+              alt={name}
+              width={112}
+              height={112}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              priority
+            />
+          </div>
+        )}
+        <div style={{ minWidth: 0, flex: 1 }}>
         <h1 className={nameClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
           fontSize: 'clamp(32px, 5vw, 52px)',
@@ -153,6 +176,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals }: Props) {
             </span>
           </div>
         )}
+        </div>
       </div>
 
       {/* Description */}
