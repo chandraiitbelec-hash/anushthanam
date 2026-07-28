@@ -243,6 +243,12 @@ body {
   padding-right: 24px;
 }
 
+/* Scrollable tablist (Tabs.tsx) — hide the scrollbar across browsers;
+   scrollbarWidth (Firefox) is set inline, this covers WebKit/Blink */
+.tablist-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* ─── Navigation ────────────────────────────────────────────── */
 /* CSS is the sole authority on display for these — no inline display overrides in JSX */
 .nav-desktop   { display: flex; }

@@ -81,9 +81,11 @@ export function TabList({
       <div
         role="tablist"
         aria-label={ariaLabel}
+        className={wrap ? undefined : 'tablist-scroll'}
         style={{
           display: 'flex',
           gap: 0,
+          minWidth: 0,
           ...(wrap
             ? { flexWrap: 'wrap' as const }
             : { overflowX: 'auto' as const, scrollbarWidth: 'none' as const, WebkitOverflowScrolling: 'touch' as const }),
