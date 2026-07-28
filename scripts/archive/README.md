@@ -49,3 +49,33 @@ safe to run).
 Note: these scripts' `.env.local` path resolution was updated from
 `../.env.local` to `../../.env.local` when they moved into this
 subdirectory — that's the only change made after archiving.
+
+## 3. Single-entity content uploaders, targeted corrections, and generators
+
+The bulk of this directory: one-shot `upload-<stotra>.mjs` /
+`upload-puja-detail-<puja>.mjs` scripts (each hardcodes one specific
+stotra/kavacham/puja's content and has already been run against the live
+Sheet), the `update-*`/`fix-*`/`patch-*`/`repair-*`/`cleanup-*` targeted
+corrections they needed afterward, the `generate-*-kavacham.mjs` sourcing
+generators that fed them, a handful of spent read/diagnostic scripts
+(`check-festivals-coverage.mjs`, `read-festival-notes.mjs`,
+`read-stanzas-groupA.mjs`, `derive-ganesha.mjs`,
+`parse-bhagavad-gita.mjs`, `parse-daily-devotional.mjs`), the Python/JSON
+one-offs that pre-processed content before upload
+(`compute-panchangam.py`, `extract-all-sahasranamams.py`,
+`extract-vratham-content.py`, `generate-meanings.py`, `merge-meanings.py`,
+`generate-stanza-translations-groupB.py`, `patch-devi-kavacham-meanings.py`,
+`vratham-content.json`), and the shared libs used only by scripts in this
+batch (`lib-ashtothram-generator.mjs`, `lib-ashtothram-uploader.mjs`,
+`lib-parse-chalisa-md.mjs`, `lib-tamil-superscript.mjs`).
+
+The **generic, reusable** uploaders these were superseded by —
+`upload-kavacham.mjs`, `upload-sahasranamam.mjs`, `upload-puja-content.mjs`
+— take a `SLUG` and stay in `scripts/` proper; they're still the right tool
+for a genuinely new stotra/kavacham/puja.
+
+This batch was moved as pure file relocation (no code edits), so unlike
+batches 1–2 above, relative `.env.local` paths inside these files were
+**not** updated and may resolve incorrectly if run from this subdirectory —
+irrelevant in practice since none of them should be re-run (see top of
+this file), but worth knowing if one is ever resurrected as a template.
