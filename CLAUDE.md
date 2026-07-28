@@ -24,6 +24,7 @@ npm run dev          # local dev server
 npm run build        # prebuild writes search-index.json, then next build
 npm run lint         # eslint . (flat config, eslint.config.mjs)
 node scripts/check-content-health.mjs   # pre-deploy: verify live Sheet headers/data, read-only
+node scripts/report-translation-coverage.mjs [--verbose]   # per-language fill-rate report across content tabs, read-only
 ```
 
 ## Architecture
@@ -151,6 +152,7 @@ Shared tabbed-UI components (`ShlokaTypeTabs`, `PujasBrowser`, `PujaProfile`, `V
 - `scripts/archive/` holds retired one-off scripts (batch fixes, past migrations) kept for reference — don't build on top of them, and new one-off scripts that are fully spent should move there rather than staying in the active `scripts/` root.
 - See `STOTRA_UPLOAD_PIPELINE.md` for the conventions specific to adding a new stotra/shloka's content end-to-end.
 - **`scripts/check-content-health.mjs`** is the pre-deploy check: read-only (no `--write` mode), it verifies against the live Sheet that every tab's header row has the columns the app reads (hardcoded `EXPECTED_COLUMNS`, derived from the `rowTo*` mappers in `lib/relations.ts` — update it when a mapper changes), warns on 0 published rows for tabs that should never be empty (`gods`, `shlokas`, `pujas`, `festivals`, `vrathams`), and warns on `festivals`/`vrathams` `next_occurrence` values that aren't `YYYY-MM-DD`. Exits 1 only on a missing header; run it before "Publish to site".
+- **`scripts/report-translation-coverage.mjs`** is read-only (no `--write` mode): it auto-detects `*_en`/`_te`/`_ta`/`_hi` field groups from the live header row of each content tab and reports per-language fill rates against published rows; `--verbose` lists the slugs missing each language.
 
 ### Environment variables
 
