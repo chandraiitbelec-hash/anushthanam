@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# working notes / source JSONs for one-off content scripts — never read by app code, stays local
+/research
