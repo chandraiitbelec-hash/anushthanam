@@ -13,16 +13,25 @@ import type { Language } from '@/lib/types';
 
 type NavLink = { href: string; key: keyof typeof UI['en'] };
 
-const NAV_LINKS: NavLink[] = [
+// Priority nav: PRIMARY links are always visible on desktop; the rest live in a
+// localized "More ▾" dropdown so long labels (Tamil especially) can't overflow
+// the row and push the search/language/theme controls off-screen.
+const PRIMARY_LINKS: NavLink[] = [
   { href: '/gods',           key: 'gods' },
   { href: '/festivals',      key: 'festivals' },
   { href: '/vrathams',       key: 'vrathams' },
   { href: '/pujas',          key: 'pujas' },
   { href: '/shlokas',        key: 'shlokas' },
+];
+
+const MORE_LINKS: NavLink[] = [
   { href: '/bhagavad-gita',  key: 'bhagavadGita' },
   { href: '/panchangam',     key: 'panchangam' },
   { href: '/upcoming',       key: 'upcoming' },
 ];
+
+// Mobile drawer shows everything flat.
+const NAV_LINKS: NavLink[] = [...PRIMARY_LINKS, ...MORE_LINKS];
 
 export default function Nav() {
   const { lang, setLang } = useLang();
@@ -30,10 +39,12 @@ export default function Nav() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   // Dismiss each popover on outside-click / Escape.
   const searchRef = useDismissable<HTMLDivElement>(searchOpen, () => setSearchOpen(false));
   const langRef = useDismissable<HTMLDivElement>(langOpen, () => setLangOpen(false));
+  const moreRef = useDismissable<HTMLDivElement>(moreOpen, () => setMoreOpen(false));
   useDismissable<HTMLDivElement>(mobileOpen, () => setMobileOpen(false), { escapeOnly: true });
 
   const hamburgerRef = useRef<HTMLButtonElement>(null);
@@ -68,8 +79,10 @@ export default function Nav() {
       }}>
         <div className="wide-width" style={{ width: '100%', minWidth: 0, display: 'flex', alignItems: 'center', gap: '32px' }}>
 
-          {/* Site name + tagline — always visible; shrinks/truncates before controls do */}
-          <Link href="/" style={{ textDecoration: 'none', minWidth: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Site name + tagline — always visible, NEVER truncated (it's the brand).
+              When space runs out, the nav links collapse into the hamburger instead
+              (see the .nav-desktop breakpoint in globals.css). */}
+          <Link href="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1018 856" width="34" height="29" style={{ flexShrink: 0 }} aria-hidden="true">
               <g transform="translate(0,856) scale(0.1,-0.1)" style={{ fill: 'var(--color-gold)' }} stroke="none">
                 <path d="M5075 5753 c-50 -100 -205 -339 -408 -628 -108 -154 -229 -334 -268 -400 -223 -369 -354 -696 -404 -1005 -25 -153 -23 -422 4 -557 50 -251 146 -451 313 -650 63 -75 74 -83 105 -83 91 0 397 -57 433 -81 12 -7 7 -17 -28 -50 -38 -36 -48 -40 -75 -35 -413 87 -876 63 -1132 -58 -126 -59 -160 -105 -114 -154 71 -77 251 -137 484 -162 78 -8 132 -7 245 5 152 15 179 21 300 62 161 54 301 144 414 264 72 76 146 177 146 198 0 6 9 11 20 11 11 0 20 -5 20 -11 0 -20 72 -120 141 -193 183 -196 392 -293 716 -332 117 -14 154 -15 253 -5 219 23 344 60 448 131 87 59 77 107 -34 167 -174 95 -451 141 -764 130 -131 -5 -224 -17 -420 -54 -19 -3 -34 5 -65 36 -24 26 -35 44 -30 50 18 17 167 48 319 67 l148 18 59 65 c155 168 274 410 326 661 25 119 25 447 0 575 -87 450 -266 819 -677 1400 -217 307 -345 502 -410 628 -14 26 -27 47 -30 47 -3 0 -19 -26 -35 -57z m-14 -1111 c304 -337 518 -771 574 -1165 18 -128 19 -218 1 -327 -41 -251 -147 -416 -374 -583 -27 -21 -22 4 12 60 109 179 125 376 43 541 -13 26 -45 87 -71 135 -63 116 -77 162 -85 282 l-6 100 -96 -145 c-143 -215 -195 -331 -219 -489 -20 -124 17 -284 95 -410 25 -41 43 -76 40 -79 -3 -3 -40 21 -82 54 -231 177 -348 444 -313 714 22 169 87 325 243 585 94 157 155 286 183 390 20 74 26 236 12 328 -4 26 -4 47 1 47 4 0 23 -17 42 -38z"/>
@@ -142,17 +155,14 @@ export default function Nav() {
               color: 'var(--color-gold)',
               lineHeight: 1.1,
               whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              minWidth: 0,
             }}>
               {SITE_NAMES[lang]}
             </span>
           </Link>
 
           {/* Desktop nav links — CSS hides this on mobile */}
-          <nav className="nav-desktop" style={{ gap: '24px', flex: 1 }}>
-            {NAV_LINKS.map(link => (
+          <nav className="nav-desktop" style={{ gap: '24px', flex: 1, alignItems: 'center' }}>
+            {PRIMARY_LINKS.map(link => (
               <Link key={link.href} href={link.href} style={{
                 fontSize: '14px',
                 color: 'var(--color-text-secondary)',
@@ -165,6 +175,65 @@ export default function Nav() {
                 {linkLabel(link)}
               </Link>
             ))}
+
+            {/* "More ▾" overflow menu for the secondary links */}
+            <div ref={moreRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setMoreOpen(o => !o)}
+                aria-expanded={moreOpen}
+                aria-haspopup="true"
+                style={{
+                  fontSize: '14px',
+                  color: 'var(--color-text-secondary)',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontFamily: 'inherit',
+                }}
+                onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
+                onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
+              >
+                {UI[lang].navMore}
+                <span aria-hidden="true" style={{ fontSize: '9px', transform: moreOpen ? 'rotate(180deg)' : 'none' }}>▾</span>
+              </button>
+
+              {moreOpen && (
+                <div style={{
+                  position: 'absolute', left: 0, top: 'calc(100% + 14px)',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  minWidth: '200px',
+                  zIndex: 100,
+                }}>
+                  {MORE_LINKS.map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMoreOpen(false)}
+                      style={{
+                        display: 'block',
+                        padding: '10px 16px',
+                        fontSize: '13px',
+                        color: 'var(--color-text-primary)',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.08)')}
+                      onMouseOut={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      {linkLabel(link)}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right side — must never shrink; the logo gives way instead */}

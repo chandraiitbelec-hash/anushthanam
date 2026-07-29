@@ -150,6 +150,7 @@ type UiStrings = {
   // Nav
   navSearchLabel: string;
   navSwitchLanguage: string;
+  navMore: string;
   navOpenMenu: string;
   navCloseMenu: string;
   navLanguageHeading: string;
@@ -287,6 +288,7 @@ export const UI: Record<Language, UiStrings> = {
     reflection: 'Reflection',
     navSearchLabel: 'Search',
     navSwitchLanguage: 'Switch language',
+    navMore: 'More',
     navOpenMenu: 'Open menu',
     navCloseMenu: 'Close menu',
     navLanguageHeading: 'Language',
@@ -420,6 +422,7 @@ export const UI: Record<Language, UiStrings> = {
     reflection: 'చింతన',
     navSearchLabel: 'వెతకండి',
     navSwitchLanguage: 'భాష మార్చండి',
+    navMore: 'మరిన్ని',
     navOpenMenu: 'మెనూ తెరవండి',
     navCloseMenu: 'మెనూ మూసివేయండి',
     navLanguageHeading: 'భాష',
@@ -553,6 +556,7 @@ export const UI: Record<Language, UiStrings> = {
     reflection: 'சிந்தனை',
     navSearchLabel: 'தேடு',
     navSwitchLanguage: 'மொழியை மாற்று',
+    navMore: 'மேலும்',
     navOpenMenu: 'மெனுவைத் திற',
     navCloseMenu: 'மெனுவை மூடு',
     navLanguageHeading: 'மொழி',
@@ -686,6 +690,7 @@ export const UI: Record<Language, UiStrings> = {
     reflection: 'चिंतन',
     navSearchLabel: 'खोजें',
     navSwitchLanguage: 'भाषा बदलें',
+    navMore: 'अधिक',
     navOpenMenu: 'मेनू खोलें',
     navCloseMenu: 'मेनू बंद करें',
     navLanguageHeading: 'भाषा',

@@ -254,9 +254,13 @@ body {
 .nav-desktop   { display: flex; }
 .nav-hamburger { display: none; }
 
-@media (max-width: 1024px) {
-  /* 8 nav links + logo + search + language switcher don't fit below this —
-     collapsing earlier (e.g. at 768px) left a cramped/overflowing tablet zone */
+@media (max-width: 1099px) {
+  /* 5 primary links + "More ▾" menu + full logotype + search + language switcher +
+     theme control need ~1065px in the widest language (Tamil, measured). Below
+     1100 the links collapse into the hamburger. The logotype must never
+     shrink-truncate to make things fit (it's the brand) — if the row ever gets
+     tight again, move a link into MORE_LINKS in Nav.tsx rather than squeezing
+     the logo. */
   .nav-desktop   { display: none; }
   .nav-hamburger { display: flex; }
 }
