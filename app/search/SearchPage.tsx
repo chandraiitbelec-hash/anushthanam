@@ -90,12 +90,12 @@ export default function SearchPage() {
             borderRadius: '10px',
             background: 'var(--color-surface)',
             color: 'var(--color-text-primary)',
-            fontSize: '16px',
+            fontSize: 'var(--text-body)',
             boxSizing: 'border-box',
           }}
         />
         {!ready && (
-          <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '8px' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', marginTop: '8px' }}>
             {LOADING_LABEL[lang] ?? LOADING_LABEL.en}
           </p>
         )}
@@ -112,13 +112,13 @@ export default function SearchPage() {
       </div>
 
       {empty && (
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-body-sm)' }}>
           {ui.searchBuilding}
         </p>
       )}
 
       {!empty && ready && query && results.length === 0 && (
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-body-sm)' }}>
           {ui.searchNoResults(query)}
         </p>
       )}
@@ -137,17 +137,17 @@ export default function SearchPage() {
             }}>
               <span style={{ fontSize: '20px', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '15px', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                <div style={{ fontSize: 'var(--text-card-title)', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {nameForLang(r)}
                 </div>
                 {nameForLang(r) !== r.name_en && (
-                  <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                  <div style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
                     {r.name_en}
                   </div>
                 )}
               </div>
               <span style={{
-                fontSize: '11px',
+                fontSize: 'var(--text-badge)',
                 color: 'var(--color-text-secondary)',
                 background: 'var(--color-bg)',
                 border: '1px solid var(--color-border)',
@@ -174,7 +174,7 @@ export default function SearchPage() {
               padding: '8px 16px',
               border: '1px solid var(--color-border)',
               borderRadius: '20px',
-              fontSize: '13px',
+              fontSize: 'var(--text-nav)',
               color: 'var(--color-text-secondary)',
               textDecoration: 'none',
               background: 'var(--color-surface)',

@@ -28,7 +28,7 @@ export default async function PanchangamPage() {
       <Breadcrumb crumbs={[{ label: 'Panchangam', labels: { te: 'పంచాంగం', ta: 'பஞ்சாங்கம்', hi: 'पंचांग' } }]} />
       <h1 style={{
         fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(28px, 4vw, 40px)',
+        fontSize: 'var(--text-h1-page)',
         fontWeight: 600,
         color: 'var(--color-text-primary)',
         margin: '0 0 24px',
@@ -40,7 +40,7 @@ export default async function PanchangamPage() {
         {today ? (
           <>
             <h2 style={{
-              fontSize: '13px',
+              fontSize: 'var(--text-label)',
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
@@ -62,7 +62,7 @@ export default async function PanchangamPage() {
       {all.length > 0 && (
         <section>
           <h2 style={{
-            fontSize: '13px',
+            fontSize: 'var(--text-label)',
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.08em',

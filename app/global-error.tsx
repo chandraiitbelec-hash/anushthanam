@@ -32,6 +32,9 @@ export default function GlobalError({
             maxWidth: '480px',
           }}
         >
+          {/* This root error boundary renders outside <html>/<body> of the normal layout and
+              can't rely on globals.css custom properties being loaded, so sizes are literal
+              px matched to the --text-* scale's computed values rather than var() references. */}
           <p style={{ fontSize: '36px', margin: 0 }} aria-hidden="true">🪔</p>
           <p style={{ fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#D4622A', margin: 0 }}>
             Error
@@ -39,11 +42,11 @@ export default function GlobalError({
           <h1 style={{ fontSize: '28px', fontWeight: 600, color: '#3D2C22', margin: 0 }}>
             Something went wrong
           </h1>
-          <p style={{ color: '#7A6E64', margin: 0, fontSize: '15px' }}>
+          <p style={{ color: '#7A6E64', margin: 0, fontSize: '14px' }}>
             A critical error occurred. Please try reloading the page.
           </p>
           {error.digest && (
-            <p style={{ fontSize: '11px', color: '#7A6E64', fontFamily: 'monospace', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: '#7A6E64', fontFamily: 'monospace', margin: 0 }}>
               {error.digest}
             </p>
           )}

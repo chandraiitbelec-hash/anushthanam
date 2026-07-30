@@ -48,7 +48,7 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
       {/* Chapter header */}
       <div style={{ marginBottom: '32px' }}>
         <p style={{
-          fontSize: '12px',
+          fontSize: 'var(--text-label)',
           fontWeight: 600,
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
@@ -64,7 +64,7 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
         </p>
         <h1 style={{
           fontFamily: 'var(--font-cormorant)',
-          fontSize: 'clamp(24px, 4vw, 38px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 700,
           color: 'var(--color-text-primary)',
           margin: '0 0 4px',
@@ -73,17 +73,17 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
           {ch.name_en}
         </h1>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'baseline', marginTop: '6px' }}>
-          <span className="script-devanagari" style={{ fontSize: '15px', color: 'var(--color-text-secondary)' }}>
+          <span className="script-devanagari" style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
             {ch.name_hi}
           </span>
-          <span className="script-telugu" style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+          <span className="script-telugu" style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
             {ch.name_te}
           </span>
-          <span className="script-tamil" style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+          <span className="script-tamil" style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
             {ch.name_ta}
           </span>
         </div>
-        <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: '10px 0 0' }}>
+        <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '10px 0 0' }}>
           <ClientLabel labels={{
             en: `${ch.verse_count} verses`,
             te: `${ch.verse_count} శ్లోకాలు`,

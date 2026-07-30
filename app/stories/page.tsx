@@ -73,7 +73,7 @@ export default async function StoriesPage() {
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '16px' }}>
               <Link href={parent.href} style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '20px',
+                fontSize: 'var(--text-h2)',
                 fontWeight: 600,
                 color: 'var(--color-text-primary)',
                 textDecoration: 'none',
@@ -81,7 +81,7 @@ export default async function StoriesPage() {
               >
                 <ClientLabel labels={{ en: parent.title_en, te: parent.title_te || parent.title_en, ta: parent.title_ta || parent.title_en, hi: parent.title_hi || parent.title_en }} />
               </Link>
-              <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+              <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
                 {list.length} <ClientLabel labels={{ en: list.length === 1 ? 'story' : 'stories', te: 'కథలు', ta: 'கதைகள்', hi: 'कथाएं' }} />
               </span>
             </div>
@@ -105,17 +105,17 @@ export default async function StoriesPage() {
                     border: '1px solid var(--color-gold)',
                     borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '12px', fontWeight: 700, color: 'var(--color-gold-text)',
+                    fontSize: 'var(--text-badge)', fontWeight: 700, color: 'var(--color-gold-text)',
                   }}>
                     {idx + 1}
                   </span>
-                  <span style={{ flex: 1, fontSize: '15px', fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                  <span style={{ flex: 1, fontSize: 'var(--text-card-title)', fontWeight: 500, color: 'var(--color-text-primary)' }}>
                     <ClientLabel labels={{ en: s.title_en, te: s.title_te || s.title_en, ta: s.title_ta || s.title_en, hi: s.title_hi || s.title_en }} />
                   </span>
                   {s.story_type && (
                     <span style={{
                       flexShrink: 0,
-                      fontSize: '11px', padding: '2px 8px',
+                      fontSize: 'var(--text-badge)', padding: '2px 8px',
                       background: 'rgba(212,98,42,0.08)',
                       border: '1px solid var(--color-saffron)',
                       borderRadius: '12px',
@@ -135,7 +135,7 @@ export default async function StoriesPage() {
       {/* Fallback for stories without a parent */}
       {ungrouped.length > 0 && (
         <section style={{ marginBottom: '40px' }}>
-          <h2 style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 16px' }}>
+          <h2 style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 16px' }}>
             <ClientLabel labels={{ en: 'Other Stories', te: 'ఇతర కథలు', ta: 'பிற கதைகள்', hi: 'अन्य कथाएं' }} />
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -146,7 +146,7 @@ export default async function StoriesPage() {
                 border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 textDecoration: 'none',
-                fontSize: '15px', fontWeight: 500,
+                fontSize: 'var(--text-card-title)', fontWeight: 500,
                 color: 'var(--color-text-primary)',
               }}>
                 <ClientLabel labels={{ en: s.title_en, te: s.title_te || s.title_en, ta: s.title_ta || s.title_en, hi: s.title_hi || s.title_en }} />

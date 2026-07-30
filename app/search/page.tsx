@@ -10,7 +10,7 @@ export default function Page() {
       <Breadcrumb crumbs={[{ label: 'Search', labels: { en: 'Search', te: 'శోధన', ta: 'தேடல்', hi: 'खोज' } }]} />
       <ScriptH1
         labels={{ en: 'Search', te: 'శోధన', ta: 'தேடல்', hi: 'खोज' }}
-        style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 24px' }}
+        style={{ fontSize: 'var(--text-h1-page)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 24px' }}
       />
       <SearchPage />
     </div>

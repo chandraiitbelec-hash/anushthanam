@@ -140,7 +140,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <FontScaleProvider>
           <Nav />
           <main id="main-content">{children}</main>
-          <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+          <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: 'var(--text-footer)' }}>
             <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: '16px', color: 'var(--color-text-primary)' }}>Anuṣṭhāna</span>
               <FooterLinks />

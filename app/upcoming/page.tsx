@@ -34,7 +34,7 @@ export default async function UpcomingPage() {
       {today && (
         <section style={{ marginBottom: '40px' }}>
           <h2 style={{
-            fontSize: '11px',
+            fontSize: 'var(--text-label)',
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',

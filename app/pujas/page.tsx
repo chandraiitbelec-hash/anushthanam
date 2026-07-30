@@ -29,7 +29,7 @@ export default async function PujasPage() {
       <ScriptH1
         labels={{ en: 'Pujas', te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजा' }}
         style={{
-          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 32px',

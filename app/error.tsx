@@ -30,14 +30,14 @@ export default function ErrorPage({
       }}
     >
       <p style={{ fontSize: '40px', margin: 0 }} aria-hidden="true">🪔</p>
-      <p style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-saffron-text)', margin: 0 }}>
+      <p style={{ fontSize: 'var(--text-label)', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-saffron-text)', margin: 0 }}>
         Error
       </p>
       <h1
         className={titleClass}
         style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: 0,
@@ -45,11 +45,11 @@ export default function ErrorPage({
       >
         {ui.errorTitle}
       </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: 0, fontSize: '16px', maxWidth: '440px' }}>
+      <p style={{ color: 'var(--color-text-secondary)', margin: 0, fontSize: 'var(--text-body)', maxWidth: '440px' }}>
         {ui.errorBody}
       </p>
       {error.digest && (
-        <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontFamily: 'monospace', margin: 0 }}>
+        <p style={{ fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)', fontFamily: 'monospace', margin: 0 }}>
           {error.digest}
         </p>
       )}
@@ -62,7 +62,7 @@ export default function ErrorPage({
             background: 'var(--color-gold)',
             color: '#fff',
             border: 'none',
-            fontSize: '14px',
+            fontSize: 'var(--text-button)',
             fontWeight: 500,
             cursor: 'pointer',
           }}
@@ -79,7 +79,7 @@ export default function ErrorPage({
             border: '1px solid var(--color-border)',
             color: 'var(--color-text-primary)',
             textDecoration: 'none',
-            fontSize: '14px',
+            fontSize: 'var(--text-button)',
             fontWeight: 500,
           }}
         >
