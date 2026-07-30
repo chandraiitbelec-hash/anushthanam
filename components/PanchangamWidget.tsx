@@ -27,7 +27,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
         background: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
         borderRadius: '8px',
-        fontSize: '13px',
+        fontSize: 'var(--text-meta)',
       }}>
         <span>
           <b style={{ color: 'var(--color-text-secondary)' }}>{ui.tithi}: </b>
@@ -65,7 +65,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
     }}>
       {specialEvent && (
         <p className={nameClass} style={{
-          fontSize: '13px',
+          fontSize: 'var(--text-meta)',
           fontWeight: 600,
           color: 'var(--color-saffron-text)',
           margin: '0 0 12px',
@@ -75,7 +75,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
         </p>
       )}
       <p style={{
-        fontSize: '13px',
+        fontSize: 'var(--text-meta)',
         color: 'var(--color-text-secondary)',
         margin: '0 0 16px',
       }}>
@@ -89,10 +89,10 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
       }}>
         {fields.map(f => (
           <div key={f.label}>
-            <p className={nameClass} style={{ fontSize: '11px', color: 'var(--color-text-secondary)', margin: '0 0 2px', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: '0.05em' }}>
+            <p className={nameClass} style={{ fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)', margin: '0 0 2px', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: '0.05em' }}>
               {f.label}
             </p>
-            <p className={nameClass} style={{ fontSize: '15px', fontWeight: 500, color: 'var(--color-text-primary)', margin: 0 }}>
+            <p className={nameClass} style={{ fontSize: 'var(--text-body-sm)', fontWeight: 500, color: 'var(--color-text-primary)', margin: 0 }}>
               {f.value}
             </p>
           </div>

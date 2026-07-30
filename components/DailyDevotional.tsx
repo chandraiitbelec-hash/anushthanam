@@ -24,7 +24,7 @@ function Pill({ label, active, onClick, controls }: { label: string; active: boo
         border: `1px solid ${active ? 'var(--color-gold)' : 'var(--color-border)'}`,
         background: active ? 'rgba(184,134,11,0.1)' : 'transparent',
         color: active ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
-        fontSize: '13px',
+        fontSize: 'var(--text-button)',
         fontWeight: active ? 600 : 400,
         cursor: 'pointer',
         whiteSpace: 'nowrap',
@@ -63,10 +63,10 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
         {/* Always-visible row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <div>
-            <p style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-gold-text)', margin: '0 0 1px' }}>
+            <p style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-gold-text)', margin: '0 0 1px' }}>
               {ui.devotionalHeading}
             </p>
-            <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: 0 }}>
+            <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: 0 }}>
               {entry.deity}
             </p>
           </div>
@@ -81,49 +81,53 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
         {open === 'shloka' && (
           <div id="daily-shloka-panel" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ borderLeft: '3px solid var(--color-gold)', paddingLeft: '16px' }}>
-              {/* Show shloka in user's script; Sanskrit (Devanagari) shown below as reference for non-Hindi */}
+              {/* Show shloka in user's script; Sanskrit (Devanagari) shown below as reference for non-Hindi.
+                  fontSize intentionally omitted on these three — the script-* class's own
+                  calc(20px * --content-font-scale) must govern size so the font-size toggle
+                  works here; a previous inline 18px override on each silently clobbered it. */}
               {lang === 'te' && (
-                <p className="script-telugu" style={{ fontSize: '18px', lineHeight: 2.0, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                <p className="script-telugu" style={{ lineHeight: 2.0, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
                   {entry.shloka.script_te}
                 </p>
               )}
               {lang === 'ta' && (
-                <p className="script-tamil" style={{ fontSize: '18px', lineHeight: 2.1, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                <p className="script-tamil" style={{ lineHeight: 2.1, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
                   {entry.shloka.script_ta}
                 </p>
               )}
               {(lang === 'en' || lang === 'hi') && (
-                <p className="script-devanagari" style={{ fontSize: '18px', lineHeight: 1.9, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
+                <p className="script-devanagari" style={{ lineHeight: 1.9, color: 'var(--color-text-primary)', margin: 0, whiteSpace: 'pre-line' }}>
                   {entry.shloka.sanskrit}
                 </p>
               )}
-              {/* Sanskrit reference for Telugu/Tamil; IAST for English */}
+              {/* Sanskrit reference for Telugu/Tamil; IAST for English — subordinate to the
+                  primary verse above, so deliberately kept smaller than the script class's own size. */}
               {(lang === 'te' || lang === 'ta') && (
-                <p className="script-devanagari" style={{ fontSize: '13px', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.7 }}>
+                <p className="script-devanagari" style={{ fontSize: 'var(--text-meta)', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.7 }}>
                   {entry.shloka.sanskrit}
                 </p>
               )}
               {lang === 'en' && (
-                <p className="script-iast" style={{ fontSize: '13px', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.8 }}>
+                <p className="script-iast" style={{ fontSize: 'var(--text-meta)', lineHeight: 1.8, color: 'var(--color-text-secondary)', margin: '8px 0 0', whiteSpace: 'pre-line', opacity: 0.8 }}>
                   {entry.shloka.iast}
                 </p>
               )}
             </div>
 
             <div>
-              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 6px' }}>
+              <p style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', margin: '0 0 6px' }}>
                 {ui.meaning}
               </p>
-              <p className={nameClass} style={{ fontSize: '14px', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-primary)', margin: 0 }}>
+              <p className={nameClass} style={{ fontSize: 'var(--text-body-sm)', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-primary)', margin: 0 }}>
                 {localize(entry.shloka, 'meaning', lang)}
               </p>
             </div>
 
             <div style={{ background: 'rgba(184,134,11,0.06)', border: '1px solid rgba(184,134,11,0.18)', borderRadius: '8px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold-text)', margin: '0 0 6px' }}>
+              <p style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold-text)', margin: '0 0 6px' }}>
                 {ui.reflection}
               </p>
-              <p className={nameClass} style={{ fontSize: '13px', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-secondary)', margin: 0, fontStyle: lang === 'en' ? 'italic' : 'normal' }}>
+              <p className={nameClass} style={{ fontSize: 'var(--text-meta)', lineHeight: lang === 'ta' ? 1.9 : lang === 'te' ? 1.8 : 1.7, color: 'var(--color-text-secondary)', margin: 0, fontStyle: lang === 'en' ? 'italic' : 'normal' }}>
                 {localize(entry.shloka, 'reflection', lang)}
               </p>
             </div>
@@ -134,17 +138,17 @@ export default function DailyDevotional({ entry }: { entry: Entry }) {
         {open === 'story' && (
           <div id="daily-story-panel" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <h3 className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: lang === 'en' ? 700 : 500, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
+              <h3 className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'var(--text-h2)', fontWeight: lang === 'en' ? 700 : 500, color: 'var(--color-text-primary)', margin: '0 0 6px', lineHeight: 1.25 }}>
                 {localize(entry.story, 'title', lang)}
               </h3>
               {entry.story.source && (
-                <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-saffron-text)', background: 'rgba(212,98,42,0.08)', padding: '2px 8px', borderRadius: '4px' }}>
+                <span style={{ fontSize: 'var(--text-badge)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-saffron-text)', background: 'rgba(212,98,42,0.08)', padding: '2px 8px', borderRadius: '4px' }}>
                   {entry.story.source}
                 </span>
               )}
             </div>
 
-            <div className={nameClass} style={{ fontSize: '16px', lineHeight: lang === 'ta' ? 1.95 : lang === 'te' ? 1.85 : 1.8, color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div className={nameClass} style={{ fontSize: 'var(--text-body)', lineHeight: lang === 'ta' ? 1.95 : lang === 'te' ? 1.85 : 1.8, color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {localize(entry.story, 'body', lang)
                 .split('\n\n')
                 .map((para, i) => <p key={i} style={{ margin: 0 }}>{para}</p>)}

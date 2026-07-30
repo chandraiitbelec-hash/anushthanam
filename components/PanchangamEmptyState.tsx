@@ -58,7 +58,7 @@ export default function PanchangamEmptyState({ nextDate }: Props) {
       </svg>
 
       <p style={{
-        fontSize: '17px',
+        fontSize: 'var(--text-card-title)',
         fontWeight: 600,
         fontFamily: 'var(--font-display)',
         color: 'var(--color-text-primary)',
@@ -68,7 +68,7 @@ export default function PanchangamEmptyState({ nextDate }: Props) {
       </p>
 
       <p style={{
-        fontSize: '14px',
+        fontSize: 'var(--text-body-sm)',
         color: 'var(--color-text-secondary)',
         margin: '0 0 20px',
         maxWidth: '420px',
@@ -80,7 +80,7 @@ export default function PanchangamEmptyState({ nextDate }: Props) {
 
       {nextDate && (
         <p style={{
-          fontSize: '13px',
+          fontSize: 'var(--text-meta)',
           fontWeight: 500,
           color: 'var(--color-gold-text)',
           margin: '0 0 24px',
@@ -97,7 +97,7 @@ export default function PanchangamEmptyState({ nextDate }: Props) {
           background: 'var(--color-gold)',
           color: '#fff',
           borderRadius: '8px',
-          fontSize: '14px',
+          fontSize: 'var(--text-button)',
           fontWeight: 500,
           textDecoration: 'none',
         }}

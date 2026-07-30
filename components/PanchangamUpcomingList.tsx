@@ -25,19 +25,19 @@ export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[]
             alignItems: 'center',
           }}>
             <div style={{ width: '80px', flexShrink: 0 }}>
-              <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: 0 }}>
                 {new Date(day.date).toLocaleDateString(locale, { weekday: 'short' })}
               </p>
-              <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-card-title)', fontWeight: 600, color: 'var(--color-text-primary)', margin: 0 }}>
                 {new Date(day.date).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}
               </p>
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: '14px', color: 'var(--color-text-primary)', margin: '0 0 2px' }}>
+              <p style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-primary)', margin: '0 0 2px' }}>
                 {day.paksha} {localize(day, 'tithi', lang)} · {localize(day, 'nakshatra', lang)}
               </p>
               {localize(day, 'special_event', lang) && (
-                <p style={{ fontSize: '13px', color: 'var(--color-saffron-text)', fontWeight: 500, margin: 0 }}>
+                <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-saffron-text)', fontWeight: 500, margin: 0 }}>
                   {localize(day, 'special_event', lang)}
                 </p>
               )}
@@ -46,7 +46,7 @@ export default function PanchangamUpcomingList({ days }: { days: PanchangamDay[]
         ))}
       </div>
       {days.length === 30 && (
-        <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '12px', textAlign: 'center' }}>
+        <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', marginTop: '12px', textAlign: 'center' }}>
           {ui.showingDays(30)}
         </p>
       )}

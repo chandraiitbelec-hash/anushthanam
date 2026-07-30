@@ -90,7 +90,7 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
           borderRadius: '8px',
           background: 'var(--color-surface)',
           color: 'var(--color-text-primary)',
-          fontSize: '14px',
+          fontSize: 'var(--text-body-sm)',
           boxSizing: 'border-box',
         }}
       />
@@ -123,10 +123,10 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
               }}
             >
               <span style={{ fontSize: '16px', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
-              <span style={{ flex: 1, fontSize: '14px', fontWeight: 500 }}>
+              <span style={{ flex: 1, fontSize: 'var(--text-body-sm)', fontWeight: 500 }}>
                 {r[`name_${lang}` as keyof SearchRecord] as string || r.name_en}
               </span>
-              <span style={{ fontSize: '11px', color: 'var(--color-text-secondary)' }}>
+              <span style={{ fontSize: 'var(--text-badge)', color: 'var(--color-text-secondary)' }}>
                 {TYPE_LABEL[r.type] ?? r.type}
               </span>
             </Link>

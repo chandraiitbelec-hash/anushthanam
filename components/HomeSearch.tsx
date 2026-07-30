@@ -29,7 +29,7 @@ export default function HomeSearch({ popular }: { popular: PopularGod[] }) {
                 href={`/gods/${g.slug}`}
                 className={nameClass}
                 style={{
-                  fontSize: '13px',
+                  fontSize: 'var(--text-nav)',
                   padding: '6px 14px',
                   borderRadius: '20px',
                   border: '1px solid var(--color-border)',
