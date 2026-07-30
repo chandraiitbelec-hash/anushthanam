@@ -164,7 +164,7 @@ export default function Nav() {
           <nav className="nav-desktop" style={{ gap: '24px', flex: 1, alignItems: 'center' }}>
             {PRIMARY_LINKS.map(link => (
               <Link key={link.href} href={link.href} style={{
-                fontSize: '14px',
+                fontSize: 'var(--text-nav)',
                 color: 'var(--color-text-secondary)',
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
@@ -183,7 +183,7 @@ export default function Nav() {
                 aria-expanded={moreOpen}
                 aria-haspopup="true"
                 style={{
-                  fontSize: '14px',
+                  fontSize: 'var(--text-nav)',
                   color: 'var(--color-text-secondary)',
                   background: 'none',
                   border: 'none',
@@ -220,7 +220,7 @@ export default function Nav() {
                       style={{
                         display: 'block',
                         padding: '10px 16px',
-                        fontSize: '13px',
+                        fontSize: 'var(--text-nav)',
                         color: 'var(--color-text-primary)',
                         textDecoration: 'none',
                         whiteSpace: 'nowrap',
@@ -285,7 +285,7 @@ export default function Nav() {
                 aria-expanded={langOpen}
                 aria-haspopup="true"
                 style={{
-                  fontSize: '13px',
+                  fontSize: 'var(--text-meta)',
                   color: 'var(--color-text-secondary)',
                   background: 'none',
                   border: '1px solid var(--color-border)',
@@ -315,7 +315,7 @@ export default function Nav() {
                       style={{
                         display: 'block', width: '100%', textAlign: 'left',
                         padding: '10px 16px',
-                        fontSize: '13px',
+                        fontSize: 'var(--text-nav)',
                         color: l === lang ? 'var(--color-gold-text)' : 'var(--color-text-primary)',
                         background: l === lang ? 'rgba(184,134,11,0.08)' : 'none',
                         border: 'none',
@@ -340,7 +340,7 @@ export default function Nav() {
                   aria-label={t === 'light' ? UI[lang].themeLight : t === 'dark' ? UI[lang].themeDark : UI[lang].themeSystem}
                   title={t === 'light' ? UI[lang].themeLight : t === 'dark' ? UI[lang].themeDark : UI[lang].themeSystem}
                   style={{
-                    fontSize: '14px',
+                    fontSize: 'var(--text-button)',
                     padding: '5px 8px',
                     background: theme === t ? 'var(--color-gold)' : 'none',
                     color: theme === t ? '#fff' : 'var(--color-text-secondary)',
@@ -398,7 +398,7 @@ export default function Nav() {
               <Link key={link.href} href={link.href}
                 onClick={() => setMobileOpen(false)}
                 style={{
-                  fontSize: '16px',
+                  fontSize: 'var(--text-body)',
                   color: 'var(--color-text-primary)',
                   textDecoration: 'none',
                   padding: '14px 0',
@@ -412,7 +412,7 @@ export default function Nav() {
             {/* Language picker in drawer */}
             <div style={{ paddingTop: '20px' }}>
               <p style={{
-                fontSize: '11px', fontWeight: 600, textTransform: 'uppercase',
+                fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase',
                 letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
                 margin: '0 0 10px',
               }}>
@@ -425,7 +425,7 @@ export default function Nav() {
                     onClick={() => { setLang(l as Language); setMobileOpen(false); }}
                     style={{
                       padding: '7px 18px',
-                      fontSize: '14px',
+                      fontSize: 'var(--text-button)',
                       fontWeight: l === lang ? 600 : 400,
                       color: l === lang ? '#fff' : 'var(--color-text-secondary)',
                       background: l === lang ? 'var(--color-gold)' : 'transparent',
@@ -443,7 +443,7 @@ export default function Nav() {
             {/* Theme picker in drawer */}
             <div style={{ paddingTop: '20px' }}>
               <p style={{
-                fontSize: '11px', fontWeight: 600, textTransform: 'uppercase',
+                fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase',
                 letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
                 margin: '0 0 10px',
               }}>
@@ -459,7 +459,7 @@ export default function Nav() {
                       aria-pressed={theme === t}
                       style={{
                         padding: '7px 18px',
-                        fontSize: '14px',
+                        fontSize: 'var(--text-button)',
                         fontWeight: theme === t ? 600 : 400,
                         color: theme === t ? '#fff' : 'var(--color-text-secondary)',
                         background: theme === t ? 'var(--color-gold)' : 'transparent',

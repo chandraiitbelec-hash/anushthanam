@@ -24,12 +24,12 @@ export default function FontSizeToggle() {
         border: '1px solid var(--color-border)',
         background: 'transparent',
         color: 'var(--color-text-secondary)',
-        fontSize: '13px',
+        fontSize: 'var(--text-button)',
         fontWeight: 500,
         cursor: 'pointer',
       }}
     >
-      <span style={{ fontSize: '10px' }}>Aa</span>
+      <span style={{ fontSize: 'var(--text-label)' }}>Aa</span>
       {SCALE_LABEL[scale] ?? 'A'}
     </button>
   );

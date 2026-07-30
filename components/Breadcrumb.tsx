@@ -14,7 +14,7 @@ export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb" style={{
       padding: '12px 0',
-      fontSize: '13px',
+      fontSize: 'var(--text-nav)',
       color: 'var(--color-text-secondary)',
     }}>
       <div className="wide-width" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>

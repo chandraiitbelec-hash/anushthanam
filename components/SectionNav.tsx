@@ -94,7 +94,7 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
                   background: isActive ? 'var(--color-gold)' : 'transparent',
                   border: `1px solid ${isActive ? 'var(--color-gold)' : 'var(--color-border)'}`,
                   borderRadius: '20px',
-                  fontSize: '13px',
+                  fontSize: 'var(--text-nav)',
                   fontWeight: isActive ? 600 : 400,
                   color: isActive ? '#fff' : 'var(--color-text-secondary)',
                   cursor: 'pointer',

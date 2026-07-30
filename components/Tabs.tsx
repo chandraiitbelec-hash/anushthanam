@@ -110,7 +110,7 @@ export function TabList({
                 background: 'transparent',
                 border: 'none',
                 borderBottom: `2px solid ${isActive ? 'var(--color-gold)' : 'transparent'}`,
-                fontSize: '13px',
+                fontSize: 'var(--text-nav)',
                 fontWeight: isActive ? 600 : 400,
                 color: isActive ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
                 cursor: 'pointer',
