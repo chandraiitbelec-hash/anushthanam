@@ -89,6 +89,50 @@ function rowIdentifier(row, headers, { primary, secondary }) {
   return `${primaryVal}#${secondaryVal}`;
 }
 
+// shloka_stanzas.meaning is segmented by the parent shloka's `type`: name-list
+// entries (ashtothram/sahasranama, 108/1000 individual names) are a separate
+// authoring decision from per-stanza meanings on verse types, so blending them
+// into one percentage is misleading either way you read it.
+const NAME_LIST_SHLOKA_TYPES = new Set(['ashtothram', 'sahasranama']);
+
+function reportGroupForRows(tab, base, siblings, rows, headers, identifier, label) {
+  const suffix = label ? ` [${label}]` : '';
+  const total = rows.length;
+  if (total === 0) {
+    console.log(`  ${tab}.${base}${suffix}: 0 rows to check`);
+    return;
+  }
+
+  const fillCounts = {};
+  const missingBySlug = {};
+  for (const lang of siblings) {
+    const colIdx = headers.indexOf(`${base}_${lang}`);
+    let filled = 0;
+    const missing = [];
+    for (const row of rows) {
+      const value = (row[colIdx] || '').trim();
+      if (value) {
+        filled++;
+      } else {
+        missing.push(rowIdentifier(row, headers, identifier));
+      }
+    }
+    fillCounts[lang] = filled;
+    missingBySlug[lang] = missing;
+  }
+
+  const summary = siblings.map(lang => `${lang} ${fillCounts[lang]}/${total}`).join(', ');
+  console.log(`  ${tab}.${base}${suffix}: ${summary}`);
+
+  if (VERBOSE) {
+    for (const lang of siblings) {
+      if (missingBySlug[lang].length > 0) {
+        console.log(`    missing ${lang}: ${missingBySlug[lang].join(', ')}`);
+      }
+    }
+  }
+}
+
 async function reportTab(tab) {
   const { headers, rows } = await getTabWithHeadersReadonly(tab);
   if (headers.length === 0) {
@@ -111,40 +155,44 @@ async function reportTab(tab) {
 
   const identifier = pickIdentifier(headers);
 
+  let shlokaTypeBySlug = null;
+  if (tab === 'shloka_stanzas' && groups.some(g => g.base === 'meaning')) {
+    const { headers: shlokaHeaders, rows: shlokaRows } = await getTabWithHeadersReadonly('shlokas');
+    const slugIdx = shlokaHeaders.indexOf('slug');
+    const typeIdx = shlokaHeaders.indexOf('type');
+    shlokaTypeBySlug = new Map();
+    if (slugIdx !== -1 && typeIdx !== -1) {
+      for (const row of shlokaRows) {
+        shlokaTypeBySlug.set(row[slugIdx], row[typeIdx]);
+      }
+    }
+  }
+
   for (const { base, siblings } of groups) {
+    if (tab === 'shloka_stanzas' && base === 'meaning' && shlokaTypeBySlug) {
+      const shlokaSlugIdx = headers.indexOf('shloka_slug');
+      const nameListRows = [];
+      const otherRows = [];
+      for (const row of publishedRows) {
+        const parentSlug = shlokaSlugIdx !== -1 ? row[shlokaSlugIdx] : undefined;
+        const type = shlokaTypeBySlug.get(parentSlug);
+        if (NAME_LIST_SHLOKA_TYPES.has(type)) {
+          nameListRows.push(row);
+        } else {
+          otherRows.push(row);
+        }
+      }
+      reportGroupForRows(tab, base, siblings, nameListRows, headers, identifier, 'name-list: ashtothram/sahasranama');
+      reportGroupForRows(tab, base, siblings, otherRows, headers, identifier, 'verse types: shloka/stotra/etc');
+      continue;
+    }
+
     if (total === 0) {
       console.log(`  ${tab}.${base}: 0 rows to check`);
       continue;
     }
 
-    const fillCounts = {};
-    const missingBySlug = {};
-    for (const lang of siblings) {
-      const colIdx = headers.indexOf(`${base}_${lang}`);
-      let filled = 0;
-      const missing = [];
-      for (const row of publishedRows) {
-        const value = (row[colIdx] || '').trim();
-        if (value) {
-          filled++;
-        } else {
-          missing.push(rowIdentifier(row, headers, identifier));
-        }
-      }
-      fillCounts[lang] = filled;
-      missingBySlug[lang] = missing;
-    }
-
-    const summary = siblings.map(lang => `${lang} ${fillCounts[lang]}/${total}`).join(', ');
-    console.log(`  ${tab}.${base}: ${summary}`);
-
-    if (VERBOSE) {
-      for (const lang of siblings) {
-        if (missingBySlug[lang].length > 0) {
-          console.log(`    missing ${lang}: ${missingBySlug[lang].join(', ')}`);
-        }
-      }
-    }
+    reportGroupForRows(tab, base, siblings, publishedRows, headers, identifier);
   }
 }
 
