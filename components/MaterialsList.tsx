@@ -43,13 +43,13 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
       {allCount > 0 && (
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-            <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+            <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
               {doneCount}/{allCount}
             </span>
             {doneCount > 0 && (
               <button onClick={() => setChecked(new Set())} style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                fontSize: '12px', color: 'var(--color-text-secondary)',
+                fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)',
                 padding: 0, textDecoration: 'underline',
               }}>
                 {ui.reset}
@@ -89,7 +89,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                 background: done ? 'var(--color-bg)' : 'var(--color-surface)',
                 border: `1px solid ${done ? 'var(--color-border)' : 'transparent'}`,
                 borderRadius: '8px',
-                fontSize: '14px',
+                fontSize: 'var(--text-body-sm)',
                 cursor: 'pointer',
                 transition: 'background 0.15s, opacity 0.15s',
                 opacity: done ? 0.55 : 1,
@@ -113,7 +113,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                   {name(item)}
                 </span>
                 {quantity(item) && (
-                  <span className={nameClass} style={{ color: 'var(--color-text-secondary)', fontSize: '12px', flexShrink: 0 }}>
+                  <span className={nameClass} style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-meta)', flexShrink: 0 }}>
                     {quantity(item)}
                   </span>
                 )}
@@ -140,7 +140,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                 background: done ? 'var(--color-bg)' : 'transparent',
                 border: '1px dashed var(--color-border)',
                 borderRadius: '8px',
-                fontSize: '14px',
+                fontSize: 'var(--text-body-sm)',
                 cursor: 'pointer',
                 opacity: done ? 0.45 : 0.8,
                 transition: 'opacity 0.15s',
@@ -163,7 +163,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
                   {name(item)}
                 </span>
                 <span style={{
-                  fontSize: '11px', padding: '2px 6px', borderRadius: '4px',
+                  fontSize: 'var(--text-badge)', padding: '2px 6px', borderRadius: '4px',
                   background: 'var(--color-border)', color: 'var(--color-text-secondary)', flexShrink: 0,
                 }}>
                   {ui.optional}
@@ -175,7 +175,7 @@ export default function MaterialsList({ items }: { items: MaterialItem[] }) {
       </ul>
 
       {allDone && (
-        <p style={{ marginTop: '12px', fontSize: '13px', color: 'var(--color-green, #3d6b4f)', fontWeight: 500 }}>
+        <p style={{ marginTop: '12px', fontSize: 'var(--text-meta)', color: 'var(--color-green, #3d6b4f)', fontWeight: 500 }}>
           {ui.allItemsGathered}
         </p>
       )}

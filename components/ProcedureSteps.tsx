@@ -39,7 +39,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '13px',
+            fontSize: 'var(--text-badge)',
             fontWeight: 600,
             flexShrink: 0,
           }}>
@@ -49,7 +49,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
           <div style={{ flex: 1, minWidth: 0 }}>
             <p className={nameClass} style={{
               fontWeight: 500,
-              fontSize: '15px',
+              fontSize: 'var(--text-card-title)',
               margin: '0 0 6px',
               color: 'var(--color-text-primary)',
             }}>
@@ -58,7 +58,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
 
             {instruction(step) && (
               <p className={nameClass} style={{
-                fontSize: '14px',
+                fontSize: 'var(--text-body-sm)',
                 color: 'var(--color-text-secondary)',
                 margin: '0',
                 lineHeight: 1.7,
@@ -73,7 +73,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
                   onClick={onViewPasurams}
                   style={{
                     marginTop: '8px',
-                    fontSize: '12px',
+                    fontSize: 'var(--text-label)',
                     color: 'var(--color-gold-text)',
                     background: 'none',
                     border: 'none',
@@ -90,7 +90,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
                   href={`/shlokas/${step.recite_shloka_slug}`}
                   style={{
                     marginTop: '8px',
-                    fontSize: '12px',
+                    fontSize: 'var(--text-label)',
                     color: 'var(--color-gold-text)',
                     textDecoration: 'none',
                     fontWeight: 500,
@@ -105,7 +105,7 @@ export default function ProcedureSteps({ steps, hasPasurams, onViewPasurams }: {
 
             {(step[`notes_${lang}` as keyof ProcedureStep] as string || step.notes_en) && (
               <p className={nameClass} style={{
-                fontSize: '12px',
+                fontSize: 'var(--text-label)',
                 color: 'var(--color-text-secondary)',
                 margin: '8px 0 0',
                 fontStyle: 'italic',

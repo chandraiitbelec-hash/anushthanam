@@ -145,7 +145,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
       border: `1px solid ${active ? borderColor : 'var(--color-border)'}`,
       background: active ? bg : 'transparent',
       color: active ? textColor : 'var(--color-text-secondary)',
-      fontSize: '13px',
+      fontSize: 'var(--text-button)',
       fontWeight: 500,
       cursor: 'pointer',
     } as React.CSSProperties;
@@ -220,13 +220,16 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
                       {splitStanzaLines(primaryText).map((line, li) => <div key={li}>{line}</div>)}
                     </div>
                   )}
+                  {/* fontSize intentionally omitted — SCRIPT_CLASS[extraScript]'s own
+                      calc(20px * --content-font-scale) must govern size so the font-size
+                      toggle works here; a previous inline 14px override clobbered it. */}
                   {showExtra && extraText && (
-                    <div className={SCRIPT_CLASS[extraScript]} lang={SCRIPT_LANG[extraScript]} style={{ opacity: 0.75, fontSize: '14px' }}>
+                    <div className={SCRIPT_CLASS[extraScript]} lang={SCRIPT_LANG[extraScript]} style={{ opacity: 0.75 }}>
                       {splitStanzaLines(extraText).map((line, li) => <div key={li}>{line}</div>)}
                     </div>
                   )}
                   {showMeaning && meaningText && (
-                    <div style={{ fontSize: 'calc(13px * var(--content-font-scale, 1))', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+                    <div style={{ fontSize: 'calc(var(--text-meta) * var(--content-font-scale, 1))', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
                       {meaningText}
                     </div>
                   )}
@@ -234,7 +237,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 {isMilestone && (
                   <span style={{
-                    fontSize: '12px', fontWeight: 600, color: 'var(--color-gold-text)', flexShrink: 0,
+                    fontSize: 'var(--text-badge)', fontWeight: 600, color: 'var(--color-gold-text)', flexShrink: 0,
                   }}>
                     ({stanza.stanza_number})
                   </span>
@@ -291,7 +294,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 {stanza.stanza_label && (
                   <p style={{
-                    fontSize: '12px', fontWeight: 500, color: 'var(--color-gold-text)',
+                    fontSize: 'var(--text-label)', fontWeight: 500, color: 'var(--color-gold-text)',
                     margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em',
                   }}>
                     {stanza.stanza_label}
@@ -316,7 +319,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
                       marginTop: '8px',
                       paddingTop: '8px',
                       borderTop: '1px solid var(--color-border)',
-                      fontSize: 'calc(14px * var(--content-font-scale, 1))',
+                      fontSize: 'calc(var(--text-body-sm) * var(--content-font-scale, 1))',
                       color: 'var(--color-text-secondary)',
                       lineHeight: 1.7,
                     }}>
@@ -327,7 +330,7 @@ export default function ShlokaViewer({ stanzas, type }: { stanzas: ShlokaStanza[
 
                 {stanza.notes_en && (
                   <p style={{
-                    fontSize: '12px', color: 'var(--color-text-secondary)',
+                    fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)',
                     margin: '8px 0 0', fontStyle: 'italic',
                   }}>
                     {stanza.notes_en}

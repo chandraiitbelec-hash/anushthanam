@@ -42,7 +42,7 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
       {/* Eyebrow label */}
       {stanza.stanza_label && (
         <p style={{
-          fontSize: '10px', fontWeight: 600, color: 'var(--color-gold-text)',
+          fontSize: 'var(--text-label)', fontWeight: 600, color: 'var(--color-gold-text)',
           margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.07em',
         }}>
           {stanza.stanza_label}
@@ -56,8 +56,10 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
         marginBottom: meaningText ? '14px' : 0,
       }}>
         {stanza.script_tamil && (
+          // fontSize intentionally omitted — .script-tamil's own calc(20px * --content-font-scale)
+          // must govern size so the font-size toggle works on this verse text; a previous inline
+          // 14px override here silently clobbered it.
           <div className="script-tamil" style={{
-            fontSize: '14px',
             lineHeight: 1.75,
             marginBottom: translitText ? '10px' : 0,
           }}>
@@ -68,8 +70,11 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
         )}
 
         {translitText && (
+          // This is a subordinate transliteration gloss under the primary verse, so it's
+          // deliberately kept smaller than translitClass's own script-scale size (unlike the
+          // primary verse fix above, this override is intentional, not a toggle-breaking bug).
           <div className={translitClass} style={{
-            fontSize: '12px',
+            fontSize: 'var(--text-meta)',
             lineHeight: 1.65,
             color: 'var(--color-text-secondary)',
           }}>
@@ -83,7 +88,7 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
       {/* Meaning — visually separate, prose-style */}
       {meaningText && (
         <p style={{
-          fontSize: '13px',
+          fontSize: 'var(--text-meta)',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.75,
           margin: 0,
@@ -96,7 +101,7 @@ function StanzaCard({ stanza, lang }: { stanza: ShlokaStanza; lang: string }) {
 
       {stanza.notes_en && (
         <p style={{
-          fontSize: '11px', color: 'var(--color-text-secondary)',
+          fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)',
           margin: '10px 0 0', fontStyle: 'italic', paddingLeft: '17px',
         }}>
           {stanza.notes_en}
@@ -136,7 +141,7 @@ export default function PasuramViewer({
     <div>
       {todayDay && (
         <p style={{
-          fontSize: '13px',
+          fontSize: 'var(--text-meta)',
           color: 'var(--color-saffron-text)',
           fontWeight: 500,
           margin: '0 0 16px',
@@ -197,7 +202,7 @@ export default function PasuramViewer({
                 {s.stanza_number}
               </div>
               <div style={{
-                fontSize: '9px',
+                fontSize: 'var(--text-label)',
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 opacity: 0.85,
               }}>
