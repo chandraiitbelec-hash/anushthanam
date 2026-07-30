@@ -57,12 +57,12 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: '11px', color: 'var(--color-text-secondary)', margin: '0 0 2px', letterSpacing: '0.04em' }}>
+            <p style={{ fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)', margin: '0 0 2px', letterSpacing: '0.04em' }}>
               {ui.gitaChapterWord} {ch.number}
             </p>
             <p style={{
               fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-              fontSize: lang === 'en' ? '17px' : '15px',
+              fontSize: 'var(--text-card-title)',
               fontWeight: 600,
               color: 'var(--color-text-primary)',
               margin: '0 0 2px',
@@ -71,11 +71,11 @@ export default function ChapterGrid({ chapters }: { chapters: GitaChapter[] }) {
               {chapterName(ch)}
             </p>
             {lang !== 'en' && (
-              <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: '0 0 4px', lineHeight: 1.3 }}>
+              <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 4px', lineHeight: 1.3 }}>
                 {ch.name_en}
               </p>
             )}
-            <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: 0 }}>
+            <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: 0 }}>
               {ch.verse_count} {ui.gitaVerseWord}
             </p>
           </div>

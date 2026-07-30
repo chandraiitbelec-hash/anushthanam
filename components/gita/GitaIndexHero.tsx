@@ -15,7 +15,7 @@ export default function GitaIndexHero({ chapterCount, verseCount }: Props) {
     <div style={{ marginBottom: '32px' }}>
       <h1 className={nameClass} style={{
         fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-        fontSize: 'clamp(28px, 5vw, 42px)',
+        fontSize: 'var(--text-h1-page)',
         fontWeight: 700,
         color: 'var(--color-text-primary)',
         margin: '0 0 8px',
@@ -24,7 +24,7 @@ export default function GitaIndexHero({ chapterCount, verseCount }: Props) {
         {ui.gitaTitle}
       </h1>
       <p style={{
-        fontSize: '15px',
+        fontSize: 'var(--text-body)',
         color: 'var(--color-text-secondary)',
         margin: '0 0 6px',
         lineHeight: 1.6,

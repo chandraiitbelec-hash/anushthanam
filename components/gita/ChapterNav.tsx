@@ -28,7 +28,7 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
     }}>
       {prev ? (
         <Link href={`/bhagavad-gita/${prev.number}`} style={{
-          fontSize: '14px',
+          fontSize: 'var(--text-nav)',
           color: 'var(--color-text-secondary)',
           textDecoration: 'none',
           display: 'flex',
@@ -38,14 +38,14 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
-          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← {ui.chapterLabel(prev.number)}</span>
-          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: '17px', fontWeight: 600 }}>{chapterName(prev, lang)}</span>
+          <span style={{ fontSize: 'var(--text-label)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>← {ui.chapterLabel(prev.number)}</span>
+          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'var(--text-card-title)', fontWeight: 600 }}>{chapterName(prev, lang)}</span>
         </Link>
       ) : <div />}
 
       {next ? (
         <Link href={`/bhagavad-gita/${next.number}`} style={{
-          fontSize: '14px',
+          fontSize: 'var(--text-nav)',
           color: 'var(--color-text-secondary)',
           textDecoration: 'none',
           display: 'flex',
@@ -56,8 +56,8 @@ export default function ChapterNav({ prev, next }: { prev: GitaChapter | null; n
           onMouseOver={e => (e.currentTarget.style.color = 'var(--color-gold-text)')}
           onMouseOut={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
-          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{ui.chapterLabel(next.number)} →</span>
-          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: '17px', fontWeight: 600 }}>{chapterName(next, lang)}</span>
+          <span style={{ fontSize: 'var(--text-label)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{ui.chapterLabel(next.number)} →</span>
+          <span className={nameClass} style={{ fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined, fontSize: 'var(--text-card-title)', fontWeight: 600 }}>{chapterName(next, lang)}</span>
         </Link>
       ) : <div />}
     </div>

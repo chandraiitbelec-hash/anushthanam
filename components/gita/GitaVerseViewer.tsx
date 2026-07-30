@@ -37,7 +37,7 @@ function pill(active: boolean): React.CSSProperties {
     border: `1px solid ${active ? 'var(--color-gold)' : 'var(--color-border)'}`,
     background: active ? 'rgba(184,134,11,0.1)' : 'transparent',
     color: active ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
-    fontSize: '13px',
+    fontSize: 'var(--text-button)',
     fontWeight: 500,
     cursor: 'pointer',
   };
@@ -49,7 +49,7 @@ const selectStyle: React.CSSProperties = {
   border: '1px solid var(--color-border)',
   background: 'var(--color-surface)',
   color: 'var(--color-text-primary)',
-  fontSize: '13px',
+  fontSize: 'var(--text-button)',
   fontWeight: 500,
   cursor: 'pointer',
   flexShrink: 0,
@@ -165,7 +165,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
             >
               {/* Verse number */}
               <p style={{
-                fontSize: '11px',
+                fontSize: 'var(--text-label)',
                 fontWeight: 600,
                 color: 'var(--color-gold-text)',
                 margin: '0 0 12px',
@@ -209,7 +209,7 @@ export default function GitaVerseViewer({ verses, chapters, currentChapter }: Pr
                     marginTop: '4px',
                     paddingTop: '10px',
                     borderTop: '1px solid var(--color-border)',
-                    fontSize: 'calc(14px * var(--content-font-scale, 1))',
+                    fontSize: 'calc(var(--text-body-sm) * var(--content-font-scale, 1))',
                     color: 'var(--color-text-secondary)',
                     lineHeight: 1.75,
                   }} className={scriptClass(lang)}>
