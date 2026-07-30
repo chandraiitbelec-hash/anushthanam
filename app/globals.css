@@ -67,6 +67,27 @@ html {
   /* Elevation for popovers/dropdowns — remapped stronger in dark mode below, where
      a faint black shadow would be invisible against the near-black background. */
   --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Type scale — role-based tokens. Replaces ad-hoc inline px values across
+     components/ and app/. Sizes are theme-independent (light/dark share this scale). */
+  --text-h1: clamp(2rem, 5vw, 3.25rem);           /* 32–52px — entity profile hero (god/festival/puja/vratham) */
+  --text-h1-page: clamp(1.75rem, 4.25vw, 2.625rem); /* 28–42px — list pages, shloka/story/gita hero, error/404/search/panchangam */
+  --text-h2: clamp(1.25rem, 3vw, 1.75rem);        /* 20–28px — major section headings */
+  --text-h3: 0.9375rem;                            /* 15px — minor/sub headings */
+  --text-card-title: 1rem;                         /* 16px */
+  --text-body: 1rem;                               /* 16px — long-form prose */
+  --text-body-sm: 0.875rem;                        /* 14px — compact rows/instructions */
+  --text-meta: 0.8125rem;                          /* 13px — dates, counts, notes, subtitles */
+  --text-label: 0.75rem;                           /* 12px — eyebrows */
+  --text-badge: 0.75rem;                           /* 12px — pills/tags */
+  --text-nav: 0.875rem;                            /* 14px — nav links, tabs, breadcrumb */
+  --text-button: 0.875rem;                         /* 14px */
+  --text-footer: 0.8125rem;                        /* 13px */
+
+  /* Indic content-script sizes, scaled by --content-font-scale (set by FontSizeToggle) */
+  --text-script-desktop: 20px;
+  --text-script-mobile: 17px;
+  --text-script-iast: 19px;
 }
 
 /* Dark mode — the whole UI styles from these CSS variables (inline styles reference
@@ -169,7 +190,7 @@ textarea:focus-visible,
   background: var(--color-gold);
   color: #fff;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: var(--text-body-sm);
   text-decoration: none;
   transition: top 0.15s;
 }
@@ -191,27 +212,27 @@ body {
 .script-devanagari {
   font-family: var(--font-devanagari);
   line-height: 1.8;
-  font-size: calc(20px * var(--content-font-scale, 1));
+  font-size: calc(var(--text-script-desktop) * var(--content-font-scale, 1));
 }
 
 .script-telugu {
   font-family: var(--font-telugu);
   line-height: 2.15;
-  font-size: calc(20px * var(--content-font-scale, 1));
+  font-size: calc(var(--text-script-desktop) * var(--content-font-scale, 1));
   letter-spacing: 0.03em;
 }
 
 .script-tamil {
   font-family: var(--font-tamil);
   line-height: 1.9;
-  font-size: calc(20px * var(--content-font-scale, 1));
+  font-size: calc(var(--text-script-desktop) * var(--content-font-scale, 1));
 }
 
 .script-iast {
   font-family: var(--font-body);
   line-height: 1.6;
   font-style: italic;
-  font-size: calc(19px * var(--content-font-scale, 1));
+  font-size: calc(var(--text-script-iast) * var(--content-font-scale, 1));
 }
 
 /* Traditional serif Devanagari for recited Sanskrit verse text (Bhagavad Gita) only —
@@ -219,7 +240,7 @@ body {
 .script-devanagari-serif {
   font-family: var(--font-devanagari-serif);
   line-height: 1.8;
-  font-size: calc(20px * var(--content-font-scale, 1));
+  font-size: calc(var(--text-script-desktop) * var(--content-font-scale, 1));
 }
 
 .font-display {
@@ -286,15 +307,15 @@ body {
 
   /* Chip font a touch smaller */
   .section-nav-bar button {
-    font-size: 12px !important;
+    font-size: var(--text-badge) !important;
     padding: 4px 12px !important;
   }
 
   /* Script sizes: Telugu/Tamil line-height is very tall — tighten on mobile */
-  .script-telugu { font-size: calc(17px * var(--content-font-scale, 1)); }
-  .script-tamil  { font-size: calc(17px * var(--content-font-scale, 1)); }
-  .script-devanagari { font-size: calc(17px * var(--content-font-scale, 1)); }
-  .script-devanagari-serif { font-size: calc(17px * var(--content-font-scale, 1)); }
+  .script-telugu { font-size: calc(var(--text-script-mobile) * var(--content-font-scale, 1)); }
+  .script-tamil  { font-size: calc(var(--text-script-mobile) * var(--content-font-scale, 1)); }
+  .script-devanagari { font-size: calc(var(--text-script-mobile) * var(--content-font-scale, 1)); }
+  .script-devanagari-serif { font-size: calc(var(--text-script-mobile) * var(--content-font-scale, 1)); }
 }
 
 /* ─── Entity grid (list pages: gods, festivals, pujas, shlokas, vrathams) ── */
