@@ -35,17 +35,15 @@
  *   item_name_hi | quantity_en | is_optional | substitution_note_en
  */
 
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter as sharedColLetter, getTabWithHeaders } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
 const SLUG = process.argv[2];
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 
 if (!SLUG) {
   console.error('Usage: node scripts/upload-puja-content.mjs <slug> [--write]');
@@ -65,35 +63,26 @@ const { puja_updates, procedure_steps: STEPS, material_items: MATERIALS } = cont
 
 // ─── Sheet connection ─────────────────────────────────────────────────────────
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
-
-async function getTab(tab, range) {
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID, range: `${tab}!${range}`,
-  });
-  return res.data.values || [];
-}
+const sheets = await getSheetsClient();
+const SHEET_ID = SPREADSHEET_ID;
 
 // ─── Read current state ───────────────────────────────────────────────────────
 
-const [pujasRows, stepsRows, matsRows] = await Promise.all([
-  getTab('pujas', 'A:U'),
-  getTab('procedure_steps', 'A:A'),
-  getTab('material_items', 'A:A'),
+const [{ rows: pujasData, col: pujaCol }, { rows: stepsData, col: stepCol }, { rows: matsData, col: matCol }] = await Promise.all([
+  getTabWithHeaders('pujas'),
+  getTabWithHeaders('procedure_steps'),
+  getTabWithHeaders('material_items'),
 ]);
 
-const [pujasHeader, ...pujasData] = pujasRows;
-const existingStepSlugs = stepsRows.slice(1).map(r => r[0]);
-const existingMatSlugs  = matsRows.slice(1).map(r => r[0]);
+const cParentSlug = stepCol('parent_slug');
+const cGroupSlug = matCol('group_slug');
+const existingStepSlugs = stepsData.map(r => r[cParentSlug]);
+const existingMatSlugs  = matsData.map(r => r[cGroupSlug]);
+
+const cSlug = pujaCol('slug');
 
 // Find target puja row
-const pujaRowIdx = pujasData.findIndex(r => r[0] === SLUG);
+const pujaRowIdx = pujasData.findIndex(r => r[cSlug] === SLUG);
 if (pujaRowIdx === -1) {
   console.error(`Slug '${SLUG}' not found in pujas tab. Aborting.`);
   process.exit(1);
@@ -101,13 +90,13 @@ if (pujaRowIdx === -1) {
 const pujaRow = pujasData[pujaRowIdx];
 const sheetRowNumber = pujaRowIdx + 2; // 1-indexed, +1 for header
 
-// pujas column indices (0-based)
+// pujas column indices, resolved by header name
 const COL = {
-  prasad_en:                    13,
-  prasad_te:                    14,
-  prasad_ta:                    15,
-  prasad_hi:                    16,
-  regional_variation_notes_en:  17,
+  prasad_en:                    pujaCol('prasad_en'),
+  prasad_te:                    pujaCol('prasad_te'),
+  prasad_ta:                    pujaCol('prasad_ta'),
+  prasad_hi:                    pujaCol('prasad_hi'),
+  regional_variation_notes_en:  pujaCol('regional_variation_notes_en'),
 };
 
 // ─── Report ───────────────────────────────────────────────────────────────────
@@ -122,7 +111,6 @@ console.log(`Source: ${contentPath}`);
 console.log('\n── pujas row patches ──────────────────────────────────────────────');
 
 const patches = []; // { a1: 'R14C1', value }
-const colLetter = (idx) => String.fromCharCode(65 + idx); // 0 → A, 13 → N
 
 for (const [field, colIdx] of Object.entries(COL)) {
   const currentVal = pujaRow[colIdx] || '';
@@ -132,7 +120,7 @@ for (const [field, colIdx] of Object.entries(COL)) {
   } else if (!newVal) {
     console.log(`  SKIP  ${field}: no value in content JSON`);
   } else {
-    const a1 = `pujas!${colLetter(colIdx)}${sheetRowNumber}`;
+    const a1 = `pujas!${sharedColLetter(colIdx)}${sheetRowNumber}`;
     patches.push({ a1, value: newVal });
     console.log(`  PATCH ${field} → ${a1}: "${newVal.slice(0, 80)}"`);
   }

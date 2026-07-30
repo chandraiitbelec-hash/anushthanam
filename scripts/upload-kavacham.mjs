@@ -19,16 +19,14 @@
  *   node scripts/upload-kavacham.mjs --slug rama-kavacham           (dry run)
  *   node scripts/upload-kavacham.mjs --slug rama-kavacham --write   (apply)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 const slugArg = process.argv.indexOf('--slug');
 if (slugArg === -1 || !process.argv[slugArg + 1]) {
   console.error('Usage: node scripts/upload-kavacham.mjs --slug <slug> [--write]');
@@ -114,15 +112,10 @@ console.log(`  meaning_en: ${rows[0].meaning_en?.slice(0, 80) || '(blank)'}`);
 console.log(`  meaning_te: ${rows[0].meaning_te?.slice(0, 60) || '(blank)'}`);
 console.log(`Last row:\n${sample(rows[rows.length - 1])}`);
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
+const sheets = await getSheetsClient();
 
 const res = await sheets.spreadsheets.values.get({
-  spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
+  spreadsheetId: SPREADSHEET_ID,
   range: 'shloka_stanzas!A:A',
 });
 const existingCount = (res.data.values || []).slice(1).filter(r => r[0] === SLUG).length;
@@ -150,7 +143,7 @@ if (!WRITE) {
     '', // notes_en
   ]);
   await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.SHEETS_SPREADSHEET_ID,
+    spreadsheetId: SPREADSHEET_ID,
     range: 'shloka_stanzas!A1',
     valueInputOption: 'RAW',
     requestBody: { values: appendRows },

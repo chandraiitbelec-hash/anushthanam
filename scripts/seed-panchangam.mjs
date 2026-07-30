@@ -16,16 +16,14 @@
  *              (use this to refresh stale data).
  */
 
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
 
-const WRITE   = process.argv.includes('--write');
+const WRITE   = parseWriteFlag(process.argv);
 const REPLACE = process.argv.includes('--replace');
 
 const sourcePath = resolve(__dirname, '../research/panchangam-computed.json');
@@ -33,13 +31,8 @@ const rows = JSON.parse(readFileSync(sourcePath, 'utf8'));
 
 // ─── Sheet connection ─────────────────────────────────────────────────────────
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const client = await auth.getClient();
-const sheets = google.sheets({ version: 'v4', auth: client });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const sheets = await getSheetsClient();
+const SHEET_ID = SPREADSHEET_ID;
 
 const HEADERS = [
   'date','tithi_en','tithi_number','paksha',

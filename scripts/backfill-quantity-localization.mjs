@@ -8,30 +8,21 @@
  *   node scripts/backfill-quantity-localization.mjs          (dry run)
  *   node scripts/backfill-quantity-localization.mjs --write   (apply)
  */
-import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter, getTabWithHeaders } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../.env.local') });
-const WRITE = process.argv.includes('--write');
+const WRITE = parseWriteFlag(process.argv);
 
 const glossary = JSON.parse(readFileSync(resolve(__dirname, '../research/quantity-glossary.json'), 'utf8'));
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-const SHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
+const sheets = await getSheetsClient();
+const SHEET_ID = SPREADSHEET_ID;
 
-const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: 'material_items!A:ZZ' });
-const [headers, ...rows] = res.data.values;
-const col = name => headers.indexOf(name);
+const { rows, col } = await getTabWithHeaders('material_items');
 const cQtyEn = col('quantity_en'), cTe = col('quantity_te'), cTa = col('quantity_ta'), cHi = col('quantity_hi');
-const colLetter = i => { let s=''; i+=1; while(i>0){const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26);} return s; };
 
 const updates = [];
 const missing = new Set();
