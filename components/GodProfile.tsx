@@ -47,7 +47,7 @@ function nameInLang(e: LinkedEntity, lang: Language) {
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 style={{
-      fontSize: '14px',
+      fontSize: 'var(--text-label)',
       fontWeight: 600,
       textTransform: 'uppercase',
       letterSpacing: '0.08em',
@@ -69,7 +69,7 @@ function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: Language })
           padding: '11px 16px',
           border: '1px solid var(--color-border)',
           borderRadius: '20px',
-          fontSize: '13px',
+          fontSize: 'var(--text-nav)',
           color: 'var(--color-text-primary)',
           textDecoration: 'none',
           background: 'var(--color-surface)',
@@ -124,14 +124,14 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
         <div style={{ minWidth: 0, flex: 1 }}>
         <h1 className={nameClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(32px, 5vw, 52px)',
+          fontSize: 'var(--text-h1)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 4px',
           lineHeight: lang === 'te' ? 1.5 : lang === 'ta' ? 1.45 : lang === 'hi' ? 1.3 : 1.15,
           // Tallest script variant (Telugu, 1.5 line-height) sets a floor so
           // switching scripts doesn't shift the page start.
-          minHeight: 'calc(clamp(32px, 5vw, 52px) * 1.5)',
+          minHeight: 'calc(var(--text-h1) * 1.5)',
         }}>
           {name}
         </h1>
@@ -139,7 +139,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
         {/* Sanskrit name — always shown as subtitle */}
         {god.name_sa && lang !== 'hi' && (
           <p className="script-devanagari" style={{
-            fontSize: '20px',
+            fontSize: 'var(--text-script-desktop)',
             color: 'var(--color-text-secondary)',
             margin: '0 0 8px',
           }}>
@@ -151,7 +151,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
             on language switch; hidden (not removed) when already viewing English. */}
         {god.name_en && (
           <p style={{
-            fontSize: '15px',
+            fontSize: 'var(--text-meta)',
             color: 'var(--color-text-secondary)',
             margin: '0 0 12px',
             visibility: lang === 'en' ? 'hidden' : 'visible',
@@ -167,7 +167,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
               background: 'rgba(184,134,11,0.1)',
               border: '1px solid var(--color-gold)',
               borderRadius: '20px',
-              fontSize: '12px',
+              fontSize: 'var(--text-label)',
               color: 'var(--color-gold-text)',
               fontWeight: 600,
               textTransform: 'capitalize',
@@ -183,7 +183,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
       {description && (
         <section style={{ marginBottom: '32px' }}>
           <p style={{
-            fontSize: '16px',
+            fontSize: 'var(--text-body)',
             lineHeight: 1.8,
             color: 'var(--color-text-primary)',
             margin: 0,
@@ -200,7 +200,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
         <section id="section-iconography" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('iconography', lang)}</SectionHeading>
           <p style={{
-            fontSize: '15px',
+            fontSize: 'var(--text-body-sm)',
             lineHeight: 1.7,
             color: 'var(--color-text-secondary)',
             margin: 0,

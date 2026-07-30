@@ -21,14 +21,14 @@ export default function ListPageHeader({ titles, count, countLabels }: Props) {
     <>
       <h1 className={titleClass} style={{
         fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-        fontSize: 'clamp(28px, 4vw, 40px)',
+        fontSize: 'var(--text-h1-page)',
         fontWeight: 600,
         color: 'var(--color-text-primary)',
         margin: '0 0 8px',
       }}>
         {title}
       </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 32px', fontSize: '15px' }}>
+      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 32px', fontSize: 'var(--text-meta)' }}>
         {count} {countLabel}
       </p>
     </>

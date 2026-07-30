@@ -37,7 +37,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
         className={titleClass}
         style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 8px',
@@ -45,7 +45,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
       >
         {ui.footerSiteIndex}
       </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 24px', fontSize: '15px' }}>
+      <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 24px', fontSize: 'var(--text-body)' }}>
         {ui.siteIndexIntro}
       </p>
 
@@ -55,7 +55,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
             key={link.href}
             href={link.href}
             style={{
-              fontSize: '13px',
+              fontSize: 'var(--text-nav)',
               padding: '6px 14px',
               borderRadius: '20px',
               border: '1px solid var(--color-border)',
@@ -75,7 +75,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
             className={titleClass}
             style={{
               fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-              fontSize: '22px',
+              fontSize: 'var(--text-h2)',
               fontWeight: 600,
               color: 'var(--color-text-primary)',
               margin: '0 0 4px',
@@ -83,7 +83,7 @@ export default function SiteIndexContent({ sections }: { sections: IndexSection[
           >
             {ui[section.key]}
           </h2>
-          <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 16px', fontSize: '13px' }}>
+          <p style={{ color: 'var(--color-text-secondary)', margin: '0 0 16px', fontSize: 'var(--text-meta)' }}>
             {section.entities.length}
           </p>
           <div className="entity-grid">

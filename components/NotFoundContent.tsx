@@ -24,14 +24,14 @@ export default function NotFoundContent() {
       }}
     >
       <p style={{ fontSize: '40px', margin: 0 }} aria-hidden="true">🪔</p>
-      <p style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-text)', margin: 0 }}>
+      <p style={{ fontSize: 'var(--text-label)', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-text)', margin: 0 }}>
         404
       </p>
       <h1
         className={titleClass}
         style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: 0,
@@ -39,7 +39,7 @@ export default function NotFoundContent() {
       >
         {ui.notFoundTitle}
       </h1>
-      <p style={{ color: 'var(--color-text-secondary)', margin: 0, fontSize: '16px', maxWidth: '440px' }}>
+      <p style={{ color: 'var(--color-text-secondary)', margin: 0, fontSize: 'var(--text-body)', maxWidth: '440px' }}>
         {ui.notFoundBody}
       </p>
       <Link
@@ -52,7 +52,7 @@ export default function NotFoundContent() {
           background: 'var(--color-gold)',
           color: '#fff',
           textDecoration: 'none',
-          fontSize: '14px',
+          fontSize: 'var(--text-button)',
           fontWeight: 500,
         }}
       >

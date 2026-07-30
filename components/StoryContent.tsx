@@ -35,7 +35,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
       {!parent && (
         <Link href="/stories" style={{
           display: 'inline-flex', alignItems: 'center', gap: '4px',
-          fontSize: '13px', color: 'var(--color-gold-text)', fontWeight: 500,
+          fontSize: 'var(--text-nav)', color: 'var(--color-gold-text)', fontWeight: 500,
           textDecoration: 'none', marginBottom: '12px',
         }}>
           ← {UI[lang].storiesLabel}
@@ -45,20 +45,20 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
       {/* Title */}
       <h1 className={nameClass} style={{
         fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-        fontSize: 'clamp(26px, 4vw, 44px)',
+        fontSize: 'var(--text-h1-page)',
         fontWeight: 600,
         color: 'var(--color-text-primary)',
         margin: '0 0 12px',
         lineHeight: 1.2,
         // Tallest script variant sets a floor so switching scripts doesn't shift the page start.
-        minHeight: 'calc(clamp(26px, 4vw, 44px) * 1.4)',
+        minHeight: 'calc(var(--text-h1-page) * 1.4)',
       }}>
         {title}
       </h1>
 
       {/* Subtitle: English title — permanent slot, hidden (not removed) in English */}
       {story.title_en && (
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: '0 0 12px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
+        <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 12px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
           {story.title_en}
         </p>
       )}
@@ -71,7 +71,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
             background: 'rgba(212,98,42,0.1)',
             border: '1px solid var(--color-saffron)',
             borderRadius: '20px',
-            fontSize: '12px', color: 'var(--color-saffron-text)', fontWeight: 600,
+            fontSize: 'var(--text-label)', color: 'var(--color-saffron-text)', fontWeight: 600,
             textTransform: 'capitalize',
           }}>
             {story.story_type.replace(/-/g, ' ')}
@@ -83,7 +83,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
       {/* Reading instruction */}
       {story.reading_instruction_en && (
         <p style={{
-          fontSize: '13px', color: 'var(--color-text-secondary)', fontStyle: 'italic',
+          fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', fontStyle: 'italic',
           margin: '0 0 24px', padding: '12px 16px',
           background: 'var(--color-surface)', borderRadius: '8px',
           border: '1px solid var(--color-border)',
@@ -104,7 +104,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
             {/* Fallback note — permanent slot, hidden (not removed) when not falling back,
                 so it never appears/disappears mid-scroll as the language toggles. */}
             <p style={{
-              fontSize: '12px',
+              fontSize: 'var(--text-label)',
               color: 'var(--color-text-secondary)',
               fontStyle: 'italic',
               margin: 0,
@@ -118,7 +118,7 @@ export default function StoryContent({ story, bodies, parent, parts }: Props) {
             </p>
             {paras.map((para, i) => (
               <p key={i} className={isFallback ? '' : nameClass} style={{
-                fontSize: '15px',
+                fontSize: 'var(--text-body)',
                 lineHeight: isFallback ? 1.9 : lang === 'te' ? 2.1 : lang === 'ta' ? 1.9 : lang === 'hi' ? 1.8 : 1.9,
                 color: 'var(--color-text-primary)',
                 margin: 0,

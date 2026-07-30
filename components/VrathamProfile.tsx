@@ -51,18 +51,18 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
       <div style={{ marginBottom: '24px' }}>
         <h1 className={nameClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(32px, 5vw, 52px)',
+          fontSize: 'var(--text-h1)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 8px',
           // Tallest script variant sets a floor so switching scripts doesn't shift the page start.
-          minHeight: 'calc(clamp(32px, 5vw, 52px) * 1.5)',
+          minHeight: 'calc(var(--text-h1) * 1.5)',
         }}>
           {title}
         </h1>
 
         {vratham.title_en && (
-          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 8px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 8px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
             {vratham.title_en}
           </p>
         )}
@@ -74,7 +74,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
               background: 'rgba(61,107,79,0.1)',
               border: '1px solid var(--color-green)',
               borderRadius: '20px',
-              fontSize: '12px', color: 'var(--color-green)', fontWeight: 600,
+              fontSize: 'var(--text-label)', color: 'var(--color-green)', fontWeight: 600,
               textTransform: 'capitalize',
             }}>
               {vratham.duration || vratham.observance_day}
@@ -83,7 +83,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
         </div>
 
         {vratham.next_occurrence && (
-          <p style={{ fontSize: '14px', color: 'var(--color-saffron-text)', fontWeight: 500, margin: '0 0 16px' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-saffron-text)', fontWeight: 500, margin: '0 0 16px' }}>
             {UI[lang].next}: {formatDateLocalized(vratham.next_occurrence, lang)}
           </p>
         )}
@@ -107,7 +107,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
       {/* Tab content */}
       {fasting && (
         <TabPanel id="fasting" activeTab={activeTab} idPrefix="vratham">
-          <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
+          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
             {fasting}
           </p>
         </TabPanel>
@@ -115,7 +115,7 @@ export default function VrathamProfile({ vratham, steps, materials, deities, sto
 
       {benefits && (
         <TabPanel id="benefits" activeTab={activeTab} idPrefix="vratham">
-          <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
+          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
             {benefits}
           </p>
         </TabPanel>

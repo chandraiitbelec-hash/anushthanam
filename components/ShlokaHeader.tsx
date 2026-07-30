@@ -18,7 +18,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
       <div style={{ marginBottom: '32px' }}>
         <h1 className={nameClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
-          fontSize: 'clamp(28px, 4vw, 44px)',
+          fontSize: 'var(--text-h1-page)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 8px',
@@ -27,7 +27,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
         </h1>
 
         {lang !== 'en' && shloka.title_en && (
-          <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', margin: '0 0 12px' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 12px' }}>
             {shloka.title_en}
           </p>
         )}
@@ -39,7 +39,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
               background: 'rgba(184,134,11,0.1)',
               border: '1px solid var(--color-gold)',
               borderRadius: '20px',
-              fontSize: '12px',
+              fontSize: 'var(--text-label)',
               color: 'var(--color-gold-text)',
               fontWeight: 600,
               textTransform: 'capitalize',
@@ -53,7 +53,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderRadius: '20px',
-              fontSize: '12px',
+              fontSize: 'var(--text-label)',
               color: 'var(--color-text-secondary)',
               textTransform: 'capitalize',
             }}>
@@ -65,7 +65,7 @@ export default function ShlokaHeader({ shloka }: { shloka: Shloka }) {
 
       {intro && (
         <p style={{
-          fontSize: '15px',
+          fontSize: 'var(--text-body-sm)',
           lineHeight: 1.8,
           color: 'var(--color-text-secondary)',
           margin: '0 0 32px',
