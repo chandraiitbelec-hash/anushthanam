@@ -135,7 +135,7 @@ export default function SearchPage() {
               textDecoration: 'none',
               color: 'var(--color-text-primary)',
             }}>
-              <span style={{ fontSize: '20px', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
+              <span style={{ fontSize: 'var(--icon-row)', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 'var(--text-card-title)', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {nameForLang(r)}

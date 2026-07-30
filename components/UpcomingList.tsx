@@ -61,7 +61,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
         border: '1px solid var(--color-border)',
         borderRadius: '12px',
       }}>
-        <p style={{ fontSize: '36px', margin: '0 0 16px', lineHeight: 1 }}>🪔</p>
+        <p style={{ fontSize: 'var(--icon-empty-state)', margin: '0 0 16px', lineHeight: 1 }}>🪔</p>
         <p style={{ fontSize: 'var(--text-card-title)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>
           {ui.upcomingEmptyHeading}
         </p>

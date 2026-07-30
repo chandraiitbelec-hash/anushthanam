@@ -108,7 +108,7 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
                     }}
                   >
                     {occ.icon && (
-                      <span style={{ fontSize: '24px', flexShrink: 0 }} aria-hidden="true">
+                      <span style={{ fontSize: 'var(--icon-row)', flexShrink: 0 }} aria-hidden="true">
                         {occ.icon}
                       </span>
                     )}

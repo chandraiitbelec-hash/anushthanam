@@ -122,7 +122,7 @@ export default function SearchBar({ autoFocus = false, onSelect, maxWidth = 480 
                 color: 'var(--color-text-primary)',
               }}
             >
-              <span style={{ fontSize: '16px', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
+              <span style={{ fontSize: 'var(--icon-row)', flexShrink: 0 }}>{TYPE_ICON[r.type] ?? '•'}</span>
               <span style={{ flex: 1, fontSize: 'var(--text-body-sm)', fontWeight: 500 }}>
                 {r[`name_${lang}` as keyof SearchRecord] as string || r.name_en}
               </span>

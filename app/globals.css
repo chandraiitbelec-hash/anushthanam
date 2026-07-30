@@ -88,6 +88,12 @@ html {
   --text-script-desktop: 20px;
   --text-script-mobile: 17px;
   --text-script-iast: 19px;
+
+  /* Decorative glyph sizes — emoji/icon-only fontSize usages, not real type-scale roles.
+     Only the two roles that had genuine cross-component inconsistency are tokenized;
+     one-off icon sizes (nav carets, checkboxes, chevrons) are left as literal px. */
+  --icon-row: 20px;         /* inline type icon next to text in a result/list row */
+  --icon-empty-state: 36px; /* large decorative emoji on empty-state / 404 / error pages */
 }
 
 /* Dark mode — the whole UI styles from these CSS variables (inline styles reference
