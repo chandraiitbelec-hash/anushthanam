@@ -118,7 +118,7 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
                         style={{
                           display: 'block',
                           fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-                          fontSize: lang === 'en' ? '17px' : '16px',
+                          fontSize: 'var(--text-card-title)',
                           fontWeight: 600,
                           color: 'var(--color-text-primary)',
                         }}
@@ -126,14 +126,14 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
                         {title}
                       </span>
                       {lang !== 'en' && occ.title_en && (
-                        <span style={{ display: 'block', fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                        <span style={{ display: 'block', fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
                           {occ.title_en}
                         </span>
                       )}
                       {description && (
                         <span
                           className={nameClass}
-                          style={{ display: 'block', fontSize: '13px', color: 'var(--color-text-secondary)', marginTop: '4px', lineHeight: 1.5 }}
+                          style={{ display: 'block', fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', marginTop: '4px', lineHeight: 1.5 }}
                         >
                           {description}
                         </span>

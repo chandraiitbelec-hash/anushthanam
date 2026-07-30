@@ -34,7 +34,7 @@ export default function ShlokaTypeTabs({ groups }: { groups: Group[] }) {
         wrap
         suffix={tab => {
           const count = groups.find(g => g.type === tab.id)?.shlokas.length ?? 0;
-          return <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.7 }}>{count}</span>;
+          return <span style={{ marginLeft: '6px', fontSize: 'var(--text-badge)', opacity: 0.7 }}>{count}</span>;
         }}
       />
 

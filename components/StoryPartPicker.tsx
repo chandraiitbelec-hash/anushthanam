@@ -27,7 +27,7 @@ export default function StoryPartPicker({
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-      <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
+      <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
         {ui.partOf(currentIndex + 1, parts.length)}
       </span>
       <select
@@ -40,7 +40,7 @@ export default function StoryPartPicker({
           background: `var(--color-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23B8860B'/%3E%3C/svg%3E") no-repeat right 10px center`,
           border: '1px solid var(--color-gold)',
           borderRadius: '20px',
-          fontSize: '13px',
+          fontSize: 'var(--text-body-sm)',
           color: 'var(--color-text-primary)',
           fontWeight: 500,
           cursor: 'pointer',

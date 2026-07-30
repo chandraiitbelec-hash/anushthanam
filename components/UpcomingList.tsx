@@ -62,10 +62,10 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
         borderRadius: '12px',
       }}>
         <p style={{ fontSize: '36px', margin: '0 0 16px', lineHeight: 1 }}>🪔</p>
-        <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>
+        <p style={{ fontSize: 'var(--text-card-title)', fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 8px' }}>
           {ui.upcomingEmptyHeading}
         </p>
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: 0, maxWidth: '340px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <p style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)', margin: 0, maxWidth: '340px', marginLeft: 'auto', marginRight: 'auto' }}>
           {ui.upcomingEmptySub}
         </p>
       </div>
@@ -80,7 +80,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
       {groups.map(group => (
         <section key={group.monthKey}>
           <h3 style={{
-            fontSize: '11px',
+            fontSize: 'var(--text-label)',
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
@@ -128,7 +128,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                     paddingTop: '2px',
                   }}>
                     <p style={{
-                      fontSize: '10px',
+                      fontSize: 'var(--text-label)',
                       fontWeight: 600,
                       letterSpacing: '0.05em',
                       textTransform: 'uppercase',
@@ -148,7 +148,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       {d.getDate()}
                     </p>
                     <p style={{
-                      fontSize: '10px',
+                      fontSize: 'var(--text-label)',
                       fontWeight: 600,
                       letterSpacing: '0.05em',
                       textTransform: 'uppercase',
@@ -163,7 +163,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p className={lang !== 'en' ? nameClass : undefined} style={{
                       fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-                      fontSize: lang === 'en' ? '18px' : '16px',
+                      fontSize: 'var(--text-card-title)',
                       fontWeight: 600,
                       color: 'var(--color-text-primary)',
                       margin: '0 0 2px',
@@ -172,13 +172,13 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                       {title}
                     </p>
                     {lang !== 'en' && item.title_en !== title && (
-                      <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: '0 0 6px', lineHeight: 1.4 }}>
+                      <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 6px', lineHeight: 1.4 }}>
                         {item.title_en}
                       </p>
                     )}
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center', marginTop: '6px' }}>
                       <span style={{
-                        fontSize: '11px',
+                        fontSize: 'var(--text-badge)',
                         padding: '2px 8px',
                         borderRadius: '20px',
                         background: isFestival ? 'rgba(212,98,42,0.1)' : 'rgba(61,107,79,0.1)',
@@ -188,13 +188,13 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                         {isFestival ? ui.festivalWord : ui.vrathamWord}
                       </span>
                       {item.next_occurrence_note_en && (
-                        <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
+                        <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
                           · {item.next_occurrence_note_en}
                         </span>
                       )}
                       {isToday && (
                         <span style={{
-                          fontSize: '11px', fontWeight: 700,
+                          fontSize: 'var(--text-badge)', fontWeight: 700,
                           color: 'var(--color-gold-text)',
                           padding: '2px 8px',
                           borderRadius: '20px',
@@ -204,7 +204,7 @@ export default function UpcomingList({ items }: { items: UpcomingItem[] }) {
                         </span>
                       )}
                       {isSoon && days !== null && (
-                        <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                        <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
                           {ui.daysAway(days)}
                         </span>
                       )}

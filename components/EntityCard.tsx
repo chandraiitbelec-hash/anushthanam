@@ -71,7 +71,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       {badge && (
         <span style={{
           display: 'inline-block',
-          fontSize: '10px',
+          fontSize: 'var(--text-badge)',
           fontWeight: 500,
           padding: '2px 7px',
           borderRadius: '20px',
@@ -85,7 +85,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       )}
       <p className={titleClass} style={{
         fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-        fontSize: lang === 'en' ? '17px' : '16px',
+        fontSize: 'var(--text-card-title)',
         fontWeight: 600,
         margin: '0 0 2px',
         color: 'var(--color-text-primary)',
@@ -95,7 +95,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       </p>
       {subtitle && (
         <p style={{
-          fontSize: '12px',
+          fontSize: 'var(--text-meta)',
           color: 'var(--color-text-secondary)',
           margin: '0 0 2px',
           lineHeight: 1.4,
@@ -105,7 +105,7 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
       )}
       {meta && (
         <p style={{
-          fontSize: '11px',
+          fontSize: 'var(--text-badge)',
           color: 'var(--color-gold-text)',
           margin: 0,
           fontWeight: 500,

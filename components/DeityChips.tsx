@@ -19,7 +19,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
-      <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-secondary)', flexShrink: 0 }}>
+      <span style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-secondary)', flexShrink: 0 }}>
         {UI[lang].deityLabel}:
       </span>
       {deities.map(d => {
@@ -33,7 +33,7 @@ export default function DeityChips({ deities }: { deities: DeityRef[] }) {
             background: 'rgba(184,134,11,0.08)',
             border: '1px solid var(--color-gold)',
             borderRadius: '20px',
-            fontSize: '13px',
+            fontSize: 'var(--text-badge)',
             fontWeight: 500,
             color: 'var(--color-gold-text)',
             textDecoration: 'none',

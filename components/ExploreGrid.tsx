@@ -55,7 +55,7 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
     <section className="wide-width explore-section">
       <h2 style={{
         fontFamily: 'var(--font-cormorant)',
-        fontSize: 'clamp(22px, 3vw, 28px)',
+        fontSize: 'var(--text-h2)',
         fontWeight: 600,
         color: 'var(--color-text-primary)',
         margin: '0 0 24px',
@@ -87,7 +87,7 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
               <span className={nameClass} style={{
                 display: 'block',
                 marginTop: '6px',
-                fontSize: '13px',
+                fontSize: 'var(--text-meta)',
                 fontWeight: 400,
                 color: 'var(--color-text-secondary)',
                 lineHeight: 1.4,
@@ -106,11 +106,11 @@ export default function ExploreGrid({ nextFestival, nextVratham, today }: Props)
           grid-template-columns: repeat(3, 1fr);
           gap: 16px;
         }
-        .explore-card { padding: 24px; font-size: 22px; justify-content: center; }
+        .explore-card { padding: 24px; font-size: var(--text-h2); justify-content: center; }
         @media (max-width: 640px) {
           .explore-section { padding: 32px 16px; }
           .explore-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-          .explore-card { padding: 18px 16px; font-size: 18px; }
+          .explore-card { padding: 18px 16px; }
         }
       `}</style>
     </section>
