@@ -50,6 +50,7 @@ export default function YouTubeEmbed({ videoId, title, watchLiveLabel }: YouTube
             src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
             alt={title}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             style={{ objectFit: 'cover' }}
           />
           <span aria-hidden="true" style={{
