@@ -7,9 +7,9 @@
     "script_telugu": "సర్వశాస్త్రార్థతత్త్వజ్ఞ సర్వలోకోపకారక|వయం చాతిథయః ప్రాప్తా ఆతిథేయోఽసి సువ్రత",
     "script_tamil": "ஸர்வஶாஸ்த்ரார்த²தத்த்வஜ்ஞ ஸர்வலோகோபகாரக|வயம் சாதித²ய: ப்ராப்தா ஆதிதே²யோஸி ஸுவ்ரத",
     "roman_iast": "sarvaśāstrārthatattvajña sarvalōkōpakāraka|vayaṃ cātithayaḥ prāptā ātithēyō'si suvrata",
-    "meaning_en": "O knower of all scriptures and their truths, the benefactor of all worlds! We have come as your guests — be our host, O virtuous one.",
-    "meaning_te": "సర్వశాస్త్ర తత్త్వజ్ఞ, సర్వలోకోపకారక! మేము అతిథులుగా వచ్చాం — ఓ సువ్రత, మాకు ఆతిథ్యమివ్వు.",
-    "meaning_ta": "சர்வ சாஸ்திர தத்வஜ்ஞ, சர்வ லோக உபகாரக! நாங்கள் விருந்தினர்களாக வந்தோம் — ஓ சுவ்ரத, எங்களுக்கு ஆதிதேயனாக இரு.",
+    "meaning_en": "O knower of all scriptures and their truths, the benefactor of all worlds! We have come as your guests; be our host, O virtuous one.",
+    "meaning_te": "సర్వశాస్త్ర తత్త్వజ్ఞ, సర్వలోకోపకారక! మేము అతిథులుగా వచ్చాం, ఓ సువ్రత, మాకు ఆతిథ్యమివ్వు.",
+    "meaning_ta": "சர்வ சாஸ்திர தத்வஜ்ஞ, சர்வ லோக உபகாரக! நாங்கள் விருந்தினர்களாக வந்தோம், ஓ சுவ்ரத, எங்களுக்கு ஆதிதேயனாக இரு.",
     "meaning_hi": "हे सर्वशास्त्र के तत्त्वज्ञ, सर्वलोक के उपकारक! हम अतिथि हैं, हे सुव्रत, आप हमारे आतिथेय हों।",
     "notes_en": ""
   },
@@ -147,10 +147,10 @@
     "script_telugu": "శృణు వక్ష్యామి దేవర్షే స్తవరాజమిదం పరమ్|మాతృకామాలికాయుక్తం జ్ఞానమోక్షసుఖప్రదమ్",
     "script_tamil": "ஶ்ருணு வக்ஷ்யாமி தே³வர்ஷே ஸ்தவராஜமித³ம் பரம்|மாத்ருகாமாலிகாயுக்தம் ஜ்ஞானமோக்ஷஸுக²ப்ரத³ம்",
     "roman_iast": "śṛṇu vakṣyāmi dēvarṣē stavarājamidaṃ param|mātṛkāmālikāyuktaṃ jñānamōkṣasukhapradam",
-    "meaning_en": "Brahma said: O divine sage, hear this supreme hymn of praises — joined with the garland of syllables, bestowing the joy of knowledge and liberation.",
-    "meaning_te": "బ్రహ్మ చెప్పాడు: హే దేవర్షే, విను ఈ పరమ స్తవరాజం — మాతృకా మాలికా యుక్తం, జ్ఞానమోక్షసుఖప్రదం.",
-    "meaning_ta": "பிரம்மா கூறினார்: ஓ தேவ ஋ஷி, இந்த பரம ஸ்தவராஜத்தை கேள் — மாத்ருகா மாலிகா யுக்தம், ஞான மோக்ஷ சுக பிரதம்.",
-    "meaning_hi": "ब्रह्मा ने कहा: हे देवर्षि, सुनो, यह परम स्तवराज — मातृकामालिका से युक्त, ज्ञानमोक्षसुखप्रद।",
+    "meaning_en": "Brahma said: O divine sage, hear this supreme hymn of praises, joined with the garland of syllables, bestowing the joy of knowledge and liberation.",
+    "meaning_te": "బ్రహ్మ చెప్పాడు: హే దేవర్షే, విను ఈ పరమ స్తవరాజం, మాతృకా మాలికా యుక్తం, జ్ఞానమోక్షసుఖప్రదం.",
+    "meaning_ta": "பிரம்மா கூறினார்: ஓ தேவ ஋ஷி, இந்த பரம ஸ்தவராஜத்தை கேள், மாத்ருகா மாலிகா யுக்தம், ஞான மோக்ஷ சுக பிரதம்.",
+    "meaning_hi": "ब्रह्मा ने कहा: हे देवर्षि, सुनो, यह परम स्तवराज मातृकामालिका से युक्त, ज्ञानमोक्षसुखप्रद है।",
     "notes_en": ""
   },
   {
@@ -161,10 +161,10 @@
     "script_telugu": "సహస్రాణి చ నామాని షణ్ముఖస్య మహాత్మనః|యాని నామాని దివ్యాని దుఃఖరోగహరాణి చ",
     "script_tamil": "ஸஹஸ்ராணி ச நாமானி ஷண்முக²ஸ்ய மஹாத்மன:|யானி நாமானி தி³வ்யானி து³:க²ரோக³ஹராணி ச",
     "roman_iast": "sahasrāṇi ca nāmāni ṣaṇmukhasya mahātmanaḥ|yāni nāmāni divyāni duḥkharōgaharāṇi ca",
-    "meaning_en": "The thousands of names of the great-souled Shanmukha — those divine names that remove suffering and disease.",
-    "meaning_te": "మహాత్మ షణ్ముఖుని వేల నామాలు — దుఃఖరోగహరమైన ఆ దివ్య నామాలు.",
-    "meaning_ta": "மஹாத்மா ஷண்முகனின் ஆயிரம் நாமங்கள் — துக்கம் மற்றும் நோயை போக்கும் அந்த தெய்வீக நாமங்கள்.",
-    "meaning_hi": "महात्मा षण्मुख के सहस्रों नाम — वे दिव्य नाम जो दुःख और रोग को दूर करते हैं।",
+    "meaning_en": "The thousands of names of the great-souled Shanmukha are those divine names that remove suffering and disease.",
+    "meaning_te": "మహాత్మ షణ్ముఖుని వేల నామాలు దుఃఖరోగహరమైన ఆ దివ్య నామాలు.",
+    "meaning_ta": "மஹாத்மா ஷண்முகனின் ஆயிரம் நாமங்கள், துக்கம் மற்றும் நோயை போக்கும் அந்த தெய்வீக நாமங்கள் ஆகும்.",
+    "meaning_hi": "महात्मा षण्मुख के सहस्रों नाम वे दिव्य नाम हैं जो दुःख और रोग को दूर करते हैं।",
     "notes_en": ""
   },
   {
@@ -175,10 +175,10 @@
     "script_telugu": "తాని నామాని వక్ష్యామి కృపయా త్వయి నారద|జపమాత్రేణ సిద్ధ్యన్తి మనసా చిన్తితాన్యపి",
     "script_tamil": "தானி நாமானி வக்ஷ்யாமி க்ருபயா த்வயி நாரத³|ஜபமாத்ரேண ஸித்³த்⁴யந்தி மனஸா சிந்திதான்யபி",
     "roman_iast": "tāni nāmāni vakṣyāmi kṛpayā tvayi nārada|japamātrēṇa siddhyanti manasā cintitānyapi",
-    "meaning_en": "I will speak those names to you with compassion, O Narada. They bear fruit through mere chanting — granting even what is only thought in the mind.",
-    "meaning_te": "హే నారద, ఆ నామాలను కరుణతో నీకు చెప్తాను. జప మాత్రముచే సిద్ధిస్తాయి — మనస్సులో చింతించినది కూడా.",
-    "meaning_ta": "ஓ நாரதா, அந்த நாமங்களை கருணையுடன் உங்களுக்கு சொல்கிறேன். ஜப மாத்திரத்தால் சித்திக்கும் — மனதில் நினைத்ததும் கூட.",
-    "meaning_hi": "हे नारद, उन नामों को करुणापूर्वक तुम्हें बताता हूँ। जप मात्र से सिद्ध होते हैं — मन में सोचे हुए को भी।",
+    "meaning_en": "I will speak those names to you with compassion, O Narada. They bear fruit through mere chanting, granting even what is only thought in the mind.",
+    "meaning_te": "హే నారద, ఆ నామాలను కరుణతో నీకు చెప్తాను. జప మాత్రముచే సిద్ధిస్తాయి, మనస్సులో చింతించినది కూడా.",
+    "meaning_ta": "ஓ நாரதா, அந்த நாமங்களை கருணையுடன் உங்களுக்கு சொல்கிறேன். ஜப மாத்திரத்தால் சித்திக்கும், மனதில் நினைத்ததும் கூட.",
+    "meaning_hi": "हे नारद, उन नामों को करुणापूर्वक तुम्हें बताता हूँ। जप मात्र से सिद्ध होते हैं, मन में सोचे हुए को भी।",
     "notes_en": ""
   },
   {
@@ -189,10 +189,10 @@
     "script_telugu": "ఇదం స్తోత్రం పరం పుణ్యం కోటియజ్ఞఫలప్రదమ్|సన్దేహో నాత్ర కర్తవ్యః శృణు మే నిశ్చితం వచః",
     "script_tamil": "இத³ம் ஸ்தோத்ரம் பரம் புண்யம் கோடியஜ்ஞப²லப்ரத³ம்|ஸந்தே³ஹோ நாத்ர கர்தவ்ய: ஶ்ருணு மே நிஶ்சிதம் வச:",
     "roman_iast": "idaṃ stōtraṃ paraṃ puṇyaṃ kōṭiyajñaphalapradam|sandēhō nātra kartavyaḥ śṛṇu mē niścitaṃ vacaḥ",
-    "meaning_en": "This supreme sacred hymn grants the merit of a crore of sacrifices. There must be no doubt whatsoever — hear my certain words.",
-    "meaning_te": "ఈ పరమ పుణ్య స్తోత్రం కోటి యజ్ఞాల ఫలాన్ని ఇస్తుంది. సందేహించకూడదు — నా నిశ్చిత వచనాన్ని విను.",
-    "meaning_ta": "இந்த பரம புண்யமான ஸ்தோத்திரம் கோடி யஜ்ஞங்களின் பலனை அளிக்கும். சந்தேகப்படாதீர்கள் — என் நிச்சித வார்த்தைகளை கேளுங்கள்.",
-    "meaning_hi": "यह परम पुण्यमय स्तोत्र कोटि यज्ञों का फल देता है। इसमें संदेह नहीं करना चाहिए — मेरी निश्चित बात सुनो।",
+    "meaning_en": "This supreme sacred hymn grants the merit of a crore of sacrifices. There must be no doubt whatsoever; hear my certain words.",
+    "meaning_te": "ఈ పరమ పుణ్య స్తోత్రం కోటి యజ్ఞాల ఫలాన్ని ఇస్తుంది. సందేహించకూడదు, నా నిశ్చిత వచనాన్ని విను.",
+    "meaning_ta": "இந்த பரம புண்யமான ஸ்தோத்திரம் கோடி யஜ்ஞங்களின் பலனை அளிக்கும். சந்தேகப்படாதீர்கள், என் நிச்சித வார்த்தைகளை கேளுங்கள்.",
+    "meaning_hi": "यह परम पुण्यमय स्तोत्र कोटि यज्ञों का फल देता है। इसमें संदेह नहीं करना चाहिए, मेरी निश्चित बात सुनो।",
     "notes_en": ""
   },
   {

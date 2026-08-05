@@ -35,7 +35,7 @@
     "script_telugu": "స్వధర్మవిరతే మార్గే ప్రవృత్తే హృది సర్వదా|తేషాం సిద్ధిం చ ముక్తిం చ త్వం మే బ్రూహి వృషధ్వజ",
     "script_tamil": "ஸ்வத⁴ர்மவிரதே மார்கே³ ப்ரவ்ருத்தே ஹ்ருதி³ ஸர்வதா³|தேஷாம் ஸித்³தி⁴ம் ச முக்திம் ச த்வம் மே ப்³ரூஹி வ்ருஷத்⁴வஜ",
     "roman_iast": "svadharmaviratē mārgē pravṛttē hṛdi sarvadā|tēṣāṃ siddhiṃ ca muktiṃ ca tvaṃ mē brūhi vṛṣadhvaja",
-    "meaning_en": "People have turned away from the path of their own Dharma, their hearts perpetually confused and lost. O Vrishadhvaja (Shiva, whose banner bears the sacred bull)! Tell me — how may they attain spiritual fulfillment and liberation?",
+    "meaning_en": "People have turned away from the path of their own Dharma, their hearts perpetually confused and lost. O Vrishadhvaja (Shiva, whose banner bears the sacred bull), tell me how they may attain spiritual fulfillment and liberation?",
     "meaning_te": "ప్రజలు తమ స్వధర్మ మార్గం నుండి విముఖులై, హృదయంలో సదా మోహగ్రస్తులై జీవిస్తున్నారు. హే వృషధ్వజా (వృషభ ధ్వజం కలిగిన శివా)! వారికి సిద్ధి మరియు మోక్షం ఎలా కలుగుతుందో నాకు చెప్పండి.",
     "meaning_ta": "மக்கள் தம் சுவதர்ம பாதையிலிருந்து விலகி, மனம் என்றும் குழம்பி வாழ்கின்றனர். ஓ வ்ருஷத்வஜனே (இடபக்கொடி கொண்ட சிவனே)! அவர்களுக்கு சித்தியும் முக்தியும் எவ்வாறு கிட்டும் என்று சொல்லுங்கள்.",
     "meaning_hi": "लोग अपने स्वधर्म के मार्ग से विमुख होकर, सदा हृदय में भटकते रहते हैं। हे वृषध्वज (वृषभ-ध्वज शिव)! उन्हें सिद्धि और मुक्ति कैसे मिलेगी, यह मुझे बताइए।",
@@ -49,10 +49,10 @@
     "script_telugu": "శృణు దేవి మహాభాగే సర్వకల్యాణకారణే|మహాశాస్తుస్ చ దేవేశి కవచం పుణ్యవర్ధనమ్",
     "script_tamil": "ஶ்ருணு தே³வி மஹாபா⁴கே³ ஸர்வகல்யாணகாரணே|மஹாஶாஸ்துஸ் ச தே³வேஶி கவசம் புண்யவர்த⁴னம்",
     "roman_iast": "śṛṇu dēvi mahābhāgē sarvakalyāṇakāraṇē|mahāśāstus ca dēvēśi kavacaṃ puṇyavardhanam",
-    "meaning_en": "O greatly blessed Goddess! O the very cause of all that is auspicious! Listen — I shall now reveal to you the Kavacham of Maha Shastha, the supreme cosmic ruler, which increases merit and spiritual virtue.",
-    "meaning_te": "ఓ మహాభాగ్యవతీ దేవీ, ఓ సర్వ కళ్యాణ కారణమా! వినుము — పుణ్యమును వర్థిల్లజేసే మహాశాస్తా కవచాన్ని నేను నీకు చెప్పెదను.",
-    "meaning_ta": "ஓ மகாபாக்யசாலியான தேவீ, ஓ எல்லா மங்களத்திற்கும் காரணமே! கேள் — புண்யத்தை பெருக்கும் மகாஶாஸ்தா கவசத்தை நான் இப்போது உனக்கு சொல்கிறேன்.",
-    "meaning_hi": "हे महाभागे देवी, हे सर्वकल्याण की कारणरूपे! सुनो — मैं तुम्हें महाशास्ता के उस कवच के विषय में बताता हूँ जो पुण्य को बढ़ाने वाला है।",
+    "meaning_en": "O greatly blessed Goddess! O the very cause of all that is auspicious! Listen, for I shall now reveal to you the Kavacham of Maha Shastha, the supreme cosmic ruler, which increases merit and spiritual virtue.",
+    "meaning_te": "ఓ మహాభాగ్యవతీ దేవీ, ఓ సర్వ కళ్యాణ కారణమా! వినుము, పుణ్యమును వర్థిల్లజేసే మహాశాస్తా కవచాన్ని నేను నీకు చెప్పెదను.",
+    "meaning_ta": "ஓ மகாபாக்யசாலியான தேவீ, ஓ எல்லா மங்களத்திற்கும் காரணமே! கேள், புண்யத்தை பெருக்கும் மகாஶாஸ்தா கவசத்தை நான் இப்போது உனக்கு சொல்கிறேன்.",
+    "meaning_hi": "हे महाभागे देवी, हे सर्वकल्याण की कारणरूपे! सुनो, मैं तुम्हें महाशास्ता के उस कवच के विषय में बताता हूँ जो पुण्य को बढ़ाने वाला है।",
     "notes_en": ""
   },
   {
@@ -121,8 +121,8 @@
     "roman_iast": "tējōmaṇḍalāmadhyagaṃ trinayanaṃ divyāmbarālaṅkṛtaṃ dēvaṃ puṣpaśarēkṣukārmuka lasanmāṇikyapātrābhayam|bibhrāṇaṃ karapaṅkajaiḥ madagaja skandhādhirūḍhaṃ vibhuṃ śāstāraṃ śaraṇaṃ vrajāmi satataṃ trailōkya sammōhanam",
     "meaning_en": "I constantly seek refuge in Lord Shastha (Ayyappa), who shines radiantly in the center of a brilliant orb of light, who possesses three divine eyes, and is adorned in celestial garments. In His lotus-like hands, He holds a flower arrow, a sugarcane bow, a gleaming vessel made of rubies, and displays the Abhaya Mudra (gesture of fearlessness and protection). Riding majestically on the shoulders of a caparisoned elephant, He is the omnipresent Lord who captivates and enchants all three worlds.",
     "meaning_te": "వెలిగిపోయే తేజోమండలం మధ్యలో విరాజిల్లేవాడు, మూడు కన్నులు కలిగినవాడు, దివ్యమైన వస్త్రాలను ధరించినవాడు, కమల హస్తాలలో పుష్పశరమును (పూల బాణమును), చెరకు విల్లును, రత్నఖచిత పాత్రను ధరించి అభయముద్ర చూపేవాడు, మదగజం స్కంధంపై ఆరూఢుడై ప్రకాశించేవాడు, మూడు లోకాలను సమ్మోహింపజేసే శక్తి గలవాడు అయిన ఆ అయ్యప్ప స్వామిని నేను నిరంతరం శరణు వేడుకుంటున్నాను.",
-    "meaning_ta": "நான் என்றும் ஶாஸ்தாவை சரணடைகிறேன் — தேஜோமண்டல மத்தியில் விளங்குபவரை, முக்கண்ணனை, திவ்ய வஸ்திர ஆபரணங்கள் அணிந்தவரை, தாமரை கரங்களில் புஷ்பஶரம் (பூ அம்பு), கரும்பு வில், மாணிக்யபாத்திரம், அபயமுத்திரை ஏந்தியவரை, மதகஜ ஸ்கந்தத்தில் எழுந்தருளியவரை, திரிலோக ஸம்மோஹனனை.",
-    "meaning_hi": "जो दिव्य तेजोमंडल के मध्य में विराजमान हैं, जिनके तीन नेत्र हैं, जो दिव्य वस्त्रों से सुशोभित हैं; जिनके कमल-हाथों में फूलों के बाण, गन्ने का धनुष, माणिक्य-जड़ित दिव्य पात्र है और जो अभयमुद्रा से भक्तों को सुरक्षा देते हैं; जो मतवाले हाथी के स्कंध पर सवार हैं और तीनों लोकों को सम्मोहित करने वाले हैं — उन प्रभु महाशास्ता (अय्यप्पा) की शरण में मैं निरंतर जाता/जाती हूँ।",
+    "meaning_ta": "தேஜோமண்டல மத்தியில் விளங்குபவரும், முக்கண்ணரும், திவ்ய வஸ்திர ஆபரணங்கள் அணிந்தவரும், தாமரை கரங்களில் புஷ்பஶரம் (பூ அம்பு), கரும்பு வில், மாணிக்யபாத்திரம் ஏந்தி அபயமுத்திரை காட்டுபவரும், மதகஜ ஸ்கந்தத்தில் எழுந்தருளியவரும், திரிலோகத்தையும் மயக்கும் ஶாஸ்தாவை நான் என்றும் சரணடைகிறேன்.",
+    "meaning_hi": "जो दिव्य तेजोमंडल के मध्य में विराजमान हैं, जिनके तीन नेत्र हैं, जो दिव्य वस्त्रों से सुशोभित हैं, जिनके कमल-हाथों में फूलों के बाण, गन्ने का धनुष और माणिक्य-जड़ित दिव्य पात्र है, जो अभयमुद्रा से भक्तों को सुरक्षा देते हैं, तथा जो मतवाले हाथी के स्कंध पर सवार होकर तीनों लोकों को सम्मोहित करने वाले हैं, उन प्रभु महाशास्ता (अय्यप्पा) की शरण में मैं निरंतर जाता/जाती हूँ।",
     "notes_en": ""
   },
   {
@@ -163,7 +163,7 @@
     "roman_iast": "kaṇṭhaṃ pātu viśuddhātmā skandhau pātu surārcitaḥ|bāhū pātu virūpākṣaḥ karau tu kamalāpriyaḥ",
     "meaning_en": "May Vishuddhatma, the purest and supreme soul, protect my throat. May Surarchitah, the Lord who is worshipped and adored by all celestial Devas, protect my shoulders. May Virupakshah, the Lord who possesses Shiva's transcendent divine vision, protect my arms. May Kamalapriyah, the beloved of Goddess Lakshmi (Kamala), protect my hands.",
     "meaning_te": "పవిత్రమైన ఆత్మ స్వరూపుడైన విశుద్ధాత్మ నా మెడను రక్షించుగాక. దేవతలచే పూజించబడే సురార్చితుడు నా భుజాలను కాపాడుగాక. శివరూపుడైన విరూపాక్షుడు నా బాహువులను రక్షించుగాక. లక్ష్మీదేవికి ప్రియమైన కమలాప్రియుడు నా హస్తాలను కాపాడుగాక.",
-    "meaning_ta": "விஶுத்தாத்மா (தூய ஆத்மன்) என் கழுத்தை காப்பாற்றட்டும். ஸுராரசிதன் (தேவர்களால் வணங்கப்பட்டவன்) என் தோள்களை காப்பாற்றட்டும். விரூபாக்ஷன் (அற்புத கண்களுடையவன் — சிவனின் குணம் ஶாஸ்தாவில் வெளிப்பட்டது) என் கரங்களை காப்பாற்றட்டும். கமலாப்ரியன் (கமலா/லக்ஷ்மிக்கு பிரியமானவன்) என் கைகளை காப்பாற்றட்டும்.",
+    "meaning_ta": "விஶுத்தாத்மா (தூய ஆத்மன்) என் கழுத்தை காப்பாற்றட்டும். ஸுராரசிதன் (தேவர்களால் வணங்கப்பட்டவன்) என் தோள்களை காப்பாற்றட்டும். விரூபாக்ஷன் (சிவனுடைய குணமான அற்புத கண்களை உடையவன்) என் கரங்களை காப்பாற்றட்டும். கமலாப்ரியன் (கமலா/லக்ஷ்மிக்கு பிரியமானவன்) என் கைகளை காப்பாற்றட்டும்.",
     "meaning_hi": "परम पवित्र और शुद्ध आत्मा स्वरूप विशुद्धात्मा मेरे कंठ की रक्षा करें। देवताओं द्वारा पूजे जाने वाले सुरार्चित मेरे कंधों की रक्षा करें। शिव-स्वरूप विरूपाक्ष मेरी भुजाओं की रक्षा करें। माता लक्ष्मी के प्रिय कमलाप्रिय मेरे हाथों की रक्षा करें।",
     "notes_en": ""
   },
@@ -234,7 +234,7 @@
     "meaning_en": "It bestows wisdom (Jnana) and detachment (Vairagya) upon all people, and grants the fruits of both worldly enjoyment (Bhukti) and final liberation (Mukti). Whatever one sincerely desires, one shall surely obtain it without any doubt.",
     "meaning_te": "ఇది జ్ఞానమును మరియు వైరాగ్యమును ప్రసాదిస్తుంది; భోగ మరియు మోక్ష రెండింటి ఫలమునూ ఇస్తుంది. ఏ కోరికైనా నిస్సందేహంగా నెరవేరుతుంది.",
     "meaning_ta": "இது அனைவருக்கும் ஜ்ஞானத்தையும் வைராக்யத்தையும் அளிக்கிறது; போகம் மற்றும் முக்தி ஆகிய இரண்டின் பலனையும் தருகிறது. எந்த விருப்பமும் சந்தேகமின்றி நிறைவேறும்.",
-    "meaning_hi": "यह सभी लोगों को ज्ञान और वैराग्य प्रदान करता है तथा भोग और मुक्ति — दोनों का फल देता है। भक्त जो भी कामना करे, वह सब बिना किसी संशय के प्राप्त होती है।",
+    "meaning_hi": "यह सभी लोगों को ज्ञान और वैराग्य प्रदान करता है तथा भोग और मुक्ति, दोनों का फल देता है। भक्त जो भी कामना करे, वह सब बिना किसी संशय के प्राप्त होती है।",
     "notes_en": ""
   },
   {

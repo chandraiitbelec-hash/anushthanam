@@ -7,10 +7,10 @@
     "script_telugu": "ఆజానుబాహుమ్ అరవిన్దదలాయతాక్షమ్ ఆజన్మశుద్ధరసహాసముఖప్రసాదమ్|శ్యామం గృహీతశరచాపముదారరూపం రామం సరామమ్ అభిరామమ్ అనుస్మరామి",
     "script_tamil": "ஆஜானுபா³ஹும் அரவிந்த³த³லாயதாக்ஷம் ஆஜன்மஶுத்³த⁴ரஸஹாஸமுக²ப்ரஸாத³ம்|ஶ்யாமம் க்³ருஹீதஶரசாபமுதா³ரரூபம் ராமம் ஸராமம் அபி⁴ராமம் அனுஸ்மராமி",
     "roman_iast": "ājānubāhum aravindadalāyatākṣam ājanmaśuddharasahāsamukhaprasādam|śyāmaṃ gṛhītaśaracāpamudārarūpaṃ rāmaṃ sarāmam abhirāmam anusmarāmi",
-    "meaning_en": "I always remember Rāma — whose long arms reach down to his knees, whose eyes are elongated like lotus petals, who is utterly pure from birth with a face graced by a charming smile, who is dark-complexioned, holds the beautiful bow and arrows, and is supremely enchanting — together with Sītā (sarāmam).",
-    "meaning_te": "నేను ఎల్లప్పుడూ ఆ రాముని స్మరిస్తాను — ఆజానుబాహువులు కలవాడు, కమలదళ నయనుడు, జన్మనుండి నిర్మలుడు, హాస్య ముఖంతో ప్రకాశించేవాడు, శ్యామ వర్ణుడు, ధనుర్బాణ ధారి, మహానందస్వరూపుడు — సీతాసహితుడైన అభిరాముని నిరంతరం స్మరిస్తాను.",
-    "meaning_ta": "ஆஜானுவரை நீண்ட கரங்களும், தாமரை இதழ் போன்ற நீண்ட கண்களும், பிறவியிலேயே மலரும் சுத்தமான புன்னகை நிறைந்த முகமும், கரிய நிறமும், வில்லும் அம்பும் ஏந்திய திருக்கரங்களும் கொண்ட, மிகவும் அழகிய — சீதையுடன் விளங்கும் — அந்த ராமனை நான் என்றென்றும் நினைக்கின்றேன்.",
-    "meaning_hi": "मैं सदा उस राम का स्मरण करता हूँ जिनकी लंबी भुजाएँ घुटनों तक पहुँचती हैं, जिनके नेत्र कमल-दल के समान विशाल हैं, जो जन्म से ही निर्मल और हँसते हुए मुखवाले हैं, जो श्याम वर्ण और धनुष-बाण धारण किए हुए हैं और जो अत्यंत सुंदर हैं — सीता सहित उन रामचन्द्र का मैं स्मरण करता हूँ।",
+    "meaning_en": "I always remember Rāma, whose long arms reach down to his knees, whose eyes are elongated like lotus petals, who is utterly pure from birth with a face graced by a charming smile, who is dark-complexioned, who holds the beautiful bow and arrows, and who is supremely enchanting, together with Sītā (sarāmam).",
+    "meaning_te": "నేను ఎల్లప్పుడూ ఆజానుబాహువులు కలవాడు, కమలదళ నయనుడు, జన్మనుండి నిర్మలుడు, హాస్య ముఖంతో ప్రకాశించేవాడు, శ్యామ వర్ణుడు, ధనుర్బాణ ధారి, మహానందస్వరూపుడు అయిన ఆ రాముని స్మరిస్తాను; సీతాసహితుడైన అభిరాముని నిరంతరం స్మరిస్తాను.",
+    "meaning_ta": "ஆஜானுவரை நீண்ட கரங்களும், தாமரை இதழ் போன்ற நீண்ட கண்களும், பிறவியிலேயே மலரும் சுத்தமான புன்னகை நிறைந்த முகமும், கரிய நிறமும், வில்லும் அம்பும் ஏந்திய திருக்கரங்களும் கொண்ட, மிகவும் அழகிய, சீதையுடன் விளங்கும் அந்த ராமனை நான் என்றென்றும் நினைக்கின்றேன்.",
+    "meaning_hi": "मैं सदा उस राम का स्मरण करता हूँ जिनकी लंबी भुजाएँ घुटनों तक पहुँचती हैं, जिनके नेत्र कमल-दल के समान विशाल हैं, जो जन्म से ही निर्मल और हँसते हुए मुखवाले हैं, जो श्याम वर्ण और धनुष-बाण धारण किए हुए हैं और जो अत्यंत सुंदर हैं, सीता सहित उन रामचन्द्र का मैं स्मरण करता हूँ।",
     "notes_en": ""
   },
   {
@@ -35,10 +35,10 @@
     "script_telugu": "సీతాసౌమిత్రిసహితం జటాముకుటధారిణమ్|సాసితూణధనుర్బాణపాణిం దానవమర్దనమ్",
     "script_tamil": "ஸீதாஸௌமித்ரிஸஹிதம் ஜடாமுகுடதா⁴ரிணம்|ஸாஸிதூணத⁴னுர்பா³ணபாணிம் தா³னவமர்த³னம்",
     "roman_iast": "sītāsaumitrisahitaṃ jaṭāmukuṭadhāriṇam|sāsitūṇadhanurbāṇapāṇiṃ dānavamardanam",
-    "meaning_en": "Accompanied by Sītā and Saumitri (Lakshmana), wearing a crown of matted locks; holding the quiver, bow, and arrows in hand — the crusher of demons.",
-    "meaning_te": "సీతా-సౌమిత్రులతో కూడినవాడు, జటలతో నిర్మించిన మకుటం ధరించినవాడు; తూణీరం, ధనుస్సు, బాణాలు చేతపట్టుకున్నవాడు — దానవులను మర్దించేవాడు.",
-    "meaning_ta": "சீதையும் சௌமித்ரியும் (லக்ஷ்மணனும்) உடன் இருக்க, சடை முடி அணிந்தவர்; அம்புறாத்தூணியும் வில்லும் அம்பும் கரத்தில் ஏந்தியவர் — அசுரர்களை அழிப்பவர்.",
-    "meaning_hi": "सीता और लक्ष्मण के साथ विराजमान, जटाओं का मुकुट धारण किए हुए; तरकश, धनुष और बाण हाथ में लिए हुए — दानवों को मर्दन करने वाले।",
+    "meaning_en": "Accompanied by Sītā and Saumitri (Lakshmana), wearing a crown of matted locks, holding the quiver, bow, and arrows in hand, he is the crusher of demons.",
+    "meaning_te": "సీతా-సౌమిత్రులతో కూడినవాడు, జటలతో నిర్మించిన మకుటం ధరించినవాడు; తూణీరం, ధనుస్సు, బాణాలు చేతపట్టుకున్నవాడు, దానవులను మర్దించేవాడు.",
+    "meaning_ta": "சீதையும் சௌமித்ரியும் (லக்ஷ்மணனும்) உடன் இருக்க, சடை முடி அணிந்தவர்; அம்புறாத்தூணியும் வில்லும் அம்பும் கரத்தில் ஏந்தியவர், அசுரர்களை அழிப்பவர்.",
+    "meaning_hi": "सीता और लक्ष्मण के साथ विराजमान, जटाओं का मुकुट धारण किए हुए; तरकश, धनुष और बाण हाथ में लिए हुए, दानवों को मर्दन करने वाले।",
     "notes_en": ""
   },
   {
@@ -49,10 +49,10 @@
     "script_telugu": "యదా చోరభయే రాజభయే శత్రుభయే తథా|ధ్యాత్వా రఘుపతిం క్రుద్ధం కాలానలసమప్రభమ్",
     "script_tamil": "யதா³ சோரப⁴யே ராஜப⁴யே ஶத்ருப⁴யே ததா²|த்⁴யாத்வா ரகு⁴பதிம் க்ருத்³த⁴ம் காலானலஸமப்ரப⁴ம்",
     "roman_iast": "yadā cōrabhayē rājabhayē śatrubhayē tathā|dhyātvā raghupatiṃ kruddhaṃ kālānalasamaprabham",
-    "meaning_en": "When there is fear of thieves, fear of kings, or fear of enemies — then meditate on the wrathful Raghupati, who blazes like the fire of the cosmic dissolution.",
-    "meaning_te": "దొంగల భయం, రాజభయం, శత్రుభయం ఉన్నప్పుడు — కాలానలం వలె ప్రకాశించే క్రుద్ధుడైన రఘుపతిని ధ్యానించాలి.",
-    "meaning_ta": "திருடர்களின் பயம், அரசர்களின் பயம், அல்லது எதிரிகளின் பயம் எப்போது வந்தாலும் — காலத்தின் நெருப்பைப் போல் ஒளிர்கின்ற சினமுற்ற ரகுபதியை தியானிக்க வேண்டும்.",
-    "meaning_hi": "जब चोर का, राजा का, या शत्रु का भय हो — तब क्रोधित रघुपति का ध्यान करें जो कालाग्नि के समान प्रचंड तेज से दीप्तिमान हैं।",
+    "meaning_en": "When there is fear of thieves, fear of kings, or fear of enemies, then meditate on the wrathful Raghupati, who blazes like the fire of the cosmic dissolution.",
+    "meaning_te": "దొంగల భయం, రాజభయం, శత్రుభయం ఉన్నప్పుడు, కాలానలం వలె ప్రకాశించే క్రుద్ధుడైన రఘుపతిని ధ్యానించాలి.",
+    "meaning_ta": "திருடர்களின் பயம், அரசர்களின் பயம், அல்லது எதிரிகளின் பயம் எப்போது வந்தாலும், காலத்தின் நெருப்பைப் போல் ஒளிர்கின்ற சினமுற்ற ரகுபதியை தியானிக்க வேண்டும்.",
+    "meaning_hi": "जब चोर का, राजा का, या शत्रु का भय हो, तब क्रोधित रघुपति का ध्यान करें जो कालाग्नि के समान प्रचंड तेज से दीप्तिमान हैं।",
     "notes_en": ""
   },
   {
@@ -77,10 +77,10 @@
     "script_telugu": "రణే రిపూన్ రావణాదీంస్ తీక్ష్ణమార్గణవృష్టిభిః|సంహరన్తం మహావీరమ్ ఉగ్రమ్ ఐన్ద్రర థస్థితమ్",
     "script_tamil": "ரணே ரிபூன் ராவணாதீ³ம்ஸ் தீக்ஷ்ணமார்க³ணவ்ருஷ்டிபி⁴:|ஸம்ஹரந்தம் மஹாவீரம் உக்³ரம் ஐந்த்³ரர த²ஸ்தி²தம்",
     "roman_iast": "raṇē ripūn rāvaṇādīṃs tīkṣṇamārgaṇavṛṣṭibhiḥ|saṃharantaṃ mahāvīram ugram aindrara thasthitam",
-    "meaning_en": "In battle destroying enemies like Rāvaṇa and others with showers of sharp arrows — the mighty warrior, fierce and terrible, standing upon Indra's chariot.",
-    "meaning_te": "యుద్ధంలో రావణాది శత్రువులను తీక్ష్ణమైన బాణాల వర్షంతో సంహరించేవాడు — ఇంద్ర రథంపై నిలుచున్న ఉగ్రుడు, మహావీరుడు।",
-    "meaning_ta": "போர்க்களத்தில் ராவணனையும் மற்ற எதிரிகளையும் கூர்மையான அம்புகளின் மழையால் அழிப்பவர் — இந்திரனின் தேரில் நின்ற மிகவும் வலிமைமிக்க, கடும் போர்வீரர்.",
-    "meaning_hi": "रण में रावणादि शत्रुओं को तीखे बाणों की वर्षा से संहार करते हुए — इन्द्र के रथ पर खड़े महाप्रतापी, उग्र और महावीर।",
+    "meaning_en": "In battle, the mighty warrior, fierce and terrible, standing upon Indra’s chariot, destroys enemies like Rāvaṇa and others with showers of sharp arrows.",
+    "meaning_te": "ఇంద్ర రథంపై నిలుచున్న ఉగ్రుడు, మహావీరుడు యుద్ధంలో రావణాది శత్రువులను తీక్ష్ణమైన బాణాల వర్షంతో సంహరించేవాడు.",
+    "meaning_ta": "இந்திரனின் தேரில் நின்ற மிகவும் வலிமைமிக்க, கடும் போர்வீரர், போர்க்களத்தில் ராவணனையும் மற்ற எதிரிகளையும் கூர்மையான அம்புகளின் மழையால் அழிப்பவர்.",
+    "meaning_hi": "इन्द्र के रथ पर खड़े महाप्रतापी, उग्र और महावीर, रण में रावणादि शत्रुओं को तीखे बाणों की वर्षा से संहार करते हैं।",
     "notes_en": ""
   },
   {
@@ -133,10 +133,10 @@
     "script_telugu": "ఏవం ధ్యాత్వా జపేద్ రామకవచం సిద్ధిదాయకమ్|సుతీక్ష్ణ వజ్రకవచం శృణు వక్ష్యామ్య్ అనుత్తమమ్",
     "script_tamil": "ஏவம் த்⁴யாத்வா ஜபேத்³ ராமகவசம் ஸித்³தி⁴தா³யகம்|ஸுதீக்ஷ்ண வஜ்ரகவசம் ஶ்ருணு வக்ஷ்யாம்ய் அனுத்தமம்",
     "roman_iast": "ēvaṃ dhyātvā japēd rāmakavacaṃ siddhidāyakam|sutīkṣṇa vajrakavacaṃ śṛṇu vakṣyāmy anuttamam",
-    "meaning_en": "Thus meditating (on this warrior form of Rāma), one should chant this armor of Rāma which grants all perfections. O Sutīkṣṇa (best of sages), listen — I shall now declare the unsurpassable diamond-shield kavacam.",
-    "meaning_te": "ఈ విధంగా ధ్యానించి, సిద్ధిని ప్రసాదించే రామ కవచాన్ని జపించాలి. ఓ మునిసత్తమ సుతీక్ష్ణా! వినుము — ఇప్పుడు నేను అనుత్తమ వజ్రకవచాన్ని వివరిస్తాను.",
-    "meaning_ta": "இவ்வாறு தியானித்து, சித்திகளை வழங்கும் ராம கவசத்தை ஜபிக்க வேண்டும். ஓ முனி சிரேஷ்டா சுதீக்ஷ்ணா! கேட்பீராக — இப்போது நான் சிறப்புமிக்க வஜ்ர கவசத்தை அறிவிக்கின்றேன்.",
-    "meaning_hi": "इस प्रकार ध्यान करके, सिद्धि प्रदान करने वाले रामकवच का जप करना चाहिए। हे मुनिश्रेष्ठ सुतीक्ष्ण! सुनो — मैं अब उत्तम वज्रकवच सुनाता हूँ।",
+    "meaning_en": "Thus meditating (on this warrior form of Rāma), one should chant this armor of Rāma which grants all perfections. O Sutīkṣṇa (best of sages), listen: I shall now declare the unsurpassable diamond-shield kavacam.",
+    "meaning_te": "ఈ విధంగా ధ్యానించి, సిద్ధిని ప్రసాదించే రామ కవచాన్ని జపించాలి. ఓ మునిసత్తమ సుతీక్ష్ణా! వినుము, ఇప్పుడు నేను అనుత్తమ వజ్రకవచాన్ని వివరిస్తాను.",
+    "meaning_ta": "இவ்வாறு தியானித்து, சித்திகளை வழங்கும் ராம கவசத்தை ஜபிக்க வேண்டும். ஓ முனி சிரேஷ்டா சுதீக்ஷ்ணா! கேட்பீராக, இப்போது நான் சிறப்புமிக்க வஜ்ர கவசத்தை அறிவிக்கின்றேன்.",
+    "meaning_hi": "इस प्रकार ध्यान करके, सिद्धि प्रदान करने वाले रामकवच का जप करना चाहिए। हे मुनिश्रेष्ठ सुतीक्ष्ण! सुनो, मैं अब उत्तम वज्रकवच सुनाता हूँ।",
     "notes_en": ""
   },
   {
@@ -316,9 +316,9 @@
     "script_tamil": "ஸௌமித்ரிபூர்வஜ: பாது வாகா³தீ³னீந்த்³ரியாணி ச|ரோமாங்குராண்ய் அஶேஷாணி பாது ஸுக்³ரீவராஜ்யத³:",
     "roman_iast": "saumitripūrvajaḥ pātu vāgādīnīndriyāṇi ca|rōmāṅkurāṇy aśēṣāṇi pātu sugrīvarājyadaḥ",
     "meaning_en": "May Lakshmana's elder brother (Saumitripūrvaja = Rāma) guard my speech and all other sense organs; may the Restorer of Sugrīva's kingdom guard all my hair follicles.",
-    "meaning_te": "సౌమిత్రిపూర్వజుడు (లక్ష్మణుని అగ్రజుడు — రాముడు) నా వాగాది ఇంద్రియాలు రక్షించుగాక; సుగ్రీవరాజ్యదుడు నా రోమాంకురాలన్నీ రక్షించుగాక.",
+    "meaning_te": "సౌమిత్రిపూర్వజుడు (లక్ష్మణుని అగ్రజుడైన రాముడు) నా వాగాది ఇంద్రియాలు రక్షించుగాక; సుగ్రీవరాజ్యదుడు నా రోమాంకురాలన్నీ రక్షించుగాక.",
     "meaning_ta": "சௌமித்ரியின் மூத்தவன் (லக்ஷ்மணன் மூத்தவன் = ராமன்) என் வாக்கு மற்றும் இந்திரியங்களைக் காக்கட்டும்; சுக்ரீவனுக்கு ராஜ்யம் அளித்தவன் என் ரோம கூபங்கள் எல்லாவற்றையும் காக்கட்டும்.",
-    "meaning_hi": "सौमित्रिपूर्वज (लक्ष्मण के अग्रज — राम) वाणी एवं अन्य इन्द्रियों की रक्षा करें; सुग्रीवराज्यद (सुग्रीव को राज्य देने वाले) सभी रोमकूपों की रक्षा करें।",
+    "meaning_hi": "सौमित्रिपूर्वज (लक्ष्मण के अग्रज राम) वाणी एवं अन्य इन्द्रियों की रक्षा करें; सुग्रीवराज्यद (सुग्रीव को राज्य देने वाले) सभी रोमकूपों की रक्षा करें।",
     "notes_en": ""
   },
   {
@@ -329,7 +329,7 @@
     "script_telugu": "వాఙ్మనోబద్ధ్య్ అహఙ్కారైర్ జ్ఞానాజ్ఞానకృతాని చ|జన్మాన్తరకృతానీహ పాపాని వివిధాని చ",
     "script_tamil": "வாங்மனோப³த்³த்⁴ய் அஹங்காரைர் ஜ்ஞானாஜ்ஞானக்ருதானி ச|ஜன்மாந்தரக்ருதானீஹ பாபானி விவிதா⁴னி ச",
     "roman_iast": "vāṅmanōbaddhy ahaṅkārair jñānājñānakṛtāni ca|janmāntarakṛtānīha pāpāni vividhāni ca",
-    "meaning_en": "All sins committed through speech, mind, intellect, and ego — whether knowingly or unknowingly — and all the various sins performed in past births...",
+    "meaning_en": "All sins committed through speech, mind, intellect, and ego, whether knowingly or unknowingly, and all the various sins performed in past births...",
     "meaning_te": "వాక్కు, మనస్సు, బుద్ధి, అహంకారాల ద్వారా తెలిసో తెలియకో చేసిన పాపాలు, మరియు పూర్వజన్మలలో చేసిన వివిధ రకాల పాపాలు...",
     "meaning_ta": "வாக்கு, மனம், அறிவு, அகங்காரம் ஆகியவற்றால் அறிந்தோ அறியாமலோ செய்த பாவங்களும், முன் பிறவிகளில் செய்த பல வகையான பாவங்களும்...",
     "meaning_hi": "वाणी, मन, बुद्धि और अहंकार से जाने-अनजाने किए गए पाप, और पिछले जन्मों में किए गए अनेक प्रकार के पाप...",
@@ -343,7 +343,7 @@
     "script_telugu": "తాని సర్వాణి దగ్ధ్వాశు హరకోదణ్డఖణ్డనః|పాతు మాం సర్వతో రామః శార్ఙ్గబాణధరః సదా",
     "script_tamil": "தானி ஸர்வாணி த³க்³த்⁴வாஶு ஹரகோத³ண்ட³க²ண்ட³ன:|பாது மாம் ஸர்வதோ ராம: ஶார்ங்க³பா³ணத⁴ர: ஸதா³",
     "roman_iast": "tāni sarvāṇi dagdhvāśu harakōdaṇḍakhaṇḍanaḥ|pātu māṃ sarvatō rāmaḥ śārṅgabāṇadharaḥ sadā",
-    "meaning_en": "...may Rāma — the Breaker of Hara's (Śiva's) Kodanda bow — quickly burn away all those sins; may Rāma, the Bearer of the Śārṅga bow and arrows, always protect me from all directions.",
+    "meaning_en": "...may Rāma, the Breaker of Hara's (Śiva's) Kodanda bow, quickly burn away all those sins; may Rāma, the Bearer of the Śārṅga bow and arrows, always protect me from all directions.",
     "meaning_te": "...వాటన్నిటినీ శీఘ్రంగా దగ్ధం చేసి, హరకోదండఖండనుడు (శివుని కోదండాన్ని విరిచిన) రాముడు, శారంగబాణధరుడు, నన్ను అన్ని వైపుల నుండి సర్వదా రక్షించుగాక.",
     "meaning_ta": "...அவை அனைத்தையும் விரைவில் எரித்து, சிவனின் கொடண்ட வில்லை உடைத்தவன் (ஹரகோடண்டகண்டன) ராமன், சார்ங்க வில் ஏந்தியவன் என்னை எல்லா திசைகளிலும் எப்போதும் காக்கட்டும்.",
     "meaning_hi": "...उन सभी को शीघ्र ही भस्म करके हरकोदण्डखण्डन (शिव के धनुष को तोड़ने वाले) राम, शार्ङ्गबाणधर (शार्ङ्ग धनुष और बाण धारण करने वाले) राम सदा सर्वत्र मेरी रक्षा करें।",
@@ -357,10 +357,10 @@
     "script_telugu": "ఇతి శ్రీరామచన్ద్రస్య కవచం వజ్రసమ్మితమ్|గుహ్యాద్ గుహ్యతమం దివ్యం సుతీక్ష్ణ మునిసత్తమ",
     "script_tamil": "இதி ஶ்ரீராமசந்த்³ரஸ்ய கவசம் வஜ்ரஸம்மிதம்|கு³ஹ்யாத்³ கு³ஹ்யதமம் தி³வ்யம் ஸுதீக்ஷ்ண முனிஸத்தம",
     "roman_iast": "iti śrīrāmacandrasya kavacaṃ vajrasammitam|guhyād guhyatamaṃ divyaṃ sutīkṣṇa munisattama",
-    "meaning_en": "Thus this armor of Śrī Rāmacandra is hard as diamond (vajrasammita) — the most secret of all secrets, divine. O Sutīkṣṇa, best of sages!",
-    "meaning_te": "ఈ విధంగా శ్రీరామచంద్రుని కవచం వజ్రసమానమైనది — ఇది గుహ్యాతి గుహ్యం మరియు దివ్యమైనది. ఓ మునిసత్తమ సుతీక్ష్ణా!",
-    "meaning_ta": "இவ்வாறு ஸ்ரீராமசந்திரனின் கவசம் வஜ்ர சமம் (வைரம் போல் உறுதியானது) — இது இரகசியங்களிலெல்லாம் மிக உயர்ந்த இரகசியம், திவ்யமானது. ஓ, முனி சிரேஷ்டா சுதீக்ஷ்ணா!",
-    "meaning_hi": "इस प्रकार श्रीरामचन्द्र का यह कवच वज्र के समान दृढ़ है — यह सभी रहस्यों में परमरहस्य और दिव्य है। हे मुनिश्रेष्ठ सुतीक्ष्ण!",
+    "meaning_en": "Thus this armor of Śrī Rāmacandra is hard as diamond (vajrasammita), the most secret of all secrets, and divine. O Sutīkṣṇa, best of sages!",
+    "meaning_te": "ఈ విధంగా శ్రీరామచంద్రుని కవచం వజ్రసమానమైనది, ఇది గుహ్యాతి గుహ్యం మరియు దివ్యమైనది. ఓ మునిసత్తమ సుతీక్ష్ణా!",
+    "meaning_ta": "இவ்வாறு ஸ்ரீராமசந்திரனின் கவசம் வஜ்ர சமம் (வைரம் போல் உறுதியானது), இது இரகசியங்களிலெல்லாம் மிக உயர்ந்த இரகசியம், திவ்யமானது. ஓ, முனி சிரேஷ்டா சுதீக்ஷ்ணா!",
+    "meaning_hi": "इस प्रकार श्रीरामचन्द्र का यह कवच वज्र के समान दृढ़ है, यह सभी रहस्यों में परमरहस्य और दिव्य है। हे मुनिश्रेष्ठ सुतीक्ष्ण!",
     "notes_en": ""
   },
   {
@@ -371,10 +371,10 @@
     "script_telugu": "యః పఠేచ్ ఛృణుయాద్ వాపి శ్రావయేద్ వా సమాహితః|స యాతి పరమం స్థానం రామచన్ద్రప్రసాదతః",
     "script_tamil": "ய: படே²ச் ச்²ருணுயாத்³ வாபி ஶ்ராவயேத்³ வா ஸமாஹித:|ஸ யாதி பரமம் ஸ்தா²னம் ராமசந்த்³ரப்ரஸாத³த:",
     "roman_iast": "yaḥ paṭhēc chṛṇuyād vāpi śrāvayēd vā samāhitaḥ|sa yāti paramaṃ sthānaṃ rāmacandraprasādataḥ",
-    "meaning_en": "Whoever reads, hears, or causes others to hear this (kavacam) with a concentrated mind — that person, by the grace of Rāmacandra, attains the supreme abode.",
-    "meaning_te": "ఏకాగ్ర మనస్సుతో ఎవరైతే దీన్ని పఠిస్తారో, వింటారో, వినిపిస్తారో — వారు రామచంద్ర ప్రసాదంతో పరమ స్థానాన్ని పొందుతారు.",
-    "meaning_ta": "ஏகாக்கிரமான மனதுடன் இதை யார் படிக்கிறார்களோ, கேட்கிறார்களோ, கேட்கச் செய்கிறார்களோ — அவர்கள் ராமசந்திரனின் அருளால் பரம தலத்தை அடைவார்கள்.",
-    "meaning_hi": "जो एकाग्र मन से इसे पढ़े, सुने या सुनाए — वह रामचन्द्र की कृपा से परमधाम को प्राप्त होता है।",
+    "meaning_en": "Whoever reads, hears, or causes others to hear this (kavacam) with a concentrated mind, that person, by the grace of Rāmacandra, attains the supreme abode.",
+    "meaning_te": "ఏకాగ్ర మనస్సుతో ఎవరైతే దీన్ని పఠిస్తారో, వింటారో, వినిపిస్తారో, వారు రామచంద్ర ప్రసాదంతో పరమ స్థానాన్ని పొందుతారు.",
+    "meaning_ta": "ஏகாக்கிரமான மனதுடன் இதை யார் படிக்கிறார்களோ, கேட்கிறார்களோ, கேட்கச் செய்கிறார்களோ, அவர்கள் ராமசந்திரனின் அருளால் பரம தலத்தை அடைவார்கள்.",
+    "meaning_hi": "जो एकाग्र मन से इसे पढ़े, सुने या सुनाए, वह रामचन्द्र की कृपा से परमधाम को प्राप्त होता है।",
     "notes_en": ""
   },
   {
@@ -385,10 +385,10 @@
     "script_telugu": "మహాపాతకయుక్తో వా గోఘ్నో వా భ్రూణహా తథా|శ్రీరామచన్ద్రకవచపఠనాచ్ ఛుద్ధిమ్ ఆప్నుయాత్",
     "script_tamil": "மஹாபாதகயுக்தோ வா கோ³க்⁴னோ வா ப்⁴ரூணஹா ததா²|ஶ்ரீராமசந்த்³ரகவசபட²னாச் சு²த்³தி⁴ம் ஆப்னுயாத்",
     "roman_iast": "mahāpātakayuktō vā gōghnō vā bhrūṇahā tathā|śrīrāmacandrakavacapaṭhanāc chuddhim āpnuyāt",
-    "meaning_en": "Even one burdened with the five great sins, a cow-slayer, or one guilty of causing harm to the unborn (bhrūṇa-hatya) — through the recitation of Śrī Rāmacandra's armor, such a person attains purification.",
-    "meaning_te": "మహాపాతకులు, గో హంతకులు, భ్రూణ హంతకులు అయినా సరే — శ్రీరామచంద్ర కవచ పఠనం ద్వారా శుద్ధిని పొందుతారు.",
-    "meaning_ta": "மாபெரும் பாவங்கள் செய்தவராலும், பசுவை கொன்றவராலும், கரு அழிப்புக்கு காரணமானவராலும் — ஸ்ரீராமசந்திர கவசத்தை படிப்பதால் அவர்கள் தூய்மை அடைவார்கள்.",
-    "meaning_hi": "महापातकों से युक्त हो, गोहत्यारा हो या भ्रूणहत्या का दोषी हो — ऐसा व्यक्ति भी श्रीरामचन्द्र कवच के पाठ से शुद्धि प्राप्त करता है।",
+    "meaning_en": "Even one burdened with the five great sins, a cow-slayer, or one guilty of causing harm to the unborn (bhrūṇa-hatya); through the recitation of Śrī Rāmacandra’s armor, such a person attains purification.",
+    "meaning_te": "మహాపాతకులు, గో హంతకులు, భ్రూణ హంతకులు అయినా సరే, శ్రీరామచంద్ర కవచ పఠనం ద్వారా శుద్ధిని పొందుతారు.",
+    "meaning_ta": "மாபெரும் பாவங்கள் செய்தவராலும், பசுவை கொன்றவராலும், கரு அழிப்புக்கு காரணமானவராலும், ஸ்ரீராமசந்திர கவசத்தை படிப்பதால் அவர்கள் தூய்மை அடைவார்கள்.",
+    "meaning_hi": "महापातकों से युक्त हो, गोहत्यारा हो या भ्रूणहत्या का दोषी हो, ऐसा व्यक्ति भी श्रीरामचन्द्र कवच के पाठ से शुद्धि प्राप्त करता है।",
     "notes_en": ""
   }
 ]
