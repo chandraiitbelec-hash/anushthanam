@@ -139,7 +139,7 @@ type UiStrings = {
   allItemsGathered: string;
   materialsChecklist: string;
   // Empty states
-  emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas', { title: string; body: string }>;
+  emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas' | 'live-streams', { title: string; body: string }>;
   // Story content
   storyFallbackNote: string;
   // Daily devotional
@@ -158,6 +158,12 @@ type UiStrings = {
   adjustTextSize: string;
   // Panchangam upcoming
   showingDays: (n: number) => string;
+  // Live darshan
+  liveDarshan: string;
+  watchLive: string;
+  arathiSchedule: string;
+  visitChannel: string;
+  liveDarshanLocation: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -280,6 +286,7 @@ export const UI: Record<Language, UiStrings> = {
       shlokas: { title: 'No shlokas published yet', body: 'Shlokas and stotras will appear here once published.' },
       occasions: { title: 'No occasions published yet', body: 'Life occasions and samskaras will appear here once published.' },
       'occasion-pujas': { title: 'No pujas listed yet', body: 'Puja guides for this occasion will appear here once added.' },
+      'live-streams': { title: 'No live streams published yet', body: 'Temple live darshan streams will appear here once published.' },
     },
     storyFallbackNote: '',
     devotionalHeading: "Today's Devotional",
@@ -294,6 +301,11 @@ export const UI: Record<Language, UiStrings> = {
     navLanguageHeading: 'Language',
     adjustTextSize: 'Adjust text size',
     showingDays: (n) => `Showing ${n} days`,
+    liveDarshan: 'Live Darshan',
+    watchLive: 'Watch Live',
+    arathiSchedule: 'Arathi Schedule',
+    visitChannel: 'Visit Channel',
+    liveDarshanLocation: 'Location',
   },
   te: {
     tithi: 'తిథి',
@@ -414,6 +426,7 @@ export const UI: Record<Language, UiStrings> = {
       shlokas: { title: 'ఇంకా శ్లోకాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత శ్లోకాలు, స్తోత్రాలు ఇక్కడ కనిపిస్తాయి.' },
       occasions: { title: 'ఇంకా సందర్భాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత జీవిత సందర్భాలు ఇక్కడ కనిపిస్తాయి.' },
       'occasion-pujas': { title: 'ఇంకా పూజలు జోడించబడలేదు', body: 'ఈ సందర్భానికి పూజా మార్గదర్శకాలు జోడించిన తర్వాత ఇక్కడ కనిపిస్తాయి.' },
+      'live-streams': { title: 'ఇంకా లైవ్ స్ట్రీమ్‌లు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత ఆలయ ప్రత్యక్ష దర్శన ప్రసారాలు ఇక్కడ కనిపిస్తాయి.' },
     },
     storyFallbackNote: 'పూర్తి కథ ఇంకా తెలుగులో అందుబాటులో లేదు — ఇంగ్లీష్‌లో చదువుతున్నారు',
     devotionalHeading: 'నేటి భక్తి',
@@ -428,6 +441,11 @@ export const UI: Record<Language, UiStrings> = {
     navLanguageHeading: 'భాష',
     adjustTextSize: 'టెక్స్ట్ పరిమాణం మార్చండి',
     showingDays: (n) => `${n} రోజులు చూపిస్తోంది`,
+    liveDarshan: 'ప్రత్యక్ష దర్శనం',
+    watchLive: 'ప్రత్యక్షంగా చూడండి',
+    arathiSchedule: 'హారతి వేళలు',
+    visitChannel: 'ఛానెల్ చూడండి',
+    liveDarshanLocation: 'స్థానం',
   },
   ta: {
     tithi: 'திதி',
@@ -548,6 +566,7 @@ export const UI: Record<Language, UiStrings> = {
       shlokas: { title: 'இன்னும் ஸ்லோகங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் ஸ்லோகங்கள் இங்கே தோன்றும்.' },
       occasions: { title: 'இன்னும் சந்தர்ப்பங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் வாழ்க்கை சந்தர்ப்பங்கள் இங்கே தோன்றும்.' },
       'occasion-pujas': { title: 'இன்னும் பூஜைகள் சேர்க்கப்படவில்லை', body: 'இந்த சந்தர்ப்பத்திற்கான பூஜை வழிகாட்டிகள் சேர்க்கப்பட்டவுடன் இங்கே தோன்றும்.' },
+      'live-streams': { title: 'இன்னும் நேரடி ஒளிபரப்புகள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் கோயில் நேரடி தரிசன ஒளிபரப்புகள் இங்கே தோன்றும்.' },
     },
     storyFallbackNote: 'முழு கதை இன்னும் தமிழில் கிடைக்கவில்லை — ஆங்கிலத்தில் படிக்கிறீர்கள்',
     devotionalHeading: 'இன்றைய பக்தி',
@@ -562,6 +581,11 @@ export const UI: Record<Language, UiStrings> = {
     navLanguageHeading: 'மொழி',
     adjustTextSize: 'உரை அளவை மாற்று',
     showingDays: (n) => `${n} நாட்கள் காட்டப்படுகின்றன`,
+    liveDarshan: 'நேரடி தரிசனம்',
+    watchLive: 'நேரடியாகக் காண்க',
+    arathiSchedule: 'ஆரத்தி நேரங்கள்',
+    visitChannel: 'சேனலைப் பார்க்க',
+    liveDarshanLocation: 'இடம்',
   },
   hi: {
     tithi: 'तिथि',
@@ -682,6 +706,7 @@ export const UI: Record<Language, UiStrings> = {
       shlokas: { title: 'अभी तक कोई श्लोक प्रकाशित नहीं', body: 'प्रकाशित होने पर श्लोक और स्तोत्र यहाँ दिखाई देंगे।' },
       occasions: { title: 'अभी तक कोई अवसर प्रकाशित नहीं', body: 'प्रकाशित होने पर जीवन-अवसर यहाँ दिखाई देंगे।' },
       'occasion-pujas': { title: 'अभी तक कोई पूजा नहीं जोड़ी गई', body: 'इस अवसर के लिए पूजा मार्गदर्शिकाएँ जोड़े जाने पर यहाँ दिखाई देंगी।' },
+      'live-streams': { title: 'अभी तक कोई लाइव स्ट्रीम प्रकाशित नहीं', body: 'प्रकाशित होने पर मंदिर के लाइव दर्शन प्रसारण यहाँ दिखाई देंगे।' },
     },
     storyFallbackNote: 'पूरी कथा अभी हिंदी में उपलब्ध नहीं है — अंग्रेज़ी में पढ़ रहे हैं',
     devotionalHeading: 'आज की भक्ति',
@@ -696,5 +721,10 @@ export const UI: Record<Language, UiStrings> = {
     navLanguageHeading: 'भाषा',
     adjustTextSize: 'टेक्स्ट आकार समायोजित करें',
     showingDays: (n) => `${n} दिन दिखाए जा रहे हैं`,
+    liveDarshan: 'लाइव दर्शन',
+    watchLive: 'लाइव देखें',
+    arathiSchedule: 'आरती का समय',
+    visitChannel: 'चैनल देखें',
+    liveDarshanLocation: 'स्थान',
   },
 };

@@ -17,6 +17,7 @@ export const TABS = {
   config: 'config',
   occasions: 'occasions',
   puja_occasions: 'puja_occasions',
+  live_streams: 'live_streams',
 } as const;
 
 export type Tab = (typeof TABS)[keyof typeof TABS];

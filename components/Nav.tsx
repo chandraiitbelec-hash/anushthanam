@@ -28,6 +28,7 @@ const MORE_LINKS: NavLink[] = [
   { href: '/bhagavad-gita',  key: 'bhagavadGita' },
   { href: '/panchangam',     key: 'panchangam' },
   { href: '/upcoming',       key: 'upcoming' },
+  { href: '/live-darshan',   key: 'liveDarshan' },
 ];
 
 // Mobile drawer shows everything flat.

@@ -1,7 +1,7 @@
 import { getSheetRows, getPublished } from './sheets';
 import { TABS } from './tabs';
 import { todayIST } from './utils';
-import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story, Status, TranslationStatus } from './types';
+import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story, Status, TranslationStatus, LiveStream } from './types';
 
 const VALID_STATUSES: Status[] = ['draft', 'review', 'published'];
 const VALID_TRANSLATION_STATUSES: TranslationStatus[] = ['en-only', 'partial', 'complete'];
@@ -316,6 +316,36 @@ export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
     result[r.occasion_slug].push(rowToPuja(pujaRow));
   }
   return result;
+}
+
+export function rowToLiveStream(r: Record<string, string>): LiveStream {
+  return {
+    slug: r.slug,
+    temple_name_en: r.temple_name_en,
+    temple_name_te: r.temple_name_te,
+    temple_name_ta: r.temple_name_ta,
+    temple_name_hi: r.temple_name_hi,
+    deity_slug: r.deity_slug,
+    youtube_video_id: r.youtube_video_id,
+    channel_url: r.channel_url,
+    location_en: r.location_en,
+    location_te: r.location_te,
+    location_ta: r.location_ta,
+    location_hi: r.location_hi,
+    arathi_schedule_en: r.arathi_schedule_en,
+    arathi_schedule_te: r.arathi_schedule_te,
+    arathi_schedule_ta: r.arathi_schedule_ta,
+    arathi_schedule_hi: r.arathi_schedule_hi,
+    display_order: parseInt(r.display_order) || 0,
+    status: (VALID_STATUSES.includes(r.status as Status) ? r.status : 'draft') as LiveStream['status'],
+    translation_status: (VALID_TRANSLATION_STATUSES.includes(r.translation_status as TranslationStatus) ? r.translation_status : 'en-only') as LiveStream['translation_status'],
+  };
+}
+
+// Returns published live streams ordered by display_order.
+export async function getLiveStreams(): Promise<LiveStream[]> {
+  const rows = await getPublished(TABS.live_streams);
+  return rows.map(rowToLiveStream).sort((a, b) => a.display_order - b.display_order);
 }
 
 export async function getUpcoming(limit?: number) {

@@ -97,6 +97,13 @@ const EXPECTED_COLUMNS = {
     'icon', 'display_order', 'status',
   ],
   puja_occasions: ['occasion_slug', 'puja_slug', 'display_order'],
+  live_streams: [
+    'slug', 'temple_name_en', 'temple_name_te', 'temple_name_ta',
+    'temple_name_hi', 'deity_slug', 'youtube_video_id', 'channel_url',
+    'location_en', 'location_te', 'location_ta', 'location_hi',
+    'arathi_schedule_en', 'arathi_schedule_te', 'arathi_schedule_ta',
+    'arathi_schedule_hi', 'display_order', 'status', 'translation_status',
+  ],
 };
 
 // Tabs whose published-row count should never realistically be 0.

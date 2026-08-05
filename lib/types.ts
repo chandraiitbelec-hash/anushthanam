@@ -275,6 +275,28 @@ export type PanchangamDay = {
   special_event_hi: string;
 };
 
+export type LiveStream = {
+  slug: string;
+  temple_name_en: string;
+  temple_name_te: string;
+  temple_name_ta: string;
+  temple_name_hi: string;
+  deity_slug: string;
+  youtube_video_id: string;
+  channel_url: string;
+  location_en: string;
+  location_te: string;
+  location_ta: string;
+  location_hi: string;
+  arathi_schedule_en: string;
+  arathi_schedule_te: string;
+  arathi_schedule_ta: string;
+  arathi_schedule_hi: string;
+  display_order: number;
+  status: Status;
+  translation_status: TranslationStatus;
+};
+
 export type SearchRecord = {
   id: string;
   type: 'god' | 'festival' | 'vratham' | 'shloka';
