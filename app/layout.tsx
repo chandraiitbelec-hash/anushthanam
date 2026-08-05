@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { FontScaleProvider } from '@/context/FontScaleContext';
@@ -149,6 +150,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </FontScaleProvider>
         </LanguageProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
