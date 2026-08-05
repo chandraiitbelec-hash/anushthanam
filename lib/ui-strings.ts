@@ -164,6 +164,8 @@ type UiStrings = {
   arathiSchedule: string;
   visitChannel: string;
   liveDarshanLocation: string;
+  showMoreSchedule: (n: number) => string;
+  showLessSchedule: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -306,6 +308,8 @@ export const UI: Record<Language, UiStrings> = {
     arathiSchedule: 'Arathi Schedule',
     visitChannel: 'Visit Channel',
     liveDarshanLocation: 'Location',
+    showMoreSchedule: (n) => `Show ${n} more`,
+    showLessSchedule: 'Show less',
   },
   te: {
     tithi: 'తిథి',
@@ -446,6 +450,8 @@ export const UI: Record<Language, UiStrings> = {
     arathiSchedule: 'హారతి వేళలు',
     visitChannel: 'ఛానెల్ చూడండి',
     liveDarshanLocation: 'స్థానం',
+    showMoreSchedule: (n) => `మరిన్ని ${n} చూపించు`,
+    showLessSchedule: 'తక్కువగా చూపించు',
   },
   ta: {
     tithi: 'திதி',
@@ -586,6 +592,8 @@ export const UI: Record<Language, UiStrings> = {
     arathiSchedule: 'ஆரத்தி நேரங்கள்',
     visitChannel: 'சேனலைப் பார்க்க',
     liveDarshanLocation: 'இடம்',
+    showMoreSchedule: (n) => `மேலும் ${n} காட்டு`,
+    showLessSchedule: 'குறைவாகக் காட்டு',
   },
   hi: {
     tithi: 'तिथि',
@@ -726,5 +734,7 @@ export const UI: Record<Language, UiStrings> = {
     arathiSchedule: 'आरती का समय',
     visitChannel: 'चैनल देखें',
     liveDarshanLocation: 'स्थान',
+    showMoreSchedule: (n) => `${n} और दिखाएं`,
+    showLessSchedule: 'कम दिखाएं',
   },
 };
