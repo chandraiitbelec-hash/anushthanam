@@ -21,7 +21,7 @@
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
-import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag } from './lib-sheets.mjs';
+import { getSheetsClient, SPREADSHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -44,14 +44,17 @@ const HEADERS = [
   'special_event_en','special_event_te','special_event_ta','special_event_hi',
 ];
 
-// Returns true if row 1 looks like a header row (not a date)
+// Returns true if row 1 already matches HEADERS exactly. Checking the full
+// row (not just that A1 === 'date') matters because adding a new column to
+// HEADERS without a matching change here would otherwise leave a stale
+// header row silently out of sync with the data columns actually written.
 async function hasHeaderRow() {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: 'panchangam!A1',
+    range: `panchangam!A1:${colLetter(HEADERS.length - 1)}1`,
   });
-  const cell = res.data.values?.[0]?.[0] ?? '';
-  return cell === 'date';
+  const row = res.data.values?.[0] ?? [];
+  return row.length === HEADERS.length && HEADERS.every((h, i) => row[i] === h);
 }
 
 // Read existing panchangam dates from the sheet (column A after header)
