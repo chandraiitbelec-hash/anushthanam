@@ -133,7 +133,15 @@ function fail(msg) {
 }
 
 async function checkTab(tab) {
-  const { headers, rows } = await getTabWithHeaders(tab);
+  let headers, rows;
+  try {
+    ({ headers, rows } = await getTabWithHeaders(tab));
+  } catch (err) {
+    const notFound = /unable to parse range/i.test(err.message ?? '');
+    fail(`${tab}: ${notFound ? 'tab does not exist yet' : `failed to read tab (${err.message})`}`);
+    return null;
+  }
+
   const expected = EXPECTED_COLUMNS[tab];
   const missing = expected.filter(c => !headers.includes(c));
 
@@ -175,7 +183,9 @@ function checkOccurrenceDates(tab, headers, rows) {
 
 async function main() {
   for (const tab of Object.keys(EXPECTED_COLUMNS)) {
-    const { headers, rows } = await checkTab(tab);
+    const result = await checkTab(tab);
+    if (!result) continue;
+    const { headers, rows } = result;
     if (tab === 'festivals' || tab === 'vrathams') {
       checkOccurrenceDates(tab, headers, rows);
     }
