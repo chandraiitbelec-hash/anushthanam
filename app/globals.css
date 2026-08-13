@@ -395,7 +395,7 @@ body {
 }
 html.pwa-launch #pwa-splash {
   display: flex;
-  animation: pwa-splash-fade 380ms ease 1500ms forwards;
+  animation: pwa-splash-fade 450ms ease 2000ms forwards;
 }
 /* Core (flame + diya): settles in first, simple scale + fade from center. */
 .pwa-splash-core {
@@ -413,12 +413,12 @@ html.pwa-launch #pwa-splash {
   transform-origin: 5100px 2000px;
   opacity: 0;
   transform: rotate(var(--rot0)) scale(0.85);
-  animation: pwa-splash-petal-bloom 700ms cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+  animation: pwa-splash-petal-bloom 800ms cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
 }
 .pwa-splash-rays path,
 .pwa-splash-rays circle {
   opacity: 0;
-  animation: pwa-splash-ray-in 260ms cubic-bezier(0, 0, 0.58, 1) forwards;
+  animation: pwa-splash-ray-in 280ms cubic-bezier(0, 0, 0.58, 1) forwards;
 }
 @keyframes pwa-splash-core-in {
   0% { opacity: 0; transform: scale(0.5); }
