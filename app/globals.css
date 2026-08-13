@@ -397,20 +397,37 @@ html.pwa-launch #pwa-splash {
   display: flex;
   animation: pwa-splash-fade 380ms ease 1500ms forwards;
 }
-.pwa-splash-lotus {
-  transform-origin: 509px 428px;
+/* Core (flame + diya): settles in first, simple scale + fade from center. */
+.pwa-splash-core {
+  transform-box: fill-box;
+  transform-origin: center;
   opacity: 0;
-  animation: pwa-splash-unfurl 700ms cubic-bezier(0.2, 0.7, 0.3, 1) 80ms forwards;
+  transform: scale(0.5);
+  animation: pwa-splash-core-in 380ms cubic-bezier(0, 0, 0.58, 1) forwards;
+}
+/* Petals: hinged at one fixed pivot near the diya (--rot0 set per-petal in
+   PwaSplash.tsx from real path geometry) — each swings open by ROTATING
+   around that anchor, tip sweeping outward while the base stays put, like
+   a ladder falling from its planted foot. Not a translate/float-in. */
+.pwa-splash-petal {
+  transform-origin: 5100px 2000px;
+  opacity: 0;
+  transform: rotate(var(--rot0)) scale(0.85);
+  animation: pwa-splash-petal-bloom 700ms cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
 }
 .pwa-splash-rays path,
 .pwa-splash-rays circle {
   opacity: 0;
-  animation: pwa-splash-ray-in 260ms ease-out forwards;
+  animation: pwa-splash-ray-in 260ms cubic-bezier(0, 0, 0.58, 1) forwards;
 }
-@keyframes pwa-splash-unfurl {
-  0% { opacity: 0; transform: scale(0.35) rotate(-10deg); }
-  60% { opacity: 1; }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+@keyframes pwa-splash-core-in {
+  0% { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes pwa-splash-petal-bloom {
+  0% { opacity: 0; transform: rotate(var(--rot0)) scale(0.85); }
+  40% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
 }
 @keyframes pwa-splash-ray-in {
   0% { opacity: 0; }
