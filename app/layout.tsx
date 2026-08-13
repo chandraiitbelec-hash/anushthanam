@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Noto_Sans, Noto_Sans_Telugu, Noto_Sans_Tamil, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
@@ -9,6 +9,7 @@ import type { Theme } from '@/context/ThemeContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import { SITE_URL, SITE_NAME } from '@/lib/seo';
 import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
@@ -80,6 +81,11 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
   robots: { index: true, follow: true },
+  manifest: '/manifest.json',
+  icons: {
+    icon: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+    apple: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+  },
   openGraph: {
     type: 'website',
     siteName: SITE_NAME,
@@ -95,6 +101,12 @@ export const metadata: Metadata = {
     description:
       'Gods, shlokas, festivals, vrathams, pujas and panchangam — in Telugu, Tamil, Hindi and English.',
   },
+};
+
+// themeColor lives in the viewport export (not metadata) since Next 14 — this
+// is static and unrelated to the cookie-based dynamic-rendering trade below.
+export const viewport: Viewport = {
+  themeColor: '#1C1611',
 };
 
 // Reading cookies() opts the whole tree into per-request dynamic rendering — a
@@ -136,6 +148,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {`try{var m=document.cookie.match(/(?:^|; )anushthanam-theme=([^;]*)/);var t=m?decodeURIComponent(m[1]):localStorage.getItem('anushthanam-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(t==='system')document.documentElement.removeAttribute('data-theme');}catch(e){}`}
         </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
+        <ServiceWorkerRegister />
         <ThemeProvider initialTheme={initialTheme}>
         <LanguageProvider initialLang={initialLang}>
         <FontScaleProvider>
