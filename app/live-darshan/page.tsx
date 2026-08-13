@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { getLiveStreams, getTemples, getGodsForEntity } from '@/lib/relations';
+import { getLiveStreams, getTemples, getGodsForEntities } from '@/lib/relations';
 import { emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
+import type { God } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
 import EmptyState from '@/components/EmptyState';
@@ -23,14 +24,8 @@ export default async function LiveDarshanPage() {
   ]);
   const templesBySlug = new Map(temples.map(t => [t.slug, t]));
 
-  // One deity lookup per temple (not per stream) — this scope has 3 temples,
-  // so N+1 here is a non-issue; getAllOccasionPujas-style bulk fetch would be
-  // overkill until the temple catalog grows much larger.
-  const deitiesByTempleSlug = new Map(
-    await Promise.all(
-      temples.map(async t => [t.slug, (await getGodsForEntity('temple', t.slug).catch(emptyOnError(TABS.god_links, 'live-darshan', [])))[0]] as const)
-    )
-  );
+  const godsByTempleSlug = await getGodsForEntities('temple', temples.map(t => t.slug))
+    .catch(emptyOnError(TABS.god_links, 'live-darshan', {} as Record<string, God[]>));
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
@@ -49,7 +44,7 @@ export default async function LiveDarshanPage() {
               key={s.slug}
               stream={s}
               temple={templesBySlug.get(s.temple_slug)}
-              deity={deitiesByTempleSlug.get(s.temple_slug)}
+              deity={godsByTempleSlug[s.temple_slug]?.[0]}
             />
           ))}
         </div>

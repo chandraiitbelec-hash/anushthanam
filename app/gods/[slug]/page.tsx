@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
-import { getLinksForGod, rowToGod } from '@/lib/relations';
-import type { Temple } from '@/lib/types';
+import { getLinksForGod, rowToGod, getTemples } from '@/lib/relations';
 import type { GodLink } from '@/lib/types';
 import Breadcrumb from '@/components/Breadcrumb';
 import GodProfile from '@/components/GodProfile';
@@ -33,13 +32,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function GodPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const [godRows, rawLinks, shlokaRows, festivalRows, pujaRows, templeRows] = await Promise.all([
+  const [godRows, rawLinks, shlokaRows, festivalRows, pujaRows, temples] = await Promise.all([
     getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'gods/[slug]', [])),
     getLinksForGod(slug).catch(emptyOnError(TABS.god_links, 'gods/[slug]', [])),
     getPublished(TABS.shlokas).catch(emptyOnError(TABS.shlokas, 'gods/[slug]', [])),
     getPublished(TABS.festivals).catch(emptyOnError(TABS.festivals, 'gods/[slug]', [])),
     getPublished(TABS.pujas).catch(emptyOnError(TABS.pujas, 'gods/[slug]', [])),
-    getPublished(TABS.temples).catch(emptyOnError(TABS.temples, 'gods/[slug]', [])),
+    getTemples().catch(emptyOnError(TABS.temples, 'gods/[slug]', [])),
   ]);
 
   const god = godRows.map(rowToGod).find(g => g.slug === slug);
@@ -50,29 +49,41 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
   const shlokaMap = Object.fromEntries((shlokaRows as Row[]).map(s => [s.slug, s]));
   const festivalMap = Object.fromEntries((festivalRows as Row[]).map(f => [f.slug, f]));
   const pujaMap = Object.fromEntries((pujaRows as Row[]).map(p => [p.slug, p]));
-  const templeMap = Object.fromEntries((templeRows as Row[]).map((t: Row) => [t.slug, t]));
+  const templeMap = new Map(temples.map(t => [t.slug, t]));
 
-  function resolveLink(link: GodLink, type: 'shloka' | 'festival' | 'puja' | 'temple') {
-    const map = type === 'shloka' ? shlokaMap : type === 'festival' ? festivalMap : type === 'puja' ? pujaMap : templeMap;
+  function resolveLink(link: GodLink, type: 'shloka' | 'festival' | 'puja') {
+    const map = type === 'shloka' ? shlokaMap : type === 'festival' ? festivalMap : pujaMap;
     const entity = map[link.entity_slug];
-    // shlokas/festivals/pujas use title_*; temples use name_*
-    const field = type === 'temple' ? 'name' : 'title';
     const fallback = link.entity_slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     return {
       slug: link.entity_slug,
       href: `/${type === 'shloka' ? 'shlokas' : type + 's'}/${link.entity_slug}`,
       type,
-      name_en: entity?.[`${field}_en`] ?? fallback,
-      name_te: entity?.[`${field}_te`] ?? '',
-      name_ta: entity?.[`${field}_ta`] ?? '',
-      name_hi: entity?.[`${field}_hi`] ?? '',
+      name_en: entity?.title_en ?? fallback,
+      name_te: entity?.title_te ?? '',
+      name_ta: entity?.title_ta ?? '',
+      name_hi: entity?.title_hi ?? '',
+    };
+  }
+
+  function resolveTempleLink(link: GodLink) {
+    const temple = templeMap.get(link.entity_slug);
+    const fallback = link.entity_slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      slug: link.entity_slug,
+      href: `/temples/${link.entity_slug}`,
+      type: 'temple' as const,
+      name_en: temple?.name_en ?? fallback,
+      name_te: temple?.name_te ?? '',
+      name_ta: temple?.name_ta ?? '',
+      name_hi: temple?.name_hi ?? '',
     };
   }
 
   const shlokas  = rawLinks.filter((l: GodLink) => l.entity_type === 'shloka').map(l => resolveLink(l, 'shloka'));
   const pujas    = rawLinks.filter((l: GodLink) => l.entity_type === 'puja').map(l => resolveLink(l, 'puja'));
   const festivals = rawLinks.filter((l: GodLink) => l.entity_type === 'festival').map(l => resolveLink(l, 'festival'));
-  const temples  = rawLinks.filter((l: GodLink) => l.entity_type === 'temple').map(l => resolveLink(l, 'temple'));
+  const templeLinks = rawLinks.filter((l: GodLink) => l.entity_type === 'temple').map(resolveTempleLink);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -90,7 +101,7 @@ export default async function GodPage({ params }: { params: Promise<{ slug: stri
         { label: 'Gods', labels: { te: 'దేవతలు', ta: 'தெய்வங்கள்', hi: 'देवता' }, href: '/gods' },
         { label: god.name_en, labels: { te: god.name_te, ta: god.name_ta, hi: god.name_hi } },
       ]} />
-      <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} temples={temples} imagePath={godImagePath(slug)} />
+      <GodProfile god={god} shlokas={shlokas} pujas={pujas} festivals={festivals} temples={templeLinks} imagePath={godImagePath(slug)} />
     </div>
   );
 }

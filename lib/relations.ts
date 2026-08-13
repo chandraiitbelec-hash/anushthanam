@@ -36,6 +36,26 @@ export async function getGodsForEntity(entityType: GodLink['entity_type'], entit
     .map(rowToGod);
 }
 
+// Returns entitySlug → ordered God[] for ALL given entities in one fetch.
+// Mirrors getAllOccasionPujas's bulk-fetch shape — use this instead of
+// calling getGodsForEntity per entity in a loop.
+export async function getGodsForEntities(entityType: GodLink['entity_type'], entitySlugs: string[]): Promise<Record<string, God[]>> {
+  const [links, godRows] = await Promise.all([getGodLinks(), getPublished(TABS.gods)]);
+  const godIndex = new Map(godRows.map(r => [r.slug, r]));
+  const slugSet = new Set(entitySlugs);
+  const sorted = links
+    .filter(l => l.entity_type === entityType && slugSet.has(l.entity_slug))
+    .sort((a, b) => a.display_order - b.display_order);
+  const result: Record<string, God[]> = {};
+  for (const l of sorted) {
+    const godRow = godIndex.get(l.god_slug);
+    if (!godRow) continue;
+    if (!result[l.entity_slug]) result[l.entity_slug] = [];
+    result[l.entity_slug].push(rowToGod(godRow));
+  }
+  return result;
+}
+
 export async function getProcedureSteps(parentSlug: string): Promise<ProcedureStep[]> {
   const rows = await getSheetRows(TABS.procedure_steps);
   return rows

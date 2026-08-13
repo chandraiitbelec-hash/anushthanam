@@ -25,7 +25,7 @@
  * Safe to re-run — checks existing state before writing.
  */
 
-import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter } from './lib-sheets.mjs';
+import { getSheetsClient, SPREADSHEET_ID as SHEET_ID, parseWriteFlag, colLetter, getTabWithHeaders } from './lib-sheets.mjs';
 
 const WRITE = parseWriteFlag(process.argv);
 
@@ -220,11 +220,9 @@ if (existingTabs.has('temples')) {
 // ── step 3: god_links rows ─────────────────────────────────────────────────
 
 console.log('\n── Step 3: god_links rows (entity_type=temple) ──');
-const glHeaderRow = await getSheetValues('god_links', '1:1');
-const glHeaders = glHeaderRow[0] ?? [];
-const glRows = await getSheetValues('god_links', 'A:D');
+const { headers: glHeaders, rows: glDataRows } = await getTabWithHeaders('god_links');
 const existingGodLinks = new Set(
-  glRows.slice(1).map(r => `${r[0]}|${r[1]}|${r[2]}`)
+  glDataRows.map(r => `${r[0]}|${r[1]}|${r[2]}`)
 );
 const godLinksToAdd = GOD_LINK_ROWS.filter(
   r => !existingGodLinks.has(`${r.god_slug}|${r.entity_type}|${r.entity_slug}`)
@@ -238,8 +236,7 @@ if (godLinksToAdd.length === 0) {
 // ── step 4: live_streams temple_slug column + backfill ────────────────────
 
 console.log('\n── Step 4: live_streams — add + backfill temple_slug ──');
-const lsHeaderRow = await getSheetValues('live_streams', '1:1');
-const lsHeaders = lsHeaderRow[0] ?? [];
+const { headers: lsHeaders } = await getTabWithHeaders('live_streams');
 let templeSlugCol = lsHeaders.indexOf('temple_slug');
 
 if (templeSlugCol !== -1) {
@@ -252,16 +249,18 @@ if (templeSlugCol !== -1) {
   templeSlugCol = lsHeaders.length;
 }
 
-const lsAllRows = await getSheetValues('live_streams', 'A:ZZ');
-const freshLsHeaders = lsAllRows[0] ?? lsHeaders;
-const slugCol = freshLsHeaders.indexOf('slug');
-
-if (slugCol === -1) {
+const { rows: lsDataRows, col: lsCol } = await getTabWithHeaders('live_streams');
+let slugCol;
+try {
+  slugCol = lsCol('slug');
+} catch {
   console.log('  ⚠ slug column not found on live_streams — cannot backfill.');
-} else {
+}
+
+if (slugCol !== undefined) {
   const templeSlugsBySlug = new Set(TEMPLE_ROWS.map(r => r.slug));
-  for (let i = 1; i < lsAllRows.length; i++) {
-    const row = lsAllRows[i];
+  for (let i = 0; i < lsDataRows.length; i++) {
+    const row = lsDataRows[i];
     const slug = row[slugCol] ?? '';
     const current = row[templeSlugCol] ?? '';
     if (!templeSlugsBySlug.has(slug)) {
@@ -272,7 +271,7 @@ if (slugCol === -1) {
       console.log(`  ${slug}: temple_slug already '${current}' — skip`);
       continue;
     }
-    const sheetRow = i + 1;
+    const sheetRow = i + 2;
     console.log(`  ${slug}: temple_slug '${current || '(empty)'}' → '${slug}' (row ${sheetRow})`);
     await writeValues('live_streams', `${colLetter(templeSlugCol)}${sheetRow}`, [[slug]]);
   }
