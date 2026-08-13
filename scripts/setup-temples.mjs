@@ -156,6 +156,29 @@ async function appendRows(tab, headers, rows) {
   console.log(`  ✓ appended ${values.length} row(s) to ${tab}`);
 }
 
+// Sheets caps a tab's grid to its declared columnCount (defaults to 26 = Z)
+// regardless of how many header cells you try to write past it — writing to
+// e.g. AA1 on a 26-column grid 400s with "exceeds grid limits" until the grid
+// itself is expanded via appendDimension.
+async function ensureColumnCapacity(tab, neededCols) {
+  const sheetMeta = meta.sheets?.find(s => s.properties?.title === tab);
+  if (!sheetMeta) return;
+  const currentCols = sheetMeta.properties?.gridProperties?.columnCount ?? 0;
+  if (currentCols >= neededCols) return;
+  const toAdd = neededCols - currentCols;
+  if (!WRITE) {
+    console.log(`  [DRY] would expand ${tab} grid columns from ${currentCols} to ${neededCols}`);
+    return;
+  }
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: SHEET_ID,
+    requestBody: {
+      requests: [{ appendDimension: { sheetId: sheetMeta.properties.sheetId, dimension: 'COLUMNS', length: toAdd } }],
+    },
+  });
+  console.log(`  ✓ expanded ${tab} grid columns from ${currentCols} to ${neededCols}`);
+}
+
 async function ensureTab(title, existingTabs) {
   if (existingTabs.has(title)) {
     console.log(`  '${title}' tab exists`);
@@ -224,6 +247,7 @@ if (templeSlugCol !== -1) {
 } else {
   const newCol = colLetter(lsHeaders.length);
   console.log(`  appending 'temple_slug' at col ${newCol} (index ${lsHeaders.length + 1})`);
+  await ensureColumnCapacity('live_streams', lsHeaders.length + 1);
   await writeValues('live_streams', `${newCol}1`, [['temple_slug']]);
   templeSlugCol = lsHeaders.length;
 }
