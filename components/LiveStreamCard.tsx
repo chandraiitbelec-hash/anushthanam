@@ -32,7 +32,17 @@ function Badge({ children, tone }: { children: React.ReactNode; tone: 'saffron' 
   );
 }
 
-export default function LiveStreamCard({ stream, temple, deity }: { stream: LiveStream; temple?: Temple; deity?: DeityTag }) {
+type LiveStreamCardProps = {
+  stream: LiveStream;
+  temple?: Temple;
+  deity?: DeityTag;
+  // Set when embedding on the temple's own detail page, which already shows
+  // the temple name/location in its header — repeating them in the card
+  // would be redundant.
+  hideIdentity?: boolean;
+};
+
+export default function LiveStreamCard({ stream, temple, deity, hideIdentity }: LiveStreamCardProps) {
   const { lang } = useLang();
   const [expanded, setExpanded] = useState(false);
   const templeName = temple ? localize(temple, 'name', lang) : '';
@@ -72,19 +82,23 @@ export default function LiveStreamCard({ stream, temple, deity }: { stream: Live
         }
       />
       <div style={{ padding: '16px' }}>
-        <p className={titleClass} style={{
-          fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
-          fontSize: 'var(--text-card-title)',
-          fontWeight: 600,
-          margin: '0 0 4px',
-          color: 'var(--color-text-primary)',
-        }}>
-          {templeName}
-        </p>
-        {location && (
-          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 4px' }}>
-            {location}
-          </p>
+        {!hideIdentity && (
+          <>
+            <p className={titleClass} style={{
+              fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
+              fontSize: 'var(--text-card-title)',
+              fontWeight: 600,
+              margin: '0 0 4px',
+              color: 'var(--color-text-primary)',
+            }}>
+              {templeName}
+            </p>
+            {location && (
+              <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 4px' }}>
+                {location}
+              </p>
+            )}
+          </>
         )}
         {stream.established_note_en && (
           <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 10px', fontStyle: 'italic' }}>

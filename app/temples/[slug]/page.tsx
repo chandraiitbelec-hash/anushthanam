@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
-import { getTemples, getGodsForEntity } from '@/lib/relations';
+import { getTemples, getGodsForEntity, getLiveStreams } from '@/lib/relations';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import TempleProfile from '@/components/TempleProfile';
@@ -33,8 +33,12 @@ export default async function TemplePage({ params }: { params: Promise<{ slug: s
   const temple = temples.find(t => t.slug === slug);
   if (!temple) notFound();
 
-  const godRows = await getGodsForEntity('temple', slug).catch(emptyOnError(TABS.god_links, 'temples/[slug]', []));
+  const [godRows, streams] = await Promise.all([
+    getGodsForEntity('temple', slug).catch(emptyOnError(TABS.god_links, 'temples/[slug]', [])),
+    getLiveStreams().catch(emptyOnError(TABS.live_streams, 'temples/[slug]', [])),
+  ]);
   const deities: DeityRef[] = godRows.map(g => ({ slug: g.slug, name_en: g.name_en, name_te: g.name_te, name_ta: g.name_ta, name_hi: g.name_hi }));
+  const liveStream = streams.find(s => s.temple_slug === slug);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -55,7 +59,7 @@ export default async function TemplePage({ params }: { params: Promise<{ slug: s
         { label: 'Temples', labels: { te: 'ఆలయాలు', ta: 'கோயில்கள்', hi: 'मंदिर' }, href: '/temples' },
         { label: temple.name_en, labels: { te: temple.name_te, ta: temple.name_ta, hi: temple.name_hi } },
       ]} />
-      <TempleProfile temple={temple} deities={deities} />
+      <TempleProfile temple={temple} deities={deities} liveStream={liveStream} />
     </div>
   );
 }

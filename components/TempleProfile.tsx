@@ -4,13 +4,15 @@ import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { localize } from '@/lib/localize';
 import { scriptClass } from '@/lib/utils';
-import type { Temple } from '@/lib/types';
+import type { LiveStream, Temple } from '@/lib/types';
 import DeityChips, { type DeityRef } from './DeityChips';
 import SectionNav, { type NavSection } from './SectionNav';
+import LiveStreamCard from './LiveStreamCard';
 
 type Props = {
   temple: Temple;
   deities: DeityRef[];
+  liveStream?: LiveStream;
 };
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -28,7 +30,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function TempleProfile({ temple, deities }: Props) {
+export default function TempleProfile({ temple, deities, liveStream }: Props) {
   const { lang } = useLang();
 
   const name = localize(temple, 'name', lang);
@@ -40,6 +42,7 @@ export default function TempleProfile({ temple, deities }: Props) {
   const nameClass = scriptClass(lang);
 
   const navSections: NavSection[] = [
+    ...(liveStream ? [{ id: 'section-live', label: UI[lang].liveDarshan }] : []),
     ...(etymology ? [{ id: 'section-etymology', label: UI[lang].templeEtymology }] : []),
     ...(history ? [{ id: 'section-history', label: UI[lang].templeHistory }] : []),
     ...(significance ? [{ id: 'section-significance', label: UI[lang].significance }] : []),
@@ -87,6 +90,13 @@ export default function TempleProfile({ temple, deities }: Props) {
       </div>
 
       <SectionNav sections={navSections} />
+
+      {liveStream && (
+        <section id="section-live" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
+          <SectionHeading>{UI[lang].liveDarshan}</SectionHeading>
+          <LiveStreamCard stream={liveStream} deity={deities[0]} hideIdentity />
+        </section>
+      )}
 
       {etymology && (
         <section id="section-etymology" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
