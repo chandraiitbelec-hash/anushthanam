@@ -9,7 +9,7 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.join(__dirname, '..', 'public');
 
-const BG_DARK = '#1C1611'; // --color-bg-dark
+const BG = '#FAF7F2'; // --color-bg (light) — app-drawer/home-screen icon uses the light canvas regardless of the visitor's site theme
 const GOLD = '#B8860B'; // --color-gold
 
 // Same path data as the inline <svg> in components/Nav.tsx (viewBox 0 0 1018 856).
@@ -88,7 +88,7 @@ function buildSvg(size, contentFraction) {
   const offsetY = (size - markHeight) / 2;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <rect width="${size}" height="${size}" fill="${BG_DARK}"/>
+  <rect width="${size}" height="${size}" fill="${BG}"/>
   <g transform="translate(${offsetX},${offsetY}) scale(${scale})">
     <g transform="translate(0,${MARK_H}) scale(0.1,-0.1)" fill="${GOLD}" stroke="none">
       ${LOTUS_PATHS}

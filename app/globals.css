@@ -377,3 +377,46 @@ body {
     padding-right: 16px !important;
   }
 }
+
+/* PWA launch splash — lotus unfurl + rays lighting up. Hidden by default;
+   shown only when pwa-splash-init (app/layout.tsx) detects standalone
+   display mode and adds .pwa-launch to <html>, so regular browser visits
+   never see it. Runs once per cold start (animation-fill-mode: forwards
+   means it never resets, even though the class stays on <html> for the
+   rest of the SPA session). */
+#pwa-splash {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+html.pwa-launch #pwa-splash {
+  display: flex;
+  animation: pwa-splash-fade 380ms ease 1500ms forwards;
+}
+.pwa-splash-lotus {
+  transform-origin: 509px 428px;
+  opacity: 0;
+  animation: pwa-splash-unfurl 700ms cubic-bezier(0.2, 0.7, 0.3, 1) 80ms forwards;
+}
+.pwa-splash-rays path,
+.pwa-splash-rays circle {
+  opacity: 0;
+  animation: pwa-splash-ray-in 260ms ease-out forwards;
+}
+@keyframes pwa-splash-unfurl {
+  0% { opacity: 0; transform: scale(0.35) rotate(-10deg); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes pwa-splash-ray-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes pwa-splash-fade {
+  0% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}

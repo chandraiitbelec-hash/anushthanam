@@ -10,6 +10,7 @@ import Script from 'next/script';
 import Nav from '@/components/Nav';
 import FooterLinks from '@/components/FooterLinks';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
+import PwaSplash from '@/components/PwaSplash';
 import { SITE_URL, SITE_NAME } from '@/lib/seo';
 import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
@@ -147,7 +148,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Script id="theme-init" strategy="beforeInteractive">
           {`try{var m=document.cookie.match(/(?:^|; )anushthanam-theme=([^;]*)/);var t=m?decodeURIComponent(m[1]):localStorage.getItem('anushthanam-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(t==='system')document.documentElement.removeAttribute('data-theme');}catch(e){}`}
         </Script>
+        {/* pwa-splash-init: detects standalone display mode (installed app,
+            not a regular browser tab) and flags <html> before paint so the
+            splash in PwaSplash can show without a flash of the real page
+            underneath first. */}
+        <Script id="pwa-splash-init" strategy="beforeInteractive">
+          {`try{var sa=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(sa)document.documentElement.classList.add('pwa-launch');}catch(e){}`}
+        </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
+        <PwaSplash />
         <ServiceWorkerRegister />
         <ThemeProvider initialTheme={initialTheme}>
         <LanguageProvider initialLang={initialLang}>
