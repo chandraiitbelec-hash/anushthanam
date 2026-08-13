@@ -4,9 +4,42 @@ import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { scriptClass } from '@/lib/utils';
 import { localize } from '@/lib/localize';
+import { parseChoghadiya } from '@/lib/choghadiya';
 import type { PanchangamDay } from '@/lib/types';
 
 type Props = { day: PanchangamDay | null; compact?: boolean };
+
+const AUSPICIOUS_CHOGHADIYA = new Set(['Amrit', 'Shubh', 'Labh']);
+
+function ChoghadiyaRow({ label, slots, nameClass, uppercase }: { label: string; slots: ReturnType<typeof parseChoghadiya>; nameClass: string; uppercase: boolean }) {
+  if (slots.length === 0) return null;
+  return (
+    <div style={{ marginTop: '16px' }}>
+      <p className={nameClass} style={{ fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)', margin: '0 0 6px', textTransform: uppercase ? 'uppercase' : undefined, letterSpacing: '0.05em' }}>
+        {label}
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        {slots.map((slot, i) => (
+          <span
+            key={i}
+            className={nameClass}
+            style={{
+              fontSize: 'var(--text-meta)',
+              padding: '4px 8px',
+              borderRadius: '6px',
+              background: 'var(--color-background)',
+              border: '1px solid var(--color-border)',
+              color: AUSPICIOUS_CHOGHADIYA.has(slot.name) ? 'var(--color-gold-text)' : 'var(--color-text-secondary)',
+              fontWeight: AUSPICIOUS_CHOGHADIYA.has(slot.name) ? 600 : 400,
+            }}
+          >
+            {slot.start}–{slot.end} {slot.name}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function PanchangamWidget({ day, compact = false }: Props) {
   const { lang } = useLang();
@@ -54,7 +87,12 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
     { label: ui.sunrise, value: day.sunrise },
     { label: ui.sunset, value: day.sunset },
     { label: ui.rahuKalam, value: day.rahu_kalam },
+    { label: ui.gulikaKalam, value: day.gulika_kalam },
+    { label: ui.yamagandaKalam, value: day.yamaganda_kalam },
   ].filter(f => f.value);
+
+  const choghadiyaDay = parseChoghadiya(day.choghadiya_day);
+  const choghadiyaNight = parseChoghadiya(day.choghadiya_night);
 
   return (
     <div style={{
@@ -98,6 +136,8 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
           </div>
         ))}
       </div>
+      <ChoghadiyaRow label={ui.choghadiyaDay} slots={choghadiyaDay} nameClass={nameClass} uppercase={lang === 'en'} />
+      <ChoghadiyaRow label={ui.choghadiyaNight} slots={choghadiyaNight} nameClass={nameClass} uppercase={lang === 'en'} />
     </div>
   );
 }

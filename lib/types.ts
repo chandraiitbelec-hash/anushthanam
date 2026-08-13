@@ -269,6 +269,11 @@ export type PanchangamDay = {
   sunrise: string;
   sunset: string;
   rahu_kalam: string;
+  gulika_kalam: string;
+  yamaganda_kalam: string;
+  /** Pipe-delimited 8-slot list, each slot "HH:MM-HH:MM:MuhurtaName" — see parseChoghadiya() in lib/panchangam.ts */
+  choghadiya_day: string;
+  choghadiya_night: string;
   special_event_en: string;
   special_event_te: string;
   special_event_ta: string;

@@ -17,12 +17,17 @@ export async function getAllPanchangam(): Promise<PanchangamDay[]> {
     sunrise: r.sunrise,
     sunset: r.sunset,
     rahu_kalam: r.rahu_kalam,
+    gulika_kalam: r.gulika_kalam,
+    yamaganda_kalam: r.yamaganda_kalam,
+    choghadiya_day: r.choghadiya_day,
+    choghadiya_night: r.choghadiya_night,
     special_event_en: r.special_event_en,
     special_event_te: r.special_event_te,
     special_event_ta: r.special_event_ta,
     special_event_hi: r.special_event_hi,
   }));
 }
+
 
 export async function getTodayPanchangam(): Promise<PanchangamDay | null> {
   const today = todayIST();

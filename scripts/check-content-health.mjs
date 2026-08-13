@@ -87,6 +87,7 @@ const EXPECTED_COLUMNS = {
   panchangam: [
     'date', 'tithi_en', 'tithi_number', 'paksha', 'nakshatra_en', 'yoga_en',
     'karana_en', 'lunar_month_en', 'sunrise', 'sunset', 'rahu_kalam',
+    'gulika_kalam', 'yamaganda_kalam', 'choghadiya_day', 'choghadiya_night',
     'special_event_en', 'special_event_te', 'special_event_ta',
     'special_event_hi',
   ],

@@ -9,6 +9,10 @@ type UiStrings = {
   sunrise: string;
   sunset: string;
   rahuKalam: string;
+  gulikaKalam: string;
+  yamagandaKalam: string;
+  choghadiyaDay: string;
+  choghadiyaNight: string;
   masa: string;
   today: string;
   panchangam: string;
@@ -184,6 +188,10 @@ export const UI: Record<Language, UiStrings> = {
     sunrise: 'Sunrise',
     sunset: 'Sunset',
     rahuKalam: 'Rahu Kalam',
+    gulikaKalam: 'Gulika Kalam',
+    yamagandaKalam: 'Yamaganda Kalam',
+    choghadiyaDay: 'Choghadiya (Day)',
+    choghadiyaNight: 'Choghadiya (Night)',
     masa: 'Masa',
     today: 'Today',
     panchangam: 'Panchangam',
@@ -333,6 +341,10 @@ export const UI: Record<Language, UiStrings> = {
     sunrise: 'సూర్యోదయం',
     sunset: 'సూర్యాస్తమయం',
     rahuKalam: 'రాహుకాలం',
+    gulikaKalam: 'గుళిక కాలం',
+    yamagandaKalam: 'యమగండ కాలం',
+    choghadiyaDay: 'చౌఘడియ (పగలు)',
+    choghadiyaNight: 'చౌఘడియ (రాత్రి)',
     masa: 'మాసం',
     today: 'ఈ రోజు',
     panchangam: 'పంచాంగం',
@@ -482,6 +494,10 @@ export const UI: Record<Language, UiStrings> = {
     sunrise: 'சூரிய உதயம்',
     sunset: 'சூரிய அஸ்தமனம்',
     rahuKalam: 'ராகு காலம்',
+    gulikaKalam: 'குளிக காலம்',
+    yamagandaKalam: 'எமகண்ட காலம்',
+    choghadiyaDay: 'சோகடியா (பகல்)',
+    choghadiyaNight: 'சோகடியா (இரவு)',
     masa: 'மாதம்',
     today: 'இன்று',
     panchangam: 'பஞ்சாங்கம்',
@@ -631,6 +647,10 @@ export const UI: Record<Language, UiStrings> = {
     sunrise: 'सूर्योदय',
     sunset: 'सूर्यास्त',
     rahuKalam: 'राहु काल',
+    gulikaKalam: 'गुलिक काल',
+    yamagandaKalam: 'यमगण्ड काल',
+    choghadiyaDay: 'चौघड़िया (दिन)',
+    choghadiyaNight: 'चौघड़िया (रात)',
     masa: 'मास',
     today: 'आज',
     panchangam: 'पंचांग',
