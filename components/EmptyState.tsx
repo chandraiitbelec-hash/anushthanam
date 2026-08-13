@@ -3,7 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 
-export type EmptyStateType = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas' | 'live-streams';
+export type EmptyStateType = 'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas' | 'live-streams' | 'temples';
 
 const ICON: Record<EmptyStateType, string> = {
   gods: '🕉',
@@ -14,6 +14,7 @@ const ICON: Record<EmptyStateType, string> = {
   occasions: '🏠',
   'occasion-pujas': '🪷',
   'live-streams': '📺',
+  temples: '🛕',
 };
 
 export default function EmptyState({ type }: { type: EmptyStateType }) {

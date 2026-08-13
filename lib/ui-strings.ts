@@ -139,7 +139,7 @@ type UiStrings = {
   allItemsGathered: string;
   materialsChecklist: string;
   // Empty states
-  emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas' | 'live-streams', { title: string; body: string }>;
+  emptyState: Record<'gods' | 'festivals' | 'vrathams' | 'pujas' | 'shlokas' | 'occasions' | 'occasion-pujas' | 'live-streams' | 'temples', { title: string; body: string }>;
   // Story content
   storyFallbackNote: string;
   // Daily devotional
@@ -168,6 +168,11 @@ type UiStrings = {
   showLessSchedule: string;
   featuredLabel: string;
   establishedLabel: string;
+  // Temples
+  temples: string;
+  templeEtymology: string;
+  templeHistory: string;
+  templeOfficialWebsite: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -291,6 +296,7 @@ export const UI: Record<Language, UiStrings> = {
       occasions: { title: 'No occasions published yet', body: 'Life occasions and samskaras will appear here once published.' },
       'occasion-pujas': { title: 'No pujas listed yet', body: 'Puja guides for this occasion will appear here once added.' },
       'live-streams': { title: 'No live streams published yet', body: 'Temple live darshan streams will appear here once published.' },
+      temples: { title: 'No temples published yet', body: 'Temple profiles will appear here once published.' },
     },
     storyFallbackNote: '',
     devotionalHeading: "Today's Devotional",
@@ -314,6 +320,10 @@ export const UI: Record<Language, UiStrings> = {
     showLessSchedule: 'Show less',
     featuredLabel: 'Featured',
     establishedLabel: 'Est.',
+    temples: 'Temples',
+    templeEtymology: 'Etymology',
+    templeHistory: 'History',
+    templeOfficialWebsite: 'Official Website',
   },
   te: {
     tithi: 'తిథి',
@@ -435,6 +445,7 @@ export const UI: Record<Language, UiStrings> = {
       occasions: { title: 'ఇంకా సందర్భాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత జీవిత సందర్భాలు ఇక్కడ కనిపిస్తాయి.' },
       'occasion-pujas': { title: 'ఇంకా పూజలు జోడించబడలేదు', body: 'ఈ సందర్భానికి పూజా మార్గదర్శకాలు జోడించిన తర్వాత ఇక్కడ కనిపిస్తాయి.' },
       'live-streams': { title: 'ఇంకా లైవ్ స్ట్రీమ్‌లు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత ఆలయ ప్రత్యక్ష దర్శన ప్రసారాలు ఇక్కడ కనిపిస్తాయి.' },
+      temples: { title: 'ఇంకా ఆలయాలు ప్రచురించబడలేదు', body: 'ప్రచురించిన తర్వాత ఆలయ ప్రొఫైల్‌లు ఇక్కడ కనిపిస్తాయి.' },
     },
     storyFallbackNote: 'పూర్తి కథ ఇంకా తెలుగులో అందుబాటులో లేదు — ఇంగ్లీష్‌లో చదువుతున్నారు',
     devotionalHeading: 'నేటి భక్తి',
@@ -458,6 +469,10 @@ export const UI: Record<Language, UiStrings> = {
     showLessSchedule: 'తక్కువగా చూపించు',
     featuredLabel: 'ప్రత్యేకం',
     establishedLabel: 'స్థాపన',
+    temples: 'ఆలయాలు',
+    templeEtymology: 'పదవ్యుత్పత్తి',
+    templeHistory: 'చరిత్ర',
+    templeOfficialWebsite: 'అధికారిక వెబ్‌సైట్',
   },
   ta: {
     tithi: 'திதி',
@@ -579,6 +594,7 @@ export const UI: Record<Language, UiStrings> = {
       occasions: { title: 'இன்னும் சந்தர்ப்பங்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் வாழ்க்கை சந்தர்ப்பங்கள் இங்கே தோன்றும்.' },
       'occasion-pujas': { title: 'இன்னும் பூஜைகள் சேர்க்கப்படவில்லை', body: 'இந்த சந்தர்ப்பத்திற்கான பூஜை வழிகாட்டிகள் சேர்க்கப்பட்டவுடன் இங்கே தோன்றும்.' },
       'live-streams': { title: 'இன்னும் நேரடி ஒளிபரப்புகள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் கோயில் நேரடி தரிசன ஒளிபரப்புகள் இங்கே தோன்றும்.' },
+      temples: { title: 'இன்னும் கோயில்கள் வெளியிடப்படவில்லை', body: 'வெளியிடப்பட்டவுடன் கோயில் விவரங்கள் இங்கே தோன்றும்.' },
     },
     storyFallbackNote: 'முழு கதை இன்னும் தமிழில் கிடைக்கவில்லை — ஆங்கிலத்தில் படிக்கிறீர்கள்',
     devotionalHeading: 'இன்றைய பக்தி',
@@ -602,6 +618,10 @@ export const UI: Record<Language, UiStrings> = {
     showLessSchedule: 'குறைவாகக் காட்டு',
     featuredLabel: 'சிறப்பு',
     establishedLabel: 'நிறுவப்பட்டது',
+    temples: 'கோயில்கள்',
+    templeEtymology: 'சொல் வரலாறு',
+    templeHistory: 'வரலாறு',
+    templeOfficialWebsite: 'அதிகாரப்பூர்வ இணையதளம்',
   },
   hi: {
     tithi: 'तिथि',
@@ -723,6 +743,7 @@ export const UI: Record<Language, UiStrings> = {
       occasions: { title: 'अभी तक कोई अवसर प्रकाशित नहीं', body: 'प्रकाशित होने पर जीवन-अवसर यहाँ दिखाई देंगे।' },
       'occasion-pujas': { title: 'अभी तक कोई पूजा नहीं जोड़ी गई', body: 'इस अवसर के लिए पूजा मार्गदर्शिकाएँ जोड़े जाने पर यहाँ दिखाई देंगी।' },
       'live-streams': { title: 'अभी तक कोई लाइव स्ट्रीम प्रकाशित नहीं', body: 'प्रकाशित होने पर मंदिर के लाइव दर्शन प्रसारण यहाँ दिखाई देंगे।' },
+      temples: { title: 'अभी तक कोई मंदिर प्रकाशित नहीं', body: 'प्रकाशित होने पर मंदिर प्रोफ़ाइल यहाँ दिखाई देंगी।' },
     },
     storyFallbackNote: 'पूरी कथा अभी हिंदी में उपलब्ध नहीं है — अंग्रेज़ी में पढ़ रहे हैं',
     devotionalHeading: 'आज की भक्ति',
@@ -746,5 +767,9 @@ export const UI: Record<Language, UiStrings> = {
     showLessSchedule: 'कम दिखाएं',
     featuredLabel: 'विशेष',
     establishedLabel: 'स्थापित',
+    temples: 'मंदिर',
+    templeEtymology: 'शब्द व्युत्पत्ति',
+    templeHistory: 'इतिहास',
+    templeOfficialWebsite: 'आधिकारिक वेबसाइट',
   },
 };

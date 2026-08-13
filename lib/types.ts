@@ -27,7 +27,7 @@ export type God = {
 
 export type GodLink = {
   god_slug: string;
-  entity_type: 'shloka' | 'puja' | 'festival' | 'vratham';
+  entity_type: 'shloka' | 'puja' | 'festival' | 'vratham' | 'temple';
   entity_slug: string;
   display_order: number;
 };
@@ -275,19 +275,44 @@ export type PanchangamDay = {
   special_event_hi: string;
 };
 
-export type LiveStream = {
+// Temple/god relationships resolve via the god_links join table (entity_type
+// 'temple') — never add a deity_slug column directly to this tab.
+export type Temple = {
   slug: string;
-  temple_name_en: string;
-  temple_name_te: string;
-  temple_name_ta: string;
-  temple_name_hi: string;
-  deity_slug: string;
-  youtube_video_id: string;
-  channel_url: string;
+  name_en: string;
+  name_te: string;
+  name_ta: string;
+  name_hi: string;
+  etymology_en: string;
+  etymology_te: string;
+  etymology_ta: string;
+  etymology_hi: string;
+  history_en: string;
+  history_te: string;
+  history_ta: string;
+  history_hi: string;
+  significance_en: string;
+  significance_te: string;
+  significance_ta: string;
+  significance_hi: string;
   location_en: string;
   location_te: string;
   location_ta: string;
   location_hi: string;
+  official_website_url: string;
+  display_order: number;
+  status: Status;
+  translation_status: TranslationStatus;
+};
+
+export type LiveStream = {
+  slug: string;
+  // Temple facts (name/location/deity) resolve via temple_slug → temples tab
+  // → god_links, not stored here. temple_name_en/te/ta/hi, location_en/te/ta/hi,
+  // and deity_slug remain as dead columns in the Sheet until manual cleanup.
+  temple_slug: string;
+  youtube_video_id: string;
+  channel_url: string;
   arathi_schedule_en: string;
   arathi_schedule_te: string;
   arathi_schedule_ta: string;

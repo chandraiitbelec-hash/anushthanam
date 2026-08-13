@@ -18,6 +18,7 @@ export const TABS = {
   occasions: 'occasions',
   puja_occasions: 'puja_occasions',
   live_streams: 'live_streams',
+  temples: 'temples',
 } as const;
 
 export type Tab = (typeof TABS)[keyof typeof TABS];

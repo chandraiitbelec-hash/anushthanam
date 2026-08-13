@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { getLiveStreams, rowToGod } from '@/lib/relations';
-import { getPublished, emptyOnError } from '@/lib/sheets';
+import { getLiveStreams, getTemples, getGodsForEntity } from '@/lib/relations';
+import { emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -17,11 +17,20 @@ export const metadata: Metadata = {
 export default async function LiveDarshanPage() {
   // Tab may not exist in the live Sheet yet — degrade to empty state instead
   // of blanking the page.
-  const [streams, godRows] = await Promise.all([
+  const [streams, temples] = await Promise.all([
     getLiveStreams().catch(emptyOnError(TABS.live_streams, 'live-darshan', [])),
-    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'live-darshan', [])),
+    getTemples().catch(emptyOnError(TABS.temples, 'live-darshan', [])),
   ]);
-  const godsBySlug = new Map(godRows.map(rowToGod).map(g => [g.slug, g]));
+  const templesBySlug = new Map(temples.map(t => [t.slug, t]));
+
+  // One deity lookup per temple (not per stream) — this scope has 3 temples,
+  // so N+1 here is a non-issue; getAllOccasionPujas-style bulk fetch would be
+  // overkill until the temple catalog grows much larger.
+  const deitiesByTempleSlug = new Map(
+    await Promise.all(
+      temples.map(async t => [t.slug, (await getGodsForEntity('temple', t.slug).catch(emptyOnError(TABS.god_links, 'live-darshan', [])))[0]] as const)
+    )
+  );
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
@@ -36,7 +45,12 @@ export default async function LiveDarshanPage() {
       ) : (
         <div className="entity-grid entity-grid--3col">
           {streams.map(s => (
-            <LiveStreamCard key={s.slug} stream={s} deity={godsBySlug.get(s.deity_slug)} />
+            <LiveStreamCard
+              key={s.slug}
+              stream={s}
+              temple={templesBySlug.get(s.temple_slug)}
+              deity={deitiesByTempleSlug.get(s.temple_slug)}
+            />
           ))}
         </div>
       )}

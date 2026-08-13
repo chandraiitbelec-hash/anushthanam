@@ -5,13 +5,13 @@ import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { localize } from '@/lib/localize';
 import { scriptClass } from '@/lib/utils';
-import type { LiveStream } from '@/lib/types';
+import type { LiveStream, Temple } from '@/lib/types';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 
 const VISIBLE_SCHEDULE_ITEMS = 3;
 
 // Lightweight deity reference for the tag chip — callers resolve this from
-// `gods` by `deity_slug` rather than LiveStreamCard doing its own fetch.
+// `gods` via god_links (entity_type 'temple') rather than LiveStreamCard doing its own fetch.
 type DeityTag = { name_en: string; name_te: string; name_ta: string; name_hi: string };
 
 function Badge({ children, tone }: { children: React.ReactNode; tone: 'saffron' | 'gold' }) {
@@ -32,11 +32,11 @@ function Badge({ children, tone }: { children: React.ReactNode; tone: 'saffron' 
   );
 }
 
-export default function LiveStreamCard({ stream, deity }: { stream: LiveStream; deity?: DeityTag }) {
+export default function LiveStreamCard({ stream, temple, deity }: { stream: LiveStream; temple?: Temple; deity?: DeityTag }) {
   const { lang } = useLang();
   const [expanded, setExpanded] = useState(false);
-  const templeName = localize(stream, 'temple_name', lang);
-  const location = localize(stream, 'location', lang);
+  const templeName = temple ? localize(temple, 'name', lang) : '';
+  const location = temple ? localize(temple, 'location', lang) : '';
   const schedule = localize(stream, 'arathi_schedule', lang);
   const description = localize(stream, 'description', lang);
   const deityName = deity ? localize(deity, 'name', lang) : undefined;

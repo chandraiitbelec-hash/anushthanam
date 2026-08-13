@@ -24,6 +24,7 @@ type Props = {
   shlokas: LinkedEntity[];
   pujas: LinkedEntity[];
   festivals: LinkedEntity[];
+  temples: LinkedEntity[];
   imagePath: string | null;
 };
 
@@ -37,6 +38,7 @@ function label(key: string, lang: Language) {
   if (key === 'shlokas') return SHLOKAS_HEADING[lang];
   if (key === 'pujas') return UI[lang].pujas;
   if (key === 'festivals') return UI[lang].festivals;
+  if (key === 'temples') return UI[lang].temples;
   return key;
 }
 
@@ -81,7 +83,7 @@ function LinkedChips({ items, lang }: { items: LinkedEntity[]; lang: Language })
   );
 }
 
-export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }: Props) {
+export default function GodProfile({ god, shlokas, pujas, festivals, temples, imagePath }: Props) {
   const { lang } = useLang();
 
   const name = localize(god, 'name', lang);
@@ -95,6 +97,7 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
     ...(shlokas.length > 0 ? [{ id: 'section-shlokas', label: label('shlokas', lang) }] : []),
     ...(pujas.length > 0 ? [{ id: 'section-pujas', label: label('pujas', lang) }] : []),
     ...(festivals.length > 0 ? [{ id: 'section-festivals', label: label('festivals', lang) }] : []),
+    ...(temples.length > 0 ? [{ id: 'section-temples', label: label('temples', lang) }] : []),
   ];
 
   return (
@@ -231,6 +234,14 @@ export default function GodProfile({ god, shlokas, pujas, festivals, imagePath }
         <section id="section-festivals" style={{ marginTop: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{label('festivals', lang)}</SectionHeading>
           <LinkedChips items={festivals} lang={lang} />
+        </section>
+      )}
+
+      {/* Related temples */}
+      {temples.length > 0 && (
+        <section id="section-temples" style={{ marginTop: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
+          <SectionHeading>{label('temples', lang)}</SectionHeading>
+          <LinkedChips items={temples} lang={lang} />
         </section>
       )}
     </>

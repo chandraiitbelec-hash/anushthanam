@@ -29,6 +29,7 @@ const MORE_LINKS: NavLink[] = [
   { href: '/panchangam',     key: 'panchangam' },
   { href: '/upcoming',       key: 'upcoming' },
   { href: '/live-darshan',   key: 'liveDarshan' },
+  { href: '/temples',        key: 'temples' },
 ];
 
 // Mobile drawer shows everything flat.

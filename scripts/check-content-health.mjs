@@ -98,13 +98,19 @@ const EXPECTED_COLUMNS = {
   ],
   puja_occasions: ['occasion_slug', 'puja_slug', 'display_order'],
   live_streams: [
-    'slug', 'temple_name_en', 'temple_name_te', 'temple_name_ta',
-    'temple_name_hi', 'deity_slug', 'youtube_video_id', 'channel_url',
-    'location_en', 'location_te', 'location_ta', 'location_hi',
+    'slug', 'temple_slug', 'youtube_video_id', 'channel_url',
     'arathi_schedule_en', 'arathi_schedule_te', 'arathi_schedule_ta',
     'arathi_schedule_hi', 'hero_image_url', 'description_en', 'description_te',
     'description_ta', 'description_hi', 'established_note_en', 'featured',
     'display_order', 'status', 'translation_status',
+  ],
+  temples: [
+    'slug', 'name_en', 'name_te', 'name_ta', 'name_hi',
+    'etymology_en', 'etymology_te', 'etymology_ta', 'etymology_hi',
+    'history_en', 'history_te', 'history_ta', 'history_hi',
+    'significance_en', 'significance_te', 'significance_ta', 'significance_hi',
+    'location_en', 'location_te', 'location_ta', 'location_hi',
+    'official_website_url', 'display_order', 'status', 'translation_status',
   ],
 };
 

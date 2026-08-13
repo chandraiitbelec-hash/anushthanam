@@ -1,7 +1,7 @@
 import { getSheetRows, getPublished } from './sheets';
 import { TABS } from './tabs';
 import { todayIST } from './utils';
-import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story, Status, TranslationStatus, LiveStream } from './types';
+import type { GodLink, ProcedureStep, MaterialItem, Puja, Occasion, PujaOccasion, God, Festival, Vratham, Shloka, Story, Status, TranslationStatus, LiveStream, Temple } from './types';
 
 const VALID_STATUSES: Status[] = ['draft', 'review', 'published'];
 const VALID_TRANSLATION_STATUSES: TranslationStatus[] = ['en-only', 'partial', 'complete'];
@@ -21,6 +21,19 @@ export async function getLinksForGod(godSlug: string): Promise<GodLink[]> {
   return links
     .filter(l => l.god_slug === godSlug)
     .sort((a, b) => a.display_order - b.display_order);
+}
+
+// Reverse direction of getLinksForGod: given an entity (e.g. a temple), returns
+// its linked God[] via god_links, resolved and sorted by display_order.
+export async function getGodsForEntity(entityType: GodLink['entity_type'], entitySlug: string): Promise<God[]> {
+  const [links, godRows] = await Promise.all([getGodLinks(), getPublished(TABS.gods)]);
+  const godIndex = new Map(godRows.map(r => [r.slug, r]));
+  return links
+    .filter(l => l.entity_type === entityType && l.entity_slug === entitySlug)
+    .sort((a, b) => a.display_order - b.display_order)
+    .map(l => godIndex.get(l.god_slug))
+    .filter((r): r is Record<string, string> => Boolean(r))
+    .map(rowToGod);
 }
 
 export async function getProcedureSteps(parentSlug: string): Promise<ProcedureStep[]> {
@@ -318,20 +331,48 @@ export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
   return result;
 }
 
-export function rowToLiveStream(r: Record<string, string>): LiveStream {
+export function rowToTemple(r: Record<string, string>): Temple {
   return {
     slug: r.slug,
-    temple_name_en: r.temple_name_en,
-    temple_name_te: r.temple_name_te,
-    temple_name_ta: r.temple_name_ta,
-    temple_name_hi: r.temple_name_hi,
-    deity_slug: r.deity_slug,
-    youtube_video_id: r.youtube_video_id,
-    channel_url: r.channel_url,
+    name_en: r.name_en,
+    name_te: r.name_te,
+    name_ta: r.name_ta,
+    name_hi: r.name_hi,
+    etymology_en: r.etymology_en,
+    etymology_te: r.etymology_te,
+    etymology_ta: r.etymology_ta,
+    etymology_hi: r.etymology_hi,
+    history_en: r.history_en,
+    history_te: r.history_te,
+    history_ta: r.history_ta,
+    history_hi: r.history_hi,
+    significance_en: r.significance_en,
+    significance_te: r.significance_te,
+    significance_ta: r.significance_ta,
+    significance_hi: r.significance_hi,
     location_en: r.location_en,
     location_te: r.location_te,
     location_ta: r.location_ta,
     location_hi: r.location_hi,
+    official_website_url: r.official_website_url,
+    display_order: parseInt(r.display_order) || 0,
+    status: (VALID_STATUSES.includes(r.status as Status) ? r.status : 'draft') as Temple['status'],
+    translation_status: (VALID_TRANSLATION_STATUSES.includes(r.translation_status as TranslationStatus) ? r.translation_status : 'en-only') as Temple['translation_status'],
+  };
+}
+
+// Returns published temples ordered by display_order.
+export async function getTemples(): Promise<Temple[]> {
+  const rows = await getPublished(TABS.temples);
+  return rows.map(rowToTemple).sort((a, b) => a.display_order - b.display_order);
+}
+
+export function rowToLiveStream(r: Record<string, string>): LiveStream {
+  return {
+    slug: r.slug,
+    temple_slug: r.temple_slug,
+    youtube_video_id: r.youtube_video_id,
+    channel_url: r.channel_url,
     arathi_schedule_en: r.arathi_schedule_en,
     arathi_schedule_te: r.arathi_schedule_te,
     arathi_schedule_ta: r.arathi_schedule_ta,
