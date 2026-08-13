@@ -10,12 +10,36 @@ import YouTubeEmbed from '@/components/YouTubeEmbed';
 
 const VISIBLE_SCHEDULE_ITEMS = 3;
 
-export default function LiveStreamCard({ stream }: { stream: LiveStream }) {
+// Lightweight deity reference for the tag chip — callers resolve this from
+// `gods` by `deity_slug` rather than LiveStreamCard doing its own fetch.
+type DeityTag = { name_en: string; name_te: string; name_ta: string; name_hi: string };
+
+function Badge({ children, tone }: { children: React.ReactNode; tone: 'saffron' | 'gold' }) {
+  const colors = {
+    saffron: { bg: 'rgba(212,98,42,0.9)', color: '#fff' },
+    gold: { bg: 'rgba(184,134,11,0.9)', color: '#fff' },
+  }[tone];
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center',
+      fontSize: 'var(--text-badge)', fontWeight: 600,
+      padding: '3px 9px', borderRadius: '20px',
+      background: colors.bg, color: colors.color,
+      whiteSpace: 'nowrap',
+    }}>
+      {children}
+    </span>
+  );
+}
+
+export default function LiveStreamCard({ stream, deity }: { stream: LiveStream; deity?: DeityTag }) {
   const { lang } = useLang();
   const [expanded, setExpanded] = useState(false);
   const templeName = localize(stream, 'temple_name', lang);
   const location = localize(stream, 'location', lang);
   const schedule = localize(stream, 'arathi_schedule', lang);
+  const description = localize(stream, 'description', lang);
+  const deityName = deity ? localize(deity, 'name', lang) : undefined;
   const titleClass = scriptClass(lang);
 
   // Free-text schedule fields are comma-separated entries (e.g. "Suprabhatam
@@ -33,7 +57,20 @@ export default function LiveStreamCard({ stream }: { stream: LiveStream }) {
       borderRadius: '10px',
       overflow: 'hidden',
     }}>
-      <YouTubeEmbed videoId={stream.youtube_video_id} title={templeName} watchLiveLabel={UI[lang].watchLive} />
+      <YouTubeEmbed
+        videoId={stream.youtube_video_id}
+        title={templeName}
+        watchLiveLabel={UI[lang].watchLive}
+        posterUrl={stream.hero_image_url || undefined}
+        overlay={
+          (stream.featured || deityName) && (
+            <>
+              {stream.featured && <Badge tone="saffron">{UI[lang].featuredLabel}</Badge>}
+              {deityName && <Badge tone="gold">{deityName}</Badge>}
+            </>
+          )
+        }
+      />
       <div style={{ padding: '16px' }}>
         <p className={titleClass} style={{
           fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
@@ -45,8 +82,18 @@ export default function LiveStreamCard({ stream }: { stream: LiveStream }) {
           {templeName}
         </p>
         {location && (
-          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 12px' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 4px' }}>
             {location}
+          </p>
+        )}
+        {stream.established_note_en && (
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 10px', fontStyle: 'italic' }}>
+            {UI[lang].establishedLabel} {stream.established_note_en}
+          </p>
+        )}
+        {description && (
+          <p style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-primary)', margin: '0 0 12px', lineHeight: 1.6 }}>
+            {description}
           </p>
         )}
         {scheduleItems.length > 0 && (

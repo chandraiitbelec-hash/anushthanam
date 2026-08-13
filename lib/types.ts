@@ -292,6 +292,15 @@ export type LiveStream = {
   arathi_schedule_te: string;
   arathi_schedule_ta: string;
   arathi_schedule_hi: string;
+  hero_image_url: string;
+  description_en: string;
+  description_te: string;
+  description_ta: string;
+  description_hi: string;
+  // Single-language factoid, not translated content — same precedent as
+  // Festival.next_occurrence_note_en.
+  established_note_en: string;
+  featured: boolean;
   display_order: number;
   status: Status;
   translation_status: TranslationStatus;

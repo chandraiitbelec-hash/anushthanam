@@ -102,7 +102,9 @@ const EXPECTED_COLUMNS = {
     'temple_name_hi', 'deity_slug', 'youtube_video_id', 'channel_url',
     'location_en', 'location_te', 'location_ta', 'location_hi',
     'arathi_schedule_en', 'arathi_schedule_te', 'arathi_schedule_ta',
-    'arathi_schedule_hi', 'display_order', 'status', 'translation_status',
+    'arathi_schedule_hi', 'hero_image_url', 'description_en', 'description_te',
+    'description_ta', 'description_hi', 'established_note_en', 'featured',
+    'display_order', 'status', 'translation_status',
   ],
 };
 

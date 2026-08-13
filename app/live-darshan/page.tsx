@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { getLiveStreams } from '@/lib/relations';
-import { emptyOnError } from '@/lib/sheets';
+import { getLiveStreams, rowToGod } from '@/lib/relations';
+import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import Breadcrumb from '@/components/Breadcrumb';
 import ListPageHeader from '@/components/ListPageHeader';
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
 export default async function LiveDarshanPage() {
   // Tab may not exist in the live Sheet yet — degrade to empty state instead
   // of blanking the page.
-  const streams = await getLiveStreams().catch(emptyOnError(TABS.live_streams, 'live-darshan', []));
+  const [streams, godRows] = await Promise.all([
+    getLiveStreams().catch(emptyOnError(TABS.live_streams, 'live-darshan', [])),
+    getPublished(TABS.gods).catch(emptyOnError(TABS.gods, 'live-darshan', [])),
+  ]);
+  const godsBySlug = new Map(godRows.map(rowToGod).map(g => [g.slug, g]));
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
@@ -32,7 +36,7 @@ export default async function LiveDarshanPage() {
       ) : (
         <div className="entity-grid entity-grid--3col">
           {streams.map(s => (
-            <LiveStreamCard key={s.slug} stream={s} />
+            <LiveStreamCard key={s.slug} stream={s} deity={godsBySlug.get(s.deity_slug)} />
           ))}
         </div>
       )}

@@ -166,6 +166,8 @@ type UiStrings = {
   liveDarshanLocation: string;
   showMoreSchedule: (n: number) => string;
   showLessSchedule: string;
+  featuredLabel: string;
+  establishedLabel: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -310,6 +312,8 @@ export const UI: Record<Language, UiStrings> = {
     liveDarshanLocation: 'Location',
     showMoreSchedule: (n) => `Show ${n} more`,
     showLessSchedule: 'Show less',
+    featuredLabel: 'Featured',
+    establishedLabel: 'Est.',
   },
   te: {
     tithi: 'తిథి',
@@ -452,6 +456,8 @@ export const UI: Record<Language, UiStrings> = {
     liveDarshanLocation: 'స్థానం',
     showMoreSchedule: (n) => `మరిన్ని ${n} చూపించు`,
     showLessSchedule: 'తక్కువగా చూపించు',
+    featuredLabel: 'ప్రత్యేకం',
+    establishedLabel: 'స్థాపన',
   },
   ta: {
     tithi: 'திதி',
@@ -594,6 +600,8 @@ export const UI: Record<Language, UiStrings> = {
     liveDarshanLocation: 'இடம்',
     showMoreSchedule: (n) => `மேலும் ${n} காட்டு`,
     showLessSchedule: 'குறைவாகக் காட்டு',
+    featuredLabel: 'சிறப்பு',
+    establishedLabel: 'நிறுவப்பட்டது',
   },
   hi: {
     tithi: 'तिथि',
@@ -736,5 +744,7 @@ export const UI: Record<Language, UiStrings> = {
     liveDarshanLocation: 'स्थान',
     showMoreSchedule: (n) => `${n} और दिखाएं`,
     showLessSchedule: 'कम दिखाएं',
+    featuredLabel: 'विशेष',
+    establishedLabel: 'स्थापित',
   },
 };

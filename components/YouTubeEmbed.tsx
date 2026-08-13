@@ -1,18 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import Image from 'next/image';
 
 type YouTubeEmbedProps = {
   videoId: string;
   title: string;
   watchLiveLabel: string;
+  // Editorial photo (e.g. temple hero shot) shown instead of YouTube's
+  // auto-generated thumbnail. Arbitrary host, so rendered as a plain <img>
+  // rather than next/image — avoids requiring a remotePatterns entry per
+  // content source.
+  posterUrl?: string;
+  // Badge chips (Featured, deity tag, …) shown over the poster, hidden once
+  // the iframe loads.
+  overlay?: ReactNode;
 };
 
 // Renders a thumbnail poster by default; the iframe (and its cookies/tracking)
 // only loads after a click. Cheaper than mounting N youtube-nocookie iframes
 // up front when several temples are on one page.
-export default function YouTubeEmbed({ videoId, title, watchLiveLabel }: YouTubeEmbedProps) {
+export default function YouTubeEmbed({ videoId, title, watchLiveLabel, posterUrl, overlay }: YouTubeEmbedProps) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -46,13 +54,27 @@ export default function YouTubeEmbed({ videoId, title, watchLiveLabel }: YouTube
             background: 'none',
           }}
         >
-          <Image
-            src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
-            alt={title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            style={{ objectFit: 'cover' }}
-          />
+          {posterUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={posterUrl}
+              alt={title}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <Image
+              src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+            />
+          )}
+          {overlay && (
+            <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '6px' }}>
+              {overlay}
+            </div>
+          )}
           <span aria-hidden="true" style={{
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)',
