@@ -4,6 +4,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ClientLabel from '@/components/ClientLabel';
 import GitaVerseViewer from '@/components/gita/GitaVerseViewer';
 import ChapterNav from '@/components/gita/ChapterNav';
+import { SITE_URL, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -38,8 +39,24 @@ export default async function GitaChapterPage({ params }: { params: Promise<{ ch
   const prev = num > 1 ? getGitaChapter(num - 1) : null;
   const next = num < 18 ? getGitaChapter(num + 1) : null;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: `Chapter ${ch.number}: ${ch.name_en}`,
+    description: `${ch.verse_count} slokas of Bhagavad Gita Chapter ${ch.number}: ${ch.name_en} (${ch.name_hi}) with Sanskrit, Telugu, Tamil, Hindi meanings.`,
+    url: `${SITE_URL}/bhagavad-gita/${ch.number}`,
+    inLanguage: 'Sanskrit',
+    isPartOf: {
+      '@type': 'Book',
+      name: 'Bhagavad Gita',
+      url: `${SITE_URL}/bhagavad-gita`,
+    },
+    position: ch.number,
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Bhagavad Gita', labels: { te: 'భగవద్గీత', ta: 'பகவத் கீதை', hi: 'भगवद्गीता' }, href: '/bhagavad-gita' },
         { label: `Chapter ${ch.number}`, labels: { te: `అధ్యాయం ${ch.number}`, ta: `அத்தியாயம் ${ch.number}`, hi: `अध्याय ${ch.number}` } },

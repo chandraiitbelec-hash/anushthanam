@@ -4,7 +4,7 @@ import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, rowToPuja } from '@/lib/relations';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
-import { pageMeta, SITE_NAME } from '@/lib/seo';
+import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -37,8 +37,33 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
     getMaterialItems(slug).catch(emptyOnError(TABS.material_items, 'pujas/[slug]', [])),
   ]);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: puja.title_en,
+    description: puja.brief_description_en,
+    url: `${SITE_URL}/pujas/${slug}`,
+    ...(puja.duration_minutes ? { totalTime: `PT${puja.duration_minutes}M` } : {}),
+    ...(materials.length > 0 ? {
+      supply: materials.map(m => ({
+        '@type': 'HowToSupply',
+        name: m.item_name_en,
+      })),
+    } : {}),
+    ...(steps.length > 0 ? {
+      step: steps.map(s => ({
+        '@type': 'HowToStep',
+        position: s.step_number,
+        name: s.step_title_en,
+        text: s.instruction_en,
+      })),
+    } : {}),
+    isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
+  };
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <Breadcrumb crumbs={[
         { label: 'Pujas', labels: { te: 'పూజలు', ta: 'பூஜைகள்', hi: 'पूजाएं' }, href: '/pujas' },
         { label: puja.title_en, labels: { te: puja.title_te, ta: puja.title_ta, hi: puja.title_hi } },
