@@ -1,12 +1,15 @@
-import { notFound } from 'next/navigation';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { rowToShloka } from '@/lib/relations';
 import { getShlokaStanzas } from '@/lib/stanzas';
+import { localize } from '@/lib/localize';
+import { shlokaTypeLabel } from '@/lib/utils';
+import { UI } from '@/lib/ui-strings';
 import Breadcrumb from '@/components/Breadcrumb';
 import ShlokaHeader from '@/components/ShlokaHeader';
 import ShlokaViewer from '@/components/ShlokaViewer';
-import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
+import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -21,9 +24,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const rows = await getPublished(TABS.shlokas);
     const shloka = rows.map(rowToShloka).find(s => s.slug === slug);
     if (!shloka) return { title: SITE_NAME };
-    const typeLabel = shloka.type ? `${shloka.type.charAt(0).toUpperCase()}${shloka.type.slice(1)}. ` : '';
-    return pageMeta(shloka.title_en, typeLabel + (shloka.brief_intro_en || ''), `/shlokas/${slug}`);
+    const lang = await getRequestLang();
+    const ui = UI[lang];
+    const title = localize(shloka, 'title', lang);
+    const intro = localize(shloka, 'brief_intro', lang);
+    const typePrefix = shloka.type ? `${shlokaTypeLabel(shloka.type, lang)}. ` : '';
+    const description = [typePrefix + intro, ui.seoMultilingualNote].filter(Boolean).join(' — ');
+    return pageMeta(ui.seoShlokaTitle(title), description, `/shlokas/${slug}`);
   } catch (err) {
+    // Next's build-time static-params prerender attempt hits our cookies() read
+    // (getRequestLang) and signals a dynamic bailout via a throw — rethrow that
+    // so Next handles it, instead of misreporting it as a Sheets fetch failure.
+    unstable_rethrow(err);
     emptyOnError(TABS.shlokas, 'shlokas/[slug]#generateMetadata', undefined)(err);
     return { title: SITE_NAME };
   }

@@ -2,15 +2,10 @@
 
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
+import { shlokaTypeLabel as typeLabel } from '@/lib/utils';
 import EntityCard from '@/components/EntityCard';
 import { TabList, TabPanel, useTabs } from './Tabs';
-import type { Shloka, Language } from '@/lib/types';
-
-function typeLabel(type: string, lang: Language) {
-  const ui = UI[lang];
-  const key = ('shlokaType' + type.charAt(0).toUpperCase() + type.slice(1)) as keyof typeof ui;
-  return (ui[key] as string) ?? type.charAt(0).toUpperCase() + type.slice(1);
-}
+import type { Shloka } from '@/lib/types';
 
 type Group = { type: string; shlokas: Shloka[] };
 

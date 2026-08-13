@@ -1,12 +1,14 @@
-import { notFound } from 'next/navigation';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToFestival, rowToGod } from '@/lib/relations';
+import { localize } from '@/lib/localize';
+import { UI } from '@/lib/ui-strings';
 import type { God } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import FestivalProfile from '@/components/FestivalProfile';
-import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
+import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -21,8 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const rows = await getPublished(TABS.festivals);
     const festival = rows.map(rowToFestival).find(f => f.slug === slug);
     if (!festival) return { title: SITE_NAME };
-    return pageMeta(festival.title_en, festival.significance_en || '', `/festivals/${slug}`);
+    const lang = await getRequestLang();
+    const ui = UI[lang];
+    const title = localize(festival, 'title', lang);
+    const description = [localize(festival, 'significance', lang), ui.seoMultilingualNote].filter(Boolean).join(' — ');
+    return pageMeta(title, description, `/festivals/${slug}`);
   } catch (err) {
+    // See shlokas/[slug]/page.tsx generateMetadata for why this rethrow is here.
+    unstable_rethrow(err);
     emptyOnError(TABS.festivals, 'festivals/[slug]#generateMetadata', undefined)(err);
     return { title: SITE_NAME };
   }

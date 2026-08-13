@@ -1,13 +1,15 @@
-import { notFound } from 'next/navigation';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, getStoriesForParent, rowToVratham, rowToGod } from '@/lib/relations';
 import { getShlokaStanzas } from '@/lib/stanzas';
+import { localize } from '@/lib/localize';
+import { UI } from '@/lib/ui-strings';
 import type { ShlokaStanza } from '@/lib/types';
 import type { DeityRef } from '@/components/DeityChips';
 import Breadcrumb from '@/components/Breadcrumb';
 import VrathamProfile from '@/components/VrathamProfile';
-import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
+import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -22,9 +24,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const rows = await getPublished(TABS.vrathams);
     const vratham = rows.map(rowToVratham).find(v => v.slug === slug);
     if (!vratham) return { title: SITE_NAME };
-    const desc = [vratham.benefits_en, vratham.fasting_rules_en].filter(Boolean).join(' ');
-    return pageMeta(vratham.title_en, desc, `/vrathams/${slug}`);
+    const lang = await getRequestLang();
+    const ui = UI[lang];
+    const title = localize(vratham, 'title', lang);
+    const desc = [localize(vratham, 'benefits', lang), localize(vratham, 'fasting_rules', lang)].filter(Boolean).join(' ');
+    const description = [desc, ui.seoMultilingualNote].filter(Boolean).join(' — ');
+    return pageMeta(title, description, `/vrathams/${slug}`);
   } catch (err) {
+    // See shlokas/[slug]/page.tsx generateMetadata for why this rethrow is here.
+    unstable_rethrow(err);
     emptyOnError(TABS.vrathams, 'vrathams/[slug]#generateMetadata', undefined)(err);
     return { title: SITE_NAME };
   }

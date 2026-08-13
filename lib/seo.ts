@@ -1,7 +1,22 @@
+import { cookies } from 'next/headers';
+import type { Language } from './types';
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://anushthanam.vercel.app';
 
 export const SITE_NAME = 'Anuṣṭhāna';
+
+const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
+
+// Mirrors the cookie read in app/layout.tsx, but scoped to generateMetadata —
+// metadata has no access to the LanguageProvider's client context, and the
+// root layout already opted the tree into per-request dynamic rendering, so
+// reading the same cookie here is free (no extra dynamic-rendering cost).
+export async function getRequestLang(): Promise<Language> {
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get('anushthanam-lang')?.value as Language | undefined;
+  return cookieLang && VALID_LANGS.includes(cookieLang) ? cookieLang : 'en';
+}
 
 export function jsonLdString(obj: unknown): string {
   return JSON.stringify(obj).replace(/</g, '\\u003c');

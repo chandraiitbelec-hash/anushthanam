@@ -1,3 +1,15 @@
+import type { Language, ShlokaType } from './types';
+import { UI } from './ui-strings';
+
+// Localized display label for a shloka type (e.g. 'chalisa' -> 'Chalisa' / 'చాలీసా').
+// Falls back to a capitalized version of the raw type if no matching UI key exists.
+export function shlokaTypeLabel(type: ShlokaType | string, lang: Language): string {
+  const ui = UI[lang];
+  const key = ('shlokaType' + type.charAt(0).toUpperCase() + type.slice(1)) as keyof typeof ui;
+  const label = ui[key];
+  return typeof label === 'string' ? label : type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 // Split a stanza cell on | to get individual lines
 export function splitStanzaLines(text: string): string[] {
   return text.split('|').map(s => s.trim()).filter(Boolean);

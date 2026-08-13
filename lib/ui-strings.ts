@@ -107,6 +107,7 @@ type UiStrings = {
   pasurams: string;
   vrataKatha: string;
   // Shloka type tab labels
+  shlokaTypeShloka: string;
   shlokaTypeAshtothram: string;
   shlokaTypeSahasranamam: string;
   shlokaTypeChalisa: string;
@@ -177,6 +178,9 @@ type UiStrings = {
   templeEtymology: string;
   templeHistory: string;
   templeOfficialWebsite: string;
+  // SEO: language-aware title/description phrasing (shloka meaning/lyrics pages)
+  seoShlokaTitle: (title: string) => string;
+  seoMultilingualNote: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -266,6 +270,7 @@ export const UI: Record<Language, UiStrings> = {
     benefits: 'Benefits',
     pasurams: 'Pasurams',
     vrataKatha: 'Vrata Katha',
+    shlokaTypeShloka: 'Shloka',
     shlokaTypeAshtothram: 'Ashtothram',
     shlokaTypeSahasranamam: 'Sahasranamam',
     shlokaTypeChalisa: 'Chalisa',
@@ -332,6 +337,8 @@ export const UI: Record<Language, UiStrings> = {
     templeEtymology: 'Etymology',
     templeHistory: 'History',
     templeOfficialWebsite: 'Official Website',
+    seoShlokaTitle: (title) => `${title} — Meaning, Lyrics & Benefits`,
+    seoMultilingualNote: 'with meanings in Telugu, Tamil, Hindi and English',
   },
   te: {
     tithi: 'తిథి',
@@ -419,6 +426,7 @@ export const UI: Record<Language, UiStrings> = {
     benefits: 'ఫలితాలు',
     pasurams: 'పాశురాలు',
     vrataKatha: 'వ్రత కథ',
+    shlokaTypeShloka: 'శ్లోకం',
     shlokaTypeAshtothram: 'అష్టోత్తరం',
     shlokaTypeSahasranamam: 'సహస్రనామం',
     shlokaTypeChalisa: 'చాలీసా',
@@ -485,6 +493,8 @@ export const UI: Record<Language, UiStrings> = {
     templeEtymology: 'పదవ్యుత్పత్తి',
     templeHistory: 'చరిత్ర',
     templeOfficialWebsite: 'అధికారిక వెబ్‌సైట్',
+    seoShlokaTitle: (title) => `${title} అర్థం మరియు పాఠం తెలుగులో`,
+    seoMultilingualNote: 'తెలుగు, తమిళం, హిందీ మరియు ఇంగ్లీష్‌లో అర్థాలతో',
   },
   ta: {
     tithi: 'திதி',
@@ -572,6 +582,7 @@ export const UI: Record<Language, UiStrings> = {
     benefits: 'பலன்கள்',
     pasurams: 'பாசுரங்கள்',
     vrataKatha: 'விரத கதை',
+    shlokaTypeShloka: 'ஸ்லோகம்',
     shlokaTypeAshtothram: 'அஷ்டோத்திரம்',
     shlokaTypeSahasranamam: 'சஹஸ்ரநாமம்',
     shlokaTypeChalisa: 'சாலீசா',
@@ -638,6 +649,8 @@ export const UI: Record<Language, UiStrings> = {
     templeEtymology: 'சொல் வரலாறு',
     templeHistory: 'வரலாறு',
     templeOfficialWebsite: 'அதிகாரப்பூர்வ இணையதளம்',
+    seoShlokaTitle: (title) => `${title} பொருள் மற்றும் பாடல் தமிழில்`,
+    seoMultilingualNote: 'தெலுங்கு, தமிழ், இந்தி மற்றும் ஆங்கிலத்தில் பொருள்களுடன்',
   },
   hi: {
     tithi: 'तिथि',
@@ -725,6 +738,7 @@ export const UI: Record<Language, UiStrings> = {
     benefits: 'लाभ',
     pasurams: 'पासुर',
     vrataKatha: 'व्रत कथा',
+    shlokaTypeShloka: 'श्लोक',
     shlokaTypeAshtothram: 'अष्टोत्तरम्',
     shlokaTypeSahasranamam: 'सहस्रनामम्',
     shlokaTypeChalisa: 'चालीसा',
@@ -791,5 +805,7 @@ export const UI: Record<Language, UiStrings> = {
     templeEtymology: 'शब्द व्युत्पत्ति',
     templeHistory: 'इतिहास',
     templeOfficialWebsite: 'आधिकारिक वेबसाइट',
+    seoShlokaTitle: (title) => `${title} अर्थ और पाठ हिंदी में`,
+    seoMultilingualNote: 'तेलुगु, तमिल, हिंदी और अंग्रेज़ी में अर्थों के साथ',
   },
 };

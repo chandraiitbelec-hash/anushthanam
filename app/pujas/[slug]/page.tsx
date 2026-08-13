@@ -1,10 +1,12 @@
-import { notFound } from 'next/navigation';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { getPublished, emptyOnError } from '@/lib/sheets';
 import { TABS } from '@/lib/tabs';
 import { getProcedureSteps, getMaterialItems, rowToPuja } from '@/lib/relations';
+import { localize } from '@/lib/localize';
+import { UI } from '@/lib/ui-strings';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
-import { pageMeta, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
+import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -19,8 +21,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const rows = await getPublished(TABS.pujas);
     const puja = rows.map(rowToPuja).find(p => p.slug === slug);
     if (!puja) return { title: SITE_NAME };
-    return pageMeta(puja.title_en, puja.brief_description_en || '', `/pujas/${slug}`);
+    const lang = await getRequestLang();
+    const ui = UI[lang];
+    const title = localize(puja, 'title', lang);
+    const description = [localize(puja, 'brief_description', lang), ui.seoMultilingualNote].filter(Boolean).join(' — ');
+    return pageMeta(title, description, `/pujas/${slug}`);
   } catch (err) {
+    // See shlokas/[slug]/page.tsx generateMetadata for why this rethrow is here.
+    unstable_rethrow(err);
     emptyOnError(TABS.pujas, 'pujas/[slug]#generateMetadata', undefined)(err);
     return { title: SITE_NAME };
   }
