@@ -313,8 +313,7 @@ export type Temple = {
 export type LiveStream = {
   slug: string;
   // Temple facts (name/location/deity) resolve via temple_slug → temples tab
-  // → god_links, not stored here. temple_name_en/te/ta/hi, location_en/te/ta/hi,
-  // and deity_slug remain as dead columns in the Sheet until manual cleanup.
+  // → god_links, not stored here.
   temple_slug: string;
   youtube_video_id: string;
   channel_url: string;
