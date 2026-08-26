@@ -93,6 +93,7 @@ export default function LiveStreamCard({ stream, temple, deity, hideIdentity }: 
               fontWeight: 600,
               margin: '0 0 4px',
               color: 'var(--color-text-primary)',
+              overflowWrap: 'break-word',
             }}>
               {templeName}
             </p>
