@@ -3,7 +3,7 @@
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { localize, localizeLang } from '@/lib/localize';
-import { scriptClass } from '@/lib/utils';
+import { scriptClass, splitIntoParagraphs } from '@/lib/utils';
 import type { LiveStream, Temple } from '@/lib/types';
 import DeityChips, { type DeityRef } from './DeityChips';
 import SectionNav, { type NavSection } from './SectionNav';
@@ -27,6 +27,28 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
     }}>
       {children}
     </h2>
+  );
+}
+
+// history/significance arrive as one unbroken run of prose (no authored
+// paragraph breaks in the source), which reads as a wall of text at 3,000+
+// characters. Break it at sentence boundaries for rendering only; short
+// fields come back as a single paragraph, i.e. unchanged.
+function ProseSection({ text }: { text: string }) {
+  const paragraphs = splitIntoParagraphs(text);
+  return (
+    <div>
+      {paragraphs.map((para, i) => (
+        <p key={i} style={{
+          fontSize: 'var(--text-body)',
+          lineHeight: 1.8,
+          color: 'var(--color-text-primary)',
+          margin: i === paragraphs.length - 1 ? 0 : '0 0 16px',
+        }}>
+          {para}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -114,18 +136,14 @@ export default function TempleProfile({ temple, deities, liveStream }: Props) {
       {history && (
         <section id="section-history" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{UI[lang].templeHistory}</SectionHeading>
-          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
-            {history}
-          </p>
+          <ProseSection text={history} />
         </section>
       )}
 
       {significance && (
         <section id="section-significance" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{UI[lang].significance}</SectionHeading>
-          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.8, color: 'var(--color-text-primary)', margin: 0 }}>
-            {significance}
-          </p>
+          <ProseSection text={significance} />
         </section>
       )}
     </>
