@@ -104,8 +104,8 @@ function swingAngleDeg(dirX: number, dist: number): number {
   return Math.sign(dirX) * mag;
 }
 
-const RAY_STAGGER_MS = 24;
-const RAY_START_MS = 950;
+const RAY_STAGGER_MS = 30;
+const RAY_START_MS = 1150;
 
 export default function PwaSplash() {
   return (
@@ -123,7 +123,7 @@ export default function PwaSplash() {
                 cy={c.cy}
                 transform="scale(1,-1)"
                 r="30"
-                style={{ animationDelay: `${RAY_START_MS + 20 + i * RAY_STAGGER_MS}ms` }}
+                style={{ animationDelay: `${RAY_START_MS + 25 + i * RAY_STAGGER_MS}ms` }}
               />
             ))}
           </g>
@@ -133,7 +133,7 @@ export default function PwaSplash() {
                 key={i}
                 d={d}
                 className="pwa-splash-petal"
-                style={{ '--rot0': `${swingAngleDeg(dirX, dist)}deg`, animationDelay: `${200 + i * 50}ms` } as React.CSSProperties}
+                style={{ '--rot0': `${swingAngleDeg(dirX, dist)}deg`, animationDelay: `${240 + i * 65}ms` } as React.CSSProperties}
               />
             ))}
           </g>
