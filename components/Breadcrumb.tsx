@@ -19,7 +19,7 @@ export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
     }}>
       <div className="wide-width" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
         {all.map((crumb, i) => {
-          const displayLabel = (crumb as Crumb).labels?.[lang] ?? crumb.label;
+          const displayLabel = (crumb as Crumb).labels?.[lang] || crumb.label;
           return (
           <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {i > 0 && <span aria-hidden="true" style={{ color: 'var(--color-border)' }}>/</span>}
