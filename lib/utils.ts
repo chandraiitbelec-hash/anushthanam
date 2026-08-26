@@ -47,7 +47,14 @@ const SCRIPT_CLASS_MAP: Record<string, string> = {
   hi: 'script-devanagari',
 };
 
-// Native-script CSS class for a UI language; '' for en (uses the default Latin font stack).
+// Native-script CSS class for the language the *displayed text* is in; '' for en
+// (uses the default Latin font stack).
+//
+// Pass the language the string actually resolved to, not the active UI language —
+// use localizeLang()/localizeMap() from lib/localize to get it. An entity with no
+// Tamil translation renders its English name to a Tamil visitor, and
+// scriptClass('ta') would then set Noto Sans Tamil (and Tamil's taller
+// line-height) on Latin text.
 export function scriptClass(lang: string): string {
   return SCRIPT_CLASS_MAP[lang] ?? '';
 }

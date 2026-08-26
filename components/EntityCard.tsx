@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLang } from '@/context/LanguageContext';
+import { localizeMap } from '@/lib/localize';
 import { scriptClass } from '@/lib/utils';
 
 type Names = { en: string; te?: string; ta?: string; hi?: string; sa?: string };
@@ -19,11 +20,14 @@ type EntityCardProps = {
 export default function EntityCard({ href, names, badge, badgeColor = 'gold', meta, imageSrc }: EntityCardProps) {
   const { lang } = useLang();
 
-  const title = (names as Record<string, string>)[lang] || names.en;
+  // titleLang is the language the title *resolved* to, which is 'en' whenever this
+  // entity has no translation for the active language (most temples). Styling off
+  // the raw `lang` would put the UI language's script font on Latin fallback text.
+  const { text: title, lang: titleLang } = localizeMap(names, lang);
   // show English as muted subtitle when viewing another language
-  const subtitle = lang !== 'en' && names.en !== title ? names.en : undefined;
+  const subtitle = titleLang !== 'en' && names.en !== title ? names.en : undefined;
 
-  const titleClass = scriptClass(lang);
+  const titleClass = scriptClass(titleLang);
 
   const badgeColors = {
     gold:    { bg: 'rgba(184,134,11,0.1)', color: 'var(--color-gold-text)' },
@@ -83,8 +87,8 @@ export default function EntityCard({ href, names, badge, badgeColor = 'gold', me
           {badge}
         </span>
       )}
-      <p className={titleClass} style={{
-        fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
+      <p className={titleClass} lang={titleLang} style={{
+        fontFamily: titleLang === 'en' ? 'var(--font-display)' : undefined,
         fontSize: 'var(--text-card-title)',
         fontWeight: 600,
         margin: '0 0 2px',

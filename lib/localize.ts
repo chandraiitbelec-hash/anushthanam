@@ -35,3 +35,32 @@ export function localize(entity: object, field: string, lang: Language): string 
   const rec = entity as unknown as Record<string, string>;
   return pick(rec[`${field}_${lang}`]) ?? pick(rec[`${field}_en`]) ?? '';
 }
+
+// The language localize() *actually* resolved to for this field — the requested
+// `lang` when that column has content, otherwise 'en' (the fallback), and 'en'
+// when the field is empty in every language.
+//
+// Callers need this because a value's language and the active UI language are
+// not the same thing: an entity with no Tamil translation shows English text to
+// a Tamil visitor, and styling that text off the raw `lang` prop applies the
+// wrong script's font/line-height to it. Drive scriptClass() and any
+// per-script font/line-height off this, not off the UI language.
+export function localizeLang<T extends object, F extends FieldBase<T> & string>(entity: T, field: F, lang: Language): Language;
+export function localizeLang<T extends Record<string, string>>(entity: IsRawRow<T> extends true ? T : never, field: string, lang: Language): Language;
+export function localizeLang(entity: object, field: string, lang: Language): Language {
+  const rec = entity as unknown as Record<string, string>;
+  return pick(rec[`${field}_${lang}`]) !== undefined ? lang : 'en';
+}
+
+// Same resolution rule as localize()/localizeLang(), for values that arrive as a
+// plain per-language map (e.g. EntityCard's `names` prop) rather than as
+// `field_{lang}` columns on an entity. Returns the text *and* the language it
+// came from, so the caller can style it correctly in one step.
+export function localizeMap(
+  values: Partial<Record<Language, string>> & { en: string },
+  lang: Language,
+): { text: string; lang: Language } {
+  const requested = pick(values[lang]);
+  if (requested !== undefined) return { text: requested, lang };
+  return { text: pick(values.en) ?? '', lang: 'en' };
+}

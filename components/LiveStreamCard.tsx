@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
-import { localize } from '@/lib/localize';
+import { localize, localizeLang } from '@/lib/localize';
 import { scriptClass } from '@/lib/utils';
 import type { LiveStream, Temple } from '@/lib/types';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
@@ -50,7 +50,10 @@ export default function LiveStreamCard({ stream, temple, deity, hideIdentity }: 
   const schedule = localize(stream, 'arathi_schedule', lang);
   const description = localize(stream, 'description', lang);
   const deityName = deity ? localize(deity, 'name', lang) : undefined;
-  const titleClass = scriptClass(lang);
+  // Style the temple name off the language it actually resolved to, not the UI
+  // language — most temples have no te/ta/hi name and fall back to English.
+  const templeNameLang = temple ? localizeLang(temple, 'name', lang) : 'en';
+  const titleClass = scriptClass(templeNameLang);
 
   // Free-text schedule fields are comma-separated entries (e.g. "Suprabhatam
   // 5:00 AM, Maha Deeparadhana 6:00 PM"). Split into scannable lines instead
@@ -84,8 +87,8 @@ export default function LiveStreamCard({ stream, temple, deity, hideIdentity }: 
       <div style={{ padding: '16px' }}>
         {!hideIdentity && (
           <>
-            <p className={titleClass} style={{
-              fontFamily: lang === 'en' ? 'var(--font-cormorant)' : undefined,
+            <p className={titleClass} lang={templeNameLang} style={{
+              fontFamily: templeNameLang === 'en' ? 'var(--font-display)' : undefined,
               fontSize: 'var(--text-card-title)',
               fontWeight: 600,
               margin: '0 0 4px',

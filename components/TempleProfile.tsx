@@ -2,7 +2,7 @@
 
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
-import { localize } from '@/lib/localize';
+import { localize, localizeLang } from '@/lib/localize';
 import { scriptClass } from '@/lib/utils';
 import type { LiveStream, Temple } from '@/lib/types';
 import DeityChips, { type DeityRef } from './DeityChips';
@@ -39,7 +39,11 @@ export default function TempleProfile({ temple, deities, liveStream }: Props) {
   const significance = localize(temple, 'significance', lang);
   const location = localize(temple, 'location', lang);
 
-  const nameClass = scriptClass(lang);
+  // The language the name actually resolved to — most temples have no te/ta/hi
+  // name and fall back to English, which must not be styled with the UI
+  // language's script font or line-height.
+  const nameLang = localizeLang(temple, 'name', lang);
+  const nameClass = scriptClass(nameLang);
 
   const navSections: NavSection[] = [
     ...(liveStream ? [{ id: 'section-live', label: UI[lang].liveDarshan }] : []),
@@ -51,20 +55,20 @@ export default function TempleProfile({ temple, deities, liveStream }: Props) {
   return (
     <>
       <div style={{ marginBottom: '32px' }}>
-        <h1 className={nameClass} style={{
-          fontFamily: lang === 'en' ? 'var(--font-display)' : undefined,
+        <h1 className={nameClass} lang={nameLang} style={{
+          fontFamily: nameLang === 'en' ? 'var(--font-display)' : undefined,
           fontSize: 'var(--text-h1)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: '0 0 4px',
-          lineHeight: lang === 'te' ? 1.5 : lang === 'ta' ? 1.45 : lang === 'hi' ? 1.3 : 1.15,
+          lineHeight: nameLang === 'te' ? 1.5 : nameLang === 'ta' ? 1.45 : nameLang === 'hi' ? 1.3 : 1.15,
           minHeight: 'calc(var(--text-h1) * 1.5)',
         }}>
           {name}
         </h1>
 
         {temple.name_en && (
-          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 12px', visibility: lang === 'en' ? 'hidden' : 'visible' }}>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 12px', visibility: nameLang === 'en' ? 'hidden' : 'visible' }}>
             {temple.name_en}
           </p>
         )}
