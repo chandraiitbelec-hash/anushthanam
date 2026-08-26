@@ -356,6 +356,25 @@ body {
   .entity-grid--3col { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* Panchangam field list (tithi, nakshatra, … rahu/gulika/yamaganda kalam).
+   Explicit column counts rather than auto-fill: at ~277px of usable width on
+   a 375px phone, an auto-fill floor wide enough for the longest label (Tamil
+   "சூரிய அஸ்தமனம்") collapsed to a single column, making the widget tall
+   enough to push the choghadiya rows well below the fold. Three columns also
+   lays the usual nine fields out as an even 3×3 on desktop instead of
+   stranding the last field alone on a fourth row. */
+.panchangam-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .panchangam-field-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .story-row {
   transition: border-color 0.15s;
 }

@@ -120,11 +120,7 @@ export default function PanchangamWidget({ day, compact = false }: Props) {
         <span className={nameClass}>{localize(day, 'lunar_month', lang)}</span>{' '}
         <span className={nameClass}>{ui.masa}</span>
       </p>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-        gap: '12px',
-      }}>
+      <div className="panchangam-field-grid">
         {fields.map(f => (
           <div key={f.label}>
             <p className={nameClass} style={{ fontSize: 'var(--text-label)', color: 'var(--color-text-secondary)', margin: '0 0 2px', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: '0.05em' }}>
