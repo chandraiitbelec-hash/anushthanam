@@ -345,9 +345,13 @@ body {
   }
 }
 
-/* Longer titles (e.g. vratham names) — cap at 3 columns so text has room */
+/* Roomier variant for cards whose content needs width — long titles (vratham
+   names in native script) or a video embed (live darshan). Caps at 3 columns
+   instead of 4, and goes single-column on phones: at 375px the shared 2-column
+   track is ~125px of usable text width, narrower than a single word like
+   "சத்யநாராயண", which then hard-broke mid-word via overflow-wrap. */
 .entity-grid--3col {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
 }
 @media (min-width: 640px) {
   .entity-grid--3col { grid-template-columns: repeat(3, 1fr); }
@@ -402,7 +406,13 @@ body {
    display mode and adds .pwa-launch to <html>, so regular browser visits
    never see it. Runs once per cold start (animation-fill-mode: forwards
    means it never resets, even though the class stays on <html> for the
-   rest of the SPA session). */
+   rest of the SPA session).
+
+   The bloom-in choreography lives here; the fade-OUT is triggered from JS
+   (components/PwaSplashFade.tsx adds .pwa-splash-out once the real page is
+   visible and a minimum hold has passed) rather than on a fixed delay that
+   can run out while the page underneath is still blank. The long-delay
+   fallback below only matters if that JS never runs at all. */
 #pwa-splash {
   display: none;
   position: fixed;
@@ -414,7 +424,14 @@ body {
 }
 html.pwa-launch #pwa-splash {
   display: flex;
-  animation: pwa-splash-fade 500ms ease 2900ms forwards;
+  /* Safety net for a dead/never-hydrated JS bundle — deliberately later than
+     PwaSplashFade's MAX_HOLD_MS (6000ms) so it normally never fires. */
+  animation: pwa-splash-fade 500ms ease 6800ms forwards;
+}
+/* The real fade: same animation, no delay, fired by PwaSplashFade. The extra
+   class outranks the fallback rule above, replacing its delay. */
+html.pwa-launch #pwa-splash.pwa-splash-out {
+  animation: pwa-splash-fade 500ms ease forwards;
 }
 /* Core (flame + diya): settles in first, simple scale + fade from center. */
 .pwa-splash-core {

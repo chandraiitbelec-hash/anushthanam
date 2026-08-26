@@ -151,9 +151,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* pwa-splash-init: detects standalone display mode (installed app,
             not a regular browser tab) and flags <html> before paint so the
             splash in PwaSplash can show without a flash of the real page
-            underneath first. */}
+            underneath first. Also stamps window.__pwaSplashAt — the pre-paint
+            moment the splash appeared — which PwaSplashFade reads to measure
+            the minimum hold from. */}
         <Script id="pwa-splash-init" strategy="beforeInteractive">
-          {`try{var sa=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(sa)document.documentElement.classList.add('pwa-launch');}catch(e){}`}
+          {`try{var sa=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(sa){document.documentElement.classList.add('pwa-launch');window.__pwaSplashAt=performance.now();}}catch(e){}`}
         </Script>
         <a href="#main-content" className="skip-link">Skip to content</a>
         <PwaSplash />
