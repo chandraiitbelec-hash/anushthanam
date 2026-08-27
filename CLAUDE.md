@@ -28,6 +28,7 @@ node scripts/check-content-health.mjs   # pre-deploy: verify live Sheet headers/
 node scripts/report-translation-coverage.mjs [--verbose]   # per-language fill-rate report across content tabs, read-only
 node scripts/migrate.mjs             # list pending Postgres migrations (dry run)
 node scripts/migrate.mjs --write     # apply them
+node scripts/test-occurrences.mjs    # unit tests for the schedule recurrence/tz math
 ```
 
 ## Architecture
@@ -266,6 +267,64 @@ session there costs nothing extra.
 **Not built on purpose:** protected routes, middleware, gated content, roles.
 The scope of this layer is "a user can sign in with Google and the app knows who
 they are across requests".
+
+### Schedule (community events)
+
+A generic scheduled-events layer at `/schedule`, backed by Supabase Postgres
+(user-generated dynamic data — NOT a Sheets tab; Sheets stays the editorial
+CMS). This is deliberately a **shared, domain-agnostic primitive**: the planned
+live-audio **satsang** sessions and the later **pandit-booking** feature are
+both intended to be *kinds* of event on top of it. The `events.kind` column
+(default `'gathering'`, not surfaced in UI) exists precisely so those become
+new kinds, not new schemas. Keep audio/booking/pandit concepts out of this
+layer.
+
+**Tables** (`db/migrations/0002_create_events.sql`, RLS enabled with zero
+policies on both — same PostgREST-exposure reasoning as `users`):
+
+- `events` — `id` uuid pk · `owner_id` → `users.id` (the `accountId` from the
+  session, **never** `session.user.id`/`googleId`) · `kind` · `title` ·
+  `description` · `starts_at` timestamptz (the anchor occurrence) ·
+  `duration_minutes` (informational) · `recurrence` (`none|daily|weekly`) ·
+  `weekdays` smallint[] (0=Sunday…6=Saturday, weekly only) · `tz` (IANA) ·
+  `status` (`scheduled|cancelled`) · timestamps.
+- `event_interest` — `(event_id, user_id)` pk + `created_at`. The minimal
+  "Interested" toggle + count; this is the attendee contract future features
+  build on.
+
+**Visibility model (v1):** the whole platform is one implicit community.
+Reads are public (signed-out visitors see everything, with a sign-in nudge
+where the create button would be); writes require sign-in. No community or
+membership gating exists yet — that's a later layer.
+
+**Recurrence & timezones:** the rule lives on the event row; upcoming
+occurrences are computed at read time over a 60-day horizon
+(`SCHEDULE_HORIZON_DAYS`) by the pure, unit-tested math in
+`lib/occurrences.mjs` (`node scripts/test-occurrences.mjs`). Instance rows are
+**never pre-generated**, and there is no per-instance editing — v1 edits/cancels
+apply to the whole series. Recurring events are anchored to the wall-clock time
+of the IANA zone they were created in (`tz`), so they track that zone's DST;
+occurrences render in each viewer's local time (SSR pins Asia/Kolkata via a
+useSyncExternalStore server snapshot, then swaps to the browser zone — see
+`components/schedule/format.ts`), with an explicit timezone label on the
+detail view.
+
+**Files:** `lib/schedule.ts` (typed data access; reads degrade to empty on a
+missing/unreachable DB, same discipline as Sheets fetches) ·
+`lib/occurrences.mjs` (pure tz/recurrence math, .mjs so plain node can test it
+and client code can share it) · `lib/ics.ts` ("Add to Calendar" export: single
+VEVENT, RRULE for recurring; IANA TZID referenced without a VTIMEZONE block —
+deliberate, revisit only if a real client rejects it) ·
+`app/api/schedule/*` (Node runtime routes; `auth()`-guarded writes, ownership
+enforced in SQL via `WHERE owner_id`; a session missing `accountId` gets a
+`no_account` error the client renders as "try signing out and in again") ·
+`app/schedule/*` + `components/schedule/*` (list + month calendar on the
+shared Tabs primitive, create/edit form, detail view with Interested/ICS/
+owner-only edit-cancel).
+
+**Out of scope on purpose (v1):** notifications/reminders of any kind (ICS
+export *is* the reminder story), per-instance recurrence edits, monthly/custom
+RRULEs, community gating, event images.
 
 ### scripts/ conventions
 

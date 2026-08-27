@@ -186,6 +186,46 @@ type UiStrings = {
   signInWithGoogle: string;
   signOut: string;
   accountLabel: string;
+  // Schedule (community events)
+  schedule: string;
+  scheduleCalendarTab: string;
+  scheduleCreate: string;
+  scheduleSignInToCreate: string;
+  scheduleEmptyTitle: string;
+  scheduleEmptyBody: string;
+  newEventTitle: string;
+  editEventTitle: string;
+  eventTitleLabel: string;
+  eventDescriptionLabel: string;
+  eventDateLabel: string;
+  eventTimeLabel: string;
+  eventDurationLabel: string;
+  eventRecurrenceLabel: string;
+  recurrenceNone: string;
+  recurrenceDaily: string;
+  recurrenceWeekly: string;
+  eventWeekdaysLabel: string;
+  saveEvent: string;
+  savingEvent: string;
+  backToSchedule: string;
+  interestedAction: string;
+  interestedCount: (n: number) => string;
+  signInToMarkInterest: string;
+  addToCalendar: string;
+  editEvent: string;
+  cancelEvent: string;
+  confirmCancelEvent: string;
+  eventCancelledBadge: string;
+  timezoneLabel: string;
+  hostedBy: (name: string) => string;
+  repeatsDaily: string;
+  repeatsWeeklyOn: (days: string) => string;
+  scheduleErrorNoAccount: string;
+  scheduleErrorGeneric: string;
+  eventNotFound: string;
+  shownInLocalTime: string;
+  calPrevMonth: string;
+  calNextMonth: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -348,6 +388,45 @@ export const UI: Record<Language, UiStrings> = {
     signInWithGoogle: 'Sign in with Google',
     signOut: 'Sign out',
     accountLabel: 'Account',
+    schedule: 'Schedule',
+    scheduleCalendarTab: 'Calendar',
+    scheduleCreate: 'Create event',
+    scheduleSignInToCreate: 'Sign in to create an event',
+    scheduleEmptyTitle: 'No upcoming events',
+    scheduleEmptyBody: 'Events created by the community will appear here.',
+    newEventTitle: 'New event',
+    editEventTitle: 'Edit event',
+    eventTitleLabel: 'Title',
+    eventDescriptionLabel: 'Description',
+    eventDateLabel: 'Date',
+    eventTimeLabel: 'Time',
+    eventDurationLabel: 'Duration (minutes)',
+    eventRecurrenceLabel: 'Repeats',
+    recurrenceNone: 'Does not repeat',
+    recurrenceDaily: 'Daily',
+    recurrenceWeekly: 'Weekly',
+    eventWeekdaysLabel: 'On days',
+    saveEvent: 'Save',
+    savingEvent: 'Saving…',
+    backToSchedule: 'Back to schedule',
+    interestedAction: 'Interested',
+    interestedCount: (n) => (n === 1 ? '1 person interested' : `${n} people interested`),
+    signInToMarkInterest: 'Sign in to mark interest',
+    addToCalendar: 'Add to calendar',
+    editEvent: 'Edit',
+    cancelEvent: 'Cancel event',
+    confirmCancelEvent: 'Cancel this event for everyone?',
+    eventCancelledBadge: 'Cancelled',
+    timezoneLabel: 'Timezone',
+    hostedBy: (name) => `Hosted by ${name}`,
+    repeatsDaily: 'Repeats daily',
+    repeatsWeeklyOn: (days) => `Repeats weekly on ${days}`,
+    scheduleErrorNoAccount: 'Your account could not be verified. Try signing out and in again.',
+    scheduleErrorGeneric: 'Something went wrong. Please try again.',
+    eventNotFound: 'Event not found',
+    shownInLocalTime: 'Times are shown in your local time.',
+    calPrevMonth: 'Previous month',
+    calNextMonth: 'Next month',
   },
   te: {
     tithi: 'తిథి',
@@ -508,6 +587,45 @@ export const UI: Record<Language, UiStrings> = {
     signInWithGoogle: 'Googleతో సైన్ ఇన్ చేయండి',
     signOut: 'సైన్ అవుట్',
     accountLabel: 'ఖాతా',
+    schedule: 'కార్యక్రమాలు',
+    scheduleCalendarTab: 'క్యాలెండర్',
+    scheduleCreate: 'కార్యక్రమం సృష్టించండి',
+    scheduleSignInToCreate: 'కార్యక్రమం సృష్టించడానికి సైన్ ఇన్ చేయండి',
+    scheduleEmptyTitle: 'రాబోయే కార్యక్రమాలు లేవు',
+    scheduleEmptyBody: 'భక్తులు సృష్టించిన కార్యక్రమాలు ఇక్కడ కనిపిస్తాయి.',
+    newEventTitle: 'కొత్త కార్యక్రమం',
+    editEventTitle: 'కార్యక్రమం సవరించండి',
+    eventTitleLabel: 'శీర్షిక',
+    eventDescriptionLabel: 'వివరణ',
+    eventDateLabel: 'తేదీ',
+    eventTimeLabel: 'సమయం',
+    eventDurationLabel: 'వ్యవధి (నిమిషాలు)',
+    eventRecurrenceLabel: 'పునరావృతం',
+    recurrenceNone: 'పునరావృతం కాదు',
+    recurrenceDaily: 'ప్రతిరోజూ',
+    recurrenceWeekly: 'ప్రతి వారం',
+    eventWeekdaysLabel: 'వారంలో ఏ రోజులు',
+    saveEvent: 'సేవ్ చేయండి',
+    savingEvent: 'సేవ్ అవుతోంది…',
+    backToSchedule: 'కార్యక్రమాలకు తిరిగి వెళ్లండి',
+    interestedAction: 'ఆసక్తి ఉంది',
+    interestedCount: (n) => `${n} మందికి ఆసక్తి ఉంది`,
+    signInToMarkInterest: 'ఆసక్తి తెలియజేయడానికి సైన్ ఇన్ చేయండి',
+    addToCalendar: 'క్యాలెండర్‌కు జోడించండి',
+    editEvent: 'సవరించండి',
+    cancelEvent: 'కార్యక్రమం రద్దు చేయండి',
+    confirmCancelEvent: 'ఈ కార్యక్రమాన్ని అందరికీ రద్దు చేయాలా?',
+    eventCancelledBadge: 'రద్దు చేయబడింది',
+    timezoneLabel: 'సమయ మండలం',
+    hostedBy: (name) => `నిర్వాహకులు: ${name}`,
+    repeatsDaily: 'ప్రతిరోజూ జరుగుతుంది',
+    repeatsWeeklyOn: (days) => `ప్రతి వారం ${days} రోజుల్లో జరుగుతుంది`,
+    scheduleErrorNoAccount: 'మీ ఖాతా నిర్ధారించబడలేదు. సైన్ అవుట్ చేసి మళ్ళీ సైన్ ఇన్ చేయండి.',
+    scheduleErrorGeneric: 'ఏదో తప్పు జరిగింది. దయచేసి మళ్ళీ ప్రయత్నించండి.',
+    eventNotFound: 'కార్యక్రమం కనబడలేదు',
+    shownInLocalTime: 'సమయాలు మీ స్థానిక సమయంలో చూపబడతాయి.',
+    calPrevMonth: 'మునుపటి నెల',
+    calNextMonth: 'తదుపరి నెల',
   },
   ta: {
     tithi: 'திதி',
@@ -668,6 +786,45 @@ export const UI: Record<Language, UiStrings> = {
     signInWithGoogle: 'Google மூலம் உள்நுழைக',
     signOut: 'வெளியேறு',
     accountLabel: 'கணக்கு',
+    schedule: 'நிகழ்ச்சிகள்',
+    scheduleCalendarTab: 'நாட்காட்டி',
+    scheduleCreate: 'நிகழ்ச்சியை உருவாக்கவும்',
+    scheduleSignInToCreate: 'நிகழ்ச்சியை உருவாக்க உள்நுழையவும்',
+    scheduleEmptyTitle: 'வரவிருக்கும் நிகழ்ச்சிகள் இல்லை',
+    scheduleEmptyBody: 'பக்தர்கள் உருவாக்கும் நிகழ்ச்சிகள் இங்கே தோன்றும்.',
+    newEventTitle: 'புதிய நிகழ்ச்சி',
+    editEventTitle: 'நிகழ்ச்சியைத் திருத்து',
+    eventTitleLabel: 'தலைப்பு',
+    eventDescriptionLabel: 'விவரம்',
+    eventDateLabel: 'தேதி',
+    eventTimeLabel: 'நேரம்',
+    eventDurationLabel: 'கால அளவு (நிமிடங்கள்)',
+    eventRecurrenceLabel: 'மீள்நிகழ்வு',
+    recurrenceNone: 'மீண்டும் நடைபெறாது',
+    recurrenceDaily: 'தினமும்',
+    recurrenceWeekly: 'வாரந்தோறும்',
+    eventWeekdaysLabel: 'எந்த நாட்களில்',
+    saveEvent: 'சேமிக்கவும்',
+    savingEvent: 'சேமிக்கப்படுகிறது…',
+    backToSchedule: 'நிகழ்ச்சிகளுக்குத் திரும்பு',
+    interestedAction: 'ஆர்வம் உண்டு',
+    interestedCount: (n) => `${n} பேர் ஆர்வம் தெரிவித்துள்ளனர்`,
+    signInToMarkInterest: 'ஆர்வம் தெரிவிக்க உள்நுழையவும்',
+    addToCalendar: 'நாட்காட்டியில் சேர்க்கவும்',
+    editEvent: 'திருத்து',
+    cancelEvent: 'நிகழ்ச்சியை ரத்து செய்',
+    confirmCancelEvent: 'இந்த நிகழ்ச்சியை அனைவருக்கும் ரத்து செய்யவா?',
+    eventCancelledBadge: 'ரத்து செய்யப்பட்டது',
+    timezoneLabel: 'நேர மண்டலம்',
+    hostedBy: (name) => `நடத்துபவர்: ${name}`,
+    repeatsDaily: 'தினமும் நடைபெறும்',
+    repeatsWeeklyOn: (days) => `ஒவ்வொரு வாரமும் ${days} அன்று நடைபெறும்`,
+    scheduleErrorNoAccount: 'உங்கள் கணக்கை உறுதிப்படுத்த முடியவில்லை. வெளியேறி மீண்டும் உள்நுழையவும்.',
+    scheduleErrorGeneric: 'ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.',
+    eventNotFound: 'நிகழ்ச்சி கிடைக்கவில்லை',
+    shownInLocalTime: 'நேரங்கள் உங்கள் உள்ளூர் நேரத்தில் காட்டப்படுகின்றன.',
+    calPrevMonth: 'முந்தைய மாதம்',
+    calNextMonth: 'அடுத்த மாதம்',
   },
   hi: {
     tithi: 'तिथि',
@@ -828,5 +985,44 @@ export const UI: Record<Language, UiStrings> = {
     signInWithGoogle: 'Google से साइन इन करें',
     signOut: 'साइन आउट',
     accountLabel: 'खाता',
+    schedule: 'कार्यक्रम',
+    scheduleCalendarTab: 'कैलेंडर',
+    scheduleCreate: 'कार्यक्रम बनाएं',
+    scheduleSignInToCreate: 'कार्यक्रम बनाने के लिए साइन इन करें',
+    scheduleEmptyTitle: 'कोई आगामी कार्यक्रम नहीं',
+    scheduleEmptyBody: 'भक्तों द्वारा बनाए गए कार्यक्रम यहाँ दिखाई देंगे।',
+    newEventTitle: 'नया कार्यक्रम',
+    editEventTitle: 'कार्यक्रम संपादित करें',
+    eventTitleLabel: 'शीर्षक',
+    eventDescriptionLabel: 'विवरण',
+    eventDateLabel: 'तारीख़',
+    eventTimeLabel: 'समय',
+    eventDurationLabel: 'अवधि (मिनट)',
+    eventRecurrenceLabel: 'दोहराव',
+    recurrenceNone: 'दोहराया नहीं जाता',
+    recurrenceDaily: 'प्रतिदिन',
+    recurrenceWeekly: 'हर सप्ताह',
+    eventWeekdaysLabel: 'किन दिनों में',
+    saveEvent: 'सहेजें',
+    savingEvent: 'सहेजा जा रहा है…',
+    backToSchedule: 'कार्यक्रमों पर वापस जाएं',
+    interestedAction: 'रुचि है',
+    interestedCount: (n) => `${n} लोगों ने रुचि दिखाई`,
+    signInToMarkInterest: 'रुचि दिखाने के लिए साइन इन करें',
+    addToCalendar: 'कैलेंडर में जोड़ें',
+    editEvent: 'संपादित करें',
+    cancelEvent: 'कार्यक्रम रद्द करें',
+    confirmCancelEvent: 'क्या इस कार्यक्रम को सभी के लिए रद्द करें?',
+    eventCancelledBadge: 'रद्द किया गया',
+    timezoneLabel: 'समय क्षेत्र',
+    hostedBy: (name) => `आयोजक: ${name}`,
+    repeatsDaily: 'प्रतिदिन होता है',
+    repeatsWeeklyOn: (days) => `हर सप्ताह ${days} को होता है`,
+    scheduleErrorNoAccount: 'आपका खाता सत्यापित नहीं हो सका। साइन आउट करके फिर से साइन इन करें।',
+    scheduleErrorGeneric: 'कुछ गलत हो गया। कृपया फिर से प्रयास करें।',
+    eventNotFound: 'कार्यक्रम नहीं मिला',
+    shownInLocalTime: 'समय आपके स्थानीय समय में दिखाया गया है।',
+    calPrevMonth: 'पिछला महीना',
+    calNextMonth: 'अगला महीना',
   },
 };
