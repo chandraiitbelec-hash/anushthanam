@@ -82,6 +82,9 @@ Publishing is intentional: a "Publish to site" menu in Apps Script triggers the 
 | `lib/db.ts` | Pooled `pg` client + `query()` helper, and `isDbConfigured`; the only place a Postgres connection is opened |
 | `lib/users.ts` | `upsertUserFromGoogle()` — the single writer to the `users` table, called once per sign-in |
 | `auth.ts` (repo root) | Auth.js config: Google provider, JWT callbacks, `isAuthConfigured` — see Accounts / Auth below |
+| `lib/schedule.ts` + `lib/occurrences.mjs` + `lib/ics.ts` | The Schedule layer — see below |
+| `lib/satsang.ts` + `lib/event-kinds.ts` | Live-audio session state, and the client-safe event-kind vocabulary — see Satsang below |
+| `lib/audio/` | Vendor-neutral live-audio contracts (`audio-room.ts`, `admin.ts`) and the only two modules allowed to import LiveKit — see Satsang below |
 | `context/LanguageContext.tsx` | Active language (`en`/`te`/`ta`/`hi`) stored in context + localStorage/cookie |
 
 ### Status model
@@ -326,6 +329,128 @@ owner-only edit-cancel).
 export *is* the reminder story), per-instance recurrence edits, monthly/custom
 RRULEs, community gating, event images.
 
+**Event kinds live in `lib/event-kinds.ts`**, which must stay import-free.
+`EVENT_KINDS` / `SATSANG_KIND` are needed as *runtime values* by client
+components (the form's type toggle, the detail badge), and every other module
+that could own them — `lib/schedule.ts`, `lib/satsang.ts` — reaches `lib/db.ts`
+and therefore `pg`, which cannot be bundled for the browser. A value import
+from either of those into a client component is a Turbopack build failure
+(`Can't resolve 'dns'`); `tsc` and `next dev` will not catch it.
+
+### Satsang (live audio sessions)
+
+Phase 1 of the live-audio community feature: an event with `kind = 'satsang'`
+can be taken **live** by its creator (the teacher), devotees join by audio in
+the browser, and the teacher controls who is heard. **Circle form only** —
+everyone who joins may speak; the teacher's authority is over mute.
+
+Vendor is **LiveKit Cloud** (India South region confirmed), chosen in
+`research/webrtc-vendor-eval-2026-08.md`. That memo's measured findings are
+binding constraints, not suggestions — the four that shaped this code are
+called out below. `spike/live-audio/` is the throwaway prototype it was
+measured with; **nothing under `spike/` may be imported by the app.**
+
+**Vendor isolation (a cost-control requirement from the owner, not a style
+preference).** Two vendor-neutral contracts, one implementation each, and
+exactly one selection point per side:
+
+| File | Role |
+|------|------|
+| `lib/audio/audio-room.ts` | Client contract (`AudioRoom`): join/leave, self mute, teacher mute + mute-all + unmute-request, roster with active-speaker, autoplay recovery. **Imports no SDK.** |
+| `lib/audio/livekit-room.ts` | The only place `livekit-client` may be imported. |
+| `lib/audio/create-room.ts` | Client selection point; dynamically imports the adapter so the SDK only reaches browsers that actually join. |
+| `lib/audio/admin.ts` | Server contract (`LiveAudioAdmin`): mint token, mute participant, mute all, close room. Plus `isLiveAudioConfigured` and `getLiveAudioAdmin()`. **Imports no SDK.** |
+| `lib/audio/livekit-admin.ts` | The only place `livekit-server-sdk` may be imported. |
+
+Swapping providers means rewriting the two `livekit-*` files and repointing the
+two factories. `grep -rn "livekit" app/ lib/ components/` should only ever hit
+`lib/audio/livekit-*.ts` (plus prose in comments) — treat a new hit as a bug.
+
+Phase 2's **hall form** (stage/audience, raise hand) is anticipated rather than
+designed away: `RoomParticipant.canSpeak` and `MintTokenInput.canSpeak` already
+exist and vary per participant, so adding grant/revoke is additive.
+
+**Schema (`db/migrations/0003_create_live_sessions.sql`)** — `live_sessions`,
+RLS on with zero policies like 0001/0002. A row is one *run*, not the schedule:
+
+- `id` uuid pk · `event_id` → `events.id` · `occurrence_starts_at` ·
+  `room_name` (unique, `satsang-<id>`) · `started_by` → `users.id` ·
+  `started_at` · `ended_at` (NULL = live).
+- **Runs are rows, not columns on `events`,** because a recurring satsang goes
+  live many times: columns could describe only one run, so every Start would
+  overwrite the last and a client polling across a start/end boundary could not
+  tell which room to join. A row per run also gives the room name something
+  unguessable to derive from, so a second Start opens a genuinely fresh room
+  instead of re-entering a name that may still hold lingering participants.
+- A **partial unique index** (`WHERE ended_at IS NULL`) enforces at most one
+  live run per event in the database, so two of the teacher's tabs both
+  pressing Start cannot split the gathering in two. Start is idempotent.
+- `occurrence_starts_at` is informational in v1 (the teacher may start any
+  time; nothing ties a run to the timetable). It exists so per-occurrence
+  attendance later has its join key already recorded.
+
+**The Phase 0 constraints, and where each one lives**
+
+- **Teacher mute is soft mute** (PRD FR-13 default, measured §3):
+  `MutePublishedTrack` at the SFU stops the target without their cooperation
+  but leaves them able to unmute themselves again. **No Lock mutes in Phase 1.**
+  (Lock would mean revoking `canPublish`, i.e. demoting to audience — a hall
+  form concept.)
+- **Unmute is never a server command** — no vendor permits one (§3). The
+  teacher's "ask to unmute" is a data-channel message; the target's client
+  **auto-accepts if that user has already unmuted themselves this session**
+  (they have granted mic access and shown intent to speak), otherwise it raises
+  a one-tap consent prompt. Consent lives on the receiving client, by design.
+- **Remote audio is registered with the MediaSession API** so Android Chrome
+  classifies it as media playback. §5 measured playback dying on screen lock
+  while the transport survived; this is the mitigation that memo asks to prove
+  in the field, and the in-session UI also carries an explicit "keep the screen
+  on" caveat rather than promising background listening.
+- **Publish failures are silent at the SFU** (a timeout, not an error, §3), so
+  no UI state is keyed off a publish result — the roster is rebuilt from the
+  permission and mute state the provider reports.
+- Join is **gesture-initiated** (autoplay policy) and nobody joins with their
+  mic on; `playbackBlocked` surfaces an "enable audio" button when the browser
+  refuses playback anyway.
+
+**Lifecycle.** Teacher sees Start (any time) and, while live, End session for
+all (confirmed). Others see a "hasn't started yet" state that flips to a Join
+button when the teacher starts. Page state is **polled** (10s, paused when the
+tab is hidden, stopped once joined — the room's own events are then the truth);
+v1 adds no websocket infrastructure for page state on purpose. Reads are
+public and joining requires sign-in, consistent with the schedule layer;
+signed-out visitors see the live session exists and get a sign-in nudge.
+
+**A teacher disconnecting does NOT end the session** — only the explicit End
+action does. This is a deliberate deviation from the PRD's FR-15 two-minute
+grace timer, which needs a scheduler this platform does not have. The failure
+modes are asymmetric: a session left live degrades to an empty room the teacher
+can end later, whereas a wrongly-expired one ejects a room full of devotees
+mid-chant. Revisit in Phase 2.
+
+**Files.** `lib/satsang.ts` (server-only data access; reads degrade to "not
+live") · `lib/event-kinds.ts` (client-safe kind vocabulary — see the note in
+the Schedule section) · `app/api/satsang/[id]/{state,start,end,token,control}`
+(Node runtime; `auth()`-guarded, **teacher-only actions enforced server-side
+against the event's `owner_id`**, never from a client claim; `guard.ts` holds
+the shared guards) · `components/satsang/SatsangPanel.tsx` (lifecycle: poll,
+start/end, gesture join) + `SessionRoom.tsx` (roster with teacher pinned top,
+active-speaker ring, self mute, per-participant mute, mute all, ask-to-unmute).
+
+Identity in the room is the signed-in user's **`accountId`** (our `users.id`) —
+never `session.user.id`/`googleId`. Being stable per user also means a second
+tab replaces the first join rather than doubling the roster.
+
+**Degradation.** Missing `LIVEKIT_*` → `isLiveAudioConfigured` is false, the
+event-type toggle disappears from the form and the live panel disappears from
+the detail page; the schedule renders exactly as it did before this feature. A
+DB or provider outage degrades to "not live" / a friendly message, never a
+broken page.
+
+**Out of scope on purpose:** hall form / stage-audience / raise hand, Lock
+mutes, recording, reminders and push, community gating, per-occurrence
+recurrence edits, native apps, payments.
+
 ### scripts/ conventions
 
 - `scripts/lib-sheets.mjs` is the shared helper module for one-off content scripts: `loadEnv()` (auto-loads `.env.local` relative to the script's own directory, so cwd doesn't matter), `getSheetsClient()` (memoized), `parseWriteFlag(argv)`, and `getTabWithHeaders(tab)` returning `{ headers, rows, col }`.
@@ -350,13 +475,20 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 AUTH_SECRET=
 DATABASE_URL=
+
+# Live audio (satsang) — LiveKit Cloud; see the Satsang section
+LIVEKIT_URL=
+LIVEKIT_API_KEY=
+LIVEKIT_API_SECRET=
 ```
 
 `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` are the **OAuth client** credentials from Google Cloud Console — a different thing from `GOOGLE_SERVICE_ACCOUNT_KEY`, which is the read-only service account used for Sheets and Docs. The two are unrelated and must not be swapped.
 
 Auth.js would pick up `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` by convention; `auth.ts` passes `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` explicitly instead, so those are the names to set.
 
-All four are optional in the sense that the app boots without them: missing any of the three auth values turns the sign-in UI off entirely (see `isAuthConfigured`), and a missing `DATABASE_URL` lets sign-in work without persisting a row.
+`LIVEKIT_URL` (a `wss://` project endpoint) plus the API key/secret come from the LiveKit Cloud project — currently the same project the Phase 0 spike measured against. Missing any of the three turns live audio off entirely (see `isLiveAudioConfigured`): satsang event pages still render, without live-session controls.
+
+All of these are optional in the sense that the app boots without them: missing any of the three auth values turns the sign-in UI off entirely (see `isAuthConfigured`), a missing `DATABASE_URL` lets sign-in work without persisting a row, and missing `LIVEKIT_*` leaves the schedule exactly as it was before satsang.
 
 (`NEXT_PUBLIC_DEFAULT_LANGUAGE`, `NEXT_PUBLIC_SITE_NAME`, and `NEXT_PUBLIC_SHOW_TRANSLATION_BADGES` are no longer read anywhere in code — the translation-badge feature they supported was removed; don't reintroduce them without a real consumer.)
 

@@ -8,6 +8,7 @@ import { UI } from '@/lib/ui-strings';
 import { wallTime, wallTimeToUtc } from '@/lib/occurrences.mjs';
 import { weekdayShortName } from './format';
 import type { EventRecurrence, ScheduleEvent } from '@/lib/schedule';
+import { DEFAULT_EVENT_KIND, SATSANG_KIND, type EventKind } from '@/lib/event-kinds';
 
 /**
  * Create/edit form for a scheduled event. The date/time inputs are wall-clock
@@ -16,7 +17,18 @@ import type { EventRecurrence, ScheduleEvent } from '@/lib/schedule';
  * doesn't silently re-anchor "7pm IST every Tuesday" to their hotel's zone.
  * v1 edits always apply to the whole series.
  */
-export default function EventForm({ event }: { event?: ScheduleEvent }) {
+export default function EventForm({
+  event,
+  liveAudioEnabled,
+}: {
+  event?: ScheduleEvent;
+  /**
+   * Whether the audio provider is configured. When it isn't, the event-type
+   * choice is hidden entirely rather than offering a session that could never
+   * start — an event already marked satsang keeps its kind on save.
+   */
+  liveAudioEnabled: boolean;
+}) {
   const { lang } = useLang();
   const t = UI[lang];
   const router = useRouter();
@@ -39,6 +51,9 @@ export default function EventForm({ event }: { event?: ScheduleEvent }) {
     };
   }, [event]);
 
+  const [kind, setKind] = useState<EventKind>(
+    event?.kind === SATSANG_KIND ? SATSANG_KIND : DEFAULT_EVENT_KIND,
+  );
   const [title, setTitle] = useState(event?.title ?? '');
   const [description, setDescription] = useState(event?.description ?? '');
   const [date, setDate] = useState(initial?.date ?? '');
@@ -73,6 +88,7 @@ export default function EventForm({ event }: { event?: ScheduleEvent }) {
     const startsAtMs = wallTimeToUtc({ year, month, day, hour, minute }, tz);
 
     const payload = {
+      kind,
       title: title.trim(),
       description: description.trim() || null,
       startsAt: new Date(startsAtMs).toISOString(),
@@ -133,6 +149,36 @@ export default function EventForm({ event }: { event?: ScheduleEvent }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '560px' }}>
+      {liveAudioEnabled && (
+        <div>
+          <span style={labelStyle}>{t.eventKindLabel}</span>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {([
+              [DEFAULT_EVENT_KIND, t.eventKindGathering],
+              [SATSANG_KIND, t.eventKindSatsang],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setKind(value)}
+                aria-pressed={kind === value}
+                style={pillStyle(kind === value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {kind === SATSANG_KIND && (
+            <p style={{
+              fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)',
+              margin: '8px 0 0', lineHeight: 1.6,
+            }}>
+              {t.eventKindSatsangHint}
+            </p>
+          )}
+        </div>
+      )}
+
       <div>
         <label htmlFor="event-title" style={labelStyle}>{t.eventTitleLabel}</label>
         <input

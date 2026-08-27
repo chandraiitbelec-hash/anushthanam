@@ -226,6 +226,49 @@ type UiStrings = {
   shownInLocalTime: string;
   calPrevMonth: string;
   calNextMonth: string;
+  // Satsang (live audio sessions) — a `kind` of scheduled event
+  eventKindLabel: string;
+  eventKindGathering: string;
+  eventKindSatsang: string;
+  eventKindSatsangHint: string;
+  satsangBadge: string;
+  satsangNotStartedTitle: string;
+  satsangNotStartedBody: string;
+  satsangLiveNow: string;
+  satsangStartedAt: (time: string) => string;
+  satsangEndedTitle: string;
+  satsangEndedBody: string;
+  satsangStart: string;
+  satsangStarting: string;
+  satsangEnd: string;
+  satsangConfirmEnd: string;
+  satsangJoin: string;
+  satsangJoining: string;
+  satsangLeave: string;
+  satsangSignInToJoin: string;
+  satsangUnavailable: string;
+  satsangConnecting: string;
+  satsangReconnecting: string;
+  satsangEnableAudio: string;
+  satsangEnableAudioHint: string;
+  satsangUnmuteSelf: string;
+  satsangMuteSelf: string;
+  satsangMuteParticipant: string;
+  satsangAskToUnmute: string;
+  satsangMuteAll: string;
+  satsangUnmuteRequested: string;
+  satsangUnmuteAccept: string;
+  satsangUnmuteDismiss: string;
+  satsangTeacherLabel: string;
+  satsangYouLabel: string;
+  satsangSpeakingLabel: string;
+  satsangMutedLabel: string;
+  satsangInRoom: (n: number) => string;
+  satsangMicDenied: string;
+  satsangEndedByTeacher: string;
+  satsangConnectionLost: string;
+  satsangKeepScreenOn: string;
+  satsangTeacherHint: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -427,6 +470,49 @@ export const UI: Record<Language, UiStrings> = {
     shownInLocalTime: 'Times are shown in your local time.',
     calPrevMonth: 'Previous month',
     calNextMonth: 'Next month',
+    // Satsang (live audio sessions)
+    eventKindLabel: 'Event type',
+    eventKindGathering: 'Gathering',
+    eventKindSatsang: 'Live audio satsang',
+    eventKindSatsangHint: 'Devotees join by audio in the browser. You open the session and control who is heard.',
+    satsangBadge: 'Live audio satsang',
+    satsangNotStartedTitle: 'The session has not started yet',
+    satsangNotStartedBody: 'This page updates on its own when the teacher opens the room.',
+    satsangLiveNow: 'Live now',
+    satsangStartedAt: (time: string) => `Started at ${time}`,
+    satsangEndedTitle: 'This session has ended',
+    satsangEndedBody: 'The teacher can open the room again for the next occurrence.',
+    satsangStart: 'Start session',
+    satsangStarting: 'Starting…',
+    satsangEnd: 'End session for all',
+    satsangConfirmEnd: 'End the session for everyone?',
+    satsangJoin: 'Join session',
+    satsangJoining: 'Joining…',
+    satsangLeave: 'Leave session',
+    satsangSignInToJoin: 'Sign in to join the session',
+    satsangUnavailable: 'Live audio is not available right now.',
+    satsangConnecting: 'Connecting…',
+    satsangReconnecting: 'Reconnecting…',
+    satsangEnableAudio: 'Enable audio',
+    satsangEnableAudioHint: 'Your browser blocked playback. Tap to hear the session.',
+    satsangUnmuteSelf: 'Unmute',
+    satsangMuteSelf: 'Mute',
+    satsangMuteParticipant: 'Mute',
+    satsangAskToUnmute: 'Ask to unmute',
+    satsangMuteAll: 'Mute all',
+    satsangUnmuteRequested: 'The teacher is asking you to unmute.',
+    satsangUnmuteAccept: 'Unmute',
+    satsangUnmuteDismiss: 'Not now',
+    satsangTeacherLabel: 'Teacher',
+    satsangYouLabel: 'You',
+    satsangSpeakingLabel: 'Speaking',
+    satsangMutedLabel: 'Muted',
+    satsangInRoom: (n: number) => (n === 1 ? '1 person in the room' : `${n} people in the room`),
+    satsangMicDenied: 'Microphone access was refused, so you can listen but not speak.',
+    satsangEndedByTeacher: 'The teacher ended the session.',
+    satsangConnectionLost: 'The connection dropped. You can join again.',
+    satsangKeepScreenOn: 'Keep this screen on while you listen — mobile browsers pause audio when the screen locks.',
+    satsangTeacherHint: 'Muting someone is a request for silence, not a lock: they can unmute themselves again.',
   },
   te: {
     tithi: 'తిథి',
@@ -626,6 +712,49 @@ export const UI: Record<Language, UiStrings> = {
     shownInLocalTime: 'సమయాలు మీ స్థానిక సమయంలో చూపబడతాయి.',
     calPrevMonth: 'మునుపటి నెల',
     calNextMonth: 'తదుపరి నెల',
+    // Satsang (live audio sessions)
+    eventKindLabel: 'కార్యక్రమ రకం',
+    eventKindGathering: 'సమావేశం',
+    eventKindSatsang: 'లైవ్ ఆడియో సత్సంగం',
+    eventKindSatsangHint: 'బ్రావ్సర్లోనే భక్తులు ఆడియోద్వారా చేరుతారు. సత్సంగం మీరు మొదలుబెట్టి, ఎవరి మాట వినబడాలో నిర్ణయిస్తారు.',
+    satsangBadge: 'లైవ్ ఆడియో సత్సంగం',
+    satsangNotStartedTitle: 'సత్సంగం ఇంకా మొదలుకాలేదు',
+    satsangNotStartedBody: 'గురువు గదిని తెరిచిన వెంటనే ఈ పేజీ తానుగా నవీకరణం అవుతుంది.',
+    satsangLiveNow: 'ఇప్పుడు లైవ్',
+    satsangStartedAt: (time: string) => `${time}కి మొదలైంది`,
+    satsangEndedTitle: 'ఈ సత్సంగం పూర్తయింది',
+    satsangEndedBody: 'తదుపరి సమయానికి గురువు గదిని మళ్లీ తెరవచ్చు.',
+    satsangStart: 'సత్సంగం మొదలుపెట్టండి',
+    satsangStarting: 'మొదలుపెట్టుతోంది…',
+    satsangEnd: 'అందరికీ సత్సంగం ముగించండి',
+    satsangConfirmEnd: 'అందరికీ సత్సంగం ముగించాలా?',
+    satsangJoin: 'సత్సంగంలో చేరండి',
+    satsangJoining: 'చేరుతోంది…',
+    satsangLeave: 'సత్సంగం నుండి వెళ్లండి',
+    satsangSignInToJoin: 'సత్సంగంలో చేరడానికి సైన్ ఇన్ చేయండి',
+    satsangUnavailable: 'లైవ్ ఆడియో ఇప్పుడు అందుబాటులో లేదు.',
+    satsangConnecting: 'కనెక్ట్ అవుతోంది…',
+    satsangReconnecting: 'మళ్లీ కనెక్ట్ అవుతోంది…',
+    satsangEnableAudio: 'ఆడియో ప్రారంభించండి',
+    satsangEnableAudioHint: 'మీ బ్రావ్సర్ ధ్వనిని ఆపింది. వినడానికి నొక్కండి.',
+    satsangUnmuteSelf: 'మ్యూట్ తీయండి',
+    satsangMuteSelf: 'మ్యూట్ చేయండి',
+    satsangMuteParticipant: 'మ్యూట్',
+    satsangAskToUnmute: 'మాట్లాడమని అడగండి',
+    satsangMuteAll: 'అందరినీ మ్యూట్ చేయండి',
+    satsangUnmuteRequested: 'మీరు మాట్లాడాలని గురువు అడుగుతున్నారు.',
+    satsangUnmuteAccept: 'మాట్లాడుతాను',
+    satsangUnmuteDismiss: 'ఇప్పుడు వద్దు',
+    satsangTeacherLabel: 'గురువు',
+    satsangYouLabel: 'మీరు',
+    satsangSpeakingLabel: 'మాట్లాడుతున్నారు',
+    satsangMutedLabel: 'మ్యూట్ చేయబడింది',
+    satsangInRoom: (n: number) => `గదిలో ${n} మంది`,
+    satsangMicDenied: 'మైక్రోఫోన్ అనుమతి నిరాకరించబడింది కాబట్టి మీరు వినగలరు కానీ మాట్లాడలేరు.',
+    satsangEndedByTeacher: 'గురువు సత్సంగాన్ని ముగించారు.',
+    satsangConnectionLost: 'కనెక్షన్ తెగిపోయింది. మళ్లీ చేరవచ్చు.',
+    satsangKeepScreenOn: 'వినేటప్పుడు స్క్రీన్ ఆన్‌లో ఉంచండి — స్క్రీన్ లాక్ అయితే మొబైల్ బ్రావ్సర్లు ఆడియోను ఆపేస్తాయి.',
+    satsangTeacherHint: 'ఎవరినైనా మ్యూట్ చేయడం మౌనం కోరడం మాత్రమే, తాళం కాదు: వారు తిరిగి మ్యూట్ తీసుకోగలరు.',
   },
   ta: {
     tithi: 'திதி',
@@ -825,6 +954,49 @@ export const UI: Record<Language, UiStrings> = {
     shownInLocalTime: 'நேரங்கள் உங்கள் உள்ளூர் நேரத்தில் காட்டப்படுகின்றன.',
     calPrevMonth: 'முந்தைய மாதம்',
     calNextMonth: 'அடுத்த மாதம்',
+    // Satsang (live audio sessions)
+    eventKindLabel: 'நிகழ்சி வகை',
+    eventKindGathering: 'கூட்டம்',
+    eventKindSatsang: 'நேரலை ஒலி சத்சங்கம்',
+    eventKindSatsangHint: 'பக்தர்கள் உலாவியில் ஒலி வழியாக இணைவார்கள். நீங்கள் அமர்வைத் தொடங்கி, யார் பேசலாம் என்பதை நிர்வகிக்கிறீர்கள்.',
+    satsangBadge: 'நேரலை ஒலி சத்சங்கம்',
+    satsangNotStartedTitle: 'அமர்வு இன்னும் தொடங்கவில்லை',
+    satsangNotStartedBody: 'ஆசிரியர் அரங்கத்தைத் திறக்கும்போது இந்தப் பக்கம் தானாகவே புதுப்பிக்கும்.',
+    satsangLiveNow: 'இப்போது நேரலை',
+    satsangStartedAt: (time: string) => `${time} க்கு தொடங்கியது`,
+    satsangEndedTitle: 'இந்த அமர்வு நிறைவுபெற்றது',
+    satsangEndedBody: 'அடுத்த நிகழ்விற்கு ஆசிரியர் அரங்கத்தை மீண்டும் திறக்கலாம்.',
+    satsangStart: 'அமர்வைத் தொடங்கு',
+    satsangStarting: 'தொடங்குகிறது…',
+    satsangEnd: 'அனைவர்க்கும் அமர்வை முடி',
+    satsangConfirmEnd: 'அனைவர்க்கும் அமர்வை முடிக்கவா?',
+    satsangJoin: 'அமர்வில் இணை',
+    satsangJoining: 'இணைகிறது…',
+    satsangLeave: 'அமர்வில் விலகு',
+    satsangSignInToJoin: 'அமர்வில் இணைய உள்நுழைக',
+    satsangUnavailable: 'நேரலை ஒலி இப்போது கிடைக்கவில்லை.',
+    satsangConnecting: 'இணைக்கப்படுகிறது…',
+    satsangReconnecting: 'மீண்டும் இணைக்கப்படுகிறது…',
+    satsangEnableAudio: 'ஒலியை இயக்கு',
+    satsangEnableAudioHint: 'உங்கள் உலாவி ஒலியைத் தடுத்துள்ளது. கேட்கப் தட்டவும்.',
+    satsangUnmuteSelf: 'ஒலியைத் திற',
+    satsangMuteSelf: 'ஒலியை அணை',
+    satsangMuteParticipant: 'அணை',
+    satsangAskToUnmute: 'பேசக் கேட்கு',
+    satsangMuteAll: 'அனைவரையும் அணை',
+    satsangUnmuteRequested: 'நீங்கள் பேச ஆசிரியர் கேட்கிறார்.',
+    satsangUnmuteAccept: 'பேசுகிறேன்',
+    satsangUnmuteDismiss: 'இப்போது வேண்டாம்',
+    satsangTeacherLabel: 'ஆசிரியர்',
+    satsangYouLabel: 'நீங்கள்',
+    satsangSpeakingLabel: 'பேசுகிறார்',
+    satsangMutedLabel: 'அணைக்கப்பட்டது',
+    satsangInRoom: (n: number) => `அரங்கத்தில் ${n} பேர்`,
+    satsangMicDenied: 'மைக்ரோபோன் அனுமதி மறுக்கப்பட்டது, அதனால் கேடக்கும் முடியும், பேச முடியாது.',
+    satsangEndedByTeacher: 'ஆசிரியர் அமர்வை முடித்தார்.',
+    satsangConnectionLost: 'இணைப்பு துண்டிக்கப்பட்டது. மீண்டும் இணையலாம்.',
+    satsangKeepScreenOn: 'கேட்கும்போது திரையை அணைக்காதீர்கள் — திரை பூட்டப்பட்டால் மொபைல் உலாவிகள் ஒலியை நிறுத்துகின்றன.',
+    satsangTeacherHint: 'ஒருவரை அணைப்பது அமைதியாக இருக்க கேட்டுக்கோள், பூட்டு அல்ல: அவர்கள் மீண்டும் தாமாகவே ஒலியைத் திறக்கலாம்.',
   },
   hi: {
     tithi: 'तिथि',
@@ -1024,5 +1196,48 @@ export const UI: Record<Language, UiStrings> = {
     shownInLocalTime: 'समय आपके स्थानीय समय में दिखाया गया है।',
     calPrevMonth: 'पिछला महीना',
     calNextMonth: 'अगला महीना',
+    // Satsang (live audio sessions)
+    eventKindLabel: 'कार्यक्रम का प्रकार',
+    eventKindGathering: 'समागम',
+    eventKindSatsang: 'लाइव ऑडियो सत्संग',
+    eventKindSatsangHint: 'भक्त ब्राउज़र में ऑडियो से जुड़ते हैं। सत्संग आप शुरू करते हैं और कौन बोलेगा यह आप तय करते हैं।',
+    satsangBadge: 'लाइव ऑडियो सत्संग',
+    satsangNotStartedTitle: 'सत्संग अभी शुरू नहीं हुआ',
+    satsangNotStartedBody: 'गुरुजी कक्ष खोलेंगे तो यह पेज स्वयं अपडेट हो जागा।',
+    satsangLiveNow: 'अभी लाइव',
+    satsangStartedAt: (time: string) => `${time} पर शुरू हुआ`,
+    satsangEndedTitle: 'यह सत्संग समाप्त हो गया',
+    satsangEndedBody: 'अगली बार के लिए गुरुजी पुनः कक्ष खोल सकते हैं।',
+    satsangStart: 'सत्संग शुरू करें',
+    satsangStarting: 'शुरू हो रहा है…',
+    satsangEnd: 'सबके लिए समाप्त करें',
+    satsangConfirmEnd: 'सबके लिए सत्संग समाप्त करें?',
+    satsangJoin: 'सत्संग में शामिल हों',
+    satsangJoining: 'शामिल हो रहे हैं…',
+    satsangLeave: 'सत्संग से निकलें',
+    satsangSignInToJoin: 'शामिल होने के लिए साइन इन करें',
+    satsangUnavailable: 'लाइव ऑडियो अभी उपलब्ध नहीं है।',
+    satsangConnecting: 'जुड़ रहे हैं…',
+    satsangReconnecting: 'पुनः जुड़ रहे हैं…',
+    satsangEnableAudio: 'ऑडियो चालू करें',
+    satsangEnableAudioHint: 'आपके ब्राउज़र ने ध्वनि रोक दी। सुनने के लिए टैप करें।',
+    satsangUnmuteSelf: 'अनम्यूट करें',
+    satsangMuteSelf: 'म्यूट करें',
+    satsangMuteParticipant: 'म्यूट',
+    satsangAskToUnmute: 'बोलने को कहें',
+    satsangMuteAll: 'सभी को म्यूट करें',
+    satsangUnmuteRequested: 'गुरुजी आपसे बोलने को कह रहे हैं।',
+    satsangUnmuteAccept: 'बोलूंगा',
+    satsangUnmuteDismiss: 'अभी नहीं',
+    satsangTeacherLabel: 'गुरुजी',
+    satsangYouLabel: 'आप',
+    satsangSpeakingLabel: 'बोल रहे हैं',
+    satsangMutedLabel: 'म्यूट',
+    satsangInRoom: (n: number) => `कक्ष में ${n} लोग`,
+    satsangMicDenied: 'माइक्रोमाइक की अनुमति नहीं मिली, आप सुन सकते हैं पर बोल नहीं सकते।',
+    satsangEndedByTeacher: 'गुरुजी ने सत्संग समाप्त किया।',
+    satsangConnectionLost: 'संपर्क टूट गया। आप पुनः शामिल हो सकते हैं।',
+    satsangKeepScreenOn: 'सुनते समय स्क्रीन चालू रखें — स्क्रीन लॉक होने पर मोबाइल ब्राउज़र ऑडियो रोक देते हैं।',
+    satsangTeacherHint: 'किसी को म्यूट करना बंद ताला नहीं है: वे स्वयं पुनः अनम्यूट कर सकते हैं।',
   },
 };

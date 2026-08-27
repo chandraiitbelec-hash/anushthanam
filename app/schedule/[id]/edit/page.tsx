@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { Session } from 'next-auth';
 import { auth, isAuthConfigured } from '@/auth';
+import { isLiveAudioConfigured } from '@/lib/audio/admin';
 import { getEvent } from '@/lib/schedule';
 import { UI } from '@/lib/ui-strings';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -63,7 +64,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
       {!session?.user && isAuthConfigured ? (
         <SignInNudge />
       ) : event && isOwner ? (
-        <EventForm event={event} />
+        <EventForm event={event} liveAudioEnabled={isLiveAudioConfigured} />
       ) : (
         <div style={{
           padding: '64px 32px', textAlign: 'center',

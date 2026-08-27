@@ -3,6 +3,9 @@ import Link from 'next/link';
 import type { Session } from 'next-auth';
 import { auth, isAuthConfigured } from '@/auth';
 import { getEvent, nextOccurrenceIsos } from '@/lib/schedule';
+import { getSatsangState, NOT_LIVE } from '@/lib/satsang';
+import { SATSANG_KIND } from '@/lib/event-kinds';
+import { isLiveAudioConfigured } from '@/lib/audio/admin';
 import { UI } from '@/lib/ui-strings';
 import Breadcrumb from '@/components/Breadcrumb';
 import ClientLabel from '@/components/ClientLabel';
@@ -46,6 +49,17 @@ export default async function EventPage({ params }: Params) {
   // (or fully past) event falls back to its anchor inside EventDetail.
   const occurrences = event ? nextOccurrenceIsos(event) : [];
 
+  // Resolved server-side so the first paint already says whether a session is
+  // live — the same no-flash rule the language, theme and session providers
+  // follow. Degrades to "not live" rather than failing the page.
+  const satsangState =
+    event?.kind === SATSANG_KIND
+      ? await getSatsangState(event.id).catch(err => {
+          console.error('SATSANG ERROR: could not load session state', err);
+          return NOT_LIVE;
+        })
+      : null;
+
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>
       <Breadcrumb crumbs={[
@@ -59,6 +73,8 @@ export default async function EventPage({ params }: Params) {
           occurrences={occurrences}
           isOwner={isOwner}
           authEnabled={isAuthConfigured}
+          satsangState={satsangState}
+          liveAudioEnabled={isLiveAudioConfigured}
         />
       ) : (
         // Soft empty state rather than notFound(): a DB outage must degrade the

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { Session } from 'next-auth';
 import { auth, isAuthConfigured } from '@/auth';
+import { isLiveAudioConfigured } from '@/lib/audio/admin';
 import Breadcrumb from '@/components/Breadcrumb';
 import ScriptH1 from '@/components/ScriptH1';
 import EventForm from '@/components/schedule/EventForm';
@@ -42,7 +43,7 @@ export default async function NewEventPage() {
         }}
       />
 
-      {session?.user ? <EventForm /> : <SignInNudge />}
+      {session?.user ? <EventForm liveAudioEnabled={isLiveAudioConfigured} /> : <SignInNudge />}
     </div>
   );
 }

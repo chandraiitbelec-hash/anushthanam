@@ -7,6 +7,9 @@ import { signIn, useSession } from 'next-auth/react';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import type { ScheduleEventWithMeta } from '@/lib/schedule';
+import { SATSANG_KIND } from '@/lib/event-kinds';
+import type { SatsangState } from '@/lib/satsang';
+import SatsangPanel from '@/components/satsang/SatsangPanel';
 import { formatDateTime, useDisplayTimeZone, weekdayShortName } from './format';
 
 /**
@@ -19,12 +22,18 @@ export default function EventDetail({
   occurrences,
   isOwner,
   authEnabled,
+  satsangState,
+  liveAudioEnabled,
 }: {
   event: ScheduleEventWithMeta;
   /** Next occurrence start ISOs (first is the headline datetime). */
   occurrences: string[];
   isOwner: boolean;
   authEnabled: boolean;
+  /** Server-resolved live-session state; null for a non-satsang event. */
+  satsangState: SatsangState | null;
+  /** False when the audio provider is unconfigured — see the Satsang section. */
+  liveAudioEnabled: boolean;
 }) {
   const { lang } = useLang();
   const t = UI[lang];
@@ -39,6 +48,7 @@ export default function EventDetail({
 
   const cancelled = event.status === 'cancelled';
   const headline = occurrences[0] ?? event.startsAt;
+  const isSatsang = event.kind === SATSANG_KIND;
 
   async function handleInterest() {
     if (busy) return;
@@ -117,6 +127,20 @@ export default function EventDetail({
         {event.title}
       </h1>
 
+      {isSatsang && (
+        <p style={{
+          display: 'inline-block',
+          fontSize: 'var(--text-badge)', fontWeight: 600,
+          color: 'var(--color-gold-text)',
+          border: '1px solid var(--color-gold)',
+          borderRadius: '12px',
+          padding: '2px 12px',
+          margin: '0 0 12px',
+        }}>
+          {t.satsangBadge}
+        </p>
+      )}
+
       {event.ownerName && (
         <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 24px' }}>
           {t.hostedBy(event.ownerName)}
@@ -157,6 +181,20 @@ export default function EventDetail({
           </ul>
         )}
       </div>
+
+      {/* Live-session surface. Absent entirely when the audio provider is
+          unconfigured or the event is cancelled, so a deploy without LiveKit
+          credentials renders this page exactly as it did before satsang. */}
+      {isSatsang && liveAudioEnabled && satsangState && !cancelled && (
+        <SatsangPanel
+          eventId={event.id}
+          eventTitle={event.title}
+          initialState={satsangState}
+          isOwner={isOwner}
+          authEnabled={authEnabled}
+          cancelled={cancelled}
+        />
+      )}
 
       {event.description && (
         <div style={{ margin: '0 0 28px' }}>

@@ -1,5 +1,6 @@
 import { query, isDbConfigured } from './db';
 import { expandOccurrences, isValidTimeZone } from './occurrences.mjs';
+import { DEFAULT_EVENT_KIND, EVENT_KINDS, type EventKind } from './event-kinds';
 
 /**
  * Data access for the Schedule layer — scheduled events plus the minimal
@@ -14,6 +15,8 @@ import { expandOccurrences, isValidTimeZone } from './occurrences.mjs';
 
 export type EventRecurrence = 'none' | 'daily' | 'weekly';
 export type EventStatus = 'scheduled' | 'cancelled';
+
+export type { EventKind };
 
 export type ScheduleEvent = {
   id: string;
@@ -129,6 +132,7 @@ export async function getEvent(
 }
 
 export type EventInput = {
+  kind: EventKind;
   title: string;
   description: string | null;
   /** ISO string. */
@@ -146,6 +150,11 @@ export type EventInput = {
 export function parseEventInput(body: unknown): { input: EventInput } | { error: string } {
   if (typeof body !== 'object' || body === null) return { error: 'invalid_body' };
   const b = body as Record<string, unknown>;
+
+  // Absent kind means 'gathering': the field arrived with the satsang feature,
+  // so an older client (or an ICS-era payload) must keep working.
+  const kind = b.kind === undefined ? DEFAULT_EVENT_KIND : b.kind;
+  if (!EVENT_KINDS.includes(kind as EventKind)) return { error: 'invalid_kind' };
 
   const title = typeof b.title === 'string' ? b.title.trim() : '';
   if (!title || title.length > 200) return { error: 'invalid_title' };
@@ -183,6 +192,7 @@ export function parseEventInput(body: unknown): { input: EventInput } | { error:
 
   return {
     input: {
+      kind: kind as EventKind,
       title,
       description,
       startsAt: new Date(startsAtMs).toISOString(),
@@ -196,10 +206,10 @@ export function parseEventInput(body: unknown): { input: EventInput } | { error:
 
 export async function createEvent(ownerId: string, input: EventInput): Promise<ScheduleEvent> {
   const rows = await query<{ id: string }>(
-    `INSERT INTO events (owner_id, title, description, starts_at, duration_minutes, recurrence, weekdays, tz)
-     VALUES ($1, $2, $3, $4, $5, $6, $7::smallint[], $8)
+    `INSERT INTO events (owner_id, kind, title, description, starts_at, duration_minutes, recurrence, weekdays, tz)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8::smallint[], $9)
      RETURNING id`,
-    [ownerId, input.title, input.description, input.startsAt,
+    [ownerId, input.kind, input.title, input.description, input.startsAt,
      input.durationMinutes, input.recurrence, input.weekdays, input.tz],
   );
   const created = await getEvent(rows[0].id);
@@ -216,11 +226,11 @@ export async function updateEvent(
   if (!UUID_RE.test(id)) return null;
   const rows = await query<{ id: string }>(
     `UPDATE events
-        SET title = $3, description = $4, starts_at = $5, duration_minutes = $6,
-            recurrence = $7, weekdays = $8::smallint[], tz = $9, updated_at = now()
+        SET kind = $3, title = $4, description = $5, starts_at = $6, duration_minutes = $7,
+            recurrence = $8, weekdays = $9::smallint[], tz = $10, updated_at = now()
       WHERE id = $1 AND owner_id = $2
       RETURNING id`,
-    [id, ownerId, input.title, input.description, input.startsAt,
+    [id, ownerId, input.kind, input.title, input.description, input.startsAt,
      input.durationMinutes, input.recurrence, input.weekdays, input.tz],
   );
   return rows[0] ? getEvent(rows[0].id) : null;
