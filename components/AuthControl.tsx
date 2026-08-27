@@ -10,20 +10,18 @@ import { UI } from '@/lib/ui-strings';
 /**
  * Sign in / sign out control for the nav.
  *
- * `variant="desktop"` is the compact header control (a button, or the avatar
- * with a dropdown); `variant="drawer"` is the labelled block inside the mobile
- * menu, matching the language and theme pickers there.
+ * Two triggers, one menu. `variant="desktop"` sits in the header row above the
+ * nav breakpoint; `variant="mobile"` is the icon-only trigger that replaces it
+ * below (both are shown/hidden by CSS alone — see the .nav-* classes in
+ * globals.css). Signing in is the one case they differ: desktop has room for a
+ * labelled "Sign in" button that goes straight to Google, while mobile shows a
+ * person icon and opens the menu first, so a tap on a small target can't
+ * navigate off-site by accident.
  *
- * Google is the only provider, so signing in goes straight to Google rather
- * than through Auth.js's provider-picker page.
+ * Google is the only provider, so signing in skips Auth.js's provider-picker
+ * page entirely.
  */
-export default function AuthControl({
-  variant,
-  onNavigate,
-}: {
-  variant: 'desktop' | 'drawer';
-  onNavigate?: () => void;
-}) {
+export default function AuthControl({ variant }: { variant: 'desktop' | 'mobile' }) {
   const { lang } = useLang();
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,51 +30,17 @@ export default function AuthControl({
   const user = session?.user;
 
   function handleSignIn() {
-    onNavigate?.();
+    setMenuOpen(false);
     signIn('google');
   }
 
   function handleSignOut() {
     setMenuOpen(false);
-    onNavigate?.();
     signOut();
   }
 
-  if (variant === 'drawer') {
-    return (
-      <div style={{ paddingTop: '20px' }}>
-        <p style={{
-          fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase',
-          letterSpacing: '0.08em', color: 'var(--color-text-secondary)',
-          margin: '0 0 10px',
-        }}>
-          {UI[lang].accountLabel}
-        </p>
-        {user ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <Avatar user={user} size={32} />
-            <span style={{
-              fontSize: 'var(--text-body)',
-              color: 'var(--color-text-primary)',
-              minWidth: 0,
-              overflowWrap: 'anywhere',
-            }}>
-              {user.name || user.email}
-            </span>
-            <button onClick={handleSignOut} style={pillStyle(false)}>
-              {UI[lang].signOut}
-            </button>
-          </div>
-        ) : (
-          <button onClick={handleSignIn} style={pillStyle(true)}>
-            {UI[lang].signInWithGoogle}
-          </button>
-        )}
-      </div>
-    );
-  }
-
-  if (!user) {
+  // Desktop, signed out: a labelled button matching the language switcher.
+  if (variant === 'desktop' && !user) {
     return (
       <button
         onClick={handleSignIn}
@@ -98,20 +62,25 @@ export default function AuthControl({
     );
   }
 
+  const isMobile = variant === 'mobile';
+
   return (
-    <div ref={menuRef} className="nav-desktop" style={{ position: 'relative' }}>
+    <div ref={menuRef} className={isMobile ? 'nav-mobile' : 'nav-desktop'} style={{ position: 'relative' }}>
       <button
         onClick={() => setMenuOpen(o => !o)}
-        aria-label={UI[lang].accountLabel}
+        aria-label={user ? UI[lang].accountLabel : UI[lang].signIn}
         aria-expanded={menuOpen}
         aria-haspopup="true"
         style={{
-          display: 'flex', alignItems: 'center',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: isMobile ? '36px' : 'auto',
+          height: isMobile ? '36px' : 'auto',
           background: 'none', border: 'none', padding: 0,
           cursor: 'pointer', borderRadius: '50%', flexShrink: 0,
+          color: menuOpen ? 'var(--color-gold)' : 'var(--color-text-secondary)',
         }}
       >
-        <Avatar user={user} size={30} />
+        {user ? <Avatar user={user} size={isMobile ? 28 : 30} /> : <PersonIcon />}
       </button>
 
       {menuOpen && (
@@ -121,71 +90,80 @@ export default function AuthControl({
           border: '1px solid var(--color-border)',
           borderRadius: '8px',
           overflow: 'hidden',
-          minWidth: '220px',
-          maxWidth: '280px',
+          width: isMobile ? 'min(260px, calc(100vw - 32px))' : undefined,
+          minWidth: isMobile ? undefined : '220px',
+          maxWidth: isMobile ? undefined : '280px',
           zIndex: 100,
         }}>
-          <div style={{
-            padding: '12px 16px',
-            borderBottom: '1px solid var(--color-border)',
-          }}>
-            {user.name && (
-              <p style={{
-                margin: 0,
-                fontSize: 'var(--text-nav)',
-                color: 'var(--color-text-primary)',
-                fontWeight: 500,
-                overflowWrap: 'anywhere',
-              }}>
-                {user.name}
-              </p>
-            )}
-            {user.email && (
-              <p style={{
-                margin: user.name ? '2px 0 0' : 0,
-                fontSize: 'var(--text-meta)',
-                color: 'var(--color-text-secondary)',
-                overflowWrap: 'anywhere',
-              }}>
-                {user.email}
-              </p>
-            )}
-          </div>
-          <button
-            onClick={handleSignOut}
-            style={{
-              display: 'block', width: '100%', textAlign: 'left',
-              padding: '10px 16px',
-              fontSize: 'var(--text-nav)',
-              color: 'var(--color-text-primary)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-            onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.08)')}
-            onMouseOut={e => (e.currentTarget.style.background = 'none')}
-          >
-            {UI[lang].signOut}
-          </button>
+          {user ? (
+            <>
+              <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--color-border)' }}>
+                {user.name && (
+                  <p style={{
+                    margin: 0,
+                    fontSize: 'var(--text-nav)',
+                    color: 'var(--color-text-primary)',
+                    fontWeight: 500,
+                    overflowWrap: 'anywhere',
+                  }}>
+                    {user.name}
+                  </p>
+                )}
+                {user.email && (
+                  <p style={{
+                    margin: user.name ? '2px 0 0' : 0,
+                    fontSize: 'var(--text-meta)',
+                    color: 'var(--color-text-secondary)',
+                    overflowWrap: 'anywhere',
+                  }}>
+                    {user.email}
+                  </p>
+                )}
+              </div>
+              <MenuItem onClick={handleSignOut}>{UI[lang].signOut}</MenuItem>
+            </>
+          ) : (
+            <MenuItem onClick={handleSignIn}>{UI[lang].signInWithGoogle}</MenuItem>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-function pillStyle(filled: boolean): React.CSSProperties {
-  return {
-    padding: '7px 18px',
-    fontSize: 'var(--text-button)',
-    fontWeight: filled ? 600 : 400,
-    color: filled ? '#fff' : 'var(--color-text-secondary)',
-    background: filled ? 'var(--color-gold)' : 'transparent',
-    border: `1px solid ${filled ? 'var(--color-gold)' : 'var(--color-border)'}`,
-    borderRadius: '20px',
-    cursor: 'pointer',
-    fontFamily: 'inherit',
-  };
+function MenuItem({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        display: 'block', width: '100%', textAlign: 'left',
+        padding: '12px 16px',
+        fontSize: 'var(--text-nav)',
+        color: 'var(--color-text-primary)',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+      }}
+      onMouseOver={e => (e.currentTarget.style.background = 'rgba(184,134,11,0.08)')}
+      onMouseOut={e => (e.currentTarget.style.background = 'none')}
+    >
+      {children}
+    </button>
+  );
+}
+
+/** Signed-out trigger. Stroke-based to match the search icon in the same row. */
+function PersonIcon() {
+  return (
+    <svg
+      width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+      strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+    >
+      <circle cx="10" cy="6.5" r="3.25" />
+      <path d="M3.75 16.75a6.25 6.25 0 0 1 12.5 0" />
+    </svg>
+  );
 }
 
 /**

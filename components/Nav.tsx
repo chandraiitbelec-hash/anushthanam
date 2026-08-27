@@ -361,8 +361,10 @@ export default function Nav({ authEnabled = false }: { authEnabled?: boolean }) 
               ))}
             </div>
 
-            {/* Sign in / account — CSS hides this on mobile (drawer has its own) */}
+            {/* Sign in / account. Two triggers, shown/hidden purely by CSS:
+                the labelled button above the nav breakpoint, the icon below it. */}
             {authEnabled && <AuthControl variant="desktop" />}
+            {authEnabled && <AuthControl variant="mobile" />}
 
             {/* Hamburger — CSS hides this on desktop */}
             <button
@@ -490,8 +492,6 @@ export default function Nav({ authEnabled = false }: { authEnabled?: boolean }) 
               </div>
             </div>
 
-            {/* Account section in drawer */}
-            {authEnabled && <AuthControl variant="drawer" onNavigate={() => setMobileOpen(false)} />}
           </nav>
         </div>
       )}

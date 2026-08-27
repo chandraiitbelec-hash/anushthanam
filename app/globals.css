@@ -280,6 +280,7 @@ body {
 /* CSS is the sole authority on display for these — no inline display overrides in JSX */
 .nav-desktop   { display: flex; }
 .nav-hamburger { display: none; }
+.nav-mobile    { display: none; }
 
 @media (max-width: 1099px) {
   /* 5 primary links + "More ▾" menu + full logotype + search + language switcher +
@@ -290,6 +291,9 @@ body {
      the logo. */
   .nav-desktop   { display: none; }
   .nav-hamburger { display: flex; }
+  /* Account control moves out of the drawer and into the header row here — a
+     primary action shouldn't sit below a scroll inside a closed menu. */
+  .nav-mobile    { display: flex; }
 }
 
 /* ─── Mobile ────────────────────────────────────────────────── */
