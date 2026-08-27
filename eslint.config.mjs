@@ -3,7 +3,9 @@ import nextConfig from 'eslint-config-next';
 const eslintConfig = [
   ...nextConfig,
   {
-    ignores: ['.next/**', 'node_modules/**', 'public/**', '.claude/**'],
+    // spike/ holds throwaway prototypes with their own toolchains (and
+    // generated bundles) — never part of the app, never linted with it.
+    ignores: ['.next/**', 'node_modules/**', 'public/**', '.claude/**', 'spike/**'],
   },
 ];
 
