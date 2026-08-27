@@ -11,6 +11,7 @@ import {
   wallTimeToUtc,
   wallTimeWeekday,
   expandOccurrences,
+  inProgressWindowMs,
   isValidTimeZone,
 } from '../lib/occurrences.mjs';
 
@@ -147,4 +148,112 @@ test('isValidTimeZone accepts IANA names and rejects junk', () => {
   assert.ok(!isValidTimeZone('Not/AZone'));
   assert.ok(!isValidTimeZone(''));
   assert.ok(!isValidTimeZone('DROP TABLE events'));
+});
+
+// ---------------------------------------------------------------------------
+// The in-progress window: an occurrence stays visible while it is happening.
+// ---------------------------------------------------------------------------
+
+const HOUR = 3_600_000;
+
+test('inProgressWindowMs floors short events at an hour and honours long ones', () => {
+  assert.equal(inProgressWindowMs(15), HOUR);
+  assert.equal(inProgressWindowMs(60), HOUR);
+  assert.equal(inProgressWindowMs(90), 90 * 60_000);
+  assert.equal(inProgressWindowMs(1440), 24 * HOUR);
+  // No duration means the caller wants future starts only (the old contract).
+  assert.equal(inProgressWindowMs(undefined), 0);
+  assert.equal(inProgressWindowMs(0), 0);
+  assert.equal(inProgressWindowMs(-5), 0);
+  assert.equal(inProgressWindowMs(NaN), 0);
+});
+
+test('one-off mid-event is still returned (the bug that hid live gatherings)', () => {
+  const startsAtMs = Date.UTC(2026, 8, 10, 13, 0);
+  const ev = { startsAtMs, recurrence: 'none', weekdays: [], tz: IST, durationMinutes: 90 };
+  // "now" is 30 minutes into a 90-minute event.
+  const now = startsAtMs + 30 * 60_000;
+  assert.deepEqual(expandOccurrences(ev, now, now + 60 * DAY), [startsAtMs]);
+});
+
+test('one-off after its end is dropped', () => {
+  const startsAtMs = Date.UTC(2026, 8, 10, 13, 0);
+  const ev = { startsAtMs, recurrence: 'none', weekdays: [], tz: IST, durationMinutes: 90 };
+  // A minute past start + 90 min.
+  const now = startsAtMs + 91 * 60_000;
+  assert.deepEqual(expandOccurrences(ev, now, now + 60 * DAY), []);
+  // Exactly at the end it is still in — the boundary is inclusive.
+  const atEnd = startsAtMs + 90 * 60_000;
+  assert.deepEqual(expandOccurrences(ev, atEnd, atEnd + 60 * DAY), [startsAtMs]);
+});
+
+test('a short one-off gets the one-hour floor, not its 15 minutes', () => {
+  const startsAtMs = Date.UTC(2026, 8, 10, 13, 0);
+  const ev = { startsAtMs, recurrence: 'none', weekdays: [], tz: IST, durationMinutes: 15 };
+  const at50min = startsAtMs + 50 * 60_000;
+  assert.deepEqual(expandOccurrences(ev, at50min, at50min + DAY), [startsAtMs]);
+  const at61min = startsAtMs + 61 * 60_000;
+  assert.deepEqual(expandOccurrences(ev, at61min, at61min + DAY), []);
+});
+
+test('a duration-less one-off keeps the old future-starts-only behaviour', () => {
+  const startsAtMs = Date.UTC(2026, 8, 10, 13, 0);
+  const ev = { startsAtMs, recurrence: 'none', weekdays: [], tz: IST };
+  assert.deepEqual(expandOccurrences(ev, startsAtMs + 1, startsAtMs + DAY), []);
+});
+
+test('recurring occurrence mid-event is returned, and only that one', () => {
+  const startsAtMs = Date.UTC(2026, 8, 1, 13, 0); // 18:30 IST daily
+  const ev = { startsAtMs, recurrence: 'daily', weekdays: [], tz: IST, durationMinutes: 90 };
+  // 30 minutes into the Sep 5 occurrence.
+  const sep5 = startsAtMs + 4 * DAY;
+  const now = sep5 + 30 * 60_000;
+  const out = expandOccurrences(ev, now, now + 2 * DAY);
+  // Today's in-progress one, plus Sep 6 and Sep 7. Yesterday's is long over.
+  assert.deepEqual(out.map(ts => wallTime(ts, IST).day), [5, 6, 7]);
+  assert.equal(out[0], sep5);
+});
+
+test('recurring occurrence past its end is dropped again', () => {
+  const startsAtMs = Date.UTC(2026, 8, 1, 13, 0);
+  const ev = { startsAtMs, recurrence: 'daily', weekdays: [], tz: IST, durationMinutes: 90 };
+  const sep5 = startsAtMs + 4 * DAY;
+  const now = sep5 + 91 * 60_000;
+  const out = expandOccurrences(ev, now, now + 2 * DAY);
+  assert.deepEqual(out.map(ts => wallTime(ts, IST).day), [6, 7]);
+});
+
+test('a weekly occurrence in progress is returned on a non-selected-day query', () => {
+  // Anchor Tue 2026-09-01 18:30 IST; rule Tue + Sat; 3h long.
+  const startsAtMs = Date.UTC(2026, 8, 1, 13, 0);
+  const ev = { startsAtMs, recurrence: 'weekly', weekdays: [2, 6], tz: IST, durationMinutes: 180 };
+  const now = startsAtMs + 2 * HOUR; // still inside Tuesday's session
+  const out = expandOccurrences(ev, now, now + 4 * DAY);
+  assert.deepEqual(out.map(ts => wallTime(ts, IST).day), [1, 5]); // Tue 1 (on now), Sat 5
+});
+
+test('the in-progress window leaves the DST boundary math alone', () => {
+  // Same series as the fall-back test above, now with a duration attached: the
+  // occurrences and their local wall times must be identical.
+  const startsAtMs = wallTimeToUtc({ year: 2026, month: 10, day: 30, hour: 19, minute: 0 }, NY);
+  const bare = { startsAtMs, recurrence: 'daily', weekdays: [], tz: NY };
+  const withDuration = { ...bare, durationMinutes: 60 };
+  const from = startsAtMs;
+  const to = startsAtMs + 4 * DAY + HOUR;
+  assert.deepEqual(expandOccurrences(withDuration, from, to), expandOccurrences(bare, from, to));
+  for (const ts of expandOccurrences(withDuration, from, to)) {
+    assert.equal(wallTime(ts, NY).hour, 19);
+  }
+});
+
+test('a DST spring-forward occurrence in progress is still found', () => {
+  // 19:00 NY on 2026-03-07, 2h long; query from inside the 2026-03-08 session,
+  // the day the clocks jump forward.
+  const startsAtMs = wallTimeToUtc({ year: 2026, month: 3, day: 7, hour: 19, minute: 0 }, NY);
+  const ev = { startsAtMs, recurrence: 'daily', weekdays: [], tz: NY, durationMinutes: 120 };
+  const mar8 = wallTimeToUtc({ year: 2026, month: 3, day: 8, hour: 19, minute: 0 }, NY);
+  const now = mar8 + HOUR;
+  const out = expandOccurrences(ev, now, now + DAY);
+  assert.equal(out[0], mar8);
+  assert.equal(wallTime(out[0], NY).hour, 19);
 });

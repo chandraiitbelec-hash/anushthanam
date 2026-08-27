@@ -92,6 +92,32 @@ export async function getLiveSession(eventId: string): Promise<LiveSession | nul
 }
 
 /**
+ * Which of the given events have a session running right now, mapped to when
+ * that run started (ISO).
+ *
+ * **One query for the whole page, not one per event.** The /schedule list can
+ * hold dozens of satsang events and renders server-side on every request (the
+ * layout is per-request dynamic), so N round trips would be N per page view.
+ * Non-satsang ids can be passed harmlessly, but the caller filtering them out
+ * first is what keeps the parameter list small.
+ *
+ * Degrades to an empty map — the schedule renders without live badges rather
+ * than not at all.
+ */
+export async function getLiveSessionStarts(
+  eventIds: readonly string[],
+): Promise<Map<string, string>> {
+  const ids = eventIds.filter(id => UUID_RE.test(id));
+  if (!isDbConfigured || ids.length === 0) return new Map();
+  const rows = await query<{ event_id: string; started_at: Date }>(
+    `SELECT event_id, started_at FROM live_sessions
+      WHERE ended_at IS NULL AND event_id = ANY($1::uuid[])`,
+    [ids],
+  );
+  return new Map(rows.map(row => [row.event_id, row.started_at.toISOString()]));
+}
+
+/**
  * Live/ended state for an event in one round trip. The newest row is enough:
  * at most one can be live (enforced by a partial unique index), so a newest row
  * with no `ended_at` is the live session and anything else means not live.

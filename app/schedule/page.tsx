@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { listScheduledEvents, upcomingOccurrencesFromNow } from '@/lib/schedule';
+import { getLiveSessionStarts } from '@/lib/satsang';
+import { SATSANG_KIND } from '@/lib/event-kinds';
 import { isAuthConfigured } from '@/auth';
 import Breadcrumb from '@/components/Breadcrumb';
 import ScriptH1 from '@/components/ScriptH1';
@@ -24,7 +26,21 @@ export default async function SchedulePage() {
     console.error('SCHEDULE ERROR: could not list events', err);
     return [];
   });
-  const occurrences = upcomingOccurrencesFromNow(events);
+
+  // A satsang the teacher has taken live must be on this page whatever the
+  // timetable says, so live state is read here and overlaid on the expansion.
+  // One query for the whole page (see getLiveSessionStarts), and only for the
+  // events that could possibly have a session.
+  const satsangIds = events.filter(e => e.kind === SATSANG_KIND).map(e => e.id);
+  const liveStarts = await getLiveSessionStarts(satsangIds).catch(err => {
+    console.error('SCHEDULE ERROR: could not read live sessions', err);
+    return new Map<string, string>();
+  });
+
+  // Server-rendered, not polled: v1 accepts that a session started after this
+  // paint shows up on the next page load. The event page is where a devotee
+  // waits for the room to open, and that one does poll.
+  const occurrences = upcomingOccurrencesFromNow(events, liveStarts);
 
   return (
     <div className="content-width" style={{ padding: '32px 24px' }}>

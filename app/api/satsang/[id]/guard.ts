@@ -67,6 +67,28 @@ export async function requireSatsangEvent(
   return { viewer, event, teacher: viewer.accountId === event.ownerId };
 }
 
+/**
+ * The 409 to return when the event has been cancelled, or null when it is still
+ * scheduled.
+ *
+ * The posture, applied consistently across the routes: **a cancelled event
+ * supports no live-audio action except ending.** Start, token and control all
+ * reject; `end` deliberately does not, because it is the escape hatch for a
+ * session that somehow outlived its cancel (the DELETE handler's teardown is
+ * best-effort, so that is a real if unlikely state). `state` is a public read
+ * and reports whatever `live_sessions` says — with the teardown in place a
+ * cancelled event has no live row to report.
+ *
+ * Rejecting on `control` rather than allowing mute is the deliberate half:
+ * there should be no session to mute on a cancelled event, and if there is, the
+ * teacher's remedy is End, not silence-one-by-one. One rule beats three.
+ */
+export function rejectIfCancelled(event: ScheduleEventWithMeta): Response | null {
+  return event.status === 'cancelled'
+    ? Response.json({ error: 'event_cancelled' }, { status: 409 })
+    : null;
+}
+
 /** The audio provider, or the 503 to return when live audio is unconfigured. */
 export async function requireAudioAdmin(): Promise<LiveAudioAdmin | Failure> {
   const admin = await getLiveAudioAdmin();

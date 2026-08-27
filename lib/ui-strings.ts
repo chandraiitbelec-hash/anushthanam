@@ -274,6 +274,11 @@ type UiStrings = {
   satsangConnectionLost: string;
   satsangKeepScreenOn: string;
   satsangTeacherHint: string;
+  // Schedule: an occurrence that is happening right now (see EventOccurrence
+  // .inProgress). The "Live now" badge for a running satsang reuses
+  // satsangLiveNow above.
+  scheduleNow: string;
+  scheduleInProgress: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -523,6 +528,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'The connection dropped. You can join again.',
     satsangKeepScreenOn: 'Keep this screen on while you listen — mobile browsers pause audio when the screen locks.',
     satsangTeacherHint: 'Muting someone is a request for silence, not a lock: they can unmute themselves again.',
+    scheduleNow: 'Now',
+    scheduleInProgress: 'In progress',
   },
   te: {
     tithi: 'తిథి',
@@ -770,6 +777,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'కనెక్షన్ తెగిపోయింది. మళ్లీ చేరవచ్చు.',
     satsangKeepScreenOn: 'వినేటప్పుడు స్క్రీన్ ఆన్‌లో ఉంచండి — స్క్రీన్ లాక్ అయితే మొబైల్ బ్రావ్సర్లు ఆడియోను ఆపేస్తాయి.',
     satsangTeacherHint: 'ఎవరినైనా మ్యూట్ చేయడం మౌనం కోరడం మాత్రమే, తాళం కాదు: వారు తిరిగి మ్యూట్ తీసుకోగలరు.',
+    scheduleNow: 'ఇప్పుడు',
+    scheduleInProgress: 'జరుగుతోంది',
   },
   ta: {
     tithi: 'திதி',
@@ -1017,6 +1026,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'இணைப்பு துண்டிக்கப்பட்டது. மீண்டும் இணையலாம்.',
     satsangKeepScreenOn: 'கேட்கும்போது திரையை அணைக்காதீர்கள் — திரை பூட்டப்பட்டால் மொபைல் உலாவிகள் ஒலியை நிறுத்துகின்றன.',
     satsangTeacherHint: 'ஒருவரை அணைப்பது அமைதியாக இருக்க கேட்டுக்கோள், பூட்டு அல்ல: அவர்கள் மீண்டும் தாமாகவே ஒலியைத் திறக்கலாம்.',
+    scheduleNow: 'இப்போது',
+    scheduleInProgress: 'நடைபெறுகிறது',
   },
   hi: {
     tithi: 'तिथि',
@@ -1264,5 +1275,7 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'संपर्क टूट गया। आप पुनः शामिल हो सकते हैं।',
     satsangKeepScreenOn: 'सुनते समय स्क्रीन चालू रखें — स्क्रीन लॉक होने पर मोबाइल ब्राउज़र ऑडियो रोक देते हैं।',
     satsangTeacherHint: 'किसी को म्यूट करना बंद ताला नहीं है: वे स्वयं पुनः अनम्यूट कर सकते हैं।',
+    scheduleNow: 'अभी',
+    scheduleInProgress: 'चल रहा है',
   },
 };

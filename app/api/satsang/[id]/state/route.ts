@@ -14,6 +14,12 @@ export const runtime = 'nodejs';
  *
  * A database outage answers "not live" rather than erroring — the event page
  * must stay readable.
+ *
+ * No cancelled-event guard here (see rejectIfCancelled in ../guard): this
+ * reports what `live_sessions` holds, and cancelling now ends the session, so a
+ * cancelled event has nothing live to report. Were the teardown ever to fail,
+ * telling the teacher the truth — there is still a room open — is what lets
+ * them End it.
  */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

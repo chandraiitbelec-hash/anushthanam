@@ -18,6 +18,11 @@ export const runtime = 'nodejs';
  * Order matters: the database row is ended first, so a provider hiccup cannot
  * leave the app advertising a session as live. Tearing the provider room down
  * afterwards is what actually disconnects everyone still in it.
+ *
+ * Deliberately **not** guarded by rejectIfCancelled, unlike start/token/control:
+ * this is the escape hatch for a session that outlived its event's cancel (the
+ * DELETE handler's teardown is best-effort), so a cancelled event is exactly
+ * when the teacher most needs End to work.
  */
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -1,4 +1,4 @@
-import { isFailure, requireAudioAdmin, requireSatsangEvent } from '../guard';
+import { isFailure, rejectIfCancelled, requireAudioAdmin, requireSatsangEvent } from '../guard';
 import { getLiveSession } from '@/lib/satsang';
 
 // Node runtime — holds the provider API secret and signs tokens.
@@ -16,6 +16,10 @@ export const runtime = 'nodejs';
  * Circle form grants publish permission to everyone; the teacher's authority is
  * over mute, not over the right to speak. Hall form (Phase 2) is where
  * `canSpeak` starts varying per participant.
+ *
+ * A cancelled event is refused outright (409 `event_cancelled`) — the kind check
+ * alone is not enough, because a live session can survive a cancel whose
+ * best-effort teardown failed.
  */
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -23,6 +27,12 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const resolved = await requireSatsangEvent(id);
   if (isFailure(resolved)) return resolved.failure;
   const { viewer, event, teacher } = resolved;
+
+  // A cancelled event mints nothing, even if a session is somehow still live:
+  // a credential handed out here would let a devotee walk into a gathering the
+  // teacher has called off. See rejectIfCancelled for the posture.
+  const cancelled = rejectIfCancelled(event);
+  if (cancelled) return cancelled;
 
   const admin = await requireAudioAdmin();
   if (isFailure(admin)) return admin.failure;

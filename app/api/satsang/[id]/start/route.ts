@@ -1,4 +1,4 @@
-import { isFailure, requireSatsangEvent } from '../guard';
+import { isFailure, rejectIfCancelled, requireSatsangEvent } from '../guard';
 import { getSatsangState, nearestOccurrenceIso, startLiveSession } from '@/lib/satsang';
 import { isLiveAudioConfigured } from '@/lib/audio/admin';
 
@@ -25,9 +25,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const { viewer, event, teacher } = resolved;
 
   if (!teacher) return Response.json({ error: 'not_teacher' }, { status: 403 });
-  if (event.status === 'cancelled') {
-    return Response.json({ error: 'event_cancelled' }, { status: 409 });
-  }
+  const cancelled = rejectIfCancelled(event);
+  if (cancelled) return cancelled;
   if (!isLiveAudioConfigured) {
     return Response.json({ error: 'audio_unavailable' }, { status: 503 });
   }

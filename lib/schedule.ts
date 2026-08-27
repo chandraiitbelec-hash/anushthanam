@@ -1,5 +1,5 @@
 import { query, isDbConfigured } from './db';
-import { expandOccurrences, isValidTimeZone } from './occurrences.mjs';
+import { expandOccurrences, inProgressWindowMs, isValidTimeZone } from './occurrences.mjs';
 import { DEFAULT_EVENT_KIND, EVENT_KINDS, type EventKind } from './event-kinds';
 
 /**
@@ -51,6 +51,19 @@ export type EventOccurrence = {
   recurrence: EventRecurrence;
   tz: string;
   ownerName: string | null;
+  /**
+   * This occurrence has started and has not yet run out — see
+   * inProgressWindowMs in lib/occurrences.mjs for how long that lasts. The
+   * list and calendar render it as happening now rather than as a past time.
+   */
+  inProgress: boolean;
+  /**
+   * A live audio session is running for this occurrence's event. Always false
+   * out of upcomingOccurrences — the satsang layer is composed on top by the
+   * caller (see withLiveSessions), because lib/schedule.ts stays
+   * domain-agnostic and must not import lib/satsang.ts.
+   */
+  live: boolean;
 };
 
 /** How far ahead upcoming occurrences are computed. */
@@ -95,9 +108,14 @@ function rowToEvent(row: EventRow): ScheduleEvent {
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * All scheduled (not cancelled) events that can still produce an upcoming
- * occurrence: recurring events always can; one-offs only until they start.
- * The small grace interval keeps an event listed while it is in progress.
+ * All scheduled (not cancelled) events that can still produce a visible
+ * occurrence: recurring events always can; one-offs only until they are over.
+ *
+ * The 2-day interval is a deliberately coarse pre-filter, not the rule. The
+ * exact "is it still on?" window is `inProgressWindowMs(duration)` applied by
+ * expandOccurrences, which is at most a day (durations are capped at 1440
+ * minutes); this bound just has to be no tighter than that, and being loose
+ * only costs a handful of rows the expansion then drops.
  */
 export async function listScheduledEvents(): Promise<ScheduleEvent[]> {
   if (!isDbConfigured) return [];
@@ -105,7 +123,7 @@ export async function listScheduledEvents(): Promise<ScheduleEvent[]> {
     `SELECT ${EVENT_COLUMNS}
        FROM events e JOIN users u ON u.id = e.owner_id
       WHERE e.status = 'scheduled'
-        AND (e.recurrence <> 'none' OR e.starts_at >= now() - interval '1 day')
+        AND (e.recurrence <> 'none' OR e.starts_at >= now() - interval '2 days')
       ORDER BY e.starts_at`,
   );
   return rows.map(rowToEvent);
@@ -236,16 +254,25 @@ export async function updateEvent(
   return rows[0] ? getEvent(rows[0].id) : null;
 }
 
-/** Cancels the whole series, owner-scoped. Returns false when not found / not owner. */
-export async function cancelEvent(id: string, ownerId: string): Promise<boolean> {
-  if (!UUID_RE.test(id)) return false;
-  const rows = await query<{ id: string }>(
+/**
+ * Cancels the whole series, owner-scoped. Returns null when not found / not
+ * owner, otherwise the cancelled row's id and kind — the kind is returned
+ * because cancelling is not the end of the story for every kind of event: a
+ * satsang may have a live session that has to be torn down too, which the
+ * route composes (this layer must not reach into lib/satsang.ts).
+ */
+export async function cancelEvent(
+  id: string,
+  ownerId: string,
+): Promise<{ id: string; kind: string } | null> {
+  if (!UUID_RE.test(id)) return null;
+  const rows = await query<{ id: string; kind: string }>(
     `UPDATE events SET status = 'cancelled', updated_at = now()
       WHERE id = $1 AND owner_id = $2
-      RETURNING id`,
+      RETURNING id, kind`,
     [id, ownerId],
   );
-  return rows.length > 0;
+  return rows[0] ?? null;
 }
 
 /** Flips the viewer's "Interested" mark and returns the new state + count. */
@@ -286,12 +313,17 @@ export function upcomingOccurrences(
   const toMs = nowMs + horizonDays * 86_400_000;
   const out: EventOccurrence[] = [];
   for (const event of events) {
+    const graceMs = inProgressWindowMs(event.durationMinutes);
     const starts = expandOccurrences(
       {
         startsAtMs: Date.parse(event.startsAt),
         recurrence: event.recurrence,
         weekdays: event.weekdays,
         tz: event.tz,
+        // Handing the duration to the expansion is what keeps an event on the
+        // page while it is happening — and keeps the list and the calendar
+        // showing the same thing, since both read this one array.
+        durationMinutes: event.durationMinutes,
       },
       nowMs,
       toMs,
@@ -305,22 +337,89 @@ export function upcomingOccurrences(
         recurrence: event.recurrence,
         tz: event.tz,
         ownerName: event.ownerName,
+        inProgress: ts <= nowMs && nowMs <= ts + graceMs,
+        live: false,
       });
     }
   }
-  return out.sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt));
+  return out.sort(byStart);
+}
+
+function byStart(a: EventOccurrence, b: EventOccurrence): number {
+  return Date.parse(a.startsAt) - Date.parse(b.startsAt);
 }
 
 /**
- * upcomingOccurrences anchored at the current instant. Server components call
- * this instead of passing Date.now() themselves — the react-hooks/purity lint
- * (correctly) refuses impure calls in component render.
+ * Overlays live-audio state onto an expansion: marks the occurrence that a
+ * running session belongs to, and *invents* one for a live event the timetable
+ * places nowhere right now. The second half is the point — a teacher may open
+ * the room at any time (v1 ties a run to no occurrence, see
+ * nearestOccurrenceIso), so "there is a satsang happening" cannot be derived
+ * from the schedule alone.
+ *
+ * The live state arrives as plain data rather than being fetched here: this
+ * module is domain-agnostic and importing lib/satsang.ts would invert the
+ * layering. The /schedule page composes the two.
+ *
+ * @param liveStartsByEventId event id → when its live session started (ISO)
+ */
+export function withLiveSessions(
+  events: ScheduleEvent[],
+  occurrences: EventOccurrence[],
+  liveStartsByEventId: ReadonlyMap<string, string>,
+  nowMs: number,
+): EventOccurrence[] {
+  if (liveStartsByEventId.size === 0) return occurrences;
+
+  const out = occurrences.map(occ =>
+    liveStartsByEventId.has(occ.eventId) && occ.inProgress ? { ...occ, live: true } : occ,
+  );
+  const placed = new Set(out.filter(occ => occ.live).map(occ => occ.eventId));
+
+  for (const [eventId, startedAt] of liveStartsByEventId) {
+    if (placed.has(eventId)) continue;
+    // Not in `events` means cancelled or gone: nothing to render, and Fix 2's
+    // teardown means a cancelled event should not have a live session anyway.
+    const event = events.find(e => e.id === eventId);
+    if (!event) continue;
+    const startedAtMs = Date.parse(startedAt);
+    out.push({
+      eventId: event.id,
+      title: event.title,
+      // The run's own start, so it sorts and groups by when it actually began
+      // rather than by a timetable slot it has no relationship to.
+      startsAt: Number.isFinite(startedAtMs) ? new Date(startedAtMs).toISOString() : new Date(nowMs).toISOString(),
+      durationMinutes: event.durationMinutes,
+      recurrence: event.recurrence,
+      tz: event.tz,
+      ownerName: event.ownerName,
+      inProgress: true,
+      live: true,
+    });
+  }
+  return out.sort(byStart);
+}
+
+/**
+ * upcomingOccurrences anchored at the current instant, with live-audio state
+ * overlaid. Server components call this instead of passing Date.now()
+ * themselves — the react-hooks/purity lint (correctly) refuses impure calls in
+ * component render, and both steps need the *same* instant.
+ *
+ * @param liveStartsByEventId see withLiveSessions; empty is the normal case.
  */
 export function upcomingOccurrencesFromNow(
   events: ScheduleEvent[],
+  liveStartsByEventId: ReadonlyMap<string, string> = new Map(),
   horizonDays: number = SCHEDULE_HORIZON_DAYS,
 ): EventOccurrence[] {
-  return upcomingOccurrences(events, Date.now(), horizonDays);
+  const now = Date.now();
+  return withLiveSessions(
+    events,
+    upcomingOccurrences(events, now, horizonDays),
+    liveStartsByEventId,
+    now,
+  );
 }
 
 /** The event's next few occurrence starts (ISO) from now, over the horizon. */

@@ -17,6 +17,12 @@ import {
  * toggled through the shared Tabs primitive. Occurrences arrive pre-expanded
  * from the server (60-day horizon) as UTC instants and are grouped/rendered
  * in the viewer's local timezone.
+ *
+ * Two flags on each occurrence carry "this is happening" state: `inProgress`
+ * (it has started and has not run out) and `live` (a satsang whose audio room
+ * is open right now). Both are computed server-side and are *not* refreshed on
+ * a timer — v1 accepts that a page load shows the truth as of that load, and
+ * the event page is where a devotee waits for a room to open.
  */
 export default function ScheduleBrowser({
   occurrences,
@@ -145,6 +151,48 @@ function RecurrenceBadge({ recurrence }: { recurrence: EventOccurrence['recurren
   );
 }
 
+/**
+ * "Live now" for a running satsang — same red dot as SatsangPanel, so the two
+ * pages read as one feature — or a quieter "In progress" for any other event
+ * that has begun.
+ */
+function StatusBadge({ occurrence }: { occurrence: EventOccurrence }) {
+  const { lang } = useLang();
+  const t = UI[lang];
+
+  if (occurrence.live) {
+    return (
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', gap: '6px',
+        fontSize: 'var(--text-badge)', fontWeight: 600,
+        color: 'var(--color-red-muted)', whiteSpace: 'nowrap',
+      }}>
+        <span aria-hidden="true" style={{
+          width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-red-muted)',
+        }} />
+        {t.satsangLiveNow}
+      </span>
+    );
+  }
+
+  if (occurrence.inProgress) {
+    return (
+      <span style={{
+        fontSize: 'var(--text-badge)',
+        color: 'var(--color-text-secondary)',
+        border: '1px solid var(--color-border)',
+        borderRadius: '10px',
+        padding: '1px 8px',
+        whiteSpace: 'nowrap',
+      }}>
+        {t.scheduleInProgress}
+      </span>
+    );
+  }
+
+  return null;
+}
+
 function UpcomingList({ occurrences, tz }: { occurrences: EventOccurrence[]; tz: string }) {
   const { lang } = useLang();
   const t = UI[lang];
@@ -183,17 +231,19 @@ function UpcomingList({ occurrences, tz }: { occurrences: EventOccurrence[]; tz:
                   display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap',
                   padding: '14px 16px',
                   background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
+                  border: `1px solid ${occ.live ? 'var(--color-red-muted)' : 'var(--color-border)'}`,
                   borderRadius: '10px',
                   textDecoration: 'none',
                 }}
               >
                 <span style={{
                   fontSize: 'var(--text-body-sm)', fontWeight: 600,
-                  color: 'var(--color-gold-text)', whiteSpace: 'nowrap',
+                  color: occ.live ? 'var(--color-red-muted)' : 'var(--color-gold-text)',
+                  whiteSpace: 'nowrap',
                   minWidth: '72px',
                 }}>
-                  {formatTime(occ.startsAt, lang, tz)}
+                  {/* A start time in the past reads as stale; say what it is instead. */}
+                  {occ.inProgress ? t.scheduleNow : formatTime(occ.startsAt, lang, tz)}
                 </span>
                 <span style={{
                   fontSize: 'var(--text-card-title)', fontWeight: 500,
@@ -202,6 +252,7 @@ function UpcomingList({ occurrences, tz }: { occurrences: EventOccurrence[]; tz:
                   {occ.title}
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <StatusBadge occurrence={occ} />
                   <RecurrenceBadge recurrence={occ.recurrence} />
                   <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
                     {occ.durationMinutes} {t.minutesShort}
@@ -238,6 +289,14 @@ function MonthCalendar({ occurrences, tz }: { occurrences: EventOccurrence[]; tz
       const list = map.get(key);
       if (list) list.push(occ);
       else map.set(key, [occ]);
+    }
+    // A cell shows at most MAX_CHIPS_PER_DAY chips and hides the rest behind
+    // "+N", so on a busy day a running session would be exactly the thing that
+    // got cut. Float live ones to the front of their day; the sort is stable, so
+    // everything else keeps its chronological order. The upcoming list has no
+    // cap and stays purely chronological — it is a timetable.
+    for (const list of map.values()) {
+      list.sort((a, b) => Number(b.live) - Number(a.live));
     }
     return map;
   }, [occurrences, tz]);
@@ -314,13 +373,15 @@ function MonthCalendar({ occurrences, tz }: { occurrences: EventOccurrence[]; tz
                 <Link
                   key={`${occ.eventId}-${occ.startsAt}`}
                   href={`/schedule/${occ.eventId}`}
-                  title={`${formatTime(occ.startsAt, lang, tz)} · ${occ.title}`}
+                  title={`${occ.live ? t.satsangLiveNow : occ.inProgress ? t.scheduleInProgress : formatTime(occ.startsAt, lang, tz)} · ${occ.title}`}
                   style={{
                     display: 'block',
                     fontSize: '10px',
                     lineHeight: 1.4,
-                    color: 'var(--color-gold-text)',
-                    background: 'rgba(184,134,11,0.10)',
+                    // The same red as the list badge and SatsangPanel's dot, so
+                    // a live session is recognisable at chip size too.
+                    color: occ.live ? 'var(--color-red-muted)' : 'var(--color-gold-text)',
+                    background: occ.live ? 'rgba(139,58,58,0.12)' : 'rgba(184,134,11,0.10)',
                     borderRadius: '4px',
                     padding: '1px 4px',
                     marginBottom: '2px',
@@ -330,6 +391,7 @@ function MonthCalendar({ occurrences, tz }: { occurrences: EventOccurrence[]; tz
                     textOverflow: 'ellipsis',
                   }}
                 >
+                  {occ.live && <span aria-hidden="true">● </span>}
                   {occ.title}
                 </Link>
               ))}

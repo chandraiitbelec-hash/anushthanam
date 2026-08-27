@@ -1,4 +1,4 @@
-import { isFailure, requireAudioAdmin, requireSatsangEvent } from '../guard';
+import { isFailure, rejectIfCancelled, requireAudioAdmin, requireSatsangEvent } from '../guard';
 import { getLiveSession } from '@/lib/satsang';
 
 // Node runtime — holds the provider API secret.
@@ -26,9 +26,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const resolved = await requireSatsangEvent(id);
   if (isFailure(resolved)) return resolved.failure;
-  const { viewer, teacher } = resolved;
+  const { viewer, event, teacher } = resolved;
 
   if (!teacher) return Response.json({ error: 'not_teacher' }, { status: 403 });
+
+  // Cancelled means no live-audio actions but End (see rejectIfCancelled).
+  const cancelled = rejectIfCancelled(event);
+  if (cancelled) return cancelled;
 
   const admin = await requireAudioAdmin();
   if (isFailure(admin)) return admin.failure;
