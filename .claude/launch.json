@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "live-audio-spike",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["spike/live-audio/server.mjs"],
+      "port": 3111
+    },
+    {
       "name": "devotion-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],

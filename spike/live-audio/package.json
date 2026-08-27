@@ -1,0 +1,14 @@
+{
+  "name": "live-audio-spike",
+  "private": true,
+  "description": "Phase 0 vendor-eval spike for the satsang live-audio PRD. Throwaway. Never import from the production app.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.0",
+    "livekit-client": "^2",
+    "livekit-server-sdk": "^2"
+  }
+}

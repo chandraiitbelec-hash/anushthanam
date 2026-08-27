@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>live-audio spike</title>
+  <style>
+    /* Deliberately ugly. Zero styling effort per spike scope. */
+    body { font-family: monospace; margin: 1rem; max-width: 720px; }
+    li { margin: 4px 0; padding: 4px; border: 1px solid #ccc; list-style: none; }
+    li.speaking { outline: 3px solid #2a2; background: #e8ffe8; }
+    button { margin-left: 4px; }
+    #log { height: 220px; overflow-y: scroll; background: #f4f4f4; padding: 6px; font-size: 11px; white-space: pre-wrap; }
+    #session { display: none; }
+    #enable-audio { display: none; background: #fc0; }
+  </style>
+</head>
+<body>
+  <h3>satsang live-audio spike (throwaway)</h3>
+
+  <div id="entry">
+    <input id="name" placeholder="display name" />
+    <select id="role">
+      <option value="listener">listener</option>
+      <option value="teacher">teacher</option>
+    </select>
+    <button id="join">Join</button>
+  </div>
+
+  <div id="session">
+    <div>connection: <span id="conn">-</span> · <span id="join-time"></span></div>
+    <p>
+      <button id="mic-toggle">Unmute myself</button><span id="mic-hint"></span>
+      <button id="hand-toggle">Raise hand</button>
+      <button id="enable-audio">🔊 enable audio</button>
+      <button id="leave">Leave</button>
+    </p>
+    <div id="teacher-bar">
+      <button id="mute-all">Mute all</button>
+      <button id="unmute-all">Unmute all (request)</button>
+    </div>
+    <ul id="participants"></ul>
+  </div>
+
+  <pre id="log"></pre>
+  <script src="/app.js"></script>
+</body>
+</html>

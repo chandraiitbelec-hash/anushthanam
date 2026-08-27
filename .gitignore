@@ -42,4 +42,9 @@ yarn-error.log*
 next-env.d.ts
 
 # working notes / source JSONs for one-off content scripts — never read by app code, stays local
+# (decision memos like research/webrtc-vendor-eval-*.md get committed with `git add -f`)
 /research
+
+# live-audio spike (self-contained lab bench; never part of a Vercel deploy)
+/spike/live-audio/node_modules
+/spike/live-audio/public/app.js
