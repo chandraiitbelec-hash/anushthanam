@@ -181,6 +181,11 @@ type UiStrings = {
   // SEO: language-aware title/description phrasing (shloka meaning/lyrics pages)
   seoShlokaTitle: (title: string) => string;
   seoMultilingualNote: string;
+  // Accounts / auth
+  signIn: string;
+  signInWithGoogle: string;
+  signOut: string;
+  accountLabel: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -339,6 +344,10 @@ export const UI: Record<Language, UiStrings> = {
     templeOfficialWebsite: 'Official Website',
     seoShlokaTitle: (title) => `${title} — Meaning, Lyrics & Benefits`,
     seoMultilingualNote: 'with meanings in Telugu, Tamil, Hindi and English',
+    signIn: 'Sign in',
+    signInWithGoogle: 'Sign in with Google',
+    signOut: 'Sign out',
+    accountLabel: 'Account',
   },
   te: {
     tithi: 'తిథి',
@@ -495,6 +504,10 @@ export const UI: Record<Language, UiStrings> = {
     templeOfficialWebsite: 'అధికారిక వెబ్‌సైట్',
     seoShlokaTitle: (title) => `${title} అర్థం మరియు పాఠం తెలుగులో`,
     seoMultilingualNote: 'తెలుగు, తమిళం, హిందీ మరియు ఇంగ్లీష్‌లో అర్థాలతో',
+    signIn: 'సైన్ ఇన్',
+    signInWithGoogle: 'Googleతో సైన్ ఇన్ చేయండి',
+    signOut: 'సైన్ అవుట్',
+    accountLabel: 'ఖాతా',
   },
   ta: {
     tithi: 'திதி',
@@ -651,6 +664,10 @@ export const UI: Record<Language, UiStrings> = {
     templeOfficialWebsite: 'அதிகாரப்பூர்வ இணையதளம்',
     seoShlokaTitle: (title) => `${title} பொருள் மற்றும் பாடல் தமிழில்`,
     seoMultilingualNote: 'தெலுங்கு, தமிழ், இந்தி மற்றும் ஆங்கிலத்தில் பொருள்களுடன்',
+    signIn: 'உள்நுழை',
+    signInWithGoogle: 'Google மூலம் உள்நுழைக',
+    signOut: 'வெளியேறு',
+    accountLabel: 'கணக்கு',
   },
   hi: {
     tithi: 'तिथि',
@@ -807,5 +824,9 @@ export const UI: Record<Language, UiStrings> = {
     templeOfficialWebsite: 'आधिकारिक वेबसाइट',
     seoShlokaTitle: (title) => `${title} अर्थ और पाठ हिंदी में`,
     seoMultilingualNote: 'तेलुगु, तमिल, हिंदी और अंग्रेज़ी में अर्थों के साथ',
+    signIn: 'साइन इन',
+    signInWithGoogle: 'Google से साइन इन करें',
+    signOut: 'साइन आउट',
+    accountLabel: 'खाता',
   },
 };

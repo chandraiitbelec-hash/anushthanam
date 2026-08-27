@@ -7,6 +7,7 @@ import { useTheme } from '@/context/ThemeContext';
 import type { Theme } from '@/context/ThemeContext';
 import SearchBar from '@/components/SearchBar';
 import { useDismissable } from '@/hooks/useDismissable';
+import AuthControl from '@/components/AuthControl';
 import { UI } from '@/lib/ui-strings';
 
 import type { Language } from '@/lib/types';
@@ -35,7 +36,10 @@ const MORE_LINKS: NavLink[] = [
 // Mobile drawer shows everything flat.
 const NAV_LINKS: NavLink[] = [...PRIMARY_LINKS, ...MORE_LINKS];
 
-export default function Nav() {
+// `authEnabled` is resolved on the server (see isAuthConfigured in auth.ts): with
+// no Google credentials configured the sign-in control is omitted entirely rather
+// than rendering a button that can only fail.
+export default function Nav({ authEnabled = false }: { authEnabled?: boolean }) {
   const { lang, setLang } = useLang();
   const { theme, setTheme } = useTheme();
   const [langOpen, setLangOpen] = useState(false);
@@ -357,6 +361,9 @@ export default function Nav() {
               ))}
             </div>
 
+            {/* Sign in / account — CSS hides this on mobile (drawer has its own) */}
+            {authEnabled && <AuthControl variant="desktop" />}
+
             {/* Hamburger — CSS hides this on desktop */}
             <button
               ref={hamburgerRef}
@@ -394,6 +401,12 @@ export default function Nav() {
               borderBottom: '1px solid var(--color-border)',
               padding: '8px 24px 24px',
               display: 'flex', flexDirection: 'column',
+              // The overlay is position:fixed, so anything taller than the
+              // viewport is simply clipped and unreachable — on a short phone
+              // the links alone already overflow past the language, theme and
+              // account sections. Scroll inside the drawer instead.
+              maxHeight: 'calc(100dvh - 64px)',
+              overflowY: 'auto',
             }}
           >
             {NAV_LINKS.map(link => (
@@ -476,6 +489,9 @@ export default function Nav() {
                 })}
               </div>
             </div>
+
+            {/* Account section in drawer */}
+            {authEnabled && <AuthControl variant="drawer" onNavigate={() => setMobileOpen(false)} />}
           </nav>
         </div>
       )}

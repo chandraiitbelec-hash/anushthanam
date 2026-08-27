@@ -8,12 +8,15 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import type { Theme } from '@/context/ThemeContext';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
+import AuthProvider from '@/components/AuthProvider';
 import FooterLinks from '@/components/FooterLinks';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import PwaSplash from '@/components/PwaSplash';
 import { SITE_URL, SITE_NAME } from '@/lib/seo';
 import { cookies } from 'next/headers';
 import type { Language } from '@/lib/types';
+import { auth, isAuthConfigured } from '@/auth';
+import type { Session } from 'next-auth';
 
 const VALID_LANGS: Language[] = ['en', 'te', 'ta', 'hi'];
 const VALID_THEMES: Theme[] = ['light', 'dark', 'system'];
@@ -127,6 +130,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Only set data-theme for explicit overrides; system = no attribute (OS media query governs)
   const dataTheme = initialTheme === 'system' ? undefined : initialTheme;
 
+  // The layout is already per-request dynamic, so reading the session here is
+  // free — and it lets the nav paint the real signed-in state on the first byte
+  // instead of fetching /api/auth/session after hydration. Guarded like every
+  // other fetch in the tree: a misconfigured or unreachable auth setup must
+  // degrade to a signed-out nav, never a blank page.
+  let session: Session | null = null;
+  if (isAuthConfigured) {
+    try {
+      session = await auth();
+    } catch (err) {
+      console.error('AUTH ERROR: could not resolve session for layout', err);
+    }
+  }
+
   return (
     <html
       lang={initialLang}
@@ -160,10 +177,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <a href="#main-content" className="skip-link">Skip to content</a>
         <PwaSplash />
         <ServiceWorkerRegister />
+        <AuthProvider session={session}>
         <ThemeProvider initialTheme={initialTheme}>
         <LanguageProvider initialLang={initialLang}>
         <FontScaleProvider>
-          <Nav />
+          <Nav authEnabled={isAuthConfigured} />
           <main id="main-content">{children}</main>
           <footer style={{ borderTop: '1px solid var(--color-border)', marginTop: '80px', padding: '36px 24px', color: 'var(--color-text-secondary)', fontSize: 'var(--text-footer)' }}>
             <div className="wide-width" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
@@ -174,6 +192,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </FontScaleProvider>
         </LanguageProvider>
         </ThemeProvider>
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

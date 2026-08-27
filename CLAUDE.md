@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Anushthanam** (alt: anushthana, anushtanam, anusthanam, anustanam) — a Hindu devotion reference site covering gods (devatas), shlokas, stotras, pujas, festivals, vrathams, and panchangam. Serves Telugu, Tamil, Hindi, and English speakers. No e-commerce, no user accounts in Phase 1.
+**Anushthanam** (alt: anushthana, anushtanam, anusthanam, anustanam) — a Hindu devotion reference site covering gods (devatas), shlokas, stotras, pujas, festivals, vrathams, and panchangam. Serves Telugu, Tamil, Hindi, and English speakers. No e-commerce. Google sign-in exists as of the Accounts / Auth section below — the earlier "no user accounts in Phase 1" rule is deliberately superseded; accounts are the foundation for the planned live-audio satsang community.
 
 GitHub: https://github.com/chandraiitbelec-hash/anushthanam
 
@@ -13,6 +13,7 @@ GitHub: https://github.com/chandraiitbelec-hash/anushthanam
 - **Frontend:** Next.js 16.2.9 (App Router), React 19.2.4, TypeScript. Styling is inline styles + CSS variables (`@theme` tokens in `app/globals.css`); Tailwind v4 is present only for base/preflight, not as the component-styling method. Builds run on Turbopack (Next 16's default build engine — no opt-in config needed).
 - **CMS:** Google Sheets (structured data) + Google Docs (legacy long-form prose) + a Sheets tab (`stories_content`) for current story bodies
 - **Search:** Client-side Fuse.js over `public/search-index.json` (built at `prebuild` time, before `next build`)
+- **Accounts:** Auth.js (next-auth v5) with Google as the only provider, JWT sessions; a minimal `users` table on Vercel Postgres (Neon) reached through `pg` — see Accounts / Auth below
 - **Deployment:** Vercel with static generation + ISR (`revalidate = 3600`) + manual deploy hook triggered from Sheets Apps Script
   - **NEVER run `vercel` or deploy to Vercel directly.** Always push to GitHub; the user manages Vercel from there.
 
@@ -25,6 +26,8 @@ npm run build        # prebuild writes search-index.json, then next build
 npm run lint         # eslint . (flat config, eslint.config.mjs)
 node scripts/check-content-health.mjs   # pre-deploy: verify live Sheet headers/data, read-only
 node scripts/report-translation-coverage.mjs [--verbose]   # per-language fill-rate report across content tabs, read-only
+node scripts/migrate.mjs             # list pending Postgres migrations (dry run)
+node scripts/migrate.mjs --write     # apply them
 ```
 
 ## Architecture
@@ -75,6 +78,9 @@ Publishing is intentional: a "Publish to site" menu in Apps Script triggers the 
 | `lib/ui-strings.ts` | Centralized UI-string dictionary — see Language / translation pattern below |
 | `lib/gita.ts` + `lib/data/bhagavad-gita.json` | Static-JSON Bhagavad Gita section — see below |
 | `lib/daily-devotional.ts` + `lib/data/daily-devotional.json` | Rotating daily devotional pick, static JSON, no Sheets dependency |
+| `lib/db.ts` | Pooled `pg` client + `query()` helper, and `isDbConfigured`; the only place a Postgres connection is opened |
+| `lib/users.ts` | `upsertUserFromGoogle()` — the single writer to the `users` table, called once per sign-in |
+| `auth.ts` (repo root) | Auth.js config: Google provider, JWT callbacks, `isAuthConfigured` — see Accounts / Auth below |
 | `context/LanguageContext.tsx` | Active language (`en`/`te`/`ta`/`hi`) stored in context + localStorage/cookie |
 
 ### Status model
@@ -144,6 +150,92 @@ Static-JSON, not Sheets-backed. `lib/gita.ts` imports `lib/data/bhagavad-gita.js
 
 Shared tabbed-UI components (`ShlokaTypeTabs`, `PujasBrowser`, `PujaProfile`, `VrathamProfile`, `FestivalProfile`, and the `/pujas` section toggle) are built on one common `Tabs` primitive rather than each rolling its own tab state/markup. Extend that primitive rather than adding another bespoke tab implementation.
 
+### Accounts / Auth
+
+Google sign-in, and nothing more. This is deliberately step 1 of the live-audio
+**satsang** community foundation — community membership, teacher roles and
+scheduled sessions are all planned on top of it and none of them exist yet.
+Resist folding them in early: the value of this layer is that it is small enough
+to be obviously correct.
+
+**Stack and why**
+
+- **Auth.js (next-auth v5), Google provider only.** Google is the sole sign-in
+  method — no passwords, no OTP — so identity verification is entirely Google's
+  problem and there is no credential handling in this repo. Auth.js handles
+  session cookie signing/encryption, CSRF and the OAuth handshake; do not
+  hand-roll anything around it.
+- **JWT session strategy.** The signed cookie carries the identity, so rendering
+  a page never queries Postgres to know who's asking. No session table, no
+  adapter.
+- **Vercel Postgres (Neon) via `pg`.** The first feature on the site needing real
+  persistent storage. One table, hand-written SQL, no ORM — reach for a query
+  builder when that stops being true, not before.
+
+**Files**
+
+| File | Role |
+|------|------|
+| `auth.ts` (repo root) | `NextAuth()` config; exports `handlers` / `auth` / `signIn` / `signOut` and `isAuthConfigured` |
+| `app/api/auth/[...nextauth]/route.ts` | Mounts Auth.js on `/api/auth/*`; pinned to the Node runtime because `pg` is not Edge-compatible |
+| `types/next-auth.d.ts` | Session/JWT augmentation for `accountId` and `googleId` |
+| `lib/db.ts` / `lib/users.ts` | Connection pool and the single `users` writer |
+| `db/migrations/*.sql` + `scripts/migrate.mjs` | Schema, and the runner that applies it |
+| `components/AuthProvider.tsx` / `components/AuthControl.tsx` | Client session provider, and the nav sign-in/account control |
+
+**Schema (`users`)**
+
+`id` (uuid pk) · `google_id` (unique, the OAuth `sub`) · `email` (unique) ·
+`name` · `avatar_url` · `created_at` · `updated_at`.
+
+`id` is a surrogate UUID rather than the Google id precisely so future
+`community` / `membership` / `teacher_role` tables can foreign-key to something
+that has nothing to do with the identity provider. Upserts conflict on
+`google_id`, which is stable across email and display-name changes, so a
+returning user keeps the same `id`.
+
+**Session shape — read this before using an id as a foreign key**
+
+- `session.user.accountId` — our `users.id` UUID. **This is the FK target.**
+  Optional: sign-in deliberately succeeds even when the Postgres write fails or
+  no `DATABASE_URL` is set, so callers must handle its absence rather than
+  assume a row exists.
+- `session.user.googleId` — the OAuth `sub`; always present on a signed-in
+  session, and enough to re-resolve or create the row later.
+- `session.user.id` — Auth.js's own default, which is the provider account id
+  (same value as `googleId`). **Never use it as a foreign key.**
+
+**Failure behaviour (all deliberate)**
+
+- Missing `AUTH_SECRET` / `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` →
+  `isAuthConfigured` is false, the nav renders with no sign-in control at all,
+  and the site behaves exactly as it did before accounts existed. Local dev and
+  preview deploys without credentials are unaffected.
+- Missing `DATABASE_URL` → sign-in works, no row is written, `accountId` is
+  undefined.
+- Postgres reachable but the write fails → logged as `AUTH ERROR` and sign-in
+  still proceeds. Login gates nothing today, so blocking entry on a transient DB
+  blip would be the worse failure. Revisit this when something actually depends
+  on the row existing.
+- `auth()` throwing in the root layout is caught and degrades to a signed-out
+  nav, matching the `.catch(() => [])` discipline every Sheets fetch follows.
+
+**Rendering**
+
+The root layout resolves the session server-side and hands it to
+`AuthProvider` / `SessionProvider` as the initial value, and passes
+`isAuthConfigured` into `Nav` as `authEnabled`. This is the same no-flash rule
+the language and theme providers follow: the first byte already shows the real
+signed-in state, so the nav never paints "Sign in" and then swaps to an avatar.
+Don't replace it with a client-side `useSession()` fetch on mount.
+
+The layout is already per-request dynamic (see Rendering model), so reading the
+session there costs nothing extra.
+
+**Not built on purpose:** protected routes, middleware, gated content, roles.
+The scope of this layer is "a user can sign in with Google and the app knows who
+they are across requests".
+
 ### scripts/ conventions
 
 - `scripts/lib-sheets.mjs` is the shared helper module for one-off content scripts: `loadEnv()` (auto-loads `.env.local` relative to the script's own directory, so cwd doesn't matter), `getSheetsClient()` (memoized), `parseWriteFlag(argv)`, and `getTabWithHeaders(tab)` returning `{ headers, rows, col }`.
@@ -152,6 +244,7 @@ Shared tabbed-UI components (`ShlokaTypeTabs`, `PujasBrowser`, `PujaProfile`, `V
 - `scripts/archive/` holds retired one-off scripts (batch fixes, past migrations) kept for reference — don't build on top of them, and new one-off scripts that are fully spent should move there rather than staying in the active `scripts/` root.
 - See `STOTRA_UPLOAD_PIPELINE.md` for the conventions specific to adding a new stotra/shloka's content end-to-end.
 - **`scripts/check-content-health.mjs`** is the pre-deploy check: read-only (no `--write` mode), it verifies against the live Sheet that every tab's header row has the columns the app reads (hardcoded `EXPECTED_COLUMNS`, derived from the `rowTo*` mappers in `lib/relations.ts` — update it when a mapper changes), warns on 0 published rows for tabs that should never be empty (`gods`, `shlokas`, `pujas`, `festivals`, `vrathams`), and warns on `festivals`/`vrathams` `next_occurrence` values that aren't `YYYY-MM-DD`. Exits 1 only on a missing header; run it before "Publish to site".
+- **`scripts/migrate.mjs`** applies `db/migrations/*.sql` to `DATABASE_URL`, tracking applied filenames in a `schema_migrations` table. Dry-run by default like the Sheets scripts; `--write` applies. Each migration runs in its own transaction. New schema changes go in a new numbered `.sql` file — never edit an already-applied one.
 - **`scripts/report-translation-coverage.mjs`** is read-only (no `--write` mode): it auto-detects `*_en`/`_te`/`_ta`/`_hi` field groups from the live header row of each content tab and reports per-language fill rates against published rows; `--verbose` lists the slugs missing each language.
 
 ### Environment variables
@@ -161,7 +254,19 @@ GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account",...}
 SHEETS_SPREADSHEET_ID=
 NEXT_PUBLIC_SITE_URL=
 DRIVE_FOLDER_ID=
+
+# Accounts / Auth (see that section for what each one is and where to get it)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+AUTH_SECRET=
+DATABASE_URL=
 ```
+
+`GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` are the **OAuth client** credentials from Google Cloud Console — a different thing from `GOOGLE_SERVICE_ACCOUNT_KEY`, which is the read-only service account used for Sheets and Docs. The two are unrelated and must not be swapped.
+
+Auth.js would pick up `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` by convention; `auth.ts` passes `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` explicitly instead, so those are the names to set.
+
+All four are optional in the sense that the app boots without them: missing any of the three auth values turns the sign-in UI off entirely (see `isAuthConfigured`), and a missing `DATABASE_URL` lets sign-in work without persisting a row.
 
 (`NEXT_PUBLIC_DEFAULT_LANGUAGE`, `NEXT_PUBLIC_SITE_NAME`, and `NEXT_PUBLIC_SHOW_TRANSLATION_BADGES` are no longer read anywhere in code — the translation-badge feature they supported was removed; don't reintroduce them without a real consumer.)
 
