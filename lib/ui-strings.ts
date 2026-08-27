@@ -236,6 +236,9 @@ type UiStrings = {
   satsangNotStartedBody: string;
   satsangLiveNow: string;
   satsangStartedAt: (time: string) => string;
+  satsangStartedJustNow: string;
+  satsangStartedMinutesAgo: (n: number) => string;
+  satsangStartedHoursAgo: (n: number) => string;
   satsangEndedTitle: string;
   satsangEndedBody: string;
   satsangStart: string;
@@ -263,6 +266,8 @@ type UiStrings = {
   satsangYouLabel: string;
   satsangSpeakingLabel: string;
   satsangMutedLabel: string;
+  satsangMicOnLabel: string;
+  satsangTeacherControlsLabel: string;
   satsangInRoom: (n: number) => string;
   satsangMicDenied: string;
   satsangEndedByTeacher: string;
@@ -480,6 +485,9 @@ export const UI: Record<Language, UiStrings> = {
     satsangNotStartedBody: 'This page updates on its own when the teacher opens the room.',
     satsangLiveNow: 'Live now',
     satsangStartedAt: (time: string) => `Started at ${time}`,
+    satsangStartedJustNow: 'Started just now',
+    satsangStartedMinutesAgo: (n: number) => `Started ${n} min ago`,
+    satsangStartedHoursAgo: (n: number) => (n === 1 ? 'Started 1 hr ago' : `Started ${n} hrs ago`),
     satsangEndedTitle: 'This session has ended',
     satsangEndedBody: 'The teacher can open the room again for the next occurrence.',
     satsangStart: 'Start session',
@@ -507,6 +515,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangYouLabel: 'You',
     satsangSpeakingLabel: 'Speaking',
     satsangMutedLabel: 'Muted',
+    satsangMicOnLabel: 'Mic on',
+    satsangTeacherControlsLabel: 'Teacher controls',
     satsangInRoom: (n: number) => (n === 1 ? '1 person in the room' : `${n} people in the room`),
     satsangMicDenied: 'Microphone access was refused, so you can listen but not speak.',
     satsangEndedByTeacher: 'The teacher ended the session.',
@@ -722,6 +732,9 @@ export const UI: Record<Language, UiStrings> = {
     satsangNotStartedBody: 'గురువు గదిని తెరిచిన వెంటనే ఈ పేజీ తానుగా నవీకరణం అవుతుంది.',
     satsangLiveNow: 'ఇప్పుడు లైవ్',
     satsangStartedAt: (time: string) => `${time}కి మొదలైంది`,
+    satsangStartedJustNow: 'ఇప్పుడే మొదలైంది',
+    satsangStartedMinutesAgo: (n: number) => `${n} నిమిషాల క్రితం మొదలైంది`,
+    satsangStartedHoursAgo: (n: number) => `${n} గంటల క్రితం మొదలైంది`,
     satsangEndedTitle: 'ఈ సత్సంగం పూర్తయింది',
     satsangEndedBody: 'తదుపరి సమయానికి గురువు గదిని మళ్లీ తెరవచ్చు.',
     satsangStart: 'సత్సంగం మొదలుపెట్టండి',
@@ -749,6 +762,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangYouLabel: 'మీరు',
     satsangSpeakingLabel: 'మాట్లాడుతున్నారు',
     satsangMutedLabel: 'మ్యూట్ చేయబడింది',
+    satsangMicOnLabel: 'మైక్ ఆన్',
+    satsangTeacherControlsLabel: 'గురువు నియంత్రణలు',
     satsangInRoom: (n: number) => `గదిలో ${n} మంది`,
     satsangMicDenied: 'మైక్రోఫోన్ అనుమతి నిరాకరించబడింది కాబట్టి మీరు వినగలరు కానీ మాట్లాడలేరు.',
     satsangEndedByTeacher: 'గురువు సత్సంగాన్ని ముగించారు.',
@@ -964,6 +979,9 @@ export const UI: Record<Language, UiStrings> = {
     satsangNotStartedBody: 'ஆசிரியர் அரங்கத்தைத் திறக்கும்போது இந்தப் பக்கம் தானாகவே புதுப்பிக்கும்.',
     satsangLiveNow: 'இப்போது நேரலை',
     satsangStartedAt: (time: string) => `${time} க்கு தொடங்கியது`,
+    satsangStartedJustNow: 'இப்போதுதான் தொடங்கியது',
+    satsangStartedMinutesAgo: (n: number) => `${n} நிமிடங்களுக்கு முன் தொடங்கியது`,
+    satsangStartedHoursAgo: (n: number) => `${n} மணி நேரத்திற்கு முன் தொடங்கியது`,
     satsangEndedTitle: 'இந்த அமர்வு நிறைவுபெற்றது',
     satsangEndedBody: 'அடுத்த நிகழ்விற்கு ஆசிரியர் அரங்கத்தை மீண்டும் திறக்கலாம்.',
     satsangStart: 'அமர்வைத் தொடங்கு',
@@ -991,6 +1009,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangYouLabel: 'நீங்கள்',
     satsangSpeakingLabel: 'பேசுகிறார்',
     satsangMutedLabel: 'அணைக்கப்பட்டது',
+    satsangMicOnLabel: 'மைக் இயக்கத்தில்',
+    satsangTeacherControlsLabel: 'ஆசிரியர் கட்டுப்பாடுகள்',
     satsangInRoom: (n: number) => `அரங்கத்தில் ${n} பேர்`,
     satsangMicDenied: 'மைக்ரோபோன் அனுமதி மறுக்கப்பட்டது, அதனால் கேடக்கும் முடியும், பேச முடியாது.',
     satsangEndedByTeacher: 'ஆசிரியர் அமர்வை முடித்தார்.',
@@ -1206,6 +1226,9 @@ export const UI: Record<Language, UiStrings> = {
     satsangNotStartedBody: 'गुरुजी कक्ष खोलेंगे तो यह पेज स्वयं अपडेट हो जागा।',
     satsangLiveNow: 'अभी लाइव',
     satsangStartedAt: (time: string) => `${time} पर शुरू हुआ`,
+    satsangStartedJustNow: 'अभी-अभी शुरू हुआ',
+    satsangStartedMinutesAgo: (n: number) => `${n} मिनट पहले शुरू हुआ`,
+    satsangStartedHoursAgo: (n: number) => `${n} घंटे पहले शुरू हुआ`,
     satsangEndedTitle: 'यह सत्संग समाप्त हो गया',
     satsangEndedBody: 'अगली बार के लिए गुरुजी पुनः कक्ष खोल सकते हैं।',
     satsangStart: 'सत्संग शुरू करें',
@@ -1233,6 +1256,8 @@ export const UI: Record<Language, UiStrings> = {
     satsangYouLabel: 'आप',
     satsangSpeakingLabel: 'बोल रहे हैं',
     satsangMutedLabel: 'म्यूट',
+    satsangMicOnLabel: 'माइक चालू',
+    satsangTeacherControlsLabel: 'गुरुजी के नियंत्रण',
     satsangInRoom: (n: number) => `कक्ष में ${n} लोग`,
     satsangMicDenied: 'माइक्रोमाइक की अनुमति नहीं मिली, आप सुन सकते हैं पर बोल नहीं सकते।',
     satsangEndedByTeacher: 'गुरुजी ने सत्संग समाप्त किया।',

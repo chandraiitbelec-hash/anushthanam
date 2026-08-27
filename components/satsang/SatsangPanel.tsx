@@ -7,7 +7,7 @@ import { UI } from '@/lib/ui-strings';
 import type { AudioRoom, RoomConnectionState, RoomParticipant } from '@/lib/audio/audio-room';
 import { createAudioRoom } from '@/lib/audio/create-room';
 import type { SatsangState } from '@/lib/satsang';
-import { formatTime, useDisplayTimeZone } from '@/components/schedule/format';
+import { formatTime, useDisplayTimeZone, useNow } from '@/components/schedule/format';
 import SessionRoom from './SessionRoom';
 
 /**
@@ -33,6 +33,7 @@ export default function SatsangPanel({
   isOwner,
   authEnabled,
   cancelled,
+  onLiveChange,
 }: {
   eventId: string;
   eventTitle: string;
@@ -41,10 +42,18 @@ export default function SatsangPanel({
   isOwner: boolean;
   authEnabled: boolean;
   cancelled: boolean;
+  /**
+   * Told whenever the session goes live or stops being live, so the page
+   * around this panel can reorder itself for a room that is open. Poll and
+   * join behaviour are unchanged — this only reports what the panel already
+   * knows.
+   */
+  onLiveChange?: (live: boolean) => void;
 }) {
   const { lang } = useLang();
   const t = UI[lang];
   const tz = useDisplayTimeZone();
+  const now = useNow();
   const { data: session } = useSession();
   const signedIn = Boolean(session?.user);
 
@@ -63,6 +72,10 @@ export default function SatsangPanel({
   const [connection, setConnection] = useState<RoomConnectionState>('idle');
   const [playbackBlocked, setPlaybackBlocked] = useState(false);
   const [unmuteRequested, setUnmuteRequested] = useState(false);
+
+  useEffect(() => {
+    onLiveChange?.(state.live);
+  }, [state.live, onLiveChange]);
 
   const refreshState = useCallback(async () => {
     try {
@@ -244,6 +257,22 @@ export default function SatsangPanel({
     setBusy(false);
   }
 
+  /**
+   * "Started 10 min ago" while that is the useful answer, and the clock time
+   * once it stops being one (a session running past half a day, or a page
+   * rendered on the server, where `useNow` is deliberately 0 so SSR and
+   * hydration agree).
+   */
+  function startedLabel(startedAt: string): string {
+    if (!now) return t.satsangStartedAt(formatTime(startedAt, lang, tz));
+    const minutes = Math.floor((now - Date.parse(startedAt)) / 60_000);
+    if (minutes < 1) return t.satsangStartedJustNow;
+    if (minutes < 60) return t.satsangStartedMinutesAgo(minutes);
+    const hours = Math.floor(minutes / 60);
+    if (hours < 12) return t.satsangStartedHoursAgo(hours);
+    return t.satsangStartedAt(formatTime(startedAt, lang, tz));
+  }
+
   const cardStyle: React.CSSProperties = {
     background: 'var(--color-surface)',
     border: '1px solid var(--color-border)',
@@ -304,23 +333,26 @@ export default function SatsangPanel({
   return (
     <div style={cardStyle}>
       {state.live ? (
-        <>
-          <p style={{
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '4px 10px', flexWrap: 'wrap',
+          margin: '0 0 16px',
+        }}>
+          <span style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             fontSize: 'var(--text-badge)', fontWeight: 600,
-            color: 'var(--color-red-muted)', margin: '0 0 6px',
+            color: 'var(--color-red-muted)',
           }}>
             <span aria-hidden="true" style={{
               width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-red-muted)',
             }} />
             {t.satsangLiveNow}
-          </p>
+          </span>
           {state.startedAt && (
-            <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '0 0 16px' }}>
-              {t.satsangStartedAt(formatTime(state.startedAt, lang, tz))}
-            </p>
+            <span style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)' }}>
+              {startedLabel(state.startedAt)}
+            </span>
           )}
-        </>
+        </div>
       ) : (
         <>
           <p style={{

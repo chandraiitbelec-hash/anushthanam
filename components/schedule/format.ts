@@ -75,3 +75,43 @@ export function monthLabel(year: number, month: number, lang: string): string {
     month: 'long', year: 'numeric', timeZone: 'UTC',
   });
 }
+
+/**
+ * A coarse shared clock for relative phrasings ("started 10 min ago").
+ *
+ * Same no-mismatch discipline as `useDisplayTimeZone`: the server snapshot is
+ * 0, meaning "no clock yet", so SSR and the hydration render emit the absolute
+ * time and only the first client render swaps in the relative one. One
+ * interval is shared by every subscriber, and the snapshot is a cached bucket
+ * rather than a fresh `Date.now()` — `useSyncExternalStore` re-renders forever
+ * if `getSnapshot` returns a new value each call.
+ */
+const NOW_TICK_MS = 30_000;
+const nowSubscribers = new Set<() => void>();
+let nowBucket = 0;
+let nowTimer: ReturnType<typeof setInterval> | null = null;
+
+function subscribeNow(onChange: () => void) {
+  nowSubscribers.add(onChange);
+  if (!nowTimer) {
+    nowTimer = setInterval(() => {
+      nowBucket = Date.now();
+      nowSubscribers.forEach(fn => fn());
+    }, NOW_TICK_MS);
+  }
+  return () => {
+    nowSubscribers.delete(onChange);
+    if (nowSubscribers.size === 0 && nowTimer) {
+      clearInterval(nowTimer);
+      nowTimer = null;
+    }
+  };
+}
+
+const getNow = () => (nowBucket ||= Date.now());
+const getServerNow = () => 0;
+
+/** Current time in ms, refreshed about every 30s; 0 during SSR/hydration. */
+export function useNow(): number {
+  return useSyncExternalStore(subscribeNow, getNow, getServerNow);
+}

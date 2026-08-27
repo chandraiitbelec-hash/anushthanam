@@ -64,6 +64,18 @@ export default function SessionRoom({
     }`,
   });
 
+  /**
+   * The self mic toggle stays the loudest control in the room: gold filled
+   * when the tap would unmute, gold outline when it would mute. Either way it
+   * reads ahead of the grey Leave and the teacher's room controls.
+   */
+  const selfMicButton = (micOn: boolean): React.CSSProperties => ({
+    ...button(micOn ? 'quiet' : 'primary'),
+    ...(micOn
+      ? { color: 'var(--color-gold-text)', border: '1px solid var(--color-gold)' }
+      : null),
+  });
+
   const smallButton: React.CSSProperties = {
     minHeight: '32px',
     padding: '5px 12px',
@@ -191,9 +203,16 @@ export default function SessionRoom({
               {p.isLocal && <> ({t.satsangYouLabel})</>}
             </span>
 
-            <span style={{ fontSize: 'var(--text-badge)', color: 'var(--color-text-secondary)' }}>
+            {/* Glyph first for a glanceable read down the column, with the
+                same state spelled out beside it — the icon is decorative and
+                the text is what a screen reader announces. */}
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              fontSize: 'var(--text-badge)', color: 'var(--color-text-secondary)',
+            }}>
+              <MicGlyph on={p.micEnabled} speaking={p.speaking} />
               {p.role === 'teacher' && <>{t.satsangTeacherLabel} · </>}
-              {p.speaking ? t.satsangSpeakingLabel : p.micEnabled ? '🎙' : t.satsangMutedLabel}
+              {p.speaking ? t.satsangSpeakingLabel : p.micEnabled ? t.satsangMicOnLabel : t.satsangMutedLabel}
             </span>
 
             {isTeacher && !p.isLocal && (
@@ -221,38 +240,73 @@ export default function SessionRoom({
         ))}
       </ul>
 
+      {/* Your own microphone, and nothing that touches anyone else. Mis-tapping
+          "Mute all" during a chant silences the whole gathering, so the room
+          controls live in their own group below rather than beside this. */}
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
         <button
           onClick={() => onAction(() => room.setMicEnabled(!me?.micEnabled))}
           disabled={busy}
           aria-pressed={Boolean(me?.micEnabled)}
-          style={button(me?.micEnabled ? 'quiet' : 'primary')}
+          style={selfMicButton(Boolean(me?.micEnabled))}
         >
+          <MicGlyph on={Boolean(me?.micEnabled)} speaking={false} />
           {me?.micEnabled ? t.satsangMuteSelf : t.satsangUnmuteSelf}
         </button>
-
-        {isTeacher && (
-          <button onClick={() => onAction(() => room.muteAll())} disabled={busy} style={button('quiet')}>
-            {t.satsangMuteAll}
-          </button>
-        )}
 
         <button onClick={onLeave} disabled={busy} style={button('quiet')}>
           {t.satsangLeave}
         </button>
-
-        {isTeacher && (
-          <button onClick={onEnd} disabled={busy} style={button('danger')}>
-            {t.satsangEnd}
-          </button>
-        )}
       </div>
 
       {isTeacher && (
-        <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '14px 0 0' }}>
-          {t.satsangTeacherHint}
-        </p>
+        <div
+          role="group"
+          aria-label={t.satsangTeacherControlsLabel}
+          style={{
+            margin: '16px 0 0',
+            padding: '14px 0 0',
+            borderTop: '1px solid var(--color-border)',
+          }}
+        >
+          <p style={{
+            fontSize: 'var(--text-badge)', fontWeight: 600,
+            color: 'var(--color-text-secondary)', margin: '0 0 10px',
+          }}>
+            {t.satsangTeacherControlsLabel}
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <button onClick={() => onAction(() => room.muteAll())} disabled={busy} style={button('quiet')}>
+              {t.satsangMuteAll}
+            </button>
+            <button onClick={onEnd} disabled={busy} style={button('danger')}>
+              {t.satsangEnd}
+            </button>
+          </div>
+          <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: '12px 0 0' }}>
+            {t.satsangTeacherHint}
+          </p>
+        </div>
       )}
     </div>
+  );
+}
+
+/**
+ * Mic on / mic off, drawn to match the stroke icons in the nav. Decorative:
+ * every row and button that carries one also spells the state out in text.
+ */
+function MicGlyph({ on, speaking }: { on: boolean; speaking: boolean }) {
+  return (
+    <svg
+      width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+      style={{ flexShrink: 0, color: speaking ? 'var(--color-gold)' : undefined }}
+    >
+      <rect x="6" y="1.75" width="4" height="7.5" rx="2" />
+      <path d="M3.5 7.25a4.5 4.5 0 0 0 9 0" />
+      <line x1="8" y1="11.75" x2="8" y2="14.25" />
+      {!on && <line x1="2.5" y1="13.5" x2="13.5" y2="2.5" />}
+    </svg>
   );
 }

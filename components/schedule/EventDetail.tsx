@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { useLang } from '@/context/LanguageContext';
@@ -49,6 +49,24 @@ export default function EventDetail({
   const cancelled = event.status === 'cancelled';
   const headline = occurrences[0] ?? event.startsAt;
   const isSatsang = event.kind === SATSANG_KIND;
+
+  /**
+   * Whether a live session is open right now. Seeded from the server-resolved
+   * state and kept current by the panel, which is already polling for it — the
+   * page needs to know because a live room reorders it (see `liveMode` below).
+   */
+  const [sessionLive, setSessionLive] = useState(Boolean(satsangState?.live));
+  const handleLiveChange = useCallback((live: boolean) => setSessionLive(live), []);
+
+  const showSatsangPanel = Boolean(isSatsang && liveAudioEnabled && satsangState && !cancelled);
+  /**
+   * The page's job changes when the room opens: from "when is it" to "you are
+   * in it". While live, the session panel leads the page and the timetable
+   * collapses to one line, so a teacher on a phone reaches the mute controls
+   * without scrolling past a month of dates. Scheduled and ended states keep
+   * the ordinary event ordering.
+   */
+  const liveMode = showSatsangPanel && sessionLive;
 
   async function handleInterest() {
     if (busy) return;
@@ -99,6 +117,18 @@ export default function EventDetail({
     cursor: 'pointer',
   };
 
+  const satsangPanel = showSatsangPanel && satsangState ? (
+    <SatsangPanel
+      eventId={event.id}
+      eventTitle={event.title}
+      initialState={satsangState}
+      isOwner={isOwner}
+      authEnabled={authEnabled}
+      cancelled={cancelled}
+      onLiveChange={handleLiveChange}
+    />
+  ) : null;
+
   return (
     <article>
       {cancelled && (
@@ -147,68 +177,84 @@ export default function EventDetail({
         </p>
       )}
 
-      <div style={{
-        background: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-        borderRadius: '12px',
-        padding: '20px',
-        margin: '0 0 24px',
-      }}>
-        <p style={{
-          fontSize: 'var(--text-card-title)', fontWeight: 600,
-          color: 'var(--color-text-primary)', margin: '0 0 6px',
-        }}>
-          {formatDateTime(headline, lang, tz)}
-        </p>
-        <p style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)', margin: '0 0 6px' }}>
-          {event.durationMinutes} {t.minutesShort}
-          {event.recurrence === 'daily' && <> · {t.repeatsDaily}</>}
-          {event.recurrence === 'weekly' && (
-            <> · {t.repeatsWeeklyOn(event.weekdays.map(d => weekdayShortName(d, lang)).join(', '))}</>
+      {/*
+        Description, timetable and live panel, reordered by `order` rather than
+        by moving them in the tree: the panel holds the polled session state and
+        the joined room, and React remounts a child that changes position, which
+        would drop both the moment a session went live.
+      */}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {/* Live-session surface. Absent entirely when the audio provider is
+            unconfigured or the event is cancelled, so a deploy without LiveKit
+            credentials renders this page exactly as it did before satsang. */}
+        <div style={{ order: liveMode ? 1 : 3 }}>{satsangPanel}</div>
+
+        <div style={{ order: liveMode ? 2 : 1 }}>
+          {event.description && (
+            <div style={{ margin: '0 0 24px' }}>
+              {event.description.split(/\n+/).map((para, i) => (
+                <p key={i} style={{
+                  fontSize: 'var(--text-body)', lineHeight: 1.7,
+                  color: 'var(--color-text-primary)', margin: '0 0 12px',
+                  overflowWrap: 'anywhere',
+                }}>
+                  {para}
+                </p>
+              ))}
+            </div>
           )}
-        </p>
-        <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: 0 }}>
-          {t.timezoneLabel}: {event.tz} · {t.shownInLocalTime}
-        </p>
-
-        {event.recurrence !== 'none' && occurrences.length > 1 && (
-          <ul style={{ listStyle: 'none', margin: '14px 0 0', padding: '14px 0 0', borderTop: '1px solid var(--color-border)' }}>
-            {occurrences.slice(1, 5).map(iso => (
-              <li key={iso} style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)', padding: '2px 0' }}>
-                {formatDateTime(iso, lang, tz)}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* Live-session surface. Absent entirely when the audio provider is
-          unconfigured or the event is cancelled, so a deploy without LiveKit
-          credentials renders this page exactly as it did before satsang. */}
-      {isSatsang && liveAudioEnabled && satsangState && !cancelled && (
-        <SatsangPanel
-          eventId={event.id}
-          eventTitle={event.title}
-          initialState={satsangState}
-          isOwner={isOwner}
-          authEnabled={authEnabled}
-          cancelled={cancelled}
-        />
-      )}
-
-      {event.description && (
-        <div style={{ margin: '0 0 28px' }}>
-          {event.description.split(/\n+/).map((para, i) => (
-            <p key={i} style={{
-              fontSize: 'var(--text-body)', lineHeight: 1.7,
-              color: 'var(--color-text-primary)', margin: '0 0 12px',
-              overflowWrap: 'anywhere',
-            }}>
-              {para}
-            </p>
-          ))}
         </div>
-      )}
+
+        <div style={{ order: liveMode ? 3 : 2 }}>
+          {liveMode ? (
+            <p style={{
+              fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)',
+              margin: '0 0 24px',
+            }}>
+              {formatDateTime(headline, lang, tz)} · {event.durationMinutes} {t.minutesShort}
+              {event.recurrence === 'daily' && <> · {t.repeatsDaily}</>}
+              {event.recurrence === 'weekly' && (
+                <> · {t.repeatsWeeklyOn(event.weekdays.map(d => weekdayShortName(d, lang)).join(', '))}</>
+              )}
+            </p>
+          ) : (
+            <div style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '12px',
+              padding: '20px',
+              margin: '0 0 24px',
+            }}>
+              <p style={{
+                fontSize: 'var(--text-card-title)', fontWeight: 600,
+                color: 'var(--color-text-primary)', margin: '0 0 6px',
+              }}>
+                {formatDateTime(headline, lang, tz)}
+              </p>
+              <p style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)', margin: '0 0 6px' }}>
+                {event.durationMinutes} {t.minutesShort}
+                {event.recurrence === 'daily' && <> · {t.repeatsDaily}</>}
+                {event.recurrence === 'weekly' && (
+                  <> · {t.repeatsWeeklyOn(event.weekdays.map(d => weekdayShortName(d, lang)).join(', '))}</>
+                )}
+              </p>
+              <p style={{ fontSize: 'var(--text-meta)', color: 'var(--color-text-secondary)', margin: 0 }}>
+                {t.timezoneLabel}: {event.tz} · {t.shownInLocalTime}
+              </p>
+
+              {event.recurrence !== 'none' && occurrences.length > 1 && (
+                <ul style={{ listStyle: 'none', margin: '14px 0 0', padding: '14px 0 0', borderTop: '1px solid var(--color-border)' }}>
+                  {occurrences.slice(1, 5).map(iso => (
+                    <li key={iso} style={{ fontSize: 'var(--text-body-sm)', color: 'var(--color-text-secondary)', padding: '2px 0' }}>
+                      {formatDateTime(iso, lang, tz)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', margin: '0 0 12px' }}>
         {authEnabled && (
