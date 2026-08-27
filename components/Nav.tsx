@@ -375,14 +375,32 @@ export default function Nav({ authEnabled = false }: { authEnabled?: boolean }) 
               aria-expanded={mobileOpen}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--color-text-primary)', fontSize: '22px',
-                padding: '4px', lineHeight: 1,
+                color: 'var(--color-text-primary)',
+                padding: '4px',
                 width: '36px', height: '36px',
                 alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              {mobileOpen ? '✕' : '☰'}
+              {/* SVG, not a ☰/✕ text glyph. Those centre on font metrics rather
+                  than their ink: ☰ has no descender, so its ink sat 3.6px below
+                  the button's centre and read as misaligned next to the search
+                  and account icons. Same 18px box and 1.6 stroke as the search
+                  icon beside it. */}
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+                {mobileOpen ? (
+                  <>
+                    <line x1="4" y1="4" x2="14" y2="14" />
+                    <line x1="14" y1="4" x2="4" y2="14" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="2.5" y1="5" x2="15.5" y2="5" />
+                    <line x1="2.5" y1="9" x2="15.5" y2="9" />
+                    <line x1="2.5" y1="13" x2="15.5" y2="13" />
+                  </>
+                )}
+              </svg>
             </button>
           </div>
         </div>
