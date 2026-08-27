@@ -1,4 +1,9 @@
 import type { Language } from './types';
+import type {
+  EnquiryDakshinaBand,
+  EnquiryDurationBand,
+  EnquiryTimingWindow,
+} from './pandit-enquiry-fields';
 
 type UiStrings = {
   // Panchangam
@@ -274,6 +279,45 @@ type UiStrings = {
   satsangConnectionLost: string;
   satsangKeepScreenOn: string;
   satsangTeacherHint: string;
+  // Pandit enquiry — the §9.1 demand test on booking-intent puja pages.
+  // Tone is bound by the PRD's banned-patterns list: no urgency, no scarcity,
+  // no suggestion that pandits are already waiting. There is no list yet and
+  // none of this copy may imply there is one.
+  panditEnquiryTitle: string;
+  panditEnquiryBody: string;
+  panditEnquiryCta: string;
+  panditEnquiryCeremonyLabel: string;
+  panditEnquiryCeremonyOther: string;
+  panditEnquiryCeremonyOtherLabel: string;
+  panditEnquiryCityLabel: string;
+  panditEnquiryLanguageLabel: string;
+  panditEnquiryLanguageOther: string;
+  panditEnquiryDateLabel: string;
+  panditEnquiryContactLabel: string;
+  panditEnquiryContactHint: string;
+  panditEnquiryNoteLabel: string;
+  panditEnquiryPrivacy: string;
+  panditEnquirySubmit: string;
+  panditEnquirySending: string;
+  panditEnquiryThanksTitle: string;
+  panditEnquiryThanksBody: string;
+  panditEnquiryErrorContact: string;
+  panditEnquiryErrorRateLimited: string;
+  panditEnquiryErrorGeneric: string;
+  panditEnquiryAreaLabel: string;
+  panditEnquiryTimeLabel: string;
+  panditEnquiryDurationLabel: string;
+  panditEnquiryTimingLabel: string;
+  // Dakshina, never "price" / "fee" / "charges" — PRD §7.2. This is what the
+  // family has in mind, not a number the platform quotes, and nothing on this
+  // site ranks or compares on it.
+  panditEnquiryDakshinaLabel: string;
+  panditEnquiryDakshinaHint: string;
+  /** The blank option on every optional select. */
+  panditEnquiryNotSure: string;
+  panditEnquiryDurationBands: Record<EnquiryDurationBand, string>;
+  panditEnquiryTimingWindows: Record<EnquiryTimingWindow, string>;
+  panditEnquiryDakshinaBands: Record<EnquiryDakshinaBand, string>;
   // Schedule: an occurrence that is happening right now (see EventOccurrence
   // .inProgress). The "Live now" badge for a running satsang reuses
   // satsangLiveNow above.
@@ -528,6 +572,61 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'The connection dropped. You can join again.',
     satsangKeepScreenOn: 'Keep this screen on while you listen — mobile browsers pause audio when the screen locks.',
     satsangTeacherHint: 'Muting someone is a request for silence, not a lock: they can unmute themselves again.',
+    // Pandit enquiry — the §9.1 demand test on booking-intent puja pages.
+    // Tone is bound by the PRD's banned-patterns list: no urgency, no scarcity,
+    // no suggestion that pandits are already waiting. There is no list yet and
+    // none of this copy may imply there is one.
+    panditEnquiryTitle: 'Looking for a pandit for this ceremony?',
+    panditEnquiryBody: 'We are putting together a small, verified list. Tell us what you need.',
+    panditEnquiryCta: 'Tell us what you need',
+    panditEnquiryCeremonyLabel: 'Ceremony',
+    panditEnquiryCeremonyOther: 'Another ceremony',
+    panditEnquiryCeremonyOtherLabel: 'Which ceremony?',
+    panditEnquiryCityLabel: 'City or town',
+    panditEnquiryLanguageLabel: 'Language for the ceremony',
+    panditEnquiryLanguageOther: 'Another language',
+    panditEnquiryDateLabel: 'Date, if you know it',
+    panditEnquiryContactLabel: 'Phone or email',
+    panditEnquiryContactHint: 'However you would like us to reach you.',
+    panditEnquiryNoteLabel: 'Anything else we should know',
+    panditEnquiryPrivacy: 'Your details are kept private and are never shown on this site.',
+    panditEnquirySubmit: 'Send',
+    panditEnquirySending: 'Sending…',
+    panditEnquiryThanksTitle: 'Thank you.',
+    panditEnquiryThanksBody: 'We do not have a list of pandits yet. We will be in touch when we have pandits for your area.',
+    panditEnquiryErrorContact: 'Please leave a phone number or an email address so we can reach you.',
+    panditEnquiryErrorRateLimited: 'You have already sent a few enquiries. Please try again a little later.',
+    panditEnquiryErrorGeneric: 'That did not go through. Please try again.',
+    panditEnquiryAreaLabel: 'Area or locality',
+    panditEnquiryTimeLabel: 'Time, if you know it',
+    panditEnquiryDurationLabel: 'How long you expect it to take',
+    panditEnquiryTimingLabel: 'When you would like it',
+    panditEnquiryDakshinaLabel: 'Dakshina you have in mind',
+    panditEnquiryDakshinaHint: 'Only so we know what to look for. Nothing is fixed here, and you would settle it directly with the pandit.',
+    panditEnquiryNotSure: 'Not sure yet',
+    panditEnquiryDurationBands: {
+      'upto-1h': 'Up to an hour',
+      '1-2h': 'One to two hours',
+      '2-4h': 'Two to four hours',
+      'half-day': 'Half a day',
+      'full-day': 'A full day',
+      'multi-day': 'More than one day',
+    },
+    panditEnquiryTimingWindows: {
+      'date-fixed': 'The date is fixed',
+      'muhurtham-pending': 'The muhurtham is not fixed yet',
+      'within-month': 'Within the next month',
+      'within-3-months': 'Within the next three months',
+      'exploring': 'Only looking into it for now',
+    },
+    panditEnquiryDakshinaBands: {
+      'upto-2100': 'Up to ₹2,100',
+      '2100-5100': '₹2,100 – ₹5,100',
+      '5100-11000': '₹5,100 – ₹11,000',
+      '11000-21000': '₹11,000 – ₹21,000',
+      'above-21000': 'Above ₹21,000',
+      'discuss': 'I would rather discuss it',
+    },
     scheduleNow: 'Now',
     scheduleInProgress: 'In progress',
   },
@@ -777,6 +876,61 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'కనెక్షన్ తెగిపోయింది. మళ్లీ చేరవచ్చు.',
     satsangKeepScreenOn: 'వినేటప్పుడు స్క్రీన్ ఆన్‌లో ఉంచండి — స్క్రీన్ లాక్ అయితే మొబైల్ బ్రావ్సర్లు ఆడియోను ఆపేస్తాయి.',
     satsangTeacherHint: 'ఎవరినైనా మ్యూట్ చేయడం మౌనం కోరడం మాత్రమే, తాళం కాదు: వారు తిరిగి మ్యూట్ తీసుకోగలరు.',
+    // Pandit enquiry — the §9.1 demand test on booking-intent puja pages.
+    // Tone is bound by the PRD's banned-patterns list: no urgency, no scarcity,
+    // no suggestion that pandits are already waiting. There is no list yet and
+    // none of this copy may imply there is one.
+    panditEnquiryTitle: 'ఈ కార్యక్రమానికి పండితుడు కావాలా?',
+    panditEnquiryBody: 'మేము ఒక చిన్న, ధృవీకరించిన జాబితాను సిద్ధం చేస్తున్నాము. మీకు ఏమి కావాలో చెప్పండి.',
+    panditEnquiryCta: 'మీకు ఏమి కావాలో చెప్పండి',
+    panditEnquiryCeremonyLabel: 'కార్యక్రమం',
+    panditEnquiryCeremonyOther: 'మరొక కార్యక్రమం',
+    panditEnquiryCeremonyOtherLabel: 'ఏ కార్యక్రమం?',
+    panditEnquiryCityLabel: 'ఊరు లేదా నగరం',
+    panditEnquiryLanguageLabel: 'కార్యక్రమానికి భాష',
+    panditEnquiryLanguageOther: 'మరొక భాష',
+    panditEnquiryDateLabel: 'తేదీ, తెలిస్తే',
+    panditEnquiryContactLabel: 'ఫోన్ లేదా ఇమెయిల్',
+    panditEnquiryContactHint: 'మిమ్మల్ని ఎలా సంప్రదించాలో ఆ వివరం ఇవ్వండి.',
+    panditEnquiryNoteLabel: 'ఇంకా ఏమైనా చెప్పాలంటే',
+    panditEnquiryPrivacy: 'మీ వివరాలు గోప్యంగా ఉంచబడతాయి, ఈ సైట్‌లో ఎక్కడా చూపబడవు.',
+    panditEnquirySubmit: 'పంపండి',
+    panditEnquirySending: 'పంపుతున్నాము…',
+    panditEnquiryThanksTitle: 'ధన్యవాదాలు.',
+    panditEnquiryThanksBody: 'మా వద్ద ఇంకా పండితుల జాబితా లేదు. మీ ప్రాంతంలో పండితులు అందుబాటులోకి వచ్చినప్పుడు మిమ్మల్ని సంప్రదిస్తాము.',
+    panditEnquiryErrorContact: 'మిమ్మల్ని సంప్రదించడానికి ఫోన్ నంబర్ లేదా ఇమెయిల్ ఇవ్వండి.',
+    panditEnquiryErrorRateLimited: 'మీరు ఇప్పటికే కొన్ని విన్నపాలు పంపారు. కొద్దిసేపటి తర్వాత ప్రయత్నించండి.',
+    panditEnquiryErrorGeneric: 'ఇది పంపబడలేదు. దయచేసి మళ్ళీ ప్రయత్నించండి.',
+    panditEnquiryAreaLabel: 'ప్రాంతం లేదా కాలనీ',
+    panditEnquiryTimeLabel: 'సమయం, తెలిస్తే',
+    panditEnquiryDurationLabel: 'ఎంత సేపు పడుతుందని అనుకుంటున్నారు',
+    panditEnquiryTimingLabel: 'ఎప్పుడు జరగాలని అనుకుంటున్నారు',
+    panditEnquiryDakshinaLabel: 'మీరు అనుకుంటున్న దక్షిణ',
+    panditEnquiryDakshinaHint: 'ఎవరిని వెతకాలో తెలుసుకోవడానికి మాత్రమే. ఇక్కడ ఏదీ నిర్ణయం కాదు, దీన్ని మీరు నేరుగా పండితుడితో మాట్లాడుకుంటారు.',
+    panditEnquiryNotSure: 'ఇంకా తెలియదు',
+    panditEnquiryDurationBands: {
+      'upto-1h': 'ఒక గంట వరకు',
+      '1-2h': 'ఒకటి నుండి రెండు గంటలు',
+      '2-4h': 'రెండు నుండి నాలుగు గంటలు',
+      'half-day': 'అర్ధ రోజు',
+      'full-day': 'పూర్తి రోజు',
+      'multi-day': 'ఒక రోజు కంటే ఎక్కువ',
+    },
+    panditEnquiryTimingWindows: {
+      'date-fixed': 'తేదీ ఖరారైంది',
+      'muhurtham-pending': 'ముహూర్తం ఇంకా ఖరారు కాలేదు',
+      'within-month': 'వచ్చే నెలలోపు',
+      'within-3-months': 'వచ్చే మూడు నెలల్లోపు',
+      'exploring': 'ప్రస్తుతానికి తెలుసుకుంటున్నాను',
+    },
+    panditEnquiryDakshinaBands: {
+      'upto-2100': '₹2,100 వరకు',
+      '2100-5100': '₹2,100 – ₹5,100',
+      '5100-11000': '₹5,100 – ₹11,000',
+      '11000-21000': '₹11,000 – ₹21,000',
+      'above-21000': '₹21,000 కంటే ఎక్కువ',
+      'discuss': 'దీని గురించి మాట్లాడుకుంటాను',
+    },
     scheduleNow: 'ఇప్పుడు',
     scheduleInProgress: 'జరుగుతోంది',
   },
@@ -1026,6 +1180,61 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'இணைப்பு துண்டிக்கப்பட்டது. மீண்டும் இணையலாம்.',
     satsangKeepScreenOn: 'கேட்கும்போது திரையை அணைக்காதீர்கள் — திரை பூட்டப்பட்டால் மொபைல் உலாவிகள் ஒலியை நிறுத்துகின்றன.',
     satsangTeacherHint: 'ஒருவரை அணைப்பது அமைதியாக இருக்க கேட்டுக்கோள், பூட்டு அல்ல: அவர்கள் மீண்டும் தாமாகவே ஒலியைத் திறக்கலாம்.',
+    // Pandit enquiry — the §9.1 demand test on booking-intent puja pages.
+    // Tone is bound by the PRD's banned-patterns list: no urgency, no scarcity,
+    // no suggestion that pandits are already waiting. There is no list yet and
+    // none of this copy may imply there is one.
+    panditEnquiryTitle: 'இந்தச் சடங்குக்குப் பண்டிதர் தேவையா?',
+    panditEnquiryBody: 'நாங்கள் ஒரு சிறிய, சரிபார்க்கப்பட்ட பட்டியலைத் தயாரித்து வருகிறோம். உங்களுக்கு என்ன தேவை என்று சொல்லுங்கள்.',
+    panditEnquiryCta: 'உங்களுக்கு என்ன தேவை என்று சொல்லுங்கள்',
+    panditEnquiryCeremonyLabel: 'சடங்கு',
+    panditEnquiryCeremonyOther: 'வேறு ஒரு சடங்கு',
+    panditEnquiryCeremonyOtherLabel: 'எந்தச் சடங்கு?',
+    panditEnquiryCityLabel: 'ஊர் அல்லது நகரம்',
+    panditEnquiryLanguageLabel: 'சடங்குக்கான மொழி',
+    panditEnquiryLanguageOther: 'வேறு ஒரு மொழி',
+    panditEnquiryDateLabel: 'தேதி, தெரிந்தால்',
+    panditEnquiryContactLabel: 'தொலைபேசி அல்லது மின்னஞ்சல்',
+    panditEnquiryContactHint: 'உங்களை எப்படித் தொடர்பு கொள்ள வேண்டும் என்பதைக் கொடுங்கள்.',
+    panditEnquiryNoteLabel: 'வேறு ஏதேனும் சொல்ல வேண்டுமா',
+    panditEnquiryPrivacy: 'உங்கள் விவரங்கள் தனிப்பட்டதாக வைக்கப்படும், இந்தத் தளத்தில் எங்கும் காட்டப்படாது.',
+    panditEnquirySubmit: 'அனுப்பு',
+    panditEnquirySending: 'அனுப்புகிறோம்…',
+    panditEnquiryThanksTitle: 'நன்றி.',
+    panditEnquiryThanksBody: 'எங்களிடம் இன்னும் பண்டிதர்கள் பட்டியல் இல்லை. உங்கள் பகுதியில் பண்டிதர்கள் கிடைக்கும்போது உங்களைத் தொடர்பு கொள்வோம்.',
+    panditEnquiryErrorContact: 'உங்களைத் தொடர்பு கொள்ள தொலைபேசி எண் அல்லது மின்னஞ்சல் முகவரியைக் கொடுங்கள்.',
+    panditEnquiryErrorRateLimited: 'நீங்கள் ஏற்கனவே சில கோரிக்கைகளை அனுப்பியுள்ளீர்கள். சிறிது நேரம் கழித்து முயற்சிக்கவும்.',
+    panditEnquiryErrorGeneric: 'இது அனுப்பப்படவில்லை. மீண்டும் முயற்சிக்கவும்.',
+    panditEnquiryAreaLabel: 'பகுதி அல்லது குடியிருப்பு',
+    panditEnquiryTimeLabel: 'நேரம், தெரிந்தால்',
+    panditEnquiryDurationLabel: 'எவ்வளவு நேரம் ஆகும் என்று நினைக்கிறீர்கள்',
+    panditEnquiryTimingLabel: 'எப்போது நடக்க வேண்டும் என்று விரும்புகிறீர்கள்',
+    panditEnquiryDakshinaLabel: 'நீங்கள் நினைத்திருக்கும் தட்சிணை',
+    panditEnquiryDakshinaHint: 'யாரைத் தேட வேண்டும் என்பதை அறியவே. இங்கு எதுவும் முடிவு செய்யப்படவில்லை, இதை நீங்கள் நேரடியாகப் பண்டிதரிடம் பேசிக் கொள்வீர்கள்.',
+    panditEnquiryNotSure: 'இன்னும் தெரியவில்லை',
+    panditEnquiryDurationBands: {
+      'upto-1h': 'ஒரு மணி நேரம் வரை',
+      '1-2h': 'ஒன்று முதல் இரண்டு மணி நேரம்',
+      '2-4h': 'இரண்டு முதல் நான்கு மணி நேரம்',
+      'half-day': 'அரை நாள்',
+      'full-day': 'ஒரு முழு நாள்',
+      'multi-day': 'ஒரு நாளுக்கு மேல்',
+    },
+    panditEnquiryTimingWindows: {
+      'date-fixed': 'தேதி முடிவாகிவிட்டது',
+      'muhurtham-pending': 'முகூர்த்தம் இன்னும் முடிவாகவில்லை',
+      'within-month': 'அடுத்த ஒரு மாதத்திற்குள்',
+      'within-3-months': 'அடுத்த மூன்று மாதங்களுக்குள்',
+      'exploring': 'இப்போதைக்கு விசாரிக்கிறேன்',
+    },
+    panditEnquiryDakshinaBands: {
+      'upto-2100': '₹2,100 வரை',
+      '2100-5100': '₹2,100 – ₹5,100',
+      '5100-11000': '₹5,100 – ₹11,000',
+      '11000-21000': '₹11,000 – ₹21,000',
+      'above-21000': '₹21,000-க்கு மேல்',
+      'discuss': 'இதைப் பற்றிப் பேசிக் கொள்கிறேன்',
+    },
     scheduleNow: 'இப்போது',
     scheduleInProgress: 'நடைபெறுகிறது',
   },
@@ -1275,6 +1484,61 @@ export const UI: Record<Language, UiStrings> = {
     satsangConnectionLost: 'संपर्क टूट गया। आप पुनः शामिल हो सकते हैं।',
     satsangKeepScreenOn: 'सुनते समय स्क्रीन चालू रखें — स्क्रीन लॉक होने पर मोबाइल ब्राउज़र ऑडियो रोक देते हैं।',
     satsangTeacherHint: 'किसी को म्यूट करना बंद ताला नहीं है: वे स्वयं पुनः अनम्यूट कर सकते हैं।',
+    // Pandit enquiry — the §9.1 demand test on booking-intent puja pages.
+    // Tone is bound by the PRD's banned-patterns list: no urgency, no scarcity,
+    // no suggestion that pandits are already waiting. There is no list yet and
+    // none of this copy may imply there is one.
+    panditEnquiryTitle: 'इस संस्कार के लिए पंडित जी चाहिए?',
+    panditEnquiryBody: 'हम एक छोटी, सत्यापित सूची तैयार कर रहे हैं। हमें बताइए आपको क्या चाहिए।',
+    panditEnquiryCta: 'हमें बताइए आपको क्या चाहिए',
+    panditEnquiryCeremonyLabel: 'संस्कार',
+    panditEnquiryCeremonyOther: 'कोई और संस्कार',
+    panditEnquiryCeremonyOtherLabel: 'कौन सा संस्कार?',
+    panditEnquiryCityLabel: 'शहर या गाँव',
+    panditEnquiryLanguageLabel: 'संस्कार की भाषा',
+    panditEnquiryLanguageOther: 'कोई और भाषा',
+    panditEnquiryDateLabel: 'तिथि, यदि पता हो',
+    panditEnquiryContactLabel: 'फ़ोन या ईमेल',
+    panditEnquiryContactHint: 'आप जिस तरह संपर्क चाहते हैं, वही लिखिए।',
+    panditEnquiryNoteLabel: 'और कुछ बताना चाहें तो',
+    panditEnquiryPrivacy: 'आपकी जानकारी निजी रखी जाती है और इस साइट पर कहीं नहीं दिखाई जाती।',
+    panditEnquirySubmit: 'भेजें',
+    panditEnquirySending: 'भेज रहे हैं…',
+    panditEnquiryThanksTitle: 'धन्यवाद।',
+    panditEnquiryThanksBody: 'हमारे पास अभी पंडितों की सूची नहीं है। जब आपके क्षेत्र में पंडित जी उपलब्ध होंगे, हम आपसे संपर्क करेंगे।',
+    panditEnquiryErrorContact: 'संपर्क के लिए फ़ोन नंबर या ईमेल पता लिखिए।',
+    panditEnquiryErrorRateLimited: 'आप पहले ही कुछ अनुरोध भेज चुके हैं। थोड़ी देर बाद प्रयास कीजिए।',
+    panditEnquiryErrorGeneric: 'यह भेजा नहीं जा सका। कृपया फिर से प्रयास कीजिए।',
+    panditEnquiryAreaLabel: 'क्षेत्र या मोहल्ला',
+    panditEnquiryTimeLabel: 'समय, यदि पता हो',
+    panditEnquiryDurationLabel: 'कितना समय लगेगा, आपके अनुमान से',
+    panditEnquiryTimingLabel: 'आप इसे कब कराना चाहते हैं',
+    panditEnquiryDakshinaLabel: 'आपके मन में जो दक्षिणा है',
+    panditEnquiryDakshinaHint: 'केवल यह जानने के लिए कि किसे खोजें। यहाँ कुछ भी तय नहीं होता, यह आप सीधे पंडित जी से तय करेंगे।',
+    panditEnquiryNotSure: 'अभी पता नहीं',
+    panditEnquiryDurationBands: {
+      'upto-1h': 'एक घंटे तक',
+      '1-2h': 'एक से दो घंटे',
+      '2-4h': 'दो से चार घंटे',
+      'half-day': 'आधा दिन',
+      'full-day': 'पूरा दिन',
+      'multi-day': 'एक दिन से अधिक',
+    },
+    panditEnquiryTimingWindows: {
+      'date-fixed': 'तिथि तय है',
+      'muhurtham-pending': 'मुहूर्त अभी तय नहीं हुआ',
+      'within-month': 'अगले एक महीने में',
+      'within-3-months': 'अगले तीन महीनों में',
+      'exploring': 'फ़िलहाल केवल जानकारी ले रहे हैं',
+    },
+    panditEnquiryDakshinaBands: {
+      'upto-2100': '₹2,100 तक',
+      '2100-5100': '₹2,100 – ₹5,100',
+      '5100-11000': '₹5,100 – ₹11,000',
+      '11000-21000': '₹11,000 – ₹21,000',
+      'above-21000': '₹21,000 से अधिक',
+      'discuss': 'इस पर बात कर लेंगे',
+    },
     scheduleNow: 'अभी',
     scheduleInProgress: 'चल रहा है',
   },

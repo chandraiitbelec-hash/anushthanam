@@ -6,6 +6,8 @@ import { localize } from '@/lib/localize';
 import { UI } from '@/lib/ui-strings';
 import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
+import PanditEnquiryBlock from '@/components/pandit/PanditEnquiryBlock';
+import { getEnquiryPlacement } from '@/lib/pandit-enquiry-placement';
 import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
@@ -40,9 +42,12 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
   const puja = rows.map(rowToPuja).find(p => p.slug === slug);
   if (!puja) notFound();
 
-  const [steps, materials] = await Promise.all([
+  const [steps, materials, enquiryPlacement] = await Promise.all([
     getProcedureSteps(slug).catch(emptyOnError(TABS.procedure_steps, 'pujas/[slug]', [])),
     getMaterialItems(slug).catch(emptyOnError(TABS.material_items, 'pujas/[slug]', [])),
+    // Null on every page that isn't a booking-intent one, and on any Sheets
+    // failure — the demand test never costs the reference content a render.
+    getEnquiryPlacement(puja).catch(emptyOnError(TABS.occasions, 'pujas/[slug]', null)),
   ]);
 
   const jsonLd = {
@@ -77,6 +82,11 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
         { label: puja.title_en, labels: { te: puja.title_te, ta: puja.title_ta, hi: puja.title_hi } },
       ]} />
       <PujaProfile puja={puja} steps={steps} materials={materials} />
+      {/* Below the procedure, never above it: the vidhi stays complete and
+          ungated, and this is an offer the reader can ignore. See §9.1. */}
+      {enquiryPlacement && (
+        <PanditEnquiryBlock placement={enquiryPlacement} sourcePujaSlug={slug} />
+      )}
     </div>
   );
 }

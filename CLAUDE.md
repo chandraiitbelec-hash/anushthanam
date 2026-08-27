@@ -451,6 +451,87 @@ broken page.
 mutes, recording, reminders and push, community gating, per-occurrence
 recurrence edits, native apps, payments.
 
+### Pandit enquiries (the demand test)
+
+A quiet enquiry form on the highest-intent puja pages, and nothing else. This
+is `research/pandit-marketplace-prd-2026-08.md` §9.1's **demand test**: before
+any marketplace is built, find out whether real booking demand exists. It is a
+measuring instrument with a deliberate two-day budget, not the first slice of
+a product — **no profiles, no listings, no matching, no reply path.** If the
+answer comes back "no", the table, the route and the block are deleted and
+nothing else has been spent.
+
+**Placement is the experiment's design.** The site has no `/occasions/[slug]`
+route, so the block rides on puja detail pages, chosen by a derived rule in
+`lib/pandit-enquiry-placement.ts`:
+
+> a puja carries the block when it is mapped to at least one life-event
+> occasion **and** is not `frequent`.
+
+The occasion mapping is what makes a puja something a family hires a pandit
+for; `frequent=FALSE` excludes the daily and festival worship those same
+occasions also list (Vinayaka Puja is mapped to seven occasions *and* is what
+a family does at home on a Tuesday). Putting the block there would bury a
+small signal under a large volume of unrelated traffic — the one measurement
+error this test cannot afford. Against the current catalogue it selects five
+pages: satyanarayana-puja, navagraha-puja, vastu-puja, gauri-puja,
+kubera-puja. **Aksharabhyasam has no eligible page** (both its pujas are
+frequent ones) — a known gap, not an oversight.
+
+**Signing in is deliberately not required.** Every other write on this site
+needs a session; this one must not, because a demand test gated behind Google
+sign-in measures willingness to sign in rather than demand for a pandit, and
+the number it produces is the whole deliverable. A session, when present, only
+attributes the row (`user_id`) and prefills the contact field.
+
+**Tone is bound by the PRD's §7.1 banned-patterns list**, which is a review
+checklist, not a preference: no urgency, no countdown, no "limited", no count
+of pandits, nothing implying anyone is waiting. One bordered card in the page
+flow, below the procedure — no modal, no sticky bar, and the vidhi above it
+stays complete and ungated. The card is collapsed to a heading and one button
+until asked for. The confirmation says plainly that there is no list yet.
+
+The **dakshina band** is the one field §7.2 bears on directly: the family
+picks what *they* have in mind, the platform never quotes; the word is
+dakshina, never price/fee/charges; figures are shagun-shaped (2,100 / 5,100 /
+11,000 / 21,000), never round retail numbers; there is no "starting from"; and
+nothing ranks, sorts or compares on it. "I would rather discuss it" is a
+first-class answer. The bands are rupee amounts — an assumption about the
+audience, not a fact about the platform. `city` is free text with no list and
+no default for the same reason: where enquiries come from is part of what is
+being measured, so nothing may prime a metro.
+
+**Schema** (`db/migrations/0004_create_pandit_enquiries.sql` +
+`0005_pandit_enquiry_details.sql`; RLS on with zero policies like 0001–0003).
+Only ceremony, city and contact are required — a test that will not accept a
+half-answered enquiry measures form-filling stamina. `ceremony_slug` (a puja
+*or* occasion slug) xor `ceremony_other` free text; `source_puja_slug` records
+which page earned the intent, which is the more useful of the two;
+`timing_window` carries the case a date field cannot (`muhurtham-pending`) and
+the one the §9.1 threshold turns on (`exploring` vs real intent).
+
+**PRIVACY.** `contact` is personal data and lives only in Postgres: no page
+reads this table, nothing is ever logged with the payload, and RLS is what
+stops Supabase's public `anon` key reading it over PostgREST. `ip_hash` is a
+salted SHA-256 (salt: `AUTH_SECRET`), never the address — it exists solely for
+the rate limit. `area` and `note` are treated the same as `contact`. The full
+note lives at the top of migration 0004; read it before adding any consumer.
+
+**Abuse resistance is deliberately light** — a honeypot field and a per-hash
+limit of 3 submissions/hour (`ENQUIRY_RATE_LIMIT`), counted in SQL so it works
+across serverless instances. Neither is a security boundary; there is nothing
+here worth attacking beyond wasting the owner's reading time.
+
+**Files.** `lib/pandit-enquiry-fields.ts` (import-free client-safe vocabulary
+— same constraint and reason as `lib/event-kinds.ts`) · `lib/pandit-enquiry.ts`
+(server data access, validation, IP hashing) · `lib/pandit-enquiry-placement.ts`
+(the placement rule and the ceremony catalogue; the route re-derives the
+allowed slugs rather than trusting the client) · `app/api/pandit-enquiry/route.ts`
+(Node runtime) · `components/pandit/PanditEnquiryBlock.tsx` ·
+`scripts/list-pandit-enquiries.mjs` (read-only; `--summary` prints counts with
+no personal data). **The read path is that script and only that script** —
+there is no admin UI on purpose.
+
 ### scripts/ conventions
 
 - `scripts/lib-sheets.mjs` is the shared helper module for one-off content scripts: `loadEnv()` (auto-loads `.env.local` relative to the script's own directory, so cwd doesn't matter), `getSheetsClient()` (memoized), `parseWriteFlag(argv)`, and `getTabWithHeaders(tab)` returning `{ headers, rows, col }`.
@@ -460,6 +541,7 @@ recurrence edits, native apps, payments.
 - See `STOTRA_UPLOAD_PIPELINE.md` for the conventions specific to adding a new stotra/shloka's content end-to-end.
 - **`scripts/check-content-health.mjs`** is the pre-deploy check: read-only (no `--write` mode), it verifies against the live Sheet that every tab's header row has the columns the app reads (hardcoded `EXPECTED_COLUMNS`, derived from the `rowTo*` mappers in `lib/relations.ts` — update it when a mapper changes), warns on 0 published rows for tabs that should never be empty (`gods`, `shlokas`, `pujas`, `festivals`, `vrathams`), and warns on `festivals`/`vrathams` `next_occurrence` values that aren't `YYYY-MM-DD`. Exits 1 only on a missing header; run it before "Publish to site".
 - **`scripts/migrate.mjs`** applies `db/migrations/*.sql` to `DATABASE_URL`, tracking applied filenames in a `schema_migrations` table. Dry-run by default like the Sheets scripts; `--write` applies. Each migration runs in its own transaction. New schema changes go in a new numbered `.sql` file — never edit an already-applied one.
+- **`scripts/list-pandit-enquiries.mjs`** is read-only (no `--write` mode, no UPDATE/DELETE anywhere in it): it prints demand-test enquiries newest-first (`--days N`, `--all`), and `--summary` prints counts only, with no personal data. Its plain output contains phone numbers and email addresses — see the Pandit enquiries section.
 - **`scripts/report-translation-coverage.mjs`** is read-only (no `--write` mode): it auto-detects `*_en`/`_te`/`_ta`/`_hi` field groups from the live header row of each content tab and reports per-language fill rates against published rows; `--verbose` lists the slugs missing each language.
 
 ### Environment variables

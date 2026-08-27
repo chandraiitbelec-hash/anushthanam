@@ -330,6 +330,19 @@ export async function resolveOccasionPujas(occasionSlug: string): Promise<Puja[]
     .map(rowToPuja);
 }
 
+// Returns the published occasions a puja is mapped to, in the occasions tab's
+// own display order. The inverse of resolveOccasionPujas().
+export async function getPujaOccasions(pujaSlug: string): Promise<Occasion[]> {
+  const [joinRows, occasions] = await Promise.all([
+    getSheetRows(TABS.puja_occasions),
+    getOccasions(),
+  ]);
+  const mapped = new Set(
+    joinRows.filter(r => r.puja_slug === pujaSlug).map(r => r.occasion_slug)
+  );
+  return occasions.filter(o => mapped.has(o.slug));
+}
+
 // Returns occasionSlug → ordered Puja[] for ALL occasions in one fetch.
 // Used by /pujas list page to hydrate PujasBrowser without N+1 calls.
 export async function getAllOccasionPujas(): Promise<Record<string, Puja[]>> {
