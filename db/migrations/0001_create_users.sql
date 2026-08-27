@@ -21,3 +21,13 @@ CREATE TABLE IF NOT EXISTS users (
 -- This index is for the other direction: finding an account by email, which is
 -- what any "who is this person" support lookup starts from.
 CREATE INDEX IF NOT EXISTS users_email_idx ON users (email);
+
+-- Supabase exposes every table in `public` over PostgREST to the `anon` role,
+-- and the anon key is public by design. Tables created via raw SQL do not get
+-- RLS enabled automatically, so without this a request to /rest/v1/users would
+-- return every row — including email addresses.
+--
+-- No policies are defined, so RLS denies everything by default. The app is
+-- unaffected: it connects as the table owner, which bypasses RLS. On a plain
+-- Postgres (Neon, local) this is a harmless no-op for the same reason.
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;

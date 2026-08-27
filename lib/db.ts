@@ -1,4 +1,5 @@
 import { Pool, type QueryResultRow } from 'pg';
+import { SUPABASE_CA, isSupabaseHost } from './supabase-ca.mjs';
 
 /**
  * Postgres access layer. This is the first feature on the site that needs real
@@ -17,10 +18,30 @@ export const isDbConfigured = Boolean(connectionString);
 
 let pool: Pool | null = null;
 
-function needsSsl(url: string): boolean {
-  if (/sslmode=disable/.test(url)) return false;
-  // Local Postgres generally has no TLS; hosted (Neon/Vercel Postgres) always does.
-  return !/@(localhost|127\.0\.0\.1)[:/]/.test(url);
+type SslConfig = { rejectUnauthorized: boolean; ca?: string };
+
+/**
+ * TLS settings for the target host, always with verification ON.
+ *
+ * Most hosted Postgres (Neon, Vercel Postgres) uses a publicly-trusted CA and
+ * needs nothing but `rejectUnauthorized`. Supabase runs its own private CA, so
+ * its root has to be supplied explicitly — see lib/supabase-ca.mjs. Local
+ * Postgres generally has no TLS at all.
+ */
+function sslFor(url: string): SslConfig | undefined {
+  if (/sslmode=disable/.test(url)) return undefined;
+
+  let hostname: string;
+  try {
+    hostname = new URL(url).hostname;
+  } catch {
+    // Unparseable URL: fall back to verified TLS and let the driver complain.
+    return { rejectUnauthorized: true };
+  }
+
+  if (hostname === 'localhost' || hostname === '127.0.0.1') return undefined;
+  if (isSupabaseHost(hostname)) return { rejectUnauthorized: true, ca: SUPABASE_CA };
+  return { rejectUnauthorized: true };
 }
 
 /**
@@ -36,7 +57,7 @@ function getPool(): Pool {
   if (!pool) {
     pool = new Pool({
       connectionString,
-      ssl: needsSsl(connectionString) ? { rejectUnauthorized: true } : undefined,
+      ssl: sslFor(connectionString),
       max: 3,
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 5_000,

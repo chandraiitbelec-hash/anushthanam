@@ -13,7 +13,7 @@ GitHub: https://github.com/chandraiitbelec-hash/anushthanam
 - **Frontend:** Next.js 16.2.9 (App Router), React 19.2.4, TypeScript. Styling is inline styles + CSS variables (`@theme` tokens in `app/globals.css`); Tailwind v4 is present only for base/preflight, not as the component-styling method. Builds run on Turbopack (Next 16's default build engine — no opt-in config needed).
 - **CMS:** Google Sheets (structured data) + Google Docs (legacy long-form prose) + a Sheets tab (`stories_content`) for current story bodies
 - **Search:** Client-side Fuse.js over `public/search-index.json` (built at `prebuild` time, before `next build`)
-- **Accounts:** Auth.js (next-auth v5) with Google as the only provider, JWT sessions; a minimal `users` table on Vercel Postgres (Neon) reached through `pg` — see Accounts / Auth below
+- **Accounts:** Auth.js (next-auth v5) with Google as the only provider, JWT sessions; a minimal `users` table on Supabase Postgres reached through `pg` — see Accounts / Auth below
 - **Deployment:** Vercel with static generation + ISR (`revalidate = 3600`) + manual deploy hook triggered from Sheets Apps Script
   - **NEVER run `vercel` or deploy to Vercel directly.** Always push to GitHub; the user manages Vercel from there.
 
@@ -168,9 +168,12 @@ to be obviously correct.
 - **JWT session strategy.** The signed cookie carries the identity, so rendering
   a page never queries Postgres to know who's asking. No session table, no
   adapter.
-- **Vercel Postgres (Neon) via `pg`.** The first feature on the site needing real
+- **Supabase Postgres via `pg`.** The first feature on the site needing real
   persistent storage. One table, hand-written SQL, no ORM — reach for a query
-  builder when that stops being true, not before.
+  builder when that stops being true, not before. `@supabase/supabase-js` is
+  deliberately **not** installed: that client is PostgREST-over-HTTP built around
+  RLS and anon keys, which only makes sense if Supabase is also the auth
+  provider. It isn't; Auth.js is. Connect over plain Postgres.
 
 **Files**
 
@@ -182,6 +185,33 @@ to be obviously correct.
 | `lib/db.ts` / `lib/users.ts` | Connection pool and the single `users` writer |
 | `db/migrations/*.sql` + `scripts/migrate.mjs` | Schema, and the runner that applies it |
 | `components/AuthProvider.tsx` / `components/AuthControl.tsx` | Client session provider, and the nav sign-in/account control |
+
+**Supabase specifics (learned the hard way — don't undo these)**
+
+- **TLS needs Supabase's private root CA.** Supabase does not use a publicly
+  trusted CA for Postgres: the pooler presents a chain rooted in a self-signed
+  `Supabase Root 2021 CA`, so Node fails with `SELF_SIGNED_CERT_IN_CHAIN`
+  against the system trust store. `lib/supabase-ca.mjs` inlines that root and
+  `sslFor()` in `lib/db.ts` supplies it for `*.supabase.com/.co` hosts with
+  verification still on. **Never "fix" a TLS error here with
+  `rejectUnauthorized: false`** — that accepts any certificate and hands a
+  network attacker the users table. The CA is inlined rather than read from a
+  `.pem` so it survives Next's server bundling with no file-tracing config.
+  It expires 2031-04-26.
+- **Use the transaction pooler** (`...pooler.supabase.com:6543`), not the direct
+  `db.<ref>.supabase.co:5432` endpoint, which is IPv6-only without a paid add-on
+  and doesn't pool. Transaction mode forbids *named* prepared statements; `pg`
+  only issues unnamed ones here, so `query()` is compatible as written.
+- **RLS is on with zero policies**, which denies everything to the `anon` role.
+  Supabase exposes `public` tables over PostgREST and the anon key is public, so
+  a `users` table full of emails must not be reachable that way. The app is
+  unaffected because it connects as the table owner, which bypasses RLS.
+- **Supabase provisions its own `auth.users`** in the `auth` schema even though
+  Supabase Auth is unused. Ours is always `public.users` — two tables named
+  `users` in one database is an easy trap.
+- Supavisor drops idle connections, so the `pool.on('error')` handler in
+  `lib/db.ts` is load-bearing, not boilerplate: without it an idle-client
+  `ETIMEDOUT` becomes an unhandled event that kills the process.
 
 **Schema (`users`)**
 
@@ -212,7 +242,8 @@ returning user keeps the same `id`.
   and the site behaves exactly as it did before accounts existed. Local dev and
   preview deploys without credentials are unaffected.
 - Missing `DATABASE_URL` → sign-in works, no row is written, `accountId` is
-  undefined.
+  undefined. This is a supported state, not a broken one — the site ran that way
+  in production before Supabase was linked.
 - Postgres reachable but the write fails → logged as `AUTH ERROR` and sign-in
   still proceeds. Login gates nothing today, so blocking entry on a transient DB
   blip would be the worse failure. Revisit this when something actually depends

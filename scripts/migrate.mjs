@@ -17,6 +17,7 @@ import { readFileSync, readdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import pg from 'pg';
+import { SUPABASE_CA, isSupabaseHost } from '../lib/supabase-ca.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: resolve(__dirname, '../.env.local') });
@@ -30,12 +31,18 @@ if (!connectionString) {
   process.exit(1);
 }
 
-const client = new pg.Client({
-  connectionString,
-  ssl: /sslmode=disable/.test(connectionString) || /@(localhost|127\.0\.0\.1)[:/]/.test(connectionString)
-    ? undefined
-    : { rejectUnauthorized: true },
-});
+// Mirrors sslFor() in lib/db.ts — verification stays on; Supabase's private
+// root CA is supplied explicitly because it isn't publicly trusted.
+function sslFor(url) {
+  if (/sslmode=disable/.test(url)) return undefined;
+  let hostname;
+  try { hostname = new URL(url).hostname; } catch { return { rejectUnauthorized: true }; }
+  if (hostname === 'localhost' || hostname === '127.0.0.1') return undefined;
+  if (isSupabaseHost(hostname)) return { rejectUnauthorized: true, ca: SUPABASE_CA };
+  return { rejectUnauthorized: true };
+}
+
+const client = new pg.Client({ connectionString, ssl: sslFor(connectionString) });
 
 await client.connect();
 
