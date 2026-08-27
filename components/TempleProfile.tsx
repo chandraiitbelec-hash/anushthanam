@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useLang } from '@/context/LanguageContext';
 import { UI } from '@/lib/ui-strings';
 import { localize, localizeLang } from '@/lib/localize';
@@ -76,6 +77,53 @@ export default function TempleProfile({ temple, deities, liveStream }: Props) {
 
   return (
     <>
+      {temple.hero_image_url && (
+        // Photo credit is rendered, not optional: every hero here is a
+        // Wikimedia Commons file and most are CC BY-SA, which requires the
+        // credit to appear wherever the photo does. The attribution string
+        // already names the photographer and the licence, so it needs no
+        // translated label of its own.
+        <figure style={{ margin: '0 0 24px' }}>
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            aspectRatio: '16 / 9',
+            borderRadius: '10px',
+            overflow: 'hidden',
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+          }}>
+            <Image
+              src={temple.hero_image_url}
+              alt={temple.name_en}
+              fill
+              priority
+              sizes="(max-width: 800px) 100vw, 800px"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
+          {temple.hero_image_attribution && (
+            <figcaption style={{
+              fontSize: 'var(--text-badge)',
+              color: 'var(--color-text-secondary)',
+              margin: '6px 2px 0',
+              lineHeight: 1.5,
+            }}>
+              {temple.hero_image_source_url ? (
+                <a
+                  href={temple.hero_image_source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'inherit', textDecoration: 'none', borderBottom: '1px solid var(--color-border)' }}
+                >
+                  {temple.hero_image_attribution}
+                </a>
+              ) : temple.hero_image_attribution}
+            </figcaption>
+          )}
+        </figure>
+      )}
+
       <div style={{ marginBottom: '32px' }}>
         <h1 className={nameClass} lang={nameLang} style={{
           fontFamily: nameLang === 'en' ? 'var(--font-display)' : undefined,
@@ -120,7 +168,7 @@ export default function TempleProfile({ temple, deities, liveStream }: Props) {
       {liveStream && (
         <section id="section-live" style={{ marginBottom: '32px', scrollMarginTop: 'var(--section-anchor-offset)' }}>
           <SectionHeading>{UI[lang].liveDarshan}</SectionHeading>
-          <LiveStreamCard stream={liveStream} deity={deities[0]} hideIdentity />
+          <LiveStreamCard stream={liveStream} temple={temple} deity={deities[0]} hideIdentity />
         </section>
       )}
 

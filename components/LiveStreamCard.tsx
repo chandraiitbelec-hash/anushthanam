@@ -74,7 +74,10 @@ export default function LiveStreamCard({ stream, temple, deity, hideIdentity }: 
         videoId={stream.youtube_video_id}
         title={templeName}
         watchLiveLabel={UI[lang].watchLive}
-        posterUrl={stream.hero_image_url || undefined}
+        // A stream may carry its own poster; otherwise the temple's hero photo
+        // stands in, so a live-darshan card never falls back to YouTube's
+        // auto-generated thumbnail just because the stream row is unfilled.
+        posterUrl={stream.hero_image_url || temple?.hero_image_url || undefined}
         overlay={
           (stream.featured || deityName) && (
             <>

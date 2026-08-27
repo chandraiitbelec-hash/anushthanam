@@ -305,6 +305,16 @@ export type Temple = {
   location_ta: string;
   location_hi: string;
   official_website_url: string;
+  // Hero photo, always a freely-licensed Wikimedia Commons file stored as its
+  // stable upload.wikimedia.org URL. Blank is a supported state — a temple with
+  // no acceptable free photo renders without one rather than with a wrong or
+  // hotlinked image. The licence/attribution pair travels with the URL because
+  // CC BY-SA credit has to be displayed wherever the photo is.
+  hero_image_url: string;
+  hero_image_license: string;
+  hero_image_attribution: string;
+  // Commons file-description page — the canonical licence record for the photo.
+  hero_image_source_url: string;
   display_order: number;
   status: Status;
   translation_status: TranslationStatus;

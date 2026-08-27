@@ -111,7 +111,9 @@ const EXPECTED_COLUMNS = {
     'history_en', 'history_te', 'history_ta', 'history_hi',
     'significance_en', 'significance_te', 'significance_ta', 'significance_hi',
     'location_en', 'location_te', 'location_ta', 'location_hi',
-    'official_website_url', 'display_order', 'status', 'translation_status',
+    'official_website_url',
+    'hero_image_url', 'hero_image_license', 'hero_image_attribution', 'hero_image_source_url',
+    'display_order', 'status', 'translation_status',
   ],
 };
 

@@ -118,7 +118,7 @@ On Vercel/CI (`process.env.VERCEL || process.env.CI`), missing `GOOGLE_SERVICE_A
 
 ### Google Sheets tabs
 
-`gods`, `shlokas`, `shloka_stanzas`, `pujas`, `festivals`, `vrathams`, `stories_index`, `stories_content`, `god_links`, `procedure_steps`, `material_items`, `panchangam`, `config`, `occasions`, `puja_occasions`
+`gods`, `shlokas`, `shloka_stanzas`, `pujas`, `festivals`, `vrathams`, `stories_index`, `stories_content`, `god_links`, `procedure_steps`, `material_items`, `panchangam`, `config`, `occasions`, `puja_occasions`, `temples`, `live_streams`
 
 (`tags` was previously listed here but has no current code references — treat as legacy/unused unless you find a new consumer.)
 
@@ -532,6 +532,45 @@ allowed slugs rather than trusting the client) · `app/api/pandit-enquiry/route.
 no personal data). **The read path is that script and only that script** —
 there is no admin UI on purpose.
 
+### Temple hero images
+
+Each `temples` row carries a hero photo in four columns — `hero_image_url`,
+`hero_image_license`, `hero_image_attribution`, `hero_image_source_url` — and
+`live_streams.hero_image_url` mirrors it for the matching stream's video
+poster. `Temple.hero_image_*` on the type, `rowToTemple` in `lib/relations.ts`,
+and `EXPECTED_COLUMNS.temples` in `check-content-health.mjs` all have to move
+together when these change.
+
+**Every image is a freely-licensed Wikimedia Commons file, stored as its stable
+`upload.wikimedia.org` URL.** That is a hard rule, not a default: no scraping
+temple websites, no hotlinking hosts we don't control, nothing whose licence
+isn't recorded. `scripts/set-temple-heroes.mjs` re-checks both the host and the
+licence at write time and refuses anything else, so the rule survives a careless
+re-run of the sourcing pass. `next.config.ts` allowlists exactly that one
+hostname for `next/image`.
+
+**Blank is a supported, deliberate state.** 11 of the 72 temples have no hero
+because no acceptable free photo exists — the Commons category is empty, or
+holds only interiors, crowds, deity statues, scenery, or (for Ram Janmabhoomi)
+Durga Puja pandal replicas. The list card and the detail page both render
+correctly without one. A missing photo degrades fine; a photo of the wrong
+temple does not, so leave it blank rather than reaching.
+
+**Attribution is rendered, not just recorded.** Most of these are CC BY-SA, so
+`TempleProfile` prints the attribution string under the hero as a `<figcaption>`
+linking to the Commons file page. The stored string already names the
+photographer and the licence, which is why it needs no translated label in
+`lib/ui-strings.ts`.
+
+Sourcing notes and the full per-temple candidate record live in
+`research/temple-hero-images.json` (gitignored). Two traps that cost a pass
+each, if this is ever redone: taking images from a Wikipedia article's whole
+image set pulls in navbox photos of *other* temples (source only from the
+article's own lead image and the temple's Wikidata `P373` Commons category),
+and article-title search happily resolves to a similarly-named different temple
+(Saptashrungi→Chaturshringi, Gangotri→Kedarnath, Tiruchendur→Thiruparankundram)
+— the picks have to be checked by eye, not by filename.
+
 ### scripts/ conventions
 
 - `scripts/lib-sheets.mjs` is the shared helper module for one-off content scripts: `loadEnv()` (auto-loads `.env.local` relative to the script's own directory, so cwd doesn't matter), `getSheetsClient()` (memoized), `parseWriteFlag(argv)`, and `getTabWithHeaders(tab)` returning `{ headers, rows, col }`.
@@ -540,6 +579,7 @@ there is no admin UI on purpose.
 - `scripts/archive/` holds retired one-off scripts (batch fixes, past migrations) kept for reference — don't build on top of them, and new one-off scripts that are fully spent should move there rather than staying in the active `scripts/` root.
 - See `STOTRA_UPLOAD_PIPELINE.md` for the conventions specific to adding a new stotra/shloka's content end-to-end.
 - **`scripts/check-content-health.mjs`** is the pre-deploy check: read-only (no `--write` mode), it verifies against the live Sheet that every tab's header row has the columns the app reads (hardcoded `EXPECTED_COLUMNS`, derived from the `rowTo*` mappers in `lib/relations.ts` — update it when a mapper changes), warns on 0 published rows for tabs that should never be empty (`gods`, `shlokas`, `pujas`, `festivals`, `vrathams`), and warns on `festivals`/`vrathams` `next_occurrence` values that aren't `YYYY-MM-DD`. Exits 1 only on a missing header; run it before "Publish to site".
+- **`scripts/set-temple-heroes.mjs`** writes the hero columns onto `temples` (adding them to the header row if absent) and mirrors the URL onto `live_streams`, from `research/temple-hero-images.json`. Dry-run by default; `--write` applies; `--force` also overwrites non-empty hero cells, which is the only way to clobber a hand-picked replacement made in the Sheet. It rejects any entry whose image is not on `upload.wikimedia.org` or whose licence is not on its free-licence allowlist — see Temple hero images above.
 - **`scripts/migrate.mjs`** applies `db/migrations/*.sql` to `DATABASE_URL`, tracking applied filenames in a `schema_migrations` table. Dry-run by default like the Sheets scripts; `--write` applies. Each migration runs in its own transaction. New schema changes go in a new numbered `.sql` file — never edit an already-applied one.
 - **`scripts/list-pandit-enquiries.mjs`** is read-only (no `--write` mode, no UPDATE/DELETE anywhere in it): it prints demand-test enquiries newest-first (`--days N`, `--all`), and `--summary` prints counts only, with no personal data. Its plain output contains phone numbers and email addresses — see the Pandit enquiries section.
 - **`scripts/report-translation-coverage.mjs`** is read-only (no `--write` mode): it auto-detects `*_en`/`_te`/`_ta`/`_hi` field groups from the live header row of each content tab and reports per-language fill rates against published rows; `--verbose` lists the slugs missing each language.
