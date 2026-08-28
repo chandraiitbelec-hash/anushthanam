@@ -1,19 +1,24 @@
-import { getOccasions, getPujaOccasions, rowToPuja } from './relations';
+import { getAllOccasionPujas, getOccasions, getPujaOccasions, rowToPuja } from './relations';
 import { getPublished } from './sheets';
 import { TABS } from './tabs';
-import { CEREMONY_OTHER } from './pandit-enquiry-fields';
+import {
+  CEREMONY_OTHER,
+  parseEnquirySource,
+  type EnquirySource,
+} from './pandit-enquiry-fields';
+import type { EnquiryOrigin } from './pandit-enquiry';
 import type { Puja } from './types';
 
 /**
- * Where the pandit enquiry block appears, and what its ceremony dropdown
- * offers. Server-only (it reads Sheets) but touches no database — the write
- * side is lib/pandit-enquiry.ts.
+ * Where the pandit enquiry form appears, what its ceremony dropdown offers,
+ * and how a submission's entry point is resolved. Server-only (it reads
+ * Sheets) but touches no database — the write side is lib/pandit-enquiry.ts.
  *
  * **The placement rule is the experiment's design, not a detail.** §9.1 asks
  * for the block on "the three or four highest-intent occasion pages". The site
  * has no /occasions/[slug] route — occasions exist only as the accordion on
- * /pujas — so the corresponding puja detail pages carry it instead, and which
- * ones is derived rather than hardcoded:
+ * /pujas — so the corresponding puja detail pages carry it, and which ones is
+ * derived rather than hardcoded:
  *
  *   a puja is a booking-intent page when it is mapped to at least one
  *   life-event occasion AND is not marked `frequent`.
@@ -30,6 +35,12 @@ import type { Puja } from './types';
  * puja, navagraha-puja, vastu-puja, gauri-puja and kubera-puja. Aksharabhyasam
  * has no eligible page, because both pujas mapped to it are frequent ones —
  * see the note in the handover; it is a known gap, not an oversight.
+ *
+ * **Those five pages are no longer the only way in.** They proved too hidden
+ * to measure anything, so /find-a-pandit hosts the same form as a linkable
+ * page and the /pujas occasion accordion points at it. Every entry point
+ * records itself distinctly — see EnquirySource — because which one earns the
+ * enquiries is a large part of what §9.1 is for.
  */
 
 /** One choice in the ceremony dropdown. Shaped for localize(_, 'title', lang). */
@@ -42,9 +53,9 @@ export type CeremonyOption = {
 };
 
 export type EnquiryPlacement = {
-  /** Prefilled selection: the puja whose page this is. */
+  /** Prefilled selection. Always one of `options`. */
   defaultSlug: string;
-  /** The puja first, then every published occasion. '__other__' is added by the form. */
+  /** The ceremonies this entry point offers. '__other__' is added by the form. */
   options: CeremonyOption[];
 };
 
@@ -85,19 +96,110 @@ export async function getEnquiryPlacement(puja: Puja): Promise<EnquiryPlacement 
 }
 
 /**
- * The catalogue slugs a submission from `sourcePujaSlug` is allowed to name.
- * The route re-derives this rather than trusting the client, so a crafted POST
- * cannot file an enquiry against a ceremony that was never offered. Returns an
- * empty set when the source page is not one that carries the block, which
- * makes every ceremony slug invalid and rejects the submission.
+ * Every puja that carries the block, by the rule above. One bulk read rather
+ * than getPujaOccasions() per puja.
  */
-export async function getAllowedCeremonySlugs(sourcePujaSlug: string): Promise<Set<string>> {
-  const rows = await getPublished(TABS.pujas);
-  const puja = rows.map(rowToPuja).find(p => p.slug === sourcePujaSlug);
-  if (!puja) return new Set();
+async function getBookingIntentPujas(): Promise<Puja[]> {
+  const [occasionPujas, pujaRows] = await Promise.all([
+    getAllOccasionPujas(),
+    getPublished(TABS.pujas),
+  ]);
+  const mapped = new Set(Object.values(occasionPujas).flat().map(p => p.slug));
+  return pujaRows
+    .map(rowToPuja)
+    .filter(p => mapped.has(p.slug) && !p.frequent);
+}
 
-  const placement = await getEnquiryPlacement(puja);
-  if (!placement) return new Set();
+/**
+ * The full ceremony catalogue, for the entry points that are not anchored to
+ * one puja page: occasions first, then the booking-intent pujas.
+ *
+ * Occasions lead because the standalone page is reached by someone who has a
+ * life event to arrange, not a puja page to read — "housewarming" is the shape
+ * of what they came to say. The pujas follow rather than being dropped, so a
+ * visitor who does think in terms of a named puja is not forced into "another
+ * ceremony".
+ */
+async function getCatalogueOptions(): Promise<CeremonyOption[]> {
+  const [occasions, pujas] = await Promise.all([
+    getOccasions(),
+    getBookingIntentPujas(),
+  ]);
+  const seen = new Set(occasions.map(o => o.slug));
+  return [
+    ...occasions.map(toOption),
+    ...pujas.filter(p => !seen.has(p.slug)).map(toOption),
+  ];
+}
 
+/**
+ * The placement for /find-a-pandit. `preselect` is the ?occasion= slug the
+ * /pujas accordion link carries; an unrecognised one is ignored rather than
+ * rejected — a stale shared link should still show a usable form.
+ *
+ * Returns null only when the catalogue is empty (a Sheets outage), which the
+ * page renders as a plain message rather than a form with nothing to pick.
+ */
+export async function getStandalonePlacement(
+  preselect?: string | null,
+): Promise<EnquiryPlacement | null> {
+  const options = await getCatalogueOptions();
+  if (options.length === 0) return null;
+
+  const defaultSlug =
+    preselect && options.some(o => o.slug === preselect) ? preselect : options[0].slug;
+
+  return { defaultSlug, options };
+}
+
+/** Slugs of the published occasions, for validating a ?occasion= or a source. */
+export async function getOccasionSlugs(): Promise<Set<string>> {
+  return new Set((await getOccasions()).map(o => o.slug));
+}
+
+/**
+ * Resolve an untrusted `source` from a submission into the origin the route
+ * records, or null when it names an entry point that does not exist.
+ *
+ * The whole point of the demand test is a count per entry point, so the source
+ * is re-derived against the live catalogue rather than trusted: a crafted POST
+ * must not be able to invent an entry point, attribute an enquiry to a puja
+ * page that never carried the block, or offer itself a ceremony the page never
+ * listed. Each kind carries its own allowed ceremony set, matching exactly
+ * what that entry point renders.
+ */
+export async function resolveEnquiryOrigin(
+  rawSource: unknown,
+): Promise<EnquiryOrigin | null> {
+  const source: EnquirySource | null = parseEnquirySource(rawSource);
+  if (!source) return null;
+
+  if (source.kind === 'puja') {
+    const rows = await getPublished(TABS.pujas);
+    const puja = rows.map(rowToPuja).find(p => p.slug === source.slug);
+    if (!puja) return null;
+    const placement = await getEnquiryPlacement(puja);
+    // Not a page that carries the block — so this enquiry cannot have come
+    // from it, and recording it would corrupt the per-page counts.
+    if (!placement) return null;
+    return {
+      source,
+      sourcePujaSlug: puja.slug,
+      allowedSlugs: allowed(placement),
+    };
+  }
+
+  if (source.kind === 'pujas-occasion' && !(await getOccasionSlugs()).has(source.slug)) {
+    return null;
+  }
+
+  const placement = await getStandalonePlacement(null);
+  if (!placement) return null;
+  // Neither of these entry points came off a puja page, so there is no content
+  // page to credit — see the note on EnquiryInput.sourcePujaSlug.
+  return { source, sourcePujaSlug: null, allowedSlugs: allowed(placement) };
+}
+
+function allowed(placement: EnquiryPlacement): Set<string> {
   return new Set(placement.options.map(o => o.slug).filter(s => s !== CEREMONY_OTHER));
 }

@@ -453,7 +453,7 @@ recurrence edits, native apps, payments.
 
 ### Pandit enquiries (the demand test)
 
-A quiet enquiry form on the highest-intent puja pages, and nothing else. This
+A quiet enquiry form, reachable from three places and nothing else. This
 is `research/pandit-marketplace-prd-2026-08.md` §9.1's **demand test**: before
 any marketplace is built, find out whether real booking demand exists. It is a
 measuring instrument with a deliberate two-day budget, not the first slice of
@@ -462,21 +462,43 @@ answer comes back "no", the table, the route and the block are deleted and
 nothing else has been spent.
 
 **Placement is the experiment's design.** The site has no `/occasions/[slug]`
-route, so the block rides on puja detail pages, chosen by a derived rule in
+route, so the card rides on puja detail pages, chosen by a derived rule in
 `lib/pandit-enquiry-placement.ts`:
 
-> a puja carries the block when it is mapped to at least one life-event
+> a puja carries the card when it is mapped to at least one life-event
 > occasion **and** is not `frequent`.
 
 The occasion mapping is what makes a puja something a family hires a pandit
 for; `frequent=FALSE` excludes the daily and festival worship those same
 occasions also list (Vinayaka Puja is mapped to seven occasions *and* is what
-a family does at home on a Tuesday). Putting the block there would bury a
+a family does at home on a Tuesday). Putting the card there would bury a
 small signal under a large volume of unrelated traffic — the one measurement
 error this test cannot afford. Against the current catalogue it selects five
 pages: satyanarayana-puja, navagraha-puja, vastu-puja, gauri-puja,
 kubera-puja. **Aksharabhyasam has no eligible page** (both its pujas are
 frequent ones) — a known gap, not an oversight.
+
+**Those five pages were not enough to measure anything**, which is why there
+are now three entry points. A test nobody can find measures discoverability,
+not demand:
+
+| Entry point | `source` | What it is |
+|---|---|---|
+| Puja detail card | `puja:<slug>` | The original five pages, below the procedure |
+| /pujas occasion accordion | `pujas-occasion:<slug>` | One text link in each expanded occasion panel, carrying `?occasion=` to the page below |
+| `/find-a-pandit` | `standalone` | The form full-width on its own linkable page, in the More nav group and the mobile drawer |
+
+**Every entry point records itself distinctly, and that is the point** — §9.1
+asks not only whether enquiries arrive but which content earns them. The route
+re-derives the source against the live catalogue (`resolveEnquiryOrigin`)
+rather than trusting the posted value, so a crafted POST cannot invent an
+entry point or credit a page that never carried the card. `/find-a-pandit`'s
+`?occasion=` both preselects the ceremony and names the source; an
+unrecognised slug degrades to a plain `standalone` visit rather than an error,
+so a stale shared link still works.
+
+**Nothing was added to the home page**, deliberately — that is a bar the owner
+raises later, not one this pass takes on its own.
 
 **Signing in is deliberately not required.** Every other write on this site
 needs a session; this one must not, because a demand test gated behind Google
@@ -487,9 +509,19 @@ attributes the row (`user_id`) and prefills the contact field.
 **Tone is bound by the PRD's §7.1 banned-patterns list**, which is a review
 checklist, not a preference: no urgency, no countdown, no "limited", no count
 of pandits, nothing implying anyone is waiting. One bordered card in the page
-flow, below the procedure — no modal, no sticky bar, and the vidhi above it
-stays complete and ungated. The card is collapsed to a heading and one button
-until asked for. The confirmation says plainly that there is no list yet.
+flow, below the procedure — no modal, no sticky bar, no interstitial, and the
+vidhi above it stays complete and ungated. The /pujas link is one line of text
+below that occasion's pujas, never above them. The confirmation says plainly
+that there is no list yet.
+
+**What the form shows without being asked** (changed on the second pass): four
+fields — ceremony, city, when, and how to reach you — with the other nine
+behind one "Add more details" disclosure. Those four are what the §9.1 finding
+is computed from: three are the only required columns in the table, and
+`timing_window` is what separates a family with a ceremony to arrange from
+someone looking around. The first pass folded all thirteen behind a button,
+which was quiet to the point of being unmeasurable; thirteen questions open on
+a reference page would be the opposite error.
 
 The **dakshina band** is the one field §7.2 bears on directly: the family
 picks what *they* have in mind, the platform never quotes; the word is
@@ -502,13 +534,21 @@ no default for the same reason: where enquiries come from is part of what is
 being measured, so nothing may prime a metro.
 
 **Schema** (`db/migrations/0004_create_pandit_enquiries.sql` +
-`0005_pandit_enquiry_details.sql`; RLS on with zero policies like 0001–0003).
-Only ceremony, city and contact are required — a test that will not accept a
-half-answered enquiry measures form-filling stamina. `ceremony_slug` (a puja
-*or* occasion slug) xor `ceremony_other` free text; `source_puja_slug` records
-which page earned the intent, which is the more useful of the two;
-`timing_window` carries the case a date field cannot (`muhurtham-pending`) and
-the one the §9.1 threshold turns on (`exploring` vs real intent).
+`0005_pandit_enquiry_details.sql` + `0006_pandit_enquiry_source.sql`; RLS on
+with zero policies like 0001–0003). Only ceremony, city and contact are
+required — a test that will not accept a half-answered enquiry measures
+form-filling stamina. `ceremony_slug` (a puja *or* occasion slug) xor
+`ceremony_other` free text; `timing_window` carries the case a date field
+cannot (`muhurtham-pending`) and the one the §9.1 threshold turns on
+(`exploring` vs real intent).
+
+`source` (0006) and `source_puja_slug` (0004, now nullable) are **not**
+duplicates and both are kept: `source` is the control the visitor used — the
+discovery question — while `source_puja_slug` is the puja page whose content
+they came off — the §9.1 content question. They coincide for the puja card and
+nowhere else; the other two entry points sit on no content page and leave it
+null. 0006 backfilled every pre-existing row to `puja:<its slug>`, which is
+where they all came from.
 
 **PRIVACY.** `contact` is personal data and lives only in Postgres: no page
 reads this table, nothing is ever logged with the payload, and RLS is what
@@ -522,15 +562,23 @@ limit of 3 submissions/hour (`ENQUIRY_RATE_LIMIT`), counted in SQL so it works
 across serverless instances. Neither is a security boundary; there is nothing
 here worth attacking beyond wasting the owner's reading time.
 
-**Files.** `lib/pandit-enquiry-fields.ts` (import-free client-safe vocabulary
-— same constraint and reason as `lib/event-kinds.ts`) · `lib/pandit-enquiry.ts`
-(server data access, validation, IP hashing) · `lib/pandit-enquiry-placement.ts`
-(the placement rule and the ceremony catalogue; the route re-derives the
-allowed slugs rather than trusting the client) · `app/api/pandit-enquiry/route.ts`
-(Node runtime) · `components/pandit/PanditEnquiryBlock.tsx` ·
-`scripts/list-pandit-enquiries.mjs` (read-only; `--summary` prints counts with
-no personal data). **The read path is that script and only that script** —
-there is no admin UI on purpose.
+**Files.** `lib/pandit-enquiry-fields.ts` (import-free client-safe vocabulary,
+including the `EnquirySource` shapes — same constraint and reason as
+`lib/event-kinds.ts`) · `lib/pandit-enquiry.ts` (server data access,
+validation, IP hashing) · `lib/pandit-enquiry-placement.ts` (the placement
+rule, the ceremony catalogue, and `resolveEnquiryOrigin`, which re-derives the
+source and the allowed slugs rather than trusting the client) ·
+`app/api/pandit-enquiry/route.ts` (Node runtime) ·
+`components/pandit/PanditEnquiryForm.tsx` (the shared form — one component so
+the thing being measured is identical wherever it is answered) ·
+`PanditEnquiryBlock.tsx` (the puja-page card) · `PanditEnquiryPage.tsx` +
+`app/find-a-pandit/page.tsx` (the standalone page) ·
+`components/PujasBrowser.tsx` (the accordion link) ·
+`scripts/list-pandit-enquiries.mjs` (read-only; `--summary` leads with the
+by-entry-point tally, `--source <prefix>` filters to one). **The read path is
+that script and only that script** — there is no admin UI on purpose, and
+deleting rows (test rows included) means a one-off script run by hand, never a
+mode added to this one.
 
 ### Temple hero images
 
@@ -581,7 +629,7 @@ and article-title search happily resolves to a similarly-named different temple
 - **`scripts/check-content-health.mjs`** is the pre-deploy check: read-only (no `--write` mode), it verifies against the live Sheet that every tab's header row has the columns the app reads (hardcoded `EXPECTED_COLUMNS`, derived from the `rowTo*` mappers in `lib/relations.ts` — update it when a mapper changes), warns on 0 published rows for tabs that should never be empty (`gods`, `shlokas`, `pujas`, `festivals`, `vrathams`), and warns on `festivals`/`vrathams` `next_occurrence` values that aren't `YYYY-MM-DD`. Exits 1 only on a missing header; run it before "Publish to site".
 - **`scripts/set-temple-heroes.mjs`** writes the hero columns onto `temples` (adding them to the header row if absent) and mirrors the URL onto `live_streams`, from `research/temple-hero-images.json`. Dry-run by default; `--write` applies; `--force` also overwrites non-empty hero cells, which is the only way to clobber a hand-picked replacement made in the Sheet. It rejects any entry whose image is not on `upload.wikimedia.org` or whose licence is not on its free-licence allowlist — see Temple hero images above.
 - **`scripts/migrate.mjs`** applies `db/migrations/*.sql` to `DATABASE_URL`, tracking applied filenames in a `schema_migrations` table. Dry-run by default like the Sheets scripts; `--write` applies. Each migration runs in its own transaction. New schema changes go in a new numbered `.sql` file — never edit an already-applied one.
-- **`scripts/list-pandit-enquiries.mjs`** is read-only (no `--write` mode, no UPDATE/DELETE anywhere in it): it prints demand-test enquiries newest-first (`--days N`, `--all`), and `--summary` prints counts only, with no personal data. Its plain output contains phone numbers and email addresses — see the Pandit enquiries section.
+- **`scripts/list-pandit-enquiries.mjs`** is read-only (no `--write` mode, no UPDATE/DELETE anywhere in it): it prints demand-test enquiries newest-first (`--days N`, `--all`), `--source <prefix>` filters to one entry point (`standalone`, `puja:`, `pujas-occasion:`), and `--summary` prints counts only, with no personal data. Its plain output contains phone numbers and email addresses — see the Pandit enquiries section.
 - **`scripts/report-translation-coverage.mjs`** is read-only (no `--write` mode): it auto-detects `*_en`/`_te`/`_ta`/`_hi` field groups from the live header row of each content tab and reports per-language fill rates against published rows; `--verbose` lists the slugs missing each language.
 
 ### Environment variables

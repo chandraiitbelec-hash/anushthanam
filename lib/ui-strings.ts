@@ -285,7 +285,6 @@ type UiStrings = {
   // none of this copy may imply there is one.
   panditEnquiryTitle: string;
   panditEnquiryBody: string;
-  panditEnquiryCta: string;
   panditEnquiryCeremonyLabel: string;
   panditEnquiryCeremonyOther: string;
   panditEnquiryCeremonyOtherLabel: string;
@@ -323,6 +322,20 @@ type UiStrings = {
   // satsangLiveNow above.
   scheduleNow: string;
   scheduleInProgress: string;
+  // Pandit enquiry, second pass: the demand test needed its own discovery, so
+  // the form also lives on a standalone /find-a-pandit page and the /pujas
+  // occasion accordion points at it. Same tone rules as above — none of this
+  // copy may imply a list exists, because it does not.
+  /** Nav label and page heading. The route itself stays English. */
+  findAPandit: string;
+  /** The standalone page's intro. Says plainly that there is no list yet. */
+  panditPageIntro: string;
+  /** Shown instead of the form when the ceremony catalogue cannot be read. */
+  panditPageUnavailable: string;
+  /** The quiet link inside an expanded occasion panel on /pujas. */
+  panditEnquiryOccasionLink: string;
+  /** Discloses the optional fields, which start folded away. */
+  panditEnquiryMoreDetails: string;
 };
 
 export const UI: Record<Language, UiStrings> = {
@@ -578,7 +591,6 @@ export const UI: Record<Language, UiStrings> = {
     // none of this copy may imply there is one.
     panditEnquiryTitle: 'Looking for a pandit for this ceremony?',
     panditEnquiryBody: 'We are putting together a small, verified list. Tell us what you need.',
-    panditEnquiryCta: 'Tell us what you need',
     panditEnquiryCeremonyLabel: 'Ceremony',
     panditEnquiryCeremonyOther: 'Another ceremony',
     panditEnquiryCeremonyOtherLabel: 'Which ceremony?',
@@ -629,6 +641,11 @@ export const UI: Record<Language, UiStrings> = {
     },
     scheduleNow: 'Now',
     scheduleInProgress: 'In progress',
+    findAPandit: 'Find a pandit',
+    panditPageIntro: 'We are putting together a small, verified list of pandits. There is no list yet — we are asking first, so that we begin where families actually need someone. Tell us what you are looking for.',
+    panditPageUnavailable: 'This is not available just now. Please try again a little later.',
+    panditEnquiryOccasionLink: 'Looking for a pandit for this occasion?',
+    panditEnquiryMoreDetails: 'Add more details',
   },
   te: {
     tithi: 'తిథి',
@@ -882,7 +899,6 @@ export const UI: Record<Language, UiStrings> = {
     // none of this copy may imply there is one.
     panditEnquiryTitle: 'ఈ కార్యక్రమానికి పండితుడు కావాలా?',
     panditEnquiryBody: 'మేము ఒక చిన్న, ధృవీకరించిన జాబితాను సిద్ధం చేస్తున్నాము. మీకు ఏమి కావాలో చెప్పండి.',
-    panditEnquiryCta: 'మీకు ఏమి కావాలో చెప్పండి',
     panditEnquiryCeremonyLabel: 'కార్యక్రమం',
     panditEnquiryCeremonyOther: 'మరొక కార్యక్రమం',
     panditEnquiryCeremonyOtherLabel: 'ఏ కార్యక్రమం?',
@@ -933,6 +949,11 @@ export const UI: Record<Language, UiStrings> = {
     },
     scheduleNow: 'ఇప్పుడు',
     scheduleInProgress: 'జరుగుతోంది',
+    findAPandit: 'పండితుల కోసం',
+    panditPageIntro: 'మేము పండితుల చిన్న, ధృవీకరించిన జాబితాను సిద్ధం చేస్తున్నాము. ఇంకా జాబితా లేదు — కుటుంబాలకు నిజంగా ఎక్కడ అవసరమో అక్కడ మొదలుపెట్టేందుకు ముందుగా అడుగుతున్నాము. మీకు ఏమి కావాలో చెప్పండి.',
+    panditPageUnavailable: 'ఇది ప్రస్తుతం అందుబాటులో లేదు. కొంతసేపటి తర్వాత మళ్ళీ ప్రయత్నించండి.',
+    panditEnquiryOccasionLink: 'ఈ సందర్భానికి పండితుడు కావాలా?',
+    panditEnquiryMoreDetails: 'మరిన్ని వివరాలు',
   },
   ta: {
     tithi: 'திதி',
@@ -1186,7 +1207,6 @@ export const UI: Record<Language, UiStrings> = {
     // none of this copy may imply there is one.
     panditEnquiryTitle: 'இந்தச் சடங்குக்குப் பண்டிதர் தேவையா?',
     panditEnquiryBody: 'நாங்கள் ஒரு சிறிய, சரிபார்க்கப்பட்ட பட்டியலைத் தயாரித்து வருகிறோம். உங்களுக்கு என்ன தேவை என்று சொல்லுங்கள்.',
-    panditEnquiryCta: 'உங்களுக்கு என்ன தேவை என்று சொல்லுங்கள்',
     panditEnquiryCeremonyLabel: 'சடங்கு',
     panditEnquiryCeremonyOther: 'வேறு ஒரு சடங்கு',
     panditEnquiryCeremonyOtherLabel: 'எந்தச் சடங்கு?',
@@ -1237,6 +1257,11 @@ export const UI: Record<Language, UiStrings> = {
     },
     scheduleNow: 'இப்போது',
     scheduleInProgress: 'நடைபெறுகிறது',
+    findAPandit: 'பண்டிதர் தேடல்',
+    panditPageIntro: 'நாங்கள் பண்டிதர்களின் ஒரு சிறிய, சரிபார்க்கப்பட்ட பட்டியலைத் தயாரித்து வருகிறோம். இன்னும் பட்டியல் இல்லை — குடும்பங்களுக்கு உண்மையில் எங்கே தேவை என்பதை அறிந்து அங்கிருந்து தொடங்கவே முதலில் கேட்கிறோம். உங்களுக்கு என்ன தேவை என்று சொல்லுங்கள்.',
+    panditPageUnavailable: 'இது தற்போது கிடைக்கவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.',
+    panditEnquiryOccasionLink: 'இந்த நிகழ்வுக்குப் பண்டிதர் தேவையா?',
+    panditEnquiryMoreDetails: 'மேலும் விவரங்கள்',
   },
   hi: {
     tithi: 'तिथि',
@@ -1490,7 +1515,6 @@ export const UI: Record<Language, UiStrings> = {
     // none of this copy may imply there is one.
     panditEnquiryTitle: 'इस संस्कार के लिए पंडित जी चाहिए?',
     panditEnquiryBody: 'हम एक छोटी, सत्यापित सूची तैयार कर रहे हैं। हमें बताइए आपको क्या चाहिए।',
-    panditEnquiryCta: 'हमें बताइए आपको क्या चाहिए',
     panditEnquiryCeremonyLabel: 'संस्कार',
     panditEnquiryCeremonyOther: 'कोई और संस्कार',
     panditEnquiryCeremonyOtherLabel: 'कौन सा संस्कार?',
@@ -1541,5 +1565,10 @@ export const UI: Record<Language, UiStrings> = {
     },
     scheduleNow: 'अभी',
     scheduleInProgress: 'चल रहा है',
+    findAPandit: 'पंडित की तलाश',
+    panditPageIntro: 'हम पंडितों की एक छोटी, सत्यापित सूची तैयार कर रहे हैं। अभी कोई सूची नहीं है — पहले यह पूछ रहे हैं, ताकि जहाँ परिवारों को सचमुच ज़रूरत है वहीं से शुरू करें। आपको क्या चाहिए, बताइए।',
+    panditPageUnavailable: 'यह अभी उपलब्ध नहीं है। कृपया थोड़ी देर बाद फिर से देखें।',
+    panditEnquiryOccasionLink: 'इस अवसर के लिए पंडित चाहिए?',
+    panditEnquiryMoreDetails: 'और विवरण',
   },
 };

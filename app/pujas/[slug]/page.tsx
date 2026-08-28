@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import PujaProfile from '@/components/PujaProfile';
 import PanditEnquiryBlock from '@/components/pandit/PanditEnquiryBlock';
 import { getEnquiryPlacement } from '@/lib/pandit-enquiry-placement';
+import { formatEnquirySource } from '@/lib/pandit-enquiry-fields';
 import { pageMeta, getRequestLang, SITE_URL, SITE_NAME, jsonLdString } from '@/lib/seo';
 
 export const revalidate = 3600;
@@ -85,7 +86,10 @@ export default async function PujaPage({ params }: { params: Promise<{ slug: str
       {/* Below the procedure, never above it: the vidhi stays complete and
           ungated, and this is an offer the reader can ignore. See §9.1. */}
       {enquiryPlacement && (
-        <PanditEnquiryBlock placement={enquiryPlacement} sourcePujaSlug={slug} />
+        <PanditEnquiryBlock
+          placement={enquiryPlacement}
+          source={formatEnquirySource({ kind: 'puja', slug })}
+        />
       )}
     </div>
   );

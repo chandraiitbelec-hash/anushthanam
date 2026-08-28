@@ -102,3 +102,63 @@ export function looksLikeContact(value: string): boolean {
 
 /** The honeypot field's name. Never shown to a human; see the form component. */
 export const HONEYPOT_FIELD = 'website';
+
+/**
+ * Where an enquiry came from — the entry point the visitor actually used.
+ *
+ * The demand test's whole deliverable is a number *per source*: §9.1 asks not
+ * only whether enquiries arrive but which content earns them, so an entry
+ * point that cannot be told apart from another has measured nothing. Each one
+ * therefore serialises to its own string, stored in `pandit_enquiries.source`
+ * (migration 0006).
+ *
+ * This lives here, with the rest of the shared vocabulary, because the browser
+ * form sends the value and the route validates it, and neither may import the
+ * other's module — see the no-imports note at the top of this file.
+ *
+ * Note the deliberate distinction from `source_puja_slug`: that column answers
+ * "which puja page's content did this come off", this one answers "which
+ * control did they use". They coincide for the puja card and nowhere else.
+ */
+export type EnquirySource =
+  /** The card at the foot of a booking-intent puja detail page. */
+  | { kind: 'puja'; slug: string }
+  /** The link inside an occasion's panel in the /pujas accordion. */
+  | { kind: 'pujas-occasion'; slug: string }
+  /** /find-a-pandit reached any other way — nav, a shared link, search. */
+  | { kind: 'standalone' };
+
+export const ENQUIRY_SOURCE_STANDALONE = 'standalone';
+const PUJA_PREFIX = 'puja:';
+const OCCASION_PREFIX = 'pujas-occasion:';
+
+/** Serialise a source for the wire and for the `source` column. */
+export function formatEnquirySource(source: EnquirySource): string {
+  switch (source.kind) {
+    case 'puja': return `${PUJA_PREFIX}${source.slug}`;
+    case 'pujas-occasion': return `${OCCASION_PREFIX}${source.slug}`;
+    case 'standalone': return ENQUIRY_SOURCE_STANDALONE;
+  }
+}
+
+const SOURCE_SLUG_RE = /^[a-z0-9][a-z0-9-]{0,99}$/;
+
+/**
+ * Parse an untrusted `source` back into a shape, or null if it is not one of
+ * the three. Shape only — that the slug names a real puja or occasion is
+ * checked server-side against the catalogue (see lib/pandit-enquiry-placement).
+ */
+export function parseEnquirySource(raw: unknown): EnquirySource | null {
+  if (typeof raw !== 'string') return null;
+  const v = raw.trim();
+  if (v === ENQUIRY_SOURCE_STANDALONE) return { kind: 'standalone' };
+  if (v.startsWith(PUJA_PREFIX)) {
+    const slug = v.slice(PUJA_PREFIX.length);
+    return SOURCE_SLUG_RE.test(slug) ? { kind: 'puja', slug } : null;
+  }
+  if (v.startsWith(OCCASION_PREFIX)) {
+    const slug = v.slice(OCCASION_PREFIX.length);
+    return SOURCE_SLUG_RE.test(slug) ? { kind: 'pujas-occasion', slug } : null;
+  }
+  return null;
+}

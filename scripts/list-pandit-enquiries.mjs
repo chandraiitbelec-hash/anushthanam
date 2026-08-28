@@ -16,6 +16,17 @@
  *   node scripts/list-pandit-enquiries.mjs --days 30      # a different window
  *   node scripts/list-pandit-enquiries.mjs --all          # everything
  *   node scripts/list-pandit-enquiries.mjs --summary      # counts only, no personal data
+ *   node scripts/list-pandit-enquiries.mjs --source standalone
+ *                                                        # one entry point only
+ *
+ * Entry points (the `source` column, see db/migrations/0006_pandit_enquiry_source.sql):
+ *   puja:<slug>            the card at the foot of that puja's detail page
+ *   pujas-occasion:<slug>  the link in that occasion's panel on /pujas
+ *   standalone             /find-a-pandit reached any other way
+ *
+ * --source matches a prefix, so `--source pujas-occasion:` is every enquiry
+ * that came through the accordion. Which entry point earns the enquiries is
+ * half of what §9.1 is measuring, so --summary leads with that tally.
  *
  * Env is loaded from .env.local relative to this file (not cwd), matching
  * scripts/migrate.mjs.
@@ -34,6 +45,13 @@ const all = argv.includes('--all');
 const summaryOnly = argv.includes('--summary');
 const daysArg = argv.indexOf('--days');
 const days = daysArg !== -1 ? Number(argv[daysArg + 1]) : 90;
+const sourceArg = argv.indexOf('--source');
+const sourceFilter = sourceArg !== -1 ? argv[sourceArg + 1] : null;
+
+if (sourceArg !== -1 && !sourceFilter) {
+  console.error('--source needs a value, e.g. --source standalone');
+  process.exit(1);
+}
 
 if (!Number.isFinite(days) || days <= 0) {
   console.error('--days needs a positive number of days.');
@@ -73,11 +91,21 @@ client.on('error', err => {
 await client.connect();
 
 try {
-  const where = all ? '' : `WHERE e.created_at > now() - ($1 || ' days')::interval`;
-  const params = all ? [] : [String(days)];
+  const clauses = [];
+  const params = [];
+  if (!all) {
+    params.push(String(days));
+    clauses.push(`e.created_at > now() - ($${params.length} || ' days')::interval`);
+  }
+  if (sourceFilter) {
+    params.push(sourceFilter);
+    clauses.push(`e.source LIKE $${params.length} || '%'`);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
 
   const { rows } = await client.query(
-    `SELECT e.id, e.created_at, e.ceremony_slug, e.ceremony_other, e.source_puja_slug,
+    `SELECT e.id, e.created_at, e.ceremony_slug, e.ceremony_other,
+            e.source, e.source_puja_slug,
             e.city, e.area, e.lang,
             e.preferred_date::text AS preferred_date,
             to_char(e.preferred_time, 'HH24:MI') AS preferred_time,
@@ -92,13 +120,19 @@ try {
   );
 
   const window = all ? 'all time' : `last ${days} days`;
-  console.log(`\n${rows.length} enquir${rows.length === 1 ? 'y' : 'ies'} (${window})\n`);
+  const scope = sourceFilter ? `${window}, source ${sourceFilter}*` : window;
+  console.log(`\n${rows.length} enquir${rows.length === 1 ? 'y' : 'ies'} (${scope})\n`);
 
   if (rows.length === 0) {
     console.log('Nothing yet.\n');
   } else if (summaryOnly) {
     // Counts only — safe to read over someone's shoulder.
-    tally('By source page', rows, r => r.source_puja_slug);
+    // Which entry point earned it — the discovery question, and the reason
+    // the form has more than one home. See the header note.
+    tally('By entry point', rows, r => r.source);
+    // Which puja page's content earned it — the §9.1 content question. Only
+    // the puja card has one; the other entry points sit on no content page.
+    tally('By source page', rows, r => r.source_puja_slug ?? '(not a puja page)');
     tally('By ceremony', rows, r => r.ceremony_slug ?? `(other) ${r.ceremony_other}`);
     tally('By city', rows, r => r.city.trim().toLowerCase());
     tally('By language', rows, r => r.lang);
@@ -113,7 +147,10 @@ try {
     for (const r of rows) {
       const ceremony = r.ceremony_slug ?? `${r.ceremony_other} (own words)`;
       console.log(`— ${r.created_at.toISOString().replace('T', ' ').slice(0, 16)} UTC  [${r.status}]`);
-      console.log(`  ceremony : ${ceremony}   (from /pujas/${r.source_puja_slug})`);
+      console.log(`  ceremony : ${ceremony}`);
+      // `source` already names the puja for a puja-card enquiry, so
+      // source_puja_slug is not repeated here.
+      console.log(`  entry    : ${r.source}`);
       console.log(`  city     : ${r.city}${r.area ? `, ${r.area}` : ''}`);
       console.log(`  language : ${r.lang}`);
       if (r.timing_window) console.log(`  timing   : ${r.timing_window}`);

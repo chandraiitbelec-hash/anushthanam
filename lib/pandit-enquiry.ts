@@ -7,10 +7,12 @@ import {
   ENQUIRY_LANGUAGES,
   ENQUIRY_LIMITS,
   ENQUIRY_TIMING_WINDOWS,
+  formatEnquirySource,
   looksLikeContact,
   type EnquiryDakshinaBand,
   type EnquiryDurationBand,
   type EnquiryLanguage,
+  type EnquirySource,
   type EnquiryTimingWindow,
 } from './pandit-enquiry-fields';
 
@@ -31,8 +33,15 @@ export type EnquiryInput = {
   ceremonySlug: string | null;
   /** The visitor's own words; null when they picked from the catalogue. */
   ceremonyOther: string | null;
-  /** The page the enquiry came from. */
-  sourcePujaSlug: string;
+  /** The entry point the visitor used. See EnquirySource. */
+  source: EnquirySource;
+  /**
+   * The puja detail page whose content this came off, when there was one —
+   * null for the standalone page and the /pujas occasion link. Deliberately
+   * not the same fact as `source`: this answers "which content earned the
+   * intent", `source` answers "which control did they use".
+   */
+  sourcePujaSlug: string | null;
   city: string;
   /** Neighbourhood within the city. Free text, optional. */
   area: string | null;
@@ -54,7 +63,6 @@ export type EnquiryInput = {
  *  comparing two ceremonies should never hit it, a script should. */
 export const ENQUIRY_RATE_LIMIT = 3;
 
-const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -77,25 +85,39 @@ function trimmedOrNull(value: unknown, max: number): string | null {
 }
 
 /**
+ * Where a submission came from, as resolved on the server against the live
+ * catalogue — never taken from the request body. Produced by
+ * resolveEnquiryOrigin() in lib/pandit-enquiry-placement.ts.
+ */
+export type EnquiryOrigin = {
+  source: EnquirySource;
+  sourcePujaSlug: string | null;
+  /** Catalogue slugs this entry point offered in its ceremony select. */
+  allowedSlugs: ReadonlySet<string>;
+};
+
+/**
  * Validates an untrusted request body into an EnquiryInput. Returns a machine
  * error code on failure, which the client maps to a localized message — the
  * same contract parseEventInput() uses.
  *
- * `allowedSlugs` is the set of catalogue slugs the page actually offered, so a
- * hand-crafted POST cannot record an enquiry against a ceremony that does not
- * exist. An unknown slug is treated as an error rather than silently demoted
- * to free text: the demand-test counts are only meaningful if the ceremony
- * column means what it says.
+ * The origin is resolved by the caller against the live catalogue rather than
+ * taken from the body, because both halves of it are load-bearing and neither
+ * can be trusted from a client: `source` is the number the whole test
+ * produces, and `allowedSlugs` is the set of ceremonies the entry point
+ * actually offered, so a hand-crafted POST cannot file an enquiry against a
+ * ceremony that does not exist. An unknown slug is an error rather than a
+ * silent demotion to free text — the counts are only meaningful if the
+ * ceremony column means what it says.
  */
 export function parseEnquiryInput(
   body: unknown,
-  allowedSlugs: ReadonlySet<string>,
+  origin: EnquiryOrigin,
 ): { input: EnquiryInput } | { error: string } {
   if (typeof body !== 'object' || body === null) return { error: 'invalid_body' };
   const b = body as Record<string, unknown>;
 
-  const sourcePujaSlug = trimmedOrNull(b.sourcePujaSlug, ENQUIRY_LIMITS.slug);
-  if (!sourcePujaSlug || !SLUG_RE.test(sourcePujaSlug)) return { error: 'invalid_source' };
+  const { source, sourcePujaSlug, allowedSlugs } = origin;
 
   let ceremonySlug: string | null = null;
   let ceremonyOther: string | null = null;
@@ -144,6 +166,7 @@ export function parseEnquiryInput(
     input: {
       ceremonySlug,
       ceremonyOther,
+      source,
       sourcePujaSlug,
       city,
       area,
@@ -213,14 +236,15 @@ export async function createEnquiry(
   if (!isDbConfigured) throw new Error('DATABASE_URL is not set');
   const rows = await query<{ id: string }>(
     `INSERT INTO pandit_enquiries
-       (ceremony_slug, ceremony_other, source_puja_slug, city, area, lang,
+       (ceremony_slug, ceremony_other, source, source_puja_slug, city, area, lang,
         preferred_date, preferred_time, duration_band, timing_window,
         dakshina_band, contact, note, user_id, ip_hash)
-     VALUES ($1, $2, $3, $4, $5, $6, $7::date, $8::time, $9, $10,
-             $11, $12, $13, $14::uuid, $15)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8::date, $9::time, $10, $11,
+             $12, $13, $14, $15::uuid, $16)
      RETURNING id`,
     [
-      input.ceremonySlug, input.ceremonyOther, input.sourcePujaSlug, input.city,
+      input.ceremonySlug, input.ceremonyOther, formatEnquirySource(input.source),
+      input.sourcePujaSlug, input.city,
       input.area, input.lang, input.preferredDate, input.preferredTime,
       input.durationBand, input.timingWindow, input.dakshinaBand,
       input.contact, input.note, userId, ipHash,

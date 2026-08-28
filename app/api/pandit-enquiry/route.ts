@@ -8,7 +8,7 @@ import {
   parseEnquiryInput,
   ENQUIRY_RATE_LIMIT,
 } from '@/lib/pandit-enquiry';
-import { getAllowedCeremonySlugs } from '@/lib/pandit-enquiry-placement';
+import { resolveEnquiryOrigin } from '@/lib/pandit-enquiry-placement';
 import { HONEYPOT_FIELD } from '@/lib/pandit-enquiry-fields';
 
 // Node runtime — `pg` is not Edge-compatible (same as the auth and schedule routes).
@@ -51,12 +51,15 @@ export async function POST(req: Request) {
     return Response.json({ error: 'rejected' }, { status: 400 });
   }
 
-  const parsedSource = (body as Record<string, unknown> | null)?.sourcePujaSlug;
-  const allowedSlugs = await getAllowedCeremonySlugs(
-    typeof parsedSource === 'string' ? parsedSource : '',
-  );
+  // The entry point is re-derived against the live catalogue, never taken as
+  // stated: a per-source count is the deliverable, so a crafted POST must not
+  // be able to invent a source or credit the wrong page.
+  const origin = await resolveEnquiryOrigin((body as Record<string, unknown> | null)?.source);
+  if (!origin) {
+    return Response.json({ error: 'invalid_source' }, { status: 400 });
+  }
 
-  const parsed = parseEnquiryInput(body, allowedSlugs);
+  const parsed = parseEnquiryInput(body, origin);
   if ('error' in parsed) {
     return Response.json({ error: parsed.error }, { status: 400 });
   }

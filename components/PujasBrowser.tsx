@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useLang } from '@/context/LanguageContext';
 import type { Puja, Occasion } from '@/lib/types';
 import { UI } from '@/lib/ui-strings';
@@ -177,6 +178,34 @@ export default function PujasBrowser({ frequentPujas, occasions, occasionPujas }
                         ))}
                       </div>
                     )}
+
+                    {/* The §9.1 demand test's second entry point. This accordion
+                        is where booking-intent browsing actually happens — a
+                        family opens "Griha Pravesham" because they are having
+                        one — and the five puja pages that carry the enquiry
+                        card are a poor proxy for it.
+
+                        One text link, below the pujas, never above them: the
+                        reference content stays the point of the panel. Tone is
+                        bound by §7.1 like every other part of this test — a
+                        question, not an offer, with nothing implying a pandit
+                        is waiting. The occasion rides along in the query so it
+                        preselects the ceremony AND records this accordion as
+                        the source; see EnquirySource. */}
+                    <div style={{ marginTop: '16px' }}>
+                      <Link
+                        href={`/find-a-pandit?occasion=${encodeURIComponent(occ.slug)}`}
+                        className={nameClass}
+                        style={{
+                          fontSize: 'var(--text-body-sm)',
+                          color: 'var(--color-gold-text)',
+                          textDecoration: 'none',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {ui.panditEnquiryOccasionLink} →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               );
