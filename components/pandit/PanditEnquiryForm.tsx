@@ -167,6 +167,43 @@ export default function PanditEnquiryForm({
     margin: '6px 0 0', lineHeight: 1.6,
   };
 
+  // Rendered in one of two places, never both at once: inline under the
+  // timing select when the family says the date is fixed (closing that loop
+  // without opening the whole details section), and inside the details
+  // section otherwise. Bottom-aligned so the two inputs stay on one line even
+  // when a translated label wraps to two.
+  const dateTimeRow = (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+      <div style={{ flex: '1 1 150px' }}>
+        <label htmlFor={`${ids}-date`} style={labelStyle}>
+          {t.panditEnquiryDateLabel} · {t.optional}
+        </label>
+        <input
+          id={`${ids}-date`}
+          type="date"
+          value={preferredDate}
+          onChange={e => setPreferredDate(e.target.value)}
+          style={inputStyle}
+        />
+      </div>
+      <div style={{ flex: '1 1 110px' }}>
+        {/* Wall-clock in the city named above, not the reader's zone: a
+            muhurtham time belongs to the place the ceremony happens. Stored
+            as a bare time for that reason. */}
+        <label htmlFor={`${ids}-time`} style={labelStyle}>
+          {t.panditEnquiryTimeLabel} · {t.optional}
+        </label>
+        <input
+          id={`${ids}-time`}
+          type="time"
+          value={preferredTime}
+          onChange={e => setPreferredTime(e.target.value)}
+          style={inputStyle}
+        />
+      </div>
+    </div>
+  );
+
   if (sent) {
     return (
       <div role="status">
@@ -274,6 +311,14 @@ export default function PanditEnquiryForm({
           </select>
         </div>
 
+        {/* "The date is fixed" and then not asking for the date would be a
+            dead end — close the loop by surfacing the date/time row right
+            here the moment that answer is chosen. Still optional (a family
+            may have fixed the day while the muhurtham time is with their
+            purohit), and it stays put when the details section is open,
+            where the same fields already live. */}
+        {timingWindow === 'date-fixed' && !showDetails && dateTimeRow}
+
         <div>
           <label htmlFor={`${ids}-contact`} style={labelStyle}>
             {t.panditEnquiryContactLabel}
@@ -359,37 +404,7 @@ export default function PanditEnquiryForm({
               </select>
             </div>
 
-            {/* Bottom-aligned so the two inputs stay on one line even when a
-                translated label wraps to two. */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-              <div style={{ flex: '1 1 150px' }}>
-                <label htmlFor={`${ids}-date`} style={labelStyle}>
-                  {t.panditEnquiryDateLabel} · {t.optional}
-                </label>
-                <input
-                  id={`${ids}-date`}
-                  type="date"
-                  value={preferredDate}
-                  onChange={e => setPreferredDate(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
-              <div style={{ flex: '1 1 110px' }}>
-                {/* Wall-clock in the city named above, not the reader's zone:
-                    a muhurtham time belongs to the place the ceremony
-                    happens. Stored as a bare time for that reason. */}
-                <label htmlFor={`${ids}-time`} style={labelStyle}>
-                  {t.panditEnquiryTimeLabel} · {t.optional}
-                </label>
-                <input
-                  id={`${ids}-time`}
-                  type="time"
-                  value={preferredTime}
-                  onChange={e => setPreferredTime(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
-            </div>
+            {dateTimeRow}
 
             <div>
               <label htmlFor={`${ids}-duration`} style={labelStyle}>
